@@ -1,29 +1,29 @@
 package dao;
 
-import logica.Season;
+import logica.Modality;
 
-public class SeasonDAO implements SeasonDAOInterface {
+public class ModalityDAO implements ModalityDAOInterface {
 
 	@Override
-	public boolean insert(Season season) {
+	public boolean insert(Modality modality) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean delete(Season season) {
+	public boolean delete(Modality modality) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean update(Season season) {
+	public boolean update(Modality modality) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean select(int idSeason) {
+	public boolean select(int idModality) {
 		// TODO Auto-generated method stub
 		return false;
 	}

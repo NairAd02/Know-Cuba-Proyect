@@ -1,29 +1,29 @@
 package dao;
 
-import logica.Season;
+import logica.Contract;
 
-public class SeasonDAO implements SeasonDAOInterface {
+public class ContractDAO implements ContractDAOInterface {
 
 	@Override
-	public boolean insert(Season season) {
+	public boolean insert(Contract contract) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean delete(Season season) {
+	public boolean delete(Contract contract) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean update(Season season) {
+	public boolean update(Contract contract) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean select(int idSeason) {
+	public boolean select(int idContract) {
 		// TODO Auto-generated method stub
 		return false;
 	}
