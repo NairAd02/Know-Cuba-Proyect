@@ -2,7 +2,7 @@ package logica;
 
 import java.time.LocalDate;
 
-public class Contract {
+public abstract class Contract {
 	protected int id;
 	protected LocalDate contract_start_date;
 	protected LocalDate contract_termination_date;
