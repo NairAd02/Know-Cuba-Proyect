@@ -49,7 +49,7 @@ public class PanelPaqueteTuristico extends JPanel {
 		JLabel label_2 = new JLabel("New label");
 		label_2.setForeground(SystemColor.info);
 		label_2.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		label_2.setBounds(694, 75, 46, 14);
+		label_2.setBounds(694, 75, 110, 14);
 		add(label_2);
 		
 		JLabel lblImagen = new JLabel("");
