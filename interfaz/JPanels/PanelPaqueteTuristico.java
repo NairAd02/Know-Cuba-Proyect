@@ -53,7 +53,7 @@ public class PanelPaqueteTuristico extends JPanel {
 		add(label_2);
 		
 		JLabel lblImagen = new JLabel("");
-		lblImagen.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia.jpg")));
+		lblImagen.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
 		lblImagen.setBounds(0, 0, 992, 216);
 		add(lblImagen);
 
