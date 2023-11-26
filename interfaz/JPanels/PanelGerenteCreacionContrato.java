@@ -4,13 +4,26 @@ import javax.swing.JPanel;
 
 import java.awt.Color;
 import java.awt.SystemColor;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import modelosTablas.ModeloTablaContract;
 
 public class PanelGerenteCreacionContrato extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private JPanel panelTable;
+	private JScrollPane scrollPaneTable;
+	private JTable table;
 
 	/**
 	 * Create the panel.
@@ -56,6 +69,23 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDelete.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblDelete.setBackground(SystemColor.info);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBounds(0, 68, 712, 678);
+		add(panel_1);
+		
+		panelTable = new JPanel();
+		panelTable.setBounds(10, 93, 692, 574);
+		panel_1.add(panelTable);
+		panelTable.setLayout(new BorderLayout(0, 0));
+		
+		scrollPaneTable = new JScrollPane();
+		panelTable.add(scrollPaneTable, BorderLayout.CENTER);
+		
+		table = new JTable();
+		table.setModel(new ModeloTablaContract());
+		scrollPaneTable.setViewportView(table);
 
 	}
 
