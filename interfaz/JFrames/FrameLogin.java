@@ -129,13 +129,14 @@ public class FrameLogin extends JFrame {
 		lblLogo.setBounds(155, 23, 85, 80);
 		panel_2.add(lblLogo);
 		
-		JLabel lblNotificacionRegistro = new JLabel("Usted no se ha registrado en el sistema");
+		JLabel lblNotificacionRegistro = new JLabel("You have not registered in the system");
+		lblNotificacionRegistro.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNotificacionRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblNotificacionRegistro.setBounds(96, 324, 203, 14);
 		lblNotificacionRegistro.setForeground(new Color(255, 51, 0));
 		panel_2.add(lblNotificacionRegistro);
 		
-		JLabel lblNewLabel = new JLabel("Registrar");
+		JLabel lblNewLabel = new JLabel("To register");
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(268, 298, 57, 14);

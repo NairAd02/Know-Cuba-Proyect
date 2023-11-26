@@ -83,20 +83,13 @@ public class FrameRegistro extends JFrame {
 		checkBoxShowPassword.setBounds(37, 236, 121, 23);
 		panel.add(checkBoxShowPassword);
 		
-		JLabel labelAceptar = new JLabel("ACEPTAR");
+		JLabel labelAceptar = new JLabel("ACCEPT");
 		labelAceptar.setOpaque(true);
 		labelAceptar.setHorizontalAlignment(SwingConstants.CENTER);
 		labelAceptar.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		labelAceptar.setBackground(SystemColor.info);
 		labelAceptar.setBounds(40, 288, 138, 35);
 		panel.add(labelAceptar);
-		
-		JLabel labelX = new JLabel("X");
-		labelX.setHorizontalAlignment(SwingConstants.CENTER);
-		labelX.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		labelX.setBackground(SystemColor.menu);
-		labelX.setBounds(356, 0, 40, 30);
-		panel.add(labelX);
 		
 		textFieldPassword = new JTextField();
 		textFieldPassword.setOpaque(false);
@@ -109,7 +102,7 @@ public class FrameRegistro extends JFrame {
 		labelBarraPassword.setBounds(37, 208, 325, 21);
 		panel.add(labelBarraPassword);
 		
-		JLabel lblCancelar = new JLabel("CANCELAR");
+		JLabel lblCancelar = new JLabel("CANCEL");
 		lblCancelar.setOpaque(true);
 		lblCancelar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCancelar.setFont(new Font("Arial Black", Font.PLAIN, 11));
@@ -117,9 +110,17 @@ public class FrameRegistro extends JFrame {
 		lblCancelar.setBounds(218, 288, 138, 35);
 		panel.add(lblCancelar);
 		
-		JLabel lblRegistro = new JLabel("REGISTRAR :");
-		lblRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		lblRegistro.setBounds(26, 11, 121, 30);
+		JLabel lblRegistro = new JLabel("To Register :");
+		lblRegistro.setFont(new Font("Arial Black", Font.PLAIN, 19));
+		lblRegistro.setBounds(26, 11, 152, 30);
 		panel.add(lblRegistro);
+		
+		JLabel lblX = new JLabel("X");
+		lblX.setHorizontalAlignment(SwingConstants.CENTER);
+		lblX.setForeground(Color.BLACK);
+		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		lblX.setBackground(SystemColor.menu);
+		lblX.setBounds(358, 0, 38, 38);
+		panel.add(lblX);
 	}
 }
