@@ -1,23 +1,27 @@
 package JFrames;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JScrollBar;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import java.awt.SystemColor;
-import javax.swing.JComboBox;
-import javax.swing.JSpinner;
-import javax.swing.JSeparator;
 import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+import javax.swing.JSpinner;
+import javax.swing.JComboBox;
+import javax.swing.JSeparator;
 
-public class FrameTrabajador extends JFrame {
+public class FrameDependiente extends JFrame {
 
-	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	/**
@@ -27,7 +31,7 @@ public class FrameTrabajador extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrameTrabajador frame = new FrameTrabajador();
+					FrameDependiente frame = new FrameDependiente();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -39,13 +43,12 @@ public class FrameTrabajador extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FrameTrabajador() {
+	public FrameDependiente() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 990, 782);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
@@ -55,97 +58,81 @@ public class FrameTrabajador extends JFrame {
 		panel.setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		panel_1.setBackground(new Color(5, 150, 177));
 		panel_1.setBounds(0, 0, 990, 112);
+		panel_1.setBackground(new Color(5, 150, 177));
 		panel.add(panel_1);
+		panel_1.setLayout(null);
 		
-		JLabel lblDependiente = new JLabel("WORKER");
-		lblDependiente.setHorizontalAlignment(SwingConstants.CENTER);
+		JLabel lblDependiente = new JLabel("DEPENDENT");
 		lblDependiente.setFont(new Font("Arial Black", Font.PLAIN, 19));
+		lblDependiente.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDependiente.setBounds(42, 11, 163, 39);
 		panel_1.add(lblDependiente);
 		
 		JLabel lblNewLabel_3 = new JLabel("Cost-Max :");
 		lblNewLabel_3.setForeground(SystemColor.info);
 		lblNewLabel_3.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblNewLabel_3.setBounds(84, 61, 101, 20);
+		lblNewLabel_3.setBounds(67, 61, 108, 20);
 		panel_1.add(lblNewLabel_3);
 		
 		JLabel lblCostomin = new JLabel("Cost-Min :");
 		lblCostomin.setForeground(SystemColor.info);
 		lblCostomin.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblCostomin.setBounds(323, 61, 96, 20);
+		lblCostomin.setBounds(388, 61, 108, 20);
 		panel_1.add(lblCostomin);
 		
 		JLabel lblProvincia = new JLabel("Province :");
 		lblProvincia.setForeground(SystemColor.info);
 		lblProvincia.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblProvincia.setBounds(549, 61, 96, 20);
+		lblProvincia.setBounds(697, 61, 108, 20);
 		panel_1.add(lblProvincia);
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		comboBox.setBounds(650, 61, 121, 20);
+		comboBox.setBounds(803, 61, 121, 20);
 		panel_1.add(comboBox);
 		
 		JSpinner spinner = new JSpinner();
 		spinner.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		spinner.setBounds(189, 61, 70, 20);
+		spinner.setBounds(171, 63, 70, 20);
 		panel_1.add(spinner);
 		
 		JSpinner spinner_1 = new JSpinner();
 		spinner_1.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		spinner_1.setBounds(425, 61, 70, 20);
+		spinner_1.setBounds(494, 61, 70, 20);
 		panel_1.add(spinner_1);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(SystemColor.controlText);
 		separator.setBackground(SystemColor.controlText);
-		separator.setBounds(180, 36, 810, 2);
+		separator.setBounds(196, 36, 794, 2);
 		panel_1.add(separator);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setForeground(Color.BLACK);
 		separator_1.setBackground(Color.BLACK);
-		separator_1.setBounds(0, 36, 70, 2);
+		separator_1.setBounds(0, 36, 51, 2);
 		panel_1.add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
-		separator_2.setForeground(SystemColor.controlText);
 		separator_2.setBackground(SystemColor.controlText);
+		separator_2.setForeground(SystemColor.controlText);
 		separator_2.setBounds(0, 110, 990, 2);
 		panel_1.add(separator_2);
 		
 		JLabel lblX = new JLabel("X");
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
+		lblX.setForeground(Color.BLACK);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
-		lblX.setForeground(new Color(0, 0, 0));
 		lblX.setBounds(952, 0, 38, 38);
 		panel_1.add(lblX);
 		
-		JLabel lblAnnadir = new JLabel("ADD");
-		lblAnnadir.setOpaque(true);
-		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblAnnadir.setBackground(SystemColor.info);
-		lblAnnadir.setBounds(825, 49, 155, 20);
-		panel_1.add(lblAnnadir);
-		
-		JLabel lblAnnadir_1 = new JLabel("DELETE");
-		lblAnnadir_1.setOpaque(true);
-		lblAnnadir_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAnnadir_1.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblAnnadir_1.setBackground(SystemColor.info);
-		lblAnnadir_1.setBounds(825, 70, 155, 20);
-		panel_1.add(lblAnnadir_1);
-		
 		JPanel panel_2 = new JPanel();
-		panel_2.setLayout(null);
-		panel_2.setBackground(new Color(5, 150, 177));
 		panel_2.setBounds(0, 112, 990, 670);
+		panel_2.setBackground(new Color(5, 150, 177));
 		panel.add(panel_2);
+		panel_2.setLayout(null);
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setLayout(null);
@@ -201,7 +188,7 @@ public class FrameTrabajador extends JFrame {
 		panel_4.add(label_6);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(FrameTrabajador.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
+		lblNewLabel_1.setIcon(new ImageIcon(FrameDependiente.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
 		lblNewLabel_1.setBounds(0, 0, 990, 217);
 		panel_4.add(lblNewLabel_1);
 		
@@ -259,14 +246,18 @@ public class FrameTrabajador extends JFrame {
 		panel_5.add(label_13);
 		
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon(FrameTrabajador.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
-		lblNewLabel_2.setBounds(0, 0, 990, 214);
+		lblNewLabel_2.setIcon(new ImageIcon(FrameDependiente.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
+		lblNewLabel_2.setBounds(0, 0, 990, 217);
 		panel_5.add(lblNewLabel_2);
 		
+		JLabel label_14 = new JLabel("");
+		label_14.setBounds(0, 466, 990, 217);
+		panel_2.add(label_14);
+		
 		JPanel panel_3 = new JPanel();
-		panel_3.setLayout(null);
 		panel_3.setBounds(0, 0, 990, 217);
 		panel_2.add(panel_3);
+		panel_3.setLayout(null);
 		
 		JLabel labelPaquete = new JLabel("PACKAGE : ");
 		labelPaquete.setForeground(SystemColor.info);
@@ -317,7 +308,7 @@ public class FrameTrabajador extends JFrame {
 		panel_3.add(labelCampoCosto);
 		
 		JLabel lblImagen = new JLabel("");
-		lblImagen.setIcon(new ImageIcon(FrameTrabajador.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
+		lblImagen.setIcon(new ImageIcon(FrameDependiente.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
 		lblImagen.setBounds(0, 0, 990, 217);
 		panel_3.add(lblImagen);
 	}

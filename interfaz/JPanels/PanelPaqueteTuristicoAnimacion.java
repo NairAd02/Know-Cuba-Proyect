@@ -14,7 +14,7 @@ public class PanelPaqueteTuristicoAnimacion extends JPanel {
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(PanelPaqueteTuristicoAnimacion.class.getResource("/images/animaci\u00F3n.gif")));
-		lblNewLabel.setBounds(0, 0, 992, 217);
+		lblNewLabel.setBounds(0, 0, 990, 217);
 		add(lblNewLabel);
 
 	}

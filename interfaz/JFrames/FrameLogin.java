@@ -75,12 +75,6 @@ public class FrameLogin extends JFrame {
 		panel.add(panel_2);
 		panel_2.setLayout(null);
 		
-		JLabel lblX = new JLabel("X");
-		lblX.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setBackground(new Color(240, 240, 240));
-		lblX.setBounds(356, 0, 40, 30);
-		panel_2.add(lblX);
 		
 		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setForeground(SystemColor.info);
@@ -146,5 +140,13 @@ public class FrameLogin extends JFrame {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(268, 298, 57, 14);
 		panel_2.add(lblNewLabel);
+		
+		JLabel lblX = new JLabel("X");
+		lblX.setHorizontalAlignment(SwingConstants.CENTER);
+		lblX.setForeground(Color.BLACK);
+		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		lblX.setBackground(SystemColor.menu);
+		lblX.setBounds(358, 0, 38, 38);
+		panel_2.add(lblX);
 	}
 }
