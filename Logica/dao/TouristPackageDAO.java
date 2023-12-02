@@ -1,37 +1,41 @@
 package dao;
 
+import java.util.List;
+
 import logica.TouristPackage;
 
 public class TouristPackageDAO implements TouristPackageDAOInterface{
 
 	@Override
-	public boolean insert(TouristPackage touristPackage) {
+	public int insert(TouristPackage entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean delete(TouristPackage touristPackage) {
+	public int delete(TouristPackage entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean update(TouristPackage touristPackage) {
+	public int update(TouristPackage entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean select(int idTouristPackage) {
+	public TouristPackage select(int idEntidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean selectAll() {
+	public List<TouristPackage> selectAll() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
+
+
 
 }

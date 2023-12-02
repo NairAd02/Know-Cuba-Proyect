@@ -1,37 +1,41 @@
 package dao;
 
+import java.util.List;
+
 import logica.Season;
 
 public class SeasonDAO implements SeasonDAOInterface {
 
 	@Override
-	public boolean insert(Season season) {
+	public int insert(Season entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean delete(Season season) {
+	public int delete(Season entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean update(Season season) {
+	public int update(Season entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean select(int idSeason) {
+	public Season select(int idEntidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean selectAll() {
+	public List<Season> selectAll() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
+
+
 
 }

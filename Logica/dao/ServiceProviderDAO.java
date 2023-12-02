@@ -1,37 +1,41 @@
 package dao;
 
+import java.util.List;
+
 import logica.ServiceProvider;
 
 public class ServiceProviderDAO implements ServiceProviderDAOInterface {
 
 	@Override
-	public boolean insert(ServiceProvider serviceProvider) {
+	public int insert(ServiceProvider entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean delete(ServiceProvider serviceProvider) {
+	public int delete(ServiceProvider entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean update(ServiceProvider serviceProvider) {
+	public int update(ServiceProvider entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean select(int idServiceProvider) {
+	public ServiceProvider select(int idEntidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean selectAll() {
+	public List<ServiceProvider> selectAll() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
+
+
 
 }

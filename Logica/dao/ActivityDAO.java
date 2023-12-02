@@ -1,37 +1,41 @@
 package dao;
 
+import java.util.List;
+
 import logica.Activity;
 
 public class ActivityDAO implements ActivityDAOInterface {
 
 	@Override
-	public boolean insert(Activity activity) {
+	public int insert(Activity entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean delete(Activity activity) {
+	public int delete(Activity entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean update(Activity activity) {
+	public int update(Activity entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean select(int idActivity) {
+	public Activity select(int idEntidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean selectAll() {
+	public List<Activity> selectAll() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
+
+
 
 }

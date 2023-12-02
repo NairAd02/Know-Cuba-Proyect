@@ -1,37 +1,39 @@
 package dao;
 
+import java.util.List;
+
 import logica.TypeOfRoom;
 
 public class TypeOfRoomDAO implements TypeOfRoomDAOInterface {
 
 	@Override
-	public boolean insert(TypeOfRoom typeOfRoom) {
+	public int insert(TypeOfRoom entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean delete(TypeOfRoom typeOfRoom) {
+	public int delete(TypeOfRoom entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean update(TypeOfRoom typeOfRoom) {
+	public int update(TypeOfRoom entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean select(int idTypeOfRoom) {
+	public TypeOfRoom select(int idEntidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean selectAll() {
+	public List<TypeOfRoom> selectAll() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 }

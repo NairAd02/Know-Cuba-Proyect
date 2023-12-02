@@ -1,28 +1,23 @@
 package logica;
 
-public class ServiceProvider {
-	private String provider_name;
-	private String province;
+import java.util.ArrayList;
 
-	public ServiceProvider(String provider_name, String province) {
-		this.provider_name = provider_name;
-		this.province = province;
+public class ServiceProvider extends Provider {
+	private ArrayList<Activity> activities;
+
+	public ServiceProvider(int id, String name, String province,
+			ArrayList<Activity> activities) {
+		super(id, name, province);
+		this.activities = activities;
 	}
 
-	public String getProvider_name() {
-		return provider_name;
+	public ArrayList<Activity> getActivities() {
+		return activities;
 	}
 
-	public void setProvider_name(String provider_name) {
-		this.provider_name = provider_name;
+	public void setActivities(ArrayList<Activity> activities) {
+		this.activities = activities;
 	}
-
-	public String getProvince() {
-		return province;
-	}
-
-	public void setProvince(String province) {
-		this.province = province;
-	}
+	
 }
 

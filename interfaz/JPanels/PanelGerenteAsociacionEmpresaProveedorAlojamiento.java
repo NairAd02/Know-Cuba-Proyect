@@ -28,22 +28,22 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 		setBackground(SystemColor.inactiveCaptionBorder);
 		setLayout(null);
 
-		panelTable = new JPanel();
-		panelTable.setBounds(10, 93, 692, 574);
-		add(panelTable);
-		panelTable.setLayout(new BorderLayout(0, 0));
-
-		scrollPaneTable = new JScrollPane();
-		panelTable.add(scrollPaneTable, BorderLayout.CENTER);
-
-		table = new JTable();
-		table.setModel(new ModeloTablaAccommodationProvider());
-		scrollPaneTable.setViewportView(table);
-
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/Imagen1.jpg")));
 		lblNewLabel.setBounds(0, 0, 712, 678);
 		add(lblNewLabel);
+		
+				panelTable = new JPanel();
+				panelTable.setBounds(10, 93, 692, 574);
+				add(panelTable);
+				panelTable.setLayout(new BorderLayout(0, 0));
+				
+						scrollPaneTable = new JScrollPane();
+						panelTable.add(scrollPaneTable, BorderLayout.CENTER);
+						
+								table = new JTable();
+								table.setModel(new ModeloTablaAccommodationProvider());
+								scrollPaneTable.setViewportView(table);
 
 	}
 

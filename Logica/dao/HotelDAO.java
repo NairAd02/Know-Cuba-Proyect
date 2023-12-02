@@ -1,37 +1,41 @@
 package dao;
 
+import java.util.List;
+
 import logica.Hotel;
 
 public class HotelDAO implements HotelDAOInterface {
 
 	@Override
-	public boolean insert(Hotel hotel) {
+	public int insert(Hotel entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean delete(Hotel hotel) {
+	public int delete(Hotel entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean update(Hotel hotel) {
+	public int update(Hotel entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean select(int idHotel) {
+	public Hotel select(int idEntidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean selectAll() {
+	public List<Hotel> selectAll() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
+
+
 
 }

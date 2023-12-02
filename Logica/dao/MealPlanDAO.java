@@ -1,37 +1,41 @@
 package dao;
 
+import java.util.List;
+
 import logica.MealPlan;
 
 public class MealPlanDAO implements MealPlanDAOInterface {
 
 	@Override
-	public boolean insert(MealPlan mealPlan) {
+	public int insert(MealPlan entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean delete(MealPlan mealPlan) {
+	public int delete(MealPlan entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean update(MealPlan mealPlan) {
+	public int update(MealPlan entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean select(int idMealPlan) {
+	public MealPlan select(int idEntidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean selectAll() {
+	public List<MealPlan> selectAll() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
+
+
 
 }

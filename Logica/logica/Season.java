@@ -4,57 +4,70 @@ import java.time.LocalDate;
 
 public class Season {
 	private int id;
-	private String season_name;
-	private LocalDate season_start_date;
-	private LocalDate season_termination_date;
-	private String season_description;
-	private String type_of_contract;
+	private String name;
+	private LocalDate startDate;
+	private LocalDate terminationDate;
+	private String seasonDescription;
+	private String typeOfSeason;
 	
-	public Season(String season_name, LocalDate season_start_date,
-			LocalDate season_termination_date, String season_description,
-			String type_of_contract) {
-		this.season_name = season_name;
-		this.season_start_date = season_start_date;
-		this.season_termination_date = season_termination_date;
-		this.season_description = season_description;
-		this.type_of_contract = type_of_contract;
+	public Season(int id, String name, LocalDate startDate,
+			LocalDate terminationDate, String seasonDescription,
+			String typeOfSeason) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.startDate = startDate;
+		this.terminationDate = terminationDate;
+		this.seasonDescription = seasonDescription;
+		this.typeOfSeason = typeOfSeason;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getSeason_name() {
-		return season_name;
+
+	public String getName() {
+		return name;
 	}
-	public void setSeason_name(String season_name) {
-		this.season_name = season_name;
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	public LocalDate getSeason_start_date() {
-		return season_start_date;
+
+	public LocalDate getStartDate() {
+		return startDate;
 	}
-	public void setSeason_start_date(LocalDate season_start_date) {
-		this.season_start_date = season_start_date;
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
 	}
-	public LocalDate getSeason_termination_date() {
-		return season_termination_date;
+
+	public LocalDate getTerminationDate() {
+		return terminationDate;
 	}
-	public void setSeason_termination_date(LocalDate season_termination_date) {
-		this.season_termination_date = season_termination_date;
+
+	public void setTerminationDate(LocalDate terminationDate) {
+		this.terminationDate = terminationDate;
 	}
-	public String getSeason_description() {
-		return season_description;
+
+	public String getSeasonDescription() {
+		return seasonDescription;
 	}
-	public void setSeason_description(String season_description) {
-		this.season_description = season_description;
+
+	public void setSeasonDescription(String seasonDescription) {
+		this.seasonDescription = seasonDescription;
 	}
-	public String getType_of_contract() {
-		return type_of_contract;
+
+	public String getTypeOfSeason() {
+		return typeOfSeason;
 	}
-	public void setType_of_contract(String type_of_contract) {
-		this.type_of_contract = type_of_contract;
+
+	public void setTypeOfSeason(String typeOfSeason) {
+		this.typeOfSeason = typeOfSeason;
 	}
 	
 }

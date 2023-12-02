@@ -1,37 +1,41 @@
 package dao;
 
+import java.util.List;
+
 import logica.TransportationProvider;
 
 public class TransportationProviderDAO implements TransportationProviderDAOInterface {
 
 	@Override
-	public boolean insert(TransportationProvider transportationProvider) {
+	public int insert(TransportationProvider entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean delete(TransportationProvider transportationProvider) {
+	public int delete(TransportationProvider entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean update(TransportationProvider transportationProvider) {
+	public int update(TransportationProvider entidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
-	public boolean select(int idTransportationProvider) {
+	public TransportationProvider select(int idEntidad) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean selectAll() {
+	public List<TransportationProvider> selectAll() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
+
+
 
 }
