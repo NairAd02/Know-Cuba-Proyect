@@ -6,18 +6,18 @@ public class AccommodationModality extends Modality{
 	private int cantDaysAccommodation;
 	private double price;
 
-	public AccommodationModality(int id, Contract contract,
-			TypeOfRoom typeOfRoomSelect, MealPlan mealPlanSelect,
-			int cantDaysAccommodation, double price) {
-		super(id, contract);
+	public AccommodationModality(int id, Contract contract, String typeOfModality, TypeOfRoom typeOfRoomSelect,
+			MealPlan mealPlanSelect, int cantDaysAccommodation, double price) { // constructor a nivel de logica
+		super(id, contract, typeOfModality);
 		this.typeOfRoomSelect = typeOfRoomSelect;
 		this.mealPlanSelect = mealPlanSelect;
 		this.cantDaysAccommodation = cantDaysAccommodation;
 		this.price = price;
 	}
 
+	
 	public TypeOfRoom getTypeOfRoomSelect() {
-		return this.typeOfRoomSelect;
+		return typeOfRoomSelect;
 	}
 
 	public void setTypeOfRoomSelect(TypeOfRoom typeOfRoomSelect) {
@@ -25,7 +25,7 @@ public class AccommodationModality extends Modality{
 	}
 
 	public MealPlan getMealPlanSelect() {
-		return this.mealPlanSelect;
+		return mealPlanSelect;
 	}
 
 	public void setMealPlanSelect(MealPlan mealPlanSelect) {
@@ -33,7 +33,7 @@ public class AccommodationModality extends Modality{
 	}
 
 	public int getCantDaysAccommodation() {
-		return this.cantDaysAccommodation;
+		return cantDaysAccommodation;
 	}
 
 	public void setCantDaysAccommodation(int cantDaysAccommodation) {
@@ -41,11 +41,19 @@ public class AccommodationModality extends Modality{
 	}
 
 	public double getPrice() {
-		return this.price;
+		return price;
 	}
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public int getTypeOfRoomId() {
+		return this.typeOfRoomSelect.getId();
+	}
+
+	public int getMealPlanId() {
+		return this.mealPlanSelect.getId();
 	}
 
 }

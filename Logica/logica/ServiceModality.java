@@ -7,9 +7,10 @@ public class ServiceModality extends Modality{
 	private LocalDate releasedDate;
 	private double price;
 
-	public ServiceModality(int id, Contract contract, Activity activity,
-			LocalDate releasedDate, double price) {
-		super(id, contract);
+
+	public ServiceModality(int id, Contract contract, String typeOfModality, Activity activity, LocalDate releasedDate,
+			double price) {
+		super(id, contract, typeOfModality);
 		this.activity = activity;
 		this.releasedDate = releasedDate;
 		this.price = price;
@@ -37,6 +38,10 @@ public class ServiceModality extends Modality{
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public int getActivityId () {
+		return this.activity.getId();
 	}
 
 }

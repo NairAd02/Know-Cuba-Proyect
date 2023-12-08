@@ -9,6 +9,10 @@ public class MealPlan {
 		this.name = name;
 	}
 	
+	public MealPlan (int id) { // CONSTRUCTOR PARA LAS BUSQUEDAS EN EL BINARYSEARCHTREE
+		this.id = id;
+	}
+	
 	public int getId() {
 		return id;
 	}

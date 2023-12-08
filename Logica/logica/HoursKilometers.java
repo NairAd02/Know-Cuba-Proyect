@@ -5,10 +5,12 @@ private double costKilometersRout;
 private double costHours;
 private double costKilometersRoutAdditionals;
 private double costHoursAdditionals;
-public HoursKilometers(int id, Contract contract, Vehicle vehicle,
-		double costKilometersRout, double costHours,
-		double costKilometersRoutAdditionals, double costHoursAdditionals) {
-	super(id, contract, vehicle);
+
+
+public HoursKilometers(int id, Contract contract, String typeOfModality, Vehicle vehicle, String typeTransportModality,
+		double costKilometersRout, double costHours, double costKilometersRoutAdditionals,
+		double costHoursAdditionals) {
+	super(id, contract, typeOfModality, vehicle, typeTransportModality);
 	this.costKilometersRout = costKilometersRout;
 	this.costHours = costHours;
 	this.costKilometersRoutAdditionals = costKilometersRoutAdditionals;

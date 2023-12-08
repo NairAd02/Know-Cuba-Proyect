@@ -1,31 +1,39 @@
 package logica;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public abstract class Contract {
 	protected int id;
-	protected LocalDate StartDate;
+	protected LocalDate startDate;
 	protected LocalDate terminationDate;
 	protected LocalDate reconciliationDate;
 	protected String description;
 	protected Provider provider;
-	protected LinkedList<Modality> modalitys;
+	protected ArrayList<Modality> modalitys;
 	protected boolean state; // true si esta cerrado, falso si no
+	protected String typeOfContract;
+
 	public Contract(int id, LocalDate startDate, LocalDate terminationDate,
 			LocalDate reconciliationDate, String description,
-			Provider provider, LinkedList<Modality> modalitys, boolean state) {
+			Provider provider, ArrayList<Modality> modalitys, boolean state, String typeOfContract) { // Constructor a nivel de logica
 		super();
 		this.id = id;
-		StartDate = startDate;
+		this.startDate = startDate;
 		this.terminationDate = terminationDate;
 		this.reconciliationDate = reconciliationDate;
 		this.description = description;
+		this.typeOfContract = typeOfContract;
 		this.provider = provider;
 		this.modalitys = modalitys;
 		this.state = state;
 	}
-	
+
+
+	public Contract (int id) { // CONSTRUCTOR PARA LAS BUSQUEDAS EN EL BINARYSEARCHTREE
+		this.id = id;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -33,10 +41,10 @@ public abstract class Contract {
 		this.id = id;
 	}
 	public LocalDate getStartDate() {
-		return StartDate;
+		return this.startDate;
 	}
 	public void setStartDate(LocalDate startDate) {
-		StartDate = startDate;
+		this.startDate = startDate;
 	}
 	public LocalDate getTerminationDate() {
 		return terminationDate;
@@ -62,10 +70,10 @@ public abstract class Contract {
 	public void setProvider(Provider provider) {
 		this.provider = provider;
 	}
-	public LinkedList<Modality> getModalitys() {
+	public ArrayList<Modality> getModalitys() {
 		return modalitys;
 	}
-	public void setModalitys(LinkedList<Modality> modalitys) {
+	public void setModalitys(ArrayList<Modality> modalitys) {
 		this.modalitys = modalitys;
 	}
 	public boolean isState() {
@@ -74,5 +82,16 @@ public abstract class Contract {
 	public void setState(boolean state) {
 		this.state = state;
 	}
+
+	public String getTypeOfContract() {
+		return typeOfContract;
+	}
+
+	public void setTypeOfContract(String typeOfContract) {
+		this.typeOfContract = typeOfContract;
+	}
 	
+	public int getProviderId () { // Metodo para obtener el indentificador del provedor
+		return this.provider.getId();
+	}
 }

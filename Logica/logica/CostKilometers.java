@@ -5,10 +5,10 @@ public class CostKilometers extends TransportModality{
 	private double costKilometersLap;
 	private double costHoursWait;
 	
-	public CostKilometers(int id, Contract contract, Vehicle vehicle,
-			double costKilometersGoing, double costKilometersLap,
-			double costHoursWait) {
-		super(id, contract, vehicle);
+	
+	public CostKilometers(int id, Contract contract, String typeOfModality, Vehicle vehicle,
+			String typeTransportModality, double costKilometersGoing, double costKilometersLap, double costHoursWait) {
+		super(id, contract, typeOfModality, vehicle, typeTransportModality);
 		this.costKilometersGoing = costKilometersGoing;
 		this.costKilometersLap = costKilometersLap;
 		this.costHoursWait = costHoursWait;
@@ -37,4 +37,5 @@ public class CostKilometers extends TransportModality{
 	public void setCostHoursWait(double costHoursWait) {
 		this.costHoursWait = costHoursWait;
 	}
+	
 }

@@ -7,19 +7,21 @@ public class Season {
 	private String name;
 	private LocalDate startDate;
 	private LocalDate terminationDate;
-	private String seasonDescription;
+	private String description;
 	private String typeOfSeason;
-	
+	private int accommodationContractId;
+
 	public Season(int id, String name, LocalDate startDate,
-			LocalDate terminationDate, String seasonDescription,
-			String typeOfSeason) {
+			LocalDate terminationDate, String description,
+			String typeOfSeason, int accommodationContractId ) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.startDate = startDate;
 		this.terminationDate = terminationDate;
-		this.seasonDescription = seasonDescription;
+		this.description = description;
 		this.typeOfSeason = typeOfSeason;
+		this.accommodationContractId = accommodationContractId;
 	}
 
 	public int getId() {
@@ -54,12 +56,12 @@ public class Season {
 		this.terminationDate = terminationDate;
 	}
 
-	public String getSeasonDescription() {
-		return seasonDescription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setSeasonDescription(String seasonDescription) {
-		this.seasonDescription = seasonDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getTypeOfSeason() {
@@ -69,5 +71,14 @@ public class Season {
 	public void setTypeOfSeason(String typeOfSeason) {
 		this.typeOfSeason = typeOfSeason;
 	}
+
+	public int getAccommodationContractId() {
+		return accommodationContractId;
+	}
+
+	public void setAccommodationContractId(int accommodationContractId) {
+		this.accommodationContractId = accommodationContractId;
+	}
+	
 	
 }

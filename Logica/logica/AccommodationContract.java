@@ -4,19 +4,26 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import dao.AccommodationModalityDAO;
+
 public class AccommodationContract extends Contract{
 	ArrayList<Season> seasons;
-	private int surcharge;
+	private double surcharge;
 	
 	public AccommodationContract(int id, LocalDate startDate,
 			LocalDate terminationDate, LocalDate reconciliationDate,
 			String description, Provider provider,
-			LinkedList<Modality> modalitys, boolean state,
-			ArrayList<Season> seasons, int surcharge) {
+			ArrayList<AccommodationModality> modalitys, boolean state, String typeOfContract,
+			ArrayList<Season> seasons, double surcharge) {
 		super(id, startDate, terminationDate, reconciliationDate, description,
-				provider, modalitys, state);
+				provider, new ArrayList<Modality>(modalitys), state, typeOfContract);
 		this.seasons = seasons;
 		this.surcharge = surcharge;
+	} // Constructor Nivel de logica
+	
+
+	public AccommodationContract (int id) { // CONSTRUCTOR PARA LAS BUSQUEDAS EN EL BINARYSEARCHTREE
+		super(id);
 	}
 
 	public ArrayList<Season> getSeasons() {
@@ -27,12 +34,12 @@ public class AccommodationContract extends Contract{
 		this.seasons = seasons;
 	}
 
-	public int getSurcharge() {
+	public double getSurcharge() {
 		return surcharge;
 	}
 
-	public void setSurcharge(int surcharge) {
+	public void setSurcharge(double surcharge) {
 		this.surcharge = surcharge;
 	}
-	
+
 }

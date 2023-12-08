@@ -11,6 +11,10 @@ public class ServiceProvider extends Provider {
 		this.activities = activities;
 	}
 
+	public ServiceProvider (int id) { // CONSTRUCTOR PARA LAS BUSQUEDAS EN EL BINARYSEARCHTREE
+		super(id);
+	}
+
 	public ArrayList<Activity> getActivities() {
 		return activities;
 	}
@@ -18,6 +22,6 @@ public class ServiceProvider extends Provider {
 	public void setActivities(ArrayList<Activity> activities) {
 		this.activities = activities;
 	}
-	
+
 }
 

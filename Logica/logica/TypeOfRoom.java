@@ -9,6 +9,10 @@ public class TypeOfRoom {
 		this.id = id;
 		this.name = name;
 	}
+	
+	public TypeOfRoom (int id) { // CONSTRUCTOR PARA LAS BUSQUEDAS EN EL BINARYSEARCHTREE
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;
