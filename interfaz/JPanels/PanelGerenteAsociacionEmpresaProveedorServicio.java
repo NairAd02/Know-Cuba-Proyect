@@ -22,9 +22,9 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 	private JPanel panelTable;
 	private JScrollPane scrollPaneTable;
 	private JTable table;
-	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
+	private JLabel lblImage;
+	private JLabel lblAnnadir;
+	private JLabel lblEliminar;
 
 	/**
 	 * Create the panel.
@@ -33,22 +33,24 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 		setBackground(SystemColor.inactiveCaptionBorder);
 		setLayout(null);
 		
-		lblNewLabel_2 = new JLabel("DELETE");
-		lblNewLabel_2.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2.setBounds(505, 27, 108, 33);
-		add(lblNewLabel_2);
+		lblEliminar = new JLabel("");
+		lblEliminar.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/eliminar1.png")));
+		lblEliminar.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblEliminar.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEliminar.setBounds(491, 35, 108, 33);
+		add(lblEliminar);
 		
-		lblNewLabel_1 = new JLabel("ADD");
-		lblNewLabel_1.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(100, 27, 108, 33);
-		add(lblNewLabel_1);
+		lblAnnadir = new JLabel("");
+		lblAnnadir.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/a\u00F1adir2 - copia.png")));
+		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAnnadir.setBounds(127, 35, 71, 33);
+		add(lblAnnadir);
 		
-		lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/Imagen2.jpg")));
-		lblNewLabel.setBounds(0, 0, 712, 678);
-		add(lblNewLabel);
+		lblImage = new JLabel("");
+		lblImage.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/Imagen2.jpg")));
+		lblImage.setBounds(0, 0, 712, 678);
+		add(lblImage);
 		
 		panelTable = new JPanel();
 		panelTable.setOpaque(false);
