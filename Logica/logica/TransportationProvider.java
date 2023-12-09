@@ -1,18 +1,23 @@
 package logica;
 
-public class TransportationProvider {
-	private String provider_name;
+import java.util.ArrayList;
 
-	public TransportationProvider(String provider_name) {
-		super();
-		this.provider_name = provider_name;
+public class TransportationProvider extends Provider {
+	ArrayList<Vehicle> vehicles;
+
+	public TransportationProvider(int id, String name, String province,
+			ArrayList<Vehicle> vehicles) {
+		super(id, name, province);
+		this.vehicles = vehicles;
 	}
 
-	public String getProvider_name() {
-		return provider_name;
+	public ArrayList<Vehicle> getVehicles() {
+		return vehicles;
 	}
 
-	public void setProvider_name(String provider_name) {
-		this.provider_name = provider_name;
+	public void setVehicles(ArrayList<Vehicle> vehicles) {
+		this.vehicles = vehicles;
 	}
+	
+
 }

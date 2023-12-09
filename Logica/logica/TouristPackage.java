@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 public class TouristPackage {
 	private int id;
+	private String name;
 	ArrayList<Modality> modalities;
 	
-	public TouristPackage(int id) {
+	
+	public TouristPackage(int id, String name, ArrayList<Modality> modalities) {
+		super();
 		this.id = id;
-		this.modalities = new ArrayList<Modality>();
+		this.name = name;
+		this.modalities = modalities;
 	}
 
 	public int getId() {
@@ -18,5 +22,21 @@ public class TouristPackage {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public ArrayList<Modality> getModalities() {
+		return modalities;
+	}
+
+	public void setModalities(ArrayList<Modality> modalities) {
+		this.modalities = modalities;
+	}
+		
 }

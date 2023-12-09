@@ -1,7 +1,16 @@
 package logica;
 
-public class Modality {
-	public int id;
+public abstract class Modality {
+	protected int id;
+	protected Contract contract;
+	protected String typeOfModality;
+
+	public Modality(int id, Contract contract, String typeOfModality) {
+		super();
+		this.id = id;
+		this.contract = contract;
+		this.typeOfModality = typeOfModality;
+	}
 
 	public int getId() {
 		return id;
@@ -11,7 +20,23 @@ public class Modality {
 		this.id = id;
 	}
 
-	public Modality(int id) {
-		this.id = id;
+	public Contract getContract() {
+		return contract;
+	}
+
+	public void setContract(Contract contract) {
+		this.contract = contract;
+	}
+
+	public String getTypeOfModality() {
+		return typeOfModality;
+	}
+
+	public void setTypeOfModality(String typeOfModality) {
+		this.typeOfModality = typeOfModality;
+	}
+
+	public int getContractId() {
+		return this.contract.getId();
 	}
 }

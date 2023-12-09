@@ -1,37 +1,32 @@
 package dao;
 
-import logica.Contract;
+import java.sql.CallableStatement;
+import java.sql.SQLException;
+
+import utils.ConnectionDataBase;
 
 public class ContractDAO implements ContractDAOInterface {
+	private static ContractDAO contractDAO;
+	
 
-	@Override
-	public boolean insert(Contract contract) {
-		// TODO Auto-generated method stub
-		return false;
+	// PATRON SINGLENTON
+	private ContractDAO () {
+		
 	}
 
-	@Override
-	public boolean delete(Contract contract) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public static ContractDAO getInstancie () {
+		if (contractDAO == null)
+			contractDAO = new ContractDAO();
 
-	@Override
-	public boolean update(Contract contract) {
-		// TODO Auto-generated method stub
-		return false;
+		return contractDAO;
 	}
-
+	
 	@Override
-	public boolean select(int idContract) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean selectAll() {
-		// TODO Auto-generated method stub
-		return false;
+	public void delete(int idContract) throws SQLException {
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call delete_contract(?)}");
+		cs.setInt(1, idContract); // se define el parametro de la funcion
+		cs.execute(); // se ejecuta la consulta de llamada a la funcion
+		cs.close(); // se cierra la llamada a la funcion
 	}
 
 }

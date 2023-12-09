@@ -1,11 +1,10 @@
 package dao;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import logica.Season;
 
-public interface SeasonDAOInterface  {
-	public boolean insert(Season season);
-	public boolean delete(Season season);
-	public boolean update(Season season);
-	public boolean select(int idSeason);
-	public boolean selectAll();
+public interface SeasonDAOInterface extends DAO <Season> {
+	public List<Season> selectIntoAccommodationContract (int idAccommodationContract) throws SQLException; // metodo para obtener todas las temoporadas pertenecientes a un contrato
 }

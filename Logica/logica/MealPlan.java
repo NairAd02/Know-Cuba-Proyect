@@ -2,7 +2,16 @@ package logica;
 
 public class MealPlan {
 	private int id;
-	private String meal_plan_name;
+	private String name;
+	public MealPlan(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+	
+	public MealPlan (int id) { // CONSTRUCTOR PARA LAS BUSQUEDAS EN EL BINARYSEARCHTREE
+		this.id = id;
+	}
 	
 	public int getId() {
 		return id;
@@ -10,14 +19,11 @@ public class MealPlan {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getMeal_plan_name() {
-		return meal_plan_name;
+	public String getName() {
+		return name;
 	}
-	public void setMeal_plan_name(String meal_plan_name) {
-		this.meal_plan_name = meal_plan_name;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public MealPlan(String meal_plan_name) {
-		this.meal_plan_name = meal_plan_name;
-	}
 }

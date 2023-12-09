@@ -1,15 +1,43 @@
 package logica;
 
-public class Hotel {
-	private int id;
-	private String name;
+import java.util.ArrayList;
+
+public class Hotel extends Provider {
+	private String hotelChain;
+	private int hotelCategory;
+	private String address;
+	private ArrayList<TypeOfRoom> typesOfRooms;
+	private ArrayList<MealPlan> mealsPlans;
 	
-	public String getName() {
-		return name;
+	
+	public Hotel(int id, String name, String province, String hotelChain, int hotelCategory, String address,
+			ArrayList<TypeOfRoom> typesOfRooms, ArrayList<MealPlan> mealsPlans) {
+		super(id, name, province);
+		this.hotelChain = hotelChain;
+		this.hotelCategory = hotelCategory;
+		this.address = address;
+		this.typesOfRooms = typesOfRooms;
+		this.mealsPlans = mealsPlans;
+	}
+	
+	public Hotel (int id) { // CONSTRUCTOR PARA LAS BUSQUEDAS EN EL BINARYSEARCHTREE
+		super(id);
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getHotelChain() {
+		return hotelChain;
+	}
+
+	public void setHotelChain(String hotelChain) {
+		this.hotelChain = hotelChain;
+	}
+
+	public int getHotelCategory() {
+		return hotelCategory;
+	}
+
+	public void setHotelCategory(int hotelCategory) {
+		this.hotelCategory = hotelCategory;
 	}
 
 	public String getAddress() {
@@ -20,50 +48,20 @@ public class Hotel {
 		this.address = address;
 	}
 
-	public String getHotel_chain() {
-		return hotel_chain;
+	public ArrayList<TypeOfRoom> getTypesOfRooms() {
+		return typesOfRooms;
 	}
 
-	public void setHotel_chain(String hotel_chain) {
-		this.hotel_chain = hotel_chain;
+	public void setTypesOfRooms(ArrayList<TypeOfRoom> typesOfRooms) {
+		this.typesOfRooms = typesOfRooms;
 	}
 
-	public String getProvince() {
-		return province;
+	public ArrayList<MealPlan> getMealsPlans() {
+		return mealsPlans;
 	}
 
-	public void setProvince(String province) {
-		this.province = province;
+	public void setMealsPlans(ArrayList<MealPlan> mealsPlans) {
+		this.mealsPlans = mealsPlans;
 	}
-
-	public String getHotel_category() {
-		return hotel_category;
-	}
-
-	public void setHotel_category(String hotel_category) {
-		this.hotel_category = hotel_category;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String address;
-	public String hotel_chain;
-	public String province;
-	public String hotel_category;
 	
-	public Hotel(String name, String address, String hotel_chain,
-			String province, String hotel_category) {
-		super();
-		this.name = name;
-		this.address = address;
-		this.hotel_chain = hotel_chain;
-		this.province = province;
-		this.hotel_category = hotel_category;
-	}
 }
