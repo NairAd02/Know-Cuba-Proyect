@@ -1,6 +1,5 @@
 package JFrames;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,25 +20,7 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 	private JTable tableAvailableTransportation;
 	private JTable tableAssignedTransports;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameTrabajadorModalidadTransporteAnnadir frame = new FrameTrabajadorModalidadTransporteAnnadir();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
 	public FrameTrabajadorModalidadTransporteAnnadir() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,7 +33,7 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
-		panel.setOpaque(false);
+		panel.setBackground(new Color(5, 150, 177));
 		panel.setBackground(new Color(5, 150, 177));
 		panel.setBounds(0, 0, 600, 360);
 		contentPane.add(panel);
@@ -67,7 +48,7 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 		
 		JLabel lblAvailableTransportation = new JLabel("AVAILABLE TRANSPORTATION");
 		lblAvailableTransportation.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblAvailableTransportation.setBounds(25, 33, 275, 19);
+		lblAvailableTransportation.setBounds(25, 39, 275, 19);
 		panel.add(lblAvailableTransportation);
 		
 		JLabel lblAnnadir = new JLabel("ASIGN");
@@ -80,7 +61,7 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 		
 		JLabel lblAssignedTransports = new JLabel("ASSIGNED TRANSPORTS");
 		lblAssignedTransports.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblAssignedTransports.setBounds(25, 173, 275, 19);
+		lblAssignedTransports.setBounds(25, 182, 275, 19);
 		panel.add(lblAssignedTransports);
 		
 		JLabel lblDenegar = new JLabel("DENY");
@@ -99,12 +80,6 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 		lblConfirm.setBounds(182, 311, 235, 35);
 		panel.add(lblConfirm);
 		
-		JLabel lblFondo = new JLabel("");
-		lblFondo.setOpaque(true);
-		lblFondo.setBackground(new Color(5, 150, 177));
-		lblFondo.setBounds(0, 0, 600, 360);
-		panel.add(lblFondo);
-		
 		JPanel panelAvailableTransportation = new JPanel();
 		panelAvailableTransportation.setBounds(10, 71, 580, 86);
 		panel.add(panelAvailableTransportation);
@@ -114,6 +89,7 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 		panelAvailableTransportation.add(scrollPane, BorderLayout.CENTER);
 		
 		tableAvailableTransportation = new JTable();
+		
 		scrollPane.setColumnHeaderView(tableAvailableTransportation);
 		
 		JPanel panelAssignedTransports = new JPanel();

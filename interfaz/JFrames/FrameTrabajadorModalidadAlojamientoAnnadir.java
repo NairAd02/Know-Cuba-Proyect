@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelosTablas.ModeloTablaAccommodationModality;
+
 import javax.swing.JLabel;
 import java.awt.SystemColor;
 import java.awt.Font;
@@ -21,37 +24,20 @@ public class FrameTrabajadorModalidadAlojamientoAnnadir extends JFrame {
 	private JTable tableAvailableAccommodation;
 	private JTable tableAssignedAccommodations;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameTrabajadorModalidadAlojamientoAnnadir frame = new FrameTrabajadorModalidadAlojamientoAnnadir();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
+	
 	public FrameTrabajadorModalidadAlojamientoAnnadir() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 360);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		contentPane.setBackground(new Color(5, 150, 177));
+		setBackground(new Color(5, 150, 177));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setOpaque(false);
+		panel.setBackground(new Color(5, 150, 177));
 		panel.setBounds(0, 0, 600, 360);
 		panel.setBackground(new Color(5, 150, 177));
 		contentPane.add(panel);
@@ -99,12 +85,6 @@ public class FrameTrabajadorModalidadAlojamientoAnnadir extends JFrame {
 		lblConfirm.setBounds(182, 311, 235, 35);
 		panel.add(lblConfirm);
 		
-		JLabel lblFondo = new JLabel("");
-		lblFondo.setOpaque(true);
-		lblFondo.setBackground(new Color(5, 150, 177));
-		lblFondo.setBounds(0, 0, 600, 360);
-		panel.add(lblFondo);
-		
 		JPanel panelAvailableAccommodation = new JPanel();
 		panelAvailableAccommodation.setBounds(10, 71, 580, 86);
 		panel.add(panelAvailableAccommodation);
@@ -114,7 +94,8 @@ public class FrameTrabajadorModalidadAlojamientoAnnadir extends JFrame {
 		panelAvailableAccommodation.add(scrollPane, BorderLayout.CENTER);
 		
 		tableAvailableAccommodation = new JTable();
-		scrollPane.setColumnHeaderView(tableAvailableAccommodation);
+		tableAvailableAccommodation.setModel(new ModeloTablaAccommodationModality());
+		scrollPane.setViewportView(tableAvailableAccommodation);
 		
 		JPanel panelAssignedAccommodations = new JPanel();
 		panelAssignedAccommodations.setOpaque(false);
@@ -126,6 +107,7 @@ public class FrameTrabajadorModalidadAlojamientoAnnadir extends JFrame {
 		panelAssignedAccommodations.add(scrollPane_1, BorderLayout.CENTER);
 		
 		tableAssignedAccommodations = new JTable();
-		scrollPane_1.setColumnHeaderView(tableAssignedAccommodations);
+		tableAssignedAccommodations.setModel(new ModeloTablaAccommodationModality());
+		scrollPane_1.setViewportView(tableAssignedAccommodations);
 	}
 }

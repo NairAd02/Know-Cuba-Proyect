@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelosTablas.ModeloTablaServiceModality;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.SystemColor;
@@ -21,25 +24,7 @@ public class FrameTrabajadorModalidadServicioAnnadir extends JFrame {
 	private JTable tableAvailableServices;
 	private JTable tableAssignedServices;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameTrabajadorModalidadServicioAnnadir frame = new FrameTrabajadorModalidadServicioAnnadir();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
+	
 	public FrameTrabajadorModalidadServicioAnnadir() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,8 +36,8 @@ public class FrameTrabajadorModalidadServicioAnnadir extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(5, 150, 177));
 		panel.setLayout(null);
-		panel.setOpaque(false);
 		panel.setBackground(new Color(5, 150, 177));
 		panel.setBounds(0, 0, 600, 360);
 		contentPane.add(panel);
@@ -99,12 +84,6 @@ public class FrameTrabajadorModalidadServicioAnnadir extends JFrame {
 		lblConfirm.setBounds(182, 311, 235, 35);
 		panel.add(lblConfirm);
 		
-		JLabel lblFondo = new JLabel("");
-		lblFondo.setOpaque(true);
-		lblFondo.setBackground(new Color(5, 150, 177));
-		lblFondo.setBounds(0, 0, 600, 360);
-		panel.add(lblFondo);
-		
 		JPanel panelAvailableServices = new JPanel();
 		panelAvailableServices.setBounds(10, 71, 580, 86);
 		panel.add(panelAvailableServices);
@@ -114,7 +93,8 @@ public class FrameTrabajadorModalidadServicioAnnadir extends JFrame {
 		panelAvailableServices.add(scrollPane, BorderLayout.CENTER);
 		
 		tableAvailableServices = new JTable();
-		scrollPane.setColumnHeaderView(tableAvailableServices);
+		tableAvailableServices.setModel(new ModeloTablaServiceModality());
+		scrollPane.setViewportView(tableAvailableServices);
 		
 		JPanel panelAssignedServices = new JPanel();
 		panelAssignedServices.setOpaque(false);
@@ -126,7 +106,8 @@ public class FrameTrabajadorModalidadServicioAnnadir extends JFrame {
 		panelAssignedServices.add(scrollPane_1, BorderLayout.CENTER);
 		
 		tableAssignedServices = new JTable();
-		scrollPane_1.setColumnHeaderView(tableAssignedServices);
+		tableAssignedServices.setModel(new ModeloTablaServiceModality());
+		scrollPane_1.setViewportView(tableAssignedServices);
 	}
 
 }
