@@ -28,6 +28,5 @@ public class TransportModality extends Modality{
 		this.typeTransportModality = typeTransportModality;
 	}
 
-
-
+	
 }
