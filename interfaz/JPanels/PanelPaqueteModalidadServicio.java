@@ -55,7 +55,7 @@ public class PanelPaqueteModalidadServicio extends JPanel {
 		
 		JLabel lblService = new JLabel("SERVICE");
 		lblService.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblService.setBounds(28, 11, 206, 30);
+		lblService.setBounds(28, 11, 99, 30);
 		add(lblService);
 		
 	
@@ -85,5 +85,4 @@ public class PanelPaqueteModalidadServicio extends JPanel {
 		lblEliminar.setBounds(485, 53, 155, 20);
 		add(lblEliminar);
 	}
-
 }

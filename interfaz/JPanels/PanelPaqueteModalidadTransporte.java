@@ -39,6 +39,18 @@ public class PanelPaqueteModalidadTransporte extends JPanel {
 		lblTransportation.setFont(new Font("Arial Black", Font.PLAIN, 19));
 		lblTransportation.setBounds(28, 11, 206, 30);
 		add(lblTransportation);
+		
+		JLabel label = new JLabel("");
+		label.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		label.setIcon(new ImageIcon(PanelPaqueteModalidadTransporte.class.getResource("/images/flecha_izquierda.png")));
+		label.setBounds(48, 53, 99, 20);
+		add(label);
+		
+		JLabel label_1 = new JLabel("");
+		label_1.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		label_1.setIcon(new ImageIcon(PanelPaqueteModalidadTransporte.class.getResource("/images/flecha_derecha.png")));
+		label_1.setBounds(181, 53, 99, 20);
+		add(label_1);
 
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 84, 630, 359);
@@ -78,6 +90,10 @@ public class PanelPaqueteModalidadTransporte extends JPanel {
 		lblEliminar.setBackground(SystemColor.info);
 		lblEliminar.setBounds(485, 53, 155, 20);
 		add(lblEliminar);
+		
+		JLabel lblNewLabel = new JLabel("( Hours Kilometers ) ");
+		lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 15));
+		lblNewLabel.setBounds(239, 11, 173, 30);
+		add(lblNewLabel);
 	}
-
 }

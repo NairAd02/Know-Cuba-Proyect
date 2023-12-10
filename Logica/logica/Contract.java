@@ -1,9 +1,18 @@
 package logica;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import dao.ModalityDAO;
+
 public abstract class Contract {
+
+	// Atributos estaticos para el hash
+	public static final int serviceContract = 0;
+	public static final int accommodationContract = 1;
+	public static final int carrierContract = 2;
+	// fin
 	protected int id;
 	protected LocalDate startDate;
 	protected LocalDate terminationDate;
@@ -90,8 +99,24 @@ public abstract class Contract {
 	public void setTypeOfContract(String typeOfContract) {
 		this.typeOfContract = typeOfContract;
 	}
-	
+
 	public int getProviderId () { // Metodo para obtener el indentificador del provedor
 		return this.provider.getId();
 	}
+
+	// Metodos para el control de las modalidades
+
+	public void addModality (Modality modality) throws SQLException {
+		this.modalitys.add(modality); // se inserta la modalidad en la logica del negocio
+	}
+
+	public void deleteModality (Modality modality) throws SQLException {
+		ModalityDAO.getInstancie().delete(modality.getId()); // se elimina la modalidad de la base de datos 
+		this.modalitys.remove(modality); // se elimina la modalidad de la logica del negocio
+	}
+	
+	public abstract void updateModality (Modality modality) throws SQLException;
+	
+	
+	// Fin Metodos para el control de las modalidades
 }

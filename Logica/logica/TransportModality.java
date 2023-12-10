@@ -5,8 +5,15 @@ public class TransportModality extends Modality{
 	protected String typeTransportModality;
 	
 	public TransportModality(int id, Contract contract, String typeOfModality, Vehicle vehicle,
-			String typeTransportModality) {
+			String typeTransportModality) { // constructor a nivel de base de datos
 		super(id, contract, typeOfModality);
+		this.vehicle = vehicle;
+		this.typeTransportModality = typeTransportModality;
+	}
+	
+	public TransportModality(Contract contract, String typeOfModality, Vehicle vehicle,
+			String typeTransportModality) { // constructor a nivel de logica
+		super(contract, typeOfModality);
 		this.vehicle = vehicle;
 		this.typeTransportModality = typeTransportModality;
 	}
@@ -28,5 +35,4 @@ public class TransportModality extends Modality{
 		this.typeTransportModality = typeTransportModality;
 	}
 
-	
 }

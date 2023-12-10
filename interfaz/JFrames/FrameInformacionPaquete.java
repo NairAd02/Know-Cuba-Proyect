@@ -41,9 +41,10 @@ public class FrameInformacionPaquete extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 
-		lblModalities = new JLabel("MODALITIES : ");
+		lblModalities = new JLabel("MODALITIES ");
+		lblModalities.setForeground(SystemColor.info);
 		lblModalities.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblModalities.setBounds(10, 44, 151, 30);
+		lblModalities.setBounds(259, 51, 151, 30);
 		panel.add(lblModalities);
 
 		JLabel lblX = new JLabel("X");
@@ -59,7 +60,7 @@ public class FrameInformacionPaquete extends JFrame {
 		lblAccommodationModalitys.setOpaque(true);
 		lblAccommodationModalitys.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAccommodationModalitys.setBackground(new Color(18, 95, 115));
-		lblAccommodationModalitys.setBounds(97, 127, 181, 87);
+		lblAccommodationModalitys.setBounds(113, 127, 181, 87);
 		panel.add(lblAccommodationModalitys);
 
 		lblTransportModalitys = new JLabel("");
@@ -67,7 +68,7 @@ public class FrameInformacionPaquete extends JFrame {
 		lblTransportModalitys.setOpaque(true);
 		lblTransportModalitys.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTransportModalitys.setBackground(new Color(18, 95, 115));
-		lblTransportModalitys.setBounds(369, 127, 181, 87);
+		lblTransportModalitys.setBounds(354, 127, 181, 87);
 		panel.add(lblTransportModalitys);
 
 		lblServiceModalitys = new JLabel("");
@@ -95,14 +96,14 @@ public class FrameInformacionPaquete extends JFrame {
 		lblCreate.setBounds(207, 421, 235, 35);
 		panel.add(lblCreate);
 		
-		lblPackage = new JLabel("PACKAGE");
+		lblPackage = new JLabel("PACKAGE :");
 		lblPackage.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblPackage.setBounds(10, 3, 113, 30);
+		lblPackage.setBounds(27, 11, 123, 30);
 		panel.add(lblPackage);
 		
 		lblPackage_1 = new JLabel("#");
-		lblPackage_1.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblPackage_1.setBounds(131, 3, 57, 30);
+		lblPackage_1.setFont(new Font("Segoe UI", Font.PLAIN, 19));
+		lblPackage_1.setBounds(159, 11, 55, 30);
 		panel.add(lblPackage_1);
 	}
 

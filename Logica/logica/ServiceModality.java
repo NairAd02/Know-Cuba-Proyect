@@ -9,8 +9,16 @@ public class ServiceModality extends Modality{
 
 
 	public ServiceModality(int id, Contract contract, String typeOfModality, Activity activity, LocalDate releasedDate,
-			double price) {
+			double price) { // constructo a nivel de base de datos
 		super(id, contract, typeOfModality);
+		this.activity = activity;
+		this.releasedDate = releasedDate;
+		this.price = price;
+	}
+	
+	public ServiceModality(Contract contract, String typeOfModality, Activity activity, LocalDate releasedDate,
+			double price) { // constructo a nivel de logica
+		super(contract, typeOfModality);
 		this.activity = activity;
 		this.releasedDate = releasedDate;
 		this.price = price;

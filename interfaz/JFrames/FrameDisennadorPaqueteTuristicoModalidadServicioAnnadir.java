@@ -1,9 +1,13 @@
 package JFrames;
 
+import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelosTablas.ModeloTablaServiceModality;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.SystemColor;
@@ -13,15 +17,15 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
+public class FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable tableAvailableTransportation;
-	private JTable tableAssignedTransports;
+	private JTable tableAvailableServices;
+	private JTable tableAssignedServices;
 
-
-	public FrameTrabajadorModalidadTransporteAnnadir() {
+	
+	public FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 360);
@@ -32,8 +36,8 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setLayout(null);
 		panel.setBackground(new Color(5, 150, 177));
+		panel.setLayout(null);
 		panel.setBackground(new Color(5, 150, 177));
 		panel.setBounds(0, 0, 600, 360);
 		contentPane.add(panel);
@@ -46,10 +50,10 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 		lblX.setBounds(562, 0, 38, 38);
 		panel.add(lblX);
 		
-		JLabel lblAvailableTransportation = new JLabel("AVAILABLE TRANSPORTATION");
-		lblAvailableTransportation.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblAvailableTransportation.setBounds(25, 39, 275, 19);
-		panel.add(lblAvailableTransportation);
+		JLabel lblAvailableServices = new JLabel("AVAILABLE SERVICES");
+		lblAvailableServices.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblAvailableServices.setBounds(25, 33, 275, 19);
+		panel.add(lblAvailableServices);
 		
 		JLabel lblAnnadir = new JLabel("ASIGN");
 		lblAnnadir.setOpaque(true);
@@ -59,10 +63,10 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 		lblAnnadir.setBounds(435, 40, 155, 20);
 		panel.add(lblAnnadir);
 		
-		JLabel lblAssignedTransports = new JLabel("ASSIGNED TRANSPORTS");
-		lblAssignedTransports.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblAssignedTransports.setBounds(25, 182, 275, 19);
-		panel.add(lblAssignedTransports);
+		JLabel lblAssignedServices = new JLabel("ASSIGNED SERVICES");
+		lblAssignedServices.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblAssignedServices.setBounds(25, 173, 275, 19);
+		panel.add(lblAssignedServices);
 		
 		JLabel lblDenegar = new JLabel("DENY");
 		lblDenegar.setOpaque(true);
@@ -80,29 +84,30 @@ public class FrameTrabajadorModalidadTransporteAnnadir extends JFrame {
 		lblConfirm.setBounds(182, 311, 235, 35);
 		panel.add(lblConfirm);
 		
-		JPanel panelAvailableTransportation = new JPanel();
-		panelAvailableTransportation.setBounds(10, 71, 580, 86);
-		panel.add(panelAvailableTransportation);
-		panelAvailableTransportation.setLayout(new BorderLayout(0, 0));
+		JPanel panelAvailableServices = new JPanel();
+		panelAvailableServices.setBounds(10, 71, 580, 86);
+		panel.add(panelAvailableServices);
+		panelAvailableServices.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
-		panelAvailableTransportation.add(scrollPane, BorderLayout.CENTER);
+		panelAvailableServices.add(scrollPane, BorderLayout.CENTER);
 		
-		tableAvailableTransportation = new JTable();
+		tableAvailableServices = new JTable();
+		tableAvailableServices.setModel(new ModeloTablaServiceModality());
+		scrollPane.setViewportView(tableAvailableServices);
 		
-		scrollPane.setColumnHeaderView(tableAvailableTransportation);
-		
-		JPanel panelAssignedTransports = new JPanel();
-		panelAssignedTransports.setOpaque(false);
-		panelAssignedTransports.setBounds(10, 214, 580, 86);
-		panel.add(panelAssignedTransports);
-		panelAssignedTransports.setLayout(new BorderLayout(0, 0));
+		JPanel panelAssignedServices = new JPanel();
+		panelAssignedServices.setOpaque(false);
+		panelAssignedServices.setBounds(10, 214, 580, 86);
+		panel.add(panelAssignedServices);
+		panelAssignedServices.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		panelAssignedTransports.add(scrollPane_1, BorderLayout.CENTER);
+		panelAssignedServices.add(scrollPane_1, BorderLayout.CENTER);
 		
-		tableAssignedTransports = new JTable();
-		scrollPane_1.setColumnHeaderView(tableAssignedTransports);
+		tableAssignedServices = new JTable();
+		tableAssignedServices.setModel(new ModeloTablaServiceModality());
+		scrollPane_1.setViewportView(tableAssignedServices);
 	}
 
 }

@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import logica.Modality;
 import logica.TouristPackage;
 import utils.ConnectionDataBase;
 
@@ -87,7 +86,7 @@ public class TouristPackageDAO implements TouristPackageDAOInterface{
 
 		if (touristPackage == null) { // si no se encuentra almacenado en cache una referencia con ese id
 			touristPackage = new TouristPackage(cs.getResultSet().getInt("id_tourist_package"), cs.getResultSet().getString("name"),
-					(ArrayList<Modality>) ModalityDAO.getInstancie().selectIntoTouristPackage(cs.getResultSet().getInt("id_tourist_package")));
+					 ModalityDAO.getInstancie().selectIntoTouristPackage(cs.getResultSet().getInt("id_tourist_package")));
 
 			this.cache.put(touristPackage.getId(), touristPackage); // se almacena en cache la referencia del paquete turistico
 		}

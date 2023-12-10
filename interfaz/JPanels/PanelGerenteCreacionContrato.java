@@ -72,11 +72,12 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
-		panel_1.setBounds(0, 68, 712, 678);
+		panel_1.setBounds(0, 68, 712, 651);
+		panel_1.setBackground(new Color(5, 150, 177));
 		add(panel_1);
 		
 		panelTable = new JPanel();
-		panelTable.setBounds(10, 93, 692, 574);
+		panelTable.setBounds(10, 93, 692, 547);
 		panel_1.add(panelTable);
 		panelTable.setLayout(new BorderLayout(0, 0));
 		

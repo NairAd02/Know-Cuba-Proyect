@@ -7,13 +7,20 @@ private double costLap;
 
 
 public EstablishedRoute(int id, Contract contract, String typeOfModality, Vehicle vehicle, String typeTransportModality,
-		String descriptionRout, double costGoing, double costLap) {
+		String descriptionRout, double costGoing, double costLap) { // constructor a nivel de base de datos
 	super(id, contract, typeOfModality, vehicle, typeTransportModality);
 	this.descriptionRout = descriptionRout;
 	this.costGoing = costGoing;
 	this.costLap = costLap;
 }
 
+public EstablishedRoute(Contract contract, String typeOfModality, Vehicle vehicle, String typeTransportModality,
+		String descriptionRout, double costGoing, double costLap) { // constructor a nivel de logica
+	super(contract, typeOfModality, vehicle, typeTransportModality);
+	this.descriptionRout = descriptionRout;
+	this.costGoing = costGoing;
+	this.costLap = costLap;
+}
 
 public String getDescriptionRout() {
 	return descriptionRout;

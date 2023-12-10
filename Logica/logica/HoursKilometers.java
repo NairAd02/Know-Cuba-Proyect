@@ -9,8 +9,18 @@ private double costHoursAdditionals;
 
 public HoursKilometers(int id, Contract contract, String typeOfModality, Vehicle vehicle, String typeTransportModality,
 		double costKilometersRout, double costHours, double costKilometersRoutAdditionals,
-		double costHoursAdditionals) {
+		double costHoursAdditionals) { // constructor a nivel de base de datos
 	super(id, contract, typeOfModality, vehicle, typeTransportModality);
+	this.costKilometersRout = costKilometersRout;
+	this.costHours = costHours;
+	this.costKilometersRoutAdditionals = costKilometersRoutAdditionals;
+	this.costHoursAdditionals = costHoursAdditionals;
+}
+
+public HoursKilometers(Contract contract, String typeOfModality, Vehicle vehicle, String typeTransportModality,
+		double costKilometersRout, double costHours, double costKilometersRoutAdditionals,
+		double costHoursAdditionals) { // constructor a nivel de logica
+	super(contract, typeOfModality, vehicle, typeTransportModality);
 	this.costKilometersRout = costKilometersRout;
 	this.costHours = costHours;
 	this.costKilometersRoutAdditionals = costKilometersRoutAdditionals;

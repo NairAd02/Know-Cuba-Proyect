@@ -1,14 +1,14 @@
 package JFrames;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import modelosTablas.ModeloTablaServiceModality;
+import modelosTablas.ModeloTablaAccommodationModality;
 
-import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.SystemColor;
 import java.awt.Font;
@@ -17,30 +17,31 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class FrameTrabajadorModalidadServicioAnnadir extends JFrame {
+public class FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable tableAvailableServices;
-	private JTable tableAssignedServices;
+	private JTable tableAvailableAccommodation;
+	private JTable tableAssignedAccommodations;
 
 	
-	public FrameTrabajadorModalidadServicioAnnadir() {
+	public FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 360);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		contentPane.setBackground(new Color(5, 150, 177));
+		setBackground(new Color(5, 150, 177));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(5, 150, 177));
-		panel.setLayout(null);
-		panel.setBackground(new Color(5, 150, 177));
 		panel.setBounds(0, 0, 600, 360);
+		panel.setBackground(new Color(5, 150, 177));
 		contentPane.add(panel);
+		panel.setLayout(null);
 		
 		JLabel lblX = new JLabel("X");
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
@@ -50,10 +51,10 @@ public class FrameTrabajadorModalidadServicioAnnadir extends JFrame {
 		lblX.setBounds(562, 0, 38, 38);
 		panel.add(lblX);
 		
-		JLabel lblAvailableServices = new JLabel("AVAILABLE SERVICES");
-		lblAvailableServices.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblAvailableServices.setBounds(25, 33, 275, 19);
-		panel.add(lblAvailableServices);
+		JLabel lblAvailableAccommodation = new JLabel("AVAILABLE ACCOMMODATION");
+		lblAvailableAccommodation.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblAvailableAccommodation.setBounds(25, 33, 275, 19);
+		panel.add(lblAvailableAccommodation);
 		
 		JLabel lblAnnadir = new JLabel("ASIGN");
 		lblAnnadir.setOpaque(true);
@@ -63,10 +64,10 @@ public class FrameTrabajadorModalidadServicioAnnadir extends JFrame {
 		lblAnnadir.setBounds(435, 40, 155, 20);
 		panel.add(lblAnnadir);
 		
-		JLabel lblAssignedServices = new JLabel("ASSIGNED SERVICES");
-		lblAssignedServices.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblAssignedServices.setBounds(25, 173, 275, 19);
-		panel.add(lblAssignedServices);
+		JLabel lblAssignedAccommodations = new JLabel("ASSIGNED ACCOMMODATIONS");
+		lblAssignedAccommodations.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblAssignedAccommodations.setBounds(25, 173, 275, 19);
+		panel.add(lblAssignedAccommodations);
 		
 		JLabel lblDenegar = new JLabel("DENY");
 		lblDenegar.setOpaque(true);
@@ -84,30 +85,29 @@ public class FrameTrabajadorModalidadServicioAnnadir extends JFrame {
 		lblConfirm.setBounds(182, 311, 235, 35);
 		panel.add(lblConfirm);
 		
-		JPanel panelAvailableServices = new JPanel();
-		panelAvailableServices.setBounds(10, 71, 580, 86);
-		panel.add(panelAvailableServices);
-		panelAvailableServices.setLayout(new BorderLayout(0, 0));
+		JPanel panelAvailableAccommodation = new JPanel();
+		panelAvailableAccommodation.setBounds(10, 71, 580, 86);
+		panel.add(panelAvailableAccommodation);
+		panelAvailableAccommodation.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
-		panelAvailableServices.add(scrollPane, BorderLayout.CENTER);
+		panelAvailableAccommodation.add(scrollPane, BorderLayout.CENTER);
 		
-		tableAvailableServices = new JTable();
-		tableAvailableServices.setModel(new ModeloTablaServiceModality());
-		scrollPane.setViewportView(tableAvailableServices);
+		tableAvailableAccommodation = new JTable();
+		tableAvailableAccommodation.setModel(new ModeloTablaAccommodationModality());
+		scrollPane.setViewportView(tableAvailableAccommodation);
 		
-		JPanel panelAssignedServices = new JPanel();
-		panelAssignedServices.setOpaque(false);
-		panelAssignedServices.setBounds(10, 214, 580, 86);
-		panel.add(panelAssignedServices);
-		panelAssignedServices.setLayout(new BorderLayout(0, 0));
+		JPanel panelAssignedAccommodations = new JPanel();
+		panelAssignedAccommodations.setOpaque(false);
+		panelAssignedAccommodations.setBounds(10, 214, 580, 86);
+		panel.add(panelAssignedAccommodations);
+		panelAssignedAccommodations.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		panelAssignedServices.add(scrollPane_1, BorderLayout.CENTER);
+		panelAssignedAccommodations.add(scrollPane_1, BorderLayout.CENTER);
 		
-		tableAssignedServices = new JTable();
-		tableAssignedServices.setModel(new ModeloTablaServiceModality());
-		scrollPane_1.setViewportView(tableAssignedServices);
+		tableAssignedAccommodations = new JTable();
+		tableAssignedAccommodations.setModel(new ModeloTablaAccommodationModality());
+		scrollPane_1.setViewportView(tableAssignedAccommodations);
 	}
-
 }
