@@ -110,10 +110,11 @@ public class TypeOfRoomDAO implements TypeOfRoomDAOInterface {
 	@Override
 	public TypeOfRoom select(int idTypeOfRoom) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_type_of_room(?)}");
+		TypeOfRoom typeOfRoom = null;
 		cs.setInt(1, idTypeOfRoom); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		TypeOfRoom typeOfRoom = mapEntity(cs);
+		if(cs.getResultSet().next()) // se situa el puntero
+			typeOfRoom = mapEntity(cs);
 
 		cs.close(); // se cierra la llamada a la funcion
 
@@ -123,12 +124,12 @@ public class TypeOfRoomDAO implements TypeOfRoomDAOInterface {
 	@Override
 	public TypeOfRoom mapEntity(CallableStatement cs) throws SQLException {
 		TypeOfRoom typeOfRoom = this.cache.get(cs.getResultSet().getInt("id"));
-		
+
 		if (typeOfRoom == null) {
 			typeOfRoom = new TypeOfRoom(cs.getResultSet().getInt("id"), cs.getResultSet().getString("type_of_room_name"));
 			this.cache.put(typeOfRoom.getId(), typeOfRoom); // se alamacena en cache la referencia del tipo de habitacion
 		}
-		
+
 		return typeOfRoom;
 	}
 

@@ -1,6 +1,9 @@
 package logica;
 
-public abstract class Modality {
+import java.sql.SQLException;
+import dao.ModalityDAO;
+
+public abstract class Modality implements DUILogic {
 	// Atributos estaticos para el hash
 	public static final int accommodationModality = 0;
 	public static final int serviceModality = 1;
@@ -9,7 +12,7 @@ public abstract class Modality {
 	public static final int hoursKilometers = 4;
 	public static final int establishedRoute = 5;
 	// Fin Atributos estaticos para el hash
-	
+
 	protected int id;
 	protected Contract contract;
 	protected String typeOfModality;
@@ -20,7 +23,7 @@ public abstract class Modality {
 		this.contract = contract;
 		this.typeOfModality = typeOfModality;
 	}
-	
+
 	public Modality(Contract contract, String typeOfModality) { // Contructor a nivel de logica
 		super();
 		this.contract = contract;
@@ -54,4 +57,17 @@ public abstract class Modality {
 	public int getContractId() {
 		return this.contract.getId();
 	}
+
+	public void insertIntoPackageTourist (int idPackageTourist) throws SQLException { // metodo para insertar la modalidad en un paquete turistico dado
+		ModalityDAO.getInstancie().insertIntoTouristPackage(this.id, idPackageTourist);
+	}
+
+	public void deleteFromPackageTourist (int idPackageTourist) throws SQLException { // metodo para eliminar la modalidad de un paquete turistico dado
+		ModalityDAO.getInstancie().deleteFromTouristPackage(this.id, idPackageTourist);
+	}
+
+	public  void delete() throws SQLException { // Metodo para eliminar la modalidad en la base de datos
+		ModalityDAO.getInstancie().delete(this.id);
+	}
+
 }

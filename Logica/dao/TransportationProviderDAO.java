@@ -59,10 +59,11 @@ public class TransportationProviderDAO implements TransportationProviderDAOInter
 	@Override
 	public TransportationProvider select(int idTransportationProvider) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transportation_provider(?)}");
+		TransportationProvider transportationProvider = null;
 		cs.setInt(1, idTransportationProvider); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		TransportationProvider transportationProvider = mapEntity(cs);
+		if(cs.getResultSet().next()) // se situa el puntero
+			transportationProvider = mapEntity(cs);
 		cs.close(); // se cierra la llamada a la funcion
 
 		return transportationProvider;
@@ -74,13 +75,13 @@ public class TransportationProviderDAO implements TransportationProviderDAOInter
 		List<TransportationProvider> listTransportationProvider = new ArrayList<TransportationProvider>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_all_transportation_provider()}");
 		cs.execute(); // se ejecuta la consulta de la funcion
-		
+
 		while (cs.getResultSet().next()) {
 			listTransportationProvider.add(mapEntity(cs));
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listTransportationProvider;
 	}
 

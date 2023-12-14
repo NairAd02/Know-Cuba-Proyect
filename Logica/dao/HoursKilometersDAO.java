@@ -66,12 +66,13 @@ public class HoursKilometersDAO implements HoursKilometersDAOInterface {
 	@Override
 	public HoursKilometers select(int idHoursKilometers) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transport_modality_hours_kilometers(?)}");
+		HoursKilometers hoursKilometers = null;
 		cs.setInt(1, idHoursKilometers); // se define el parametro de la funcion
 		cs.execute(); // se ejectuta la llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		HoursKilometers hoursKilometers = mapEntity(cs); // se mapea la entidad a objeto
+		if(cs.getResultSet().next()) // se situa el puntero
+			hoursKilometers = mapEntity(cs); // se mapea la entidad a objeto
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return hoursKilometers;
 	}
 
@@ -80,29 +81,29 @@ public class HoursKilometersDAO implements HoursKilometersDAOInterface {
 		List<HoursKilometers> listHoursKilometers = new ArrayList<HoursKilometers>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_all_transport_modality_hours_kilometers()}");
 		cs.execute(); // se ejectuta la llamada a la funcion
-		
+
 		while (cs.getResultSet().next()) {
 			listHoursKilometers.add(mapEntity(cs)); // se alamacena en la lista la entidad mapeada a objeto
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listHoursKilometers;
 	}
-	
+
 	@Override
 	public List<HoursKilometers> selectIntoCarrierContract(int idCarrierContract) throws SQLException {
 		List<HoursKilometers> listHoursKilometers = new ArrayList<HoursKilometers>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transports_modalitys_hours_kilometers_carrier_contract(?)}");
 		cs.setInt(1, idCarrierContract); // se define el parametro de la funcion
 		cs.execute(); // se ejectuta la llamada a la funcion
-		
+
 		while (cs.getResultSet().next()) {
 			listHoursKilometers.add(mapEntity(cs)); // se alamacena en la lista la entidad mapeada a objeto
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listHoursKilometers;
 	}
 
@@ -112,29 +113,29 @@ public class HoursKilometersDAO implements HoursKilometersDAOInterface {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transport_modality_hours_kilometers_tourist_package(?)}");
 		cs.setInt(1, idTouristPackage); // se define el parametro de la funcion
 		cs.execute(); // se ejectuta la llamada a la funcion
-		
+
 		while (cs.getResultSet().next()) {
 			listHoursKilometers.add(mapEntity(cs)); // se alamacena en la lista la entidad mapeada a objeto
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listHoursKilometers;
 	}
 
 	@Override
 	public HoursKilometers mapEntity(CallableStatement cs) throws SQLException {
 		HoursKilometers hoursKilometers = this.cache.get(cs.getResultSet().getInt("modality_id"));
-		
+
 		if (hoursKilometers == null) { // si no se encuentra alamacenada una referencia con ese id
 			hoursKilometers = new HoursKilometers(cs.getResultSet().getInt("modality_id"), CarrierContractDAO.getInstancie().select(cs.getResultSet().getInt("carrier_contract_id")), 
 					cs.getResultSet().getString("type_of_modality"), VehicleDAO.getInstancie().select(cs.getResultSet().getInt("vehicle_id")), cs.getString("type_transport_modality"), 
 					cs.getResultSet().getDouble("cost_kilometers_rout"), cs.getResultSet().getDouble("cost_hours"), cs.getResultSet().getDouble("cost_kilometers_rout_additionals"), 
 					cs.getResultSet().getDouble("cost_hours_additionals")); // se crea una nueva referencia para la modalidad con ese id
-			
+
 			this.cache.put(hoursKilometers.getId(), hoursKilometers); // se alamacena en cache la referencia de la modalidad de transporte
 		}
-		
+
 		return hoursKilometers;
 	}
 

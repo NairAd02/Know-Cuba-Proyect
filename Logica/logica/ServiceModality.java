@@ -1,6 +1,9 @@
 package logica;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+
+import dao.ServiceModalityDAO;
 
 public class ServiceModality extends Modality{
 	private Activity activity;
@@ -50,6 +53,18 @@ public class ServiceModality extends Modality{
 
 	public int getActivityId () {
 		return this.activity.getId();
+	}
+
+	@Override
+	public void insert() throws SQLException {
+		
+		this.id = ServiceModalityDAO.getInstancie().insert(this);
+	}
+
+	@Override
+	public void update() throws SQLException {
+		ServiceModalityDAO.getInstancie().update(this);
+		
 	}
 
 }

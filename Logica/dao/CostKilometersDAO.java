@@ -50,7 +50,7 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 	@Override
 	public void update(CostKilometers costKilometers) throws SQLException { 
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_transport_modality_cost_kilometers(?, ?, ?, ?, ?)}");
-	// Se definen los parametros de la funcion
+		// Se definen los parametros de la funcion
 		cs.setInt(1, costKilometers.getId());
 		cs.setInt(2, costKilometers.getVehicleId());
 		cs.setDouble(3, costKilometers.getCostKilometersGoing());
@@ -63,11 +63,14 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 	@Override
 	public CostKilometers select(int idCostKilometers) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transport_modality_cost_kilometers(?)}");
+		CostKilometers costKilometers = null;
 		cs.setInt(1, idCostKilometers); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamda a la funcion
-		cs.getResultSet().next(); // se situa el cursor
-		
-		return null;
+		if(cs.getResultSet().next()) // se situa el cursor
+			costKilometers = mapEntity(cs);
+		cs.close(); // se cierra la llamada a la funcion
+
+		return costKilometers;
 	}
 
 	@Override
@@ -75,29 +78,29 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 		List<CostKilometers> listCostKilometers = new ArrayList<CostKilometers>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_all_transport_modality_cost_kilometers()}");
 		cs.execute(); // se ejecuta la consulta de llamda a la funcion
-		
+
 		while (cs.getResultSet().next()) {
 			listCostKilometers.add(mapEntity(cs));
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listCostKilometers;
 	}
-	
+
 	@Override
 	public List<CostKilometers> selectIntoCarrierContract(int idCarrierContract) throws SQLException {
 		List<CostKilometers> listCostKilometers = new ArrayList<CostKilometers>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transports_modalitys_cost_kilometers_carrier_contract(?)}");
 		cs.setInt(1, idCarrierContract); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamda a la funcion
-		
+
 		while (cs.getResultSet().next()) {
 			listCostKilometers.add(mapEntity(cs));
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listCostKilometers;
 	}
 
@@ -107,28 +110,29 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transport_modality_cost_kilometers_tourist_package(?)}");
 		cs.setInt(1, idTouristPackage); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamda a la funcion
-		
+
 		while (cs.getResultSet().next()) {
 			listCostKilometers.add(mapEntity(cs));
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listCostKilometers;
 	}
 
 	@Override
 	public CostKilometers mapEntity(CallableStatement cs) throws SQLException {
 		CostKilometers costKilometers = this.cache.get(cs.getResultSet().getInt("modality_id"));
-		
+
 		if (costKilometers == null) { // si no esta referenciado en cache
 			costKilometers = new CostKilometers(cs.getResultSet().getInt("modality_id"), CarrierContractDAO.getInstancie().select(cs.getResultSet().getInt("carrier_contract_id")), 
 					cs.getResultSet().getString("type_of_modality"), VehicleDAO.getInstancie().select(cs.getResultSet().getInt("vehicle_id")), cs.getResultSet().getString("type_transport_modality"), 
 					cs.getResultSet().getDouble("cost_kilometers_going"), cs.getResultSet().getDouble("cost_kilometers_lap"), cs.getResultSet().getDouble("cost_hours_wait"));
-			
+
 			this.cache.put(costKilometers.getId(), costKilometers); // se alamacena en cache la referencia del la modalidad de transporte
 		}
-		return null;
+		
+		return costKilometers;
 	}
-	
+
 }

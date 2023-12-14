@@ -1,5 +1,9 @@
 package logica;
 
+import java.sql.SQLException;
+
+import dao.CostKilometersDAO;
+
 public class CostKilometers extends TransportModality{
 	private double costKilometersGoing;
 	private double costKilometersLap;
@@ -44,6 +48,18 @@ public class CostKilometers extends TransportModality{
 
 	public void setCostHoursWait(double costHoursWait) {
 		this.costHoursWait = costHoursWait;
+	}
+
+	@Override
+	public void insert() throws SQLException {
+		
+		this.id = CostKilometersDAO.getInstancie().insert(this);
+	}
+
+	@Override
+	public void update() throws SQLException {
+		CostKilometersDAO.getInstancie().update(this);
+		
 	}
 	
 }

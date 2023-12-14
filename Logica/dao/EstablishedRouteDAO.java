@@ -63,11 +63,13 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 	@Override
 	public EstablishedRoute select(int idEstablishedRoute) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transport_modality_established_route(?)}");
+		EstablishedRoute establishedRoute = null;
 		cs.setInt(1, idEstablishedRoute); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la llamada a la funcion
-		EstablishedRoute establishedRoute = mapEntity(cs); // se mapea la entidad a objeto
+		if (cs.getResultSet().next())
+			establishedRoute = mapEntity(cs); // se mapea la entidad a objeto
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return establishedRoute;
 	}
 
@@ -80,9 +82,9 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 		while (cs.getResultSet().next()) {
 			listEstablishedRoute.add(mapEntity(cs)); //se alamacena en la lista la entidad mapeada a objeto
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listEstablishedRoute;
 	}
 
@@ -96,9 +98,9 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 		while (cs.getResultSet().next()) {
 			listEstablishedRoute.add(mapEntity(cs)); //se alamacena en la lista la entidad mapeada a objeto
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listEstablishedRoute;
 	}
 
@@ -112,25 +114,25 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 		while (cs.getResultSet().next()) {
 			listEstablishedRoute.add(mapEntity(cs)); //se alamacena en la lista la entidad mapeada a objeto
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listEstablishedRoute;
 	}
 
 	@Override
 	public EstablishedRoute mapEntity(CallableStatement cs) throws SQLException {
 		EstablishedRoute establishedRoute = this.cache.get(cs.getResultSet().getInt("modality_id"));
-		
+
 		if (establishedRoute == null) { // se no se encuentra en cache una referencia con ese id
 			establishedRoute = new EstablishedRoute(cs.getResultSet().getInt("modality_id"), CarrierContractDAO.getInstancie().select(cs.getResultSet().getInt("carrier_contract_id")), 
 					cs.getResultSet().getString("type_of_modality"), VehicleDAO.getInstancie().select(cs.getResultSet().getInt("vehicle_id")), cs.getResultSet().getString("type_transport_modality"), 
 					cs.getResultSet().getString("description_rout"), cs.getResultSet().getDouble("cost_going"), cs.getResultSet().getDouble("cost_lap"));
-			
+
 			this.cache.put(establishedRoute.getId(), establishedRoute); // se alamacena en cache la referencia de la modalidad de transporte
-			
+
 		}
-		
+
 		return establishedRoute;
 	}
 }

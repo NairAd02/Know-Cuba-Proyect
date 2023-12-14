@@ -62,15 +62,12 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 	@Override
 	public AccommodationModality select(int idAccommodationModality) throws SQLException  { // No se va a utilizar NUNCA
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_accommodation_modality(?)}");
-
+		AccommodationModality accommodationModality = null;
 		cs.setInt(1, idAccommodationModality); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-
-		AccommodationModality accommodationModality = mapEntity(cs); 
-
+		if(cs.getResultSet().next()) // se situa el puntero
+			accommodationModality = mapEntity(cs); 
 		cs.close(); // se cierra la llamada a la funcion
-
 
 		return accommodationModality;
 	}
@@ -106,7 +103,7 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 
 		return listModalities;
 	}
-	
+
 	@Override
 	public List<AccommodationModality> selectIntoTouristPackage(int idTouristPackage) throws SQLException {
 		List<AccommodationModality> listModalities = new ArrayList<AccommodationModality>();
@@ -135,5 +132,5 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 
 		return accommodationModality;
 	}
-	
+
 }

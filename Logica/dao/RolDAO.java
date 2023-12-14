@@ -56,10 +56,11 @@ public class RolDAO implements RolDAOInterface {
 	@Override
 	public Rol select(int idRol) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_rol(?)}");
+		Rol rol = null;
 		cs.setInt(1, idRol); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		Rol rol = mapEntity(cs); // se mapea la entidad de objeto
+		if(cs.getResultSet().next()) // se situa el puntero
+		rol = mapEntity(cs); // se mapea la entidad de objeto
 		cs.close(); // se cierra la llamada a la funcion
 
 		return rol;

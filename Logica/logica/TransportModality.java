@@ -1,6 +1,6 @@
 package logica;
 
-public class TransportModality extends Modality{
+public abstract class TransportModality extends Modality{
 	protected Vehicle vehicle;
 	protected String typeTransportModality;
 	

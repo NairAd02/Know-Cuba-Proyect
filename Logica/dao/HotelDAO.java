@@ -14,7 +14,7 @@ import utils.ConnectionDataBase;
 public class HotelDAO implements HotelDAOInterface {
 	private static HotelDAO hotelDAO;
 	private HashMap<Integer, Hotel> cache; // Atributo para guardar en cache cada referencia creada
-	
+
 	// PATRON SINGLENTON
 	private HotelDAO () {
 		this.cache = new HashMap<Integer, Hotel>();
@@ -84,11 +84,11 @@ public class HotelDAO implements HotelDAOInterface {
 	@Override
 	public Hotel select(int idHotel) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_hotel(?)}");
+		Hotel hotel = null;
 		cs.setInt(1, idHotel); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-
-		Hotel hotel = mapEntity(cs);
+		if(cs.getResultSet().next()) // se situa el puntero
+			hotel = mapEntity(cs);
 
 		cs.close(); // se cierra la llamada a la funcion
 
@@ -98,15 +98,15 @@ public class HotelDAO implements HotelDAOInterface {
 	@Override
 	public Hotel mapEntity(CallableStatement cs) throws SQLException {
 		Hotel hotel = this.cache.get(cs.getResultSet().getInt("id"));
-		
+
 		if (hotel == null) {
 			hotel = new Hotel(cs.getResultSet().getInt("id"), cs.getResultSet().getString("name"), cs.getResultSet().getString("province"),
 					cs.getResultSet().getString("hotel_chain"), cs.getResultSet().getInt("hote_category"), cs.getResultSet().getString("address"), 
 					(ArrayList<TypeOfRoom>)TypeOfRoomDAO.getInstancie().selectTypeOfRoomIntoHotel(cs.getResultSet().getInt("id")), (ArrayList<MealPlan>)MealPlanDAO.getInstancie().selectMealPlanIntoHotel(cs.getResultSet().getInt("id")));
-			
+
 			this.cache.put(hotel.getId(), hotel); // se almacena en chace la referencia del hotel
 		}
-		
+
 		return hotel;
 	}
 

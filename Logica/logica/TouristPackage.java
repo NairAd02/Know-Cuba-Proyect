@@ -3,14 +3,10 @@ package logica;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import dao.AccommodationModalityDAO;
-import dao.CostKilometersDAO;
-import dao.EstablishedRouteDAO;
-import dao.HoursKilometersDAO;
-import dao.ModalityDAO;
-import dao.ServiceModalityDAO;
+import dao.TouristPackageDAO;
 
-public class TouristPackage {
+
+public class TouristPackage implements DUILogic {
 	private int id;
 	private String name;
 	HashMap<Integer, ArrayList<Modality>> modalitys; // modalidades hasheadas por su tipo
@@ -46,7 +42,7 @@ public class TouristPackage {
 	// Metodos para el control de las modalidades
 
 	public void addModality (Modality modality) throws SQLException {
-		ModalityDAO.getInstancie().insertIntoTouristPackage(modality.getId(), this.id); // se inserta la modalidad en la base de datos como modalidad perteneciente a este paquete turistico
+		modality.insertIntoPackageTourist(this.id); // se inserta la modalidad en la base de datos como modalidad perteneciente a este paquete turistico
 
 		// se inserta la modalidad en la logica del negocio
 		if (modality instanceof ServiceModality) {
@@ -67,7 +63,7 @@ public class TouristPackage {
 	}
 
 	public void deleteModality (Modality modality) throws SQLException {
-		ModalityDAO.getInstancie().deleteFromTouristPackage(modality.getId(), this.id); // se elimina la modalidad en la base de datos como modalidad perteneciente a este paquete turistico
+		modality.deleteFromPackageTourist(this.id); // se elimina la modalidad en la base de datos como modalidad perteneciente a este paquete turistico
 
 		// se elimina la modalidad en la logica del negocio
 		if (modality instanceof ServiceModality) {
@@ -87,9 +83,9 @@ public class TouristPackage {
 		}
 
 	}
-	
-	public void updateModality (Modality modality) throws SQLException {
-		
+
+	/*public void updateModality (Modality modality) throws SQLException {
+
 		if (modality instanceof ServiceModality) {
 			ServiceModalityDAO.getInstancie().update((ServiceModality) modality); // se actualiza la informacion de la modalidad en la base de datos
 		}
@@ -105,10 +101,28 @@ public class TouristPackage {
 		else if (modality instanceof AccommodationModality) {
 			AccommodationModalityDAO.getInstancie().update((AccommodationModality) modality); // se actualiza la informacion de la modalidad en la base de datos
 		}
-	}
-	
+	}*/
+
 	public ArrayList<Modality> getModalitys (int typeOfModality) { // se obtiene la lista de un tipo de modalidad en especifico
 		return this.modalitys.get(typeOfModality);
+	}
+
+
+	@Override
+	public void insert() throws SQLException {
+		this.id = TouristPackageDAO.getInstancie().insert(this);
+	}
+
+
+	@Override
+	public void update() throws SQLException {
+		TouristPackageDAO.getInstancie().update(this);
+	}
+
+
+	@Override
+	public void delete() throws SQLException {
+		TouristPackageDAO.getInstancie().delete(this.id);
 	}
 
 	// Fin Metodos para el control de las modalidades

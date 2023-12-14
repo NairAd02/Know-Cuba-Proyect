@@ -1,13 +1,18 @@
 package modelosTablas;
 
+import java.util.ArrayList;
+
 import javax.swing.table.DefaultTableModel;
 
-public class ModeloTablaUsers extends DefaultTableModel {
+import logica.User;
+
+public class ModeloTablaUsers extends DefaultTableModel implements ModelOperations<User> {
 
 	private static final long serialVersionUID = 1L;
-	
-	
+	private ArrayList<User> elements;
+
 	public ModeloTablaUsers(){
+		this.elements = new ArrayList<User>();
 		String[] columnNames = {"User Name", "Password", "Rol", "Start Date Connection", "Last Date Connection", "Connected"};   
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
@@ -15,27 +20,33 @@ public class ModeloTablaUsers extends DefaultTableModel {
 
 	}
 
-	public void addUser(){
+	@Override
+	public void addElement(User user) {
 		Object[] newRow =  null;
-         
-		newRow = new Object[]{}; 
-         
+		this.elements.add(user);
+		newRow = new Object[]{user.getUserName(), user.getPassword(), user.getNameRol(), 
+				(user.getStartDateConnection() != null) ? user.getStartDateConnection() : "----", (user.getLastDateConnection() != null) ? user.getLastDateConnection() : "---", user.isConnected()};
 
 		addRow(newRow);
 
 	}
-	
+
+	public User getElement (int pos) {
+		return this.elements.get(pos);
+	}
+
 	public boolean isCellEditable(int row, int column){
 		boolean x=false;
 		if(column==2)
 			x=true;
 		else
 			x=false;
-		
+
 		return x;
-			
-		
+
+
 	}
-	
+
+
 
 }

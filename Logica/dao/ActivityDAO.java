@@ -11,7 +11,7 @@ import utils.ConnectionDataBase;
 public class ActivityDAO implements ActivityDAOInterface {
 	private static ActivityDAO activityDAO;
 	private HashMap<Integer, Activity> cache; // Atributo para guardar en cache cada referencia creada
-	
+
 	// PATRON SINGLENTON
 	private ActivityDAO () {
 		this.cache = new HashMap<Integer, Activity>();
@@ -23,7 +23,7 @@ public class ActivityDAO implements ActivityDAOInterface {
 
 		return activityDAO;
 	}
-	
+
 	@Override
 	public int insert(Activity activity) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_activity(?, ?}");
@@ -84,36 +84,36 @@ public class ActivityDAO implements ActivityDAOInterface {
 		}
 
 		cs.close(); // se cierra la llamada a la funcion
-		
-		
+
+
 		return listActivities;
 	}
 
 	@Override
 	public Activity select(int idActivity) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_activity(?)");
+		Activity activity = null;
 		cs.setInt(1, idActivity); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		
-		Activity activity = mapEntity(cs);
-		
+		if(cs.getResultSet().next()) // se situa el puntero
+			activity = mapEntity(cs);
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return activity;
 	}
 
 	@Override
 	public Activity mapEntity(CallableStatement cs) throws SQLException {
 		Activity activity = this.cache.get(cs.getResultSet().getInt("id_activity"));
-		
+
 		if (activity == null) {
 			activity = new Activity(cs.getResultSet().getInt("id_activity"), 
 					cs.getResultSet().getString("activity_description"), cs.getResultSet().getInt("service_provider_id"));
-			
+
 			this.cache.put(activity.getId(), activity); // se almacena en cache la referencia de la actividad
 		}
-		
+
 		return activity;
 	}
 

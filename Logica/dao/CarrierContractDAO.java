@@ -28,13 +28,14 @@ public class CarrierContractDAO implements CarrierContractDAOInterface {
 
 	@Override
 	public int insert(CarrierContract carrierContract) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_carrier_contract(?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_carrier_contract(?, ?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
 		cs.setDate(1, Date.valueOf(carrierContract.getStartDate()));
 		cs.setDate(2, Date.valueOf(carrierContract.getTerminationDate()));
 		cs.setString(3, carrierContract.getDescription());
 		cs.setString(4, carrierContract.getTypeOfContract());
 		cs.setInt(5, carrierContract.getProviderId());
+		cs.setDouble(6, carrierContract.getSurcharge());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -49,12 +50,13 @@ public class CarrierContractDAO implements CarrierContractDAOInterface {
 
 	@Override
 	public void update(CarrierContract carrierContract) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_carrier_contract(?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_carrier_contract(?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
 		cs.setDate(1, Date.valueOf(carrierContract.getStartDate()));
 		cs.setDate(2, Date.valueOf(carrierContract.getTerminationDate()));
 		cs.setString(3, carrierContract.getDescription());
 		cs.setInt(4, carrierContract.getId());
+		cs.setDouble(5, carrierContract.getSurcharge());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		cs.close(); // se cierra la llamada a la funcion
 	}
@@ -62,10 +64,11 @@ public class CarrierContractDAO implements CarrierContractDAOInterface {
 	@Override
 	public CarrierContract select(int idCarrierContract) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_carrier_contract(?)}");
+		CarrierContract carrierContract = null;
 		cs.setInt(1, idCarrierContract); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		CarrierContract carrierContract = mapEntity(cs); // se mapea el objeto
+		if(cs.getResultSet().next()) // se situa el puntero
+			carrierContract = mapEntity(cs); // se mapea el objeto
 		cs.close(); // se cierra la llamada a la funcion
 
 		return carrierContract;
@@ -76,13 +79,13 @@ public class CarrierContractDAO implements CarrierContractDAOInterface {
 		List<CarrierContract> listCarrierContract = new ArrayList<CarrierContract>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_all_carrier_contract()}");
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		
+
 		while (cs.getResultSet().next()) {
-		listCarrierContract.add(mapEntity(cs)); // se añade a la lista la entidad mapeada a objeto	
+			listCarrierContract.add(mapEntity(cs)); // se añade a la lista la entidad mapeada a objeto	
 		}
-		
+
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return listCarrierContract;
 	}
 
@@ -94,8 +97,8 @@ public class CarrierContractDAO implements CarrierContractDAOInterface {
 			carrierContract = new CarrierContract(cs.getResultSet().getInt("id_contract"), cs.getResultSet().getDate("contract_start_date").toLocalDate(), 
 					cs.getResultSet().getDate("contract_termination_date").toLocalDate(), cs.getResultSet().getDate("contract_reconcilation_date").toLocalDate(), cs.getResultSet().getString("contract_description"), 
 					TransportationProviderDAO.getInstancie().select(cs.getResultSet().getInt("transportation_provider_id")), 
-				( ArrayList<TransportModality> )  TransportModalityDAO.getInstancie().selectIntoCarrierContract(cs.getResultSet().getInt("id_contract")), 
-					cs.getResultSet().getBoolean("state"), cs.getResultSet().getString("type_of_contract")); // se crea una nueva referencia
+					( ArrayList<TransportModality> )  TransportModalityDAO.getInstancie().selectIntoCarrierContract(cs.getResultSet().getInt("id_contract")), 
+					cs.getResultSet().getBoolean("state"), cs.getResultSet().getString("type_of_contract"), cs.getResultSet().getDouble("surcharge")); // se crea una nueva referencia
 
 			this.cache.put(carrierContract.getId(), carrierContract); // se alamacena la referencia del contrato de transportista en cache
 		}

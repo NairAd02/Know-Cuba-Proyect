@@ -1,5 +1,9 @@
 package logica;
 
+import java.sql.SQLException;
+
+import dao.AccommodationModalityDAO;
+
 public class AccommodationModality extends Modality{
 	private TypeOfRoom typeOfRoomSelect;
 	private MealPlan mealPlanSelect;
@@ -29,6 +33,15 @@ public class AccommodationModality extends Modality{
 		return typeOfRoomSelect;
 	}
 
+	
+	public void setTypeOfRoomSelect(TypeOfRoom typeOfRoomSelect) {
+		this.typeOfRoomSelect = typeOfRoomSelect;
+	}
+
+	public void setMealPlanSelect(MealPlan mealPlanSelect) {
+		this.mealPlanSelect = mealPlanSelect;
+	}
+
 	public MealPlan getMealPlanSelect() {
 		return mealPlanSelect;
 	}
@@ -55,6 +68,18 @@ public class AccommodationModality extends Modality{
 
 	public int getMealPlanId() {
 		return this.mealPlanSelect.getId();
+	}
+
+	@Override
+	public void insert() throws SQLException {
+		
+		this.id = AccommodationModalityDAO.getInstancie().insert(this);
+	}
+
+	@Override
+	public void update() throws SQLException {
+		AccommodationModalityDAO.getInstancie().update(this);
+		
 	}
 
 }

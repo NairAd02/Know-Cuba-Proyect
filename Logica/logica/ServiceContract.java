@@ -1,18 +1,21 @@
 package logica;
 
 import java.sql.SQLException;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import dao.ServiceModalityDAO;
+import dao.ServiceContractDAO;
+
 
 
 public class ServiceContract extends Contract{
 
+	
+
 	public ServiceContract(int id, LocalDate startDate, LocalDate terminationDate, LocalDate reconciliationDate,
-			String description, Provider provider, ArrayList<ServiceModality> modalitys, boolean state,
-			String typeOfContract) {
-		super(id, startDate, terminationDate, reconciliationDate, description, provider, new ArrayList<Modality>(modalitys), state, typeOfContract);
+			String description, Provider provider, ArrayList<ServiceModality> modalitys, boolean state, String typeOfContract,
+			double surcharge) {
+		super(id, startDate, terminationDate, reconciliationDate, description, provider, new ArrayList<Modality>(modalitys), state, typeOfContract,
+				surcharge);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -20,23 +23,32 @@ public class ServiceContract extends Contract{
 		super(id);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	// Metodos para el control de las modalidades
+
 	
-	public void addModality (Modality modality) throws SQLException {
-		// Verificar instaceof
-		int idInsertado = ServiceModalityDAO.getInstancie().insert((ServiceModality) modality); // se inserta la modalidad en la base de datos
-		super.addModality(modality);
-		modality.setId(idInsertado); // se asigna el id autoincrementable
-	}
-	
-	@Override
-	public void updateModality(Modality modality) throws SQLException {
-		ServiceModalityDAO.getInstancie().update((ServiceModality) modality); // se actualiza la informacion de la modalidad en la base de datos
+	public void updateServiceModality (ServiceModality serviceModality, Activity activity, LocalDate releaseDate, double price) throws SQLException {
+		// se actualiza la informacion de la modalidad a nivel de logica
+		serviceModality.setActivity(activity);
+		serviceModality.setReleasedDate(releaseDate);
+		serviceModality.setPrice(price);
+		serviceModality.update();; // se actualiza la informacion de la modalidad en la base de datos
 	}
 	// Fin Metodos para el control de las modalidades
 
-	
+	@Override
+	public void insert() throws SQLException {
+		
+		this.id = ServiceContractDAO.getInstancie().insert(this);
+	}
+
+	@Override
+	public void update() throws SQLException {
+		ServiceContractDAO.getInstancie().update(this);
+		
+	}
+
+
 
 
 }

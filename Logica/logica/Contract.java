@@ -3,10 +3,11 @@ package logica;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import dao.ContractDAO;
 
-import dao.ModalityDAO;
 
-public abstract class Contract {
+
+public abstract class Contract implements DUILogic {
 
 	// Atributos estaticos para el hash
 	public static final int serviceContract = 0;
@@ -22,25 +23,35 @@ public abstract class Contract {
 	protected ArrayList<Modality> modalitys;
 	protected boolean state; // true si esta cerrado, falso si no
 	protected String typeOfContract;
+	protected double surcharge;
 
-	public Contract(int id, LocalDate startDate, LocalDate terminationDate,
-			LocalDate reconciliationDate, String description,
-			Provider provider, ArrayList<Modality> modalitys, boolean state, String typeOfContract) { // Constructor a nivel de logica
+	
+	public Contract(int id, LocalDate startDate, LocalDate terminationDate, LocalDate reconciliationDate,
+			String description, Provider provider, ArrayList<Modality> modalitys, boolean state, String typeOfContract,
+			double surcharge) {
 		super();
 		this.id = id;
 		this.startDate = startDate;
 		this.terminationDate = terminationDate;
 		this.reconciliationDate = reconciliationDate;
 		this.description = description;
-		this.typeOfContract = typeOfContract;
 		this.provider = provider;
 		this.modalitys = modalitys;
 		this.state = state;
+		this.typeOfContract = typeOfContract;
+		this.surcharge = surcharge;
 	}
-
 
 	public Contract (int id) { // CONSTRUCTOR PARA LAS BUSQUEDAS EN EL BINARYSEARCHTREE
 		this.id = id;
+	}
+
+	public double getSurcharge() {
+		return surcharge;
+	}
+
+	public void setSurcharge(double surcharge) {
+		this.surcharge = surcharge;
 	}
 
 	public int getId() {
@@ -99,6 +110,12 @@ public abstract class Contract {
 	public void setTypeOfContract(String typeOfContract) {
 		this.typeOfContract = typeOfContract;
 	}
+	
+
+
+	public  void delete() throws SQLException { // Metodo para eliminar el contrato en la base de datos
+		ContractDAO.getInstancie().delete(this.id);
+	}
 
 	public int getProviderId () { // Metodo para obtener el indentificador del provedor
 		return this.provider.getId();
@@ -107,16 +124,14 @@ public abstract class Contract {
 	// Metodos para el control de las modalidades
 
 	public void addModality (Modality modality) throws SQLException {
+		modality.insert(); // se inserta la modalidad en la base de datos
 		this.modalitys.add(modality); // se inserta la modalidad en la logica del negocio
 	}
 
 	public void deleteModality (Modality modality) throws SQLException {
-		ModalityDAO.getInstancie().delete(modality.getId()); // se elimina la modalidad de la base de datos 
+		modality.delete(); // se elimina la modalidad de la base de datos 
 		this.modalitys.remove(modality); // se elimina la modalidad de la logica del negocio
 	}
-	
-	public abstract void updateModality (Modality modality) throws SQLException;
-	
 	
 	// Fin Metodos para el control de las modalidades
 }

@@ -3,6 +3,7 @@ package dao;
 import java.sql.CallableStatement;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +30,10 @@ public class AdministratorDAO implements AdministratorDAOInterface {
 	public int insert(Administrator administrator) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_administrator(?, ?, ?)}");
 		// Se definen los parametros de la funcion
-		cs.setString(1, administrator.getUserName());
-		cs.setString(2, administrator.getPassword());
-		cs.setInt(3, administrator.getRolId());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, administrator.getUserName());
+		cs.setString(3, administrator.getPassword());
+		cs.setInt(4, administrator.getRolId());
 		cs.execute(); // se ejecuta la llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -46,15 +48,14 @@ public class AdministratorDAO implements AdministratorDAOInterface {
 
 	@Override
 	public void update(Administrator administrator) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_administrator(?, ?, ?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_administrator(?, ?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
 		cs.setInt(1, administrator.getId());
 		cs.setString(2, administrator.getUserName());
 		cs.setString(3, administrator.getPassword());
-		cs.setInt(4, administrator.getRolId());
-		cs.setDate(5, Date.valueOf(administrator.getStartDateConnection()));
-		cs.setDate(6, Date.valueOf(administrator.getLastDateConnection()));
-		cs.setBoolean(7, administrator.isConnected());
+		cs.setDate(4, Date.valueOf(administrator.getStartDateConnection()));
+		cs.setDate(5, Date.valueOf(administrator.getLastDateConnection()));
+		cs.setBoolean(6, administrator.isConnected());
 		cs.execute(); // se ejecuta la llamada a la funcion
 		cs.close(); // se cierra la llamada a la funcion
 	}
@@ -62,10 +63,11 @@ public class AdministratorDAO implements AdministratorDAOInterface {
 	@Override
 	public Administrator select(int idAdministrator) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_administrator(?)}");
+		Administrator administrator = null;
 		cs.setInt(1, idAdministrator); // se define el paraemtro de la funcion
 		cs.execute(); // se ejecuta la llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		Administrator administrator = mapEntity(cs); // se mapea la entidad a objeto
+		if(cs.getResultSet().next()) // se situa el puntero
+			administrator = mapEntity(cs); // se mapea la entidad a objeto
 		cs.close(); // se cierra la llamada a la funcion
 
 		return administrator;
@@ -91,9 +93,12 @@ public class AdministratorDAO implements AdministratorDAOInterface {
 		Administrator administrator = this.cache.get(cs.getResultSet().getInt("id"));
 
 		if (administrator == null) { // si no se encuentra una referencia con ese id
-			administrator = new Administrator(cs.getResultSet().getInt("id"), cs.getResultSet().getString("user_name"), cs.getResultSet().getString("user_password"), RolDAO.getInstancie().select(cs.getResultSet().getInt("id_rol")), 
-					cs.getResultSet().getDate("start_date_connection").toLocalDate(), cs.getResultSet().getDate("last_date_connection").toLocalDate(), cs.getResultSet().getBoolean("connected")); // se crea una nueva referencia para el objeto
-
+			if (cs.getResultSet().getDate("start_date_connection") == null || cs.getResultSet().getDate("last_date_connection") == null )
+				administrator = new Administrator(cs.getResultSet().getInt("id"), cs.getResultSet().getString("user_name"), cs.getResultSet().getString("user_password"), RolDAO.getInstancie().select(cs.getResultSet().getInt("id_rol")), 
+						null, null, cs.getResultSet().getBoolean("connected")); // se crea una nueva referencia para el objeto
+			else
+				administrator = new Administrator(cs.getResultSet().getInt("id"), cs.getResultSet().getString("user_name"), cs.getResultSet().getString("user_password"), RolDAO.getInstancie().select(cs.getResultSet().getInt("id_rol")), 
+						cs.getResultSet().getDate("start_date_connection").toLocalDate(), cs.getResultSet().getDate("last_date_connection").toLocalDate(), cs.getResultSet().getBoolean("connected")); // se crea una nueva referencia para el objeto
 			this.cache.put(administrator.getId(), administrator); // se almacena en cache la referencia que representa a la entidad usuario
 
 		}

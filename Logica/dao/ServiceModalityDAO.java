@@ -61,10 +61,11 @@ public class ServiceModalityDAO implements ServiceModalityDAOInterface {
 	@Override
 	public ServiceModality select(int idServiceModality) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_service_modality(?)}");
+		ServiceModality serviceModality = null;
 		cs.setInt(1, idServiceModality); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		ServiceModality serviceModality = mapEntity(cs);
+		if(cs.getResultSet().next()) // se situa el puntero
+			serviceModality = mapEntity(cs);
 		cs.close(); // se cierra la llamada a la funcion
 
 		return serviceModality;

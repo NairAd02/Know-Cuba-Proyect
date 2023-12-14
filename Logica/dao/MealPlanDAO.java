@@ -11,7 +11,7 @@ import utils.ConnectionDataBase;
 public class MealPlanDAO implements MealPlanDAOInterface {
 	private static MealPlanDAO mealPlanDAO;
 	private HashMap<Integer, MealPlan> cache; // Atributo para guardar en cache cada referencia creada
-	
+
 	// PATRON SINGLENTON
 	private MealPlanDAO () {
 		this.cache = new HashMap<Integer, MealPlan>();
@@ -107,10 +107,11 @@ public class MealPlanDAO implements MealPlanDAOInterface {
 	@Override
 	public MealPlan select(int idMealPlan) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_meal_plan(?)}");
+		MealPlan mealPlan = null;
 		cs.setInt(1, idMealPlan); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		MealPlan mealPlan = mapEntity(cs);
+		if(cs.getResultSet().next()) // se situa el puntero
+			mealPlan = mapEntity(cs);
 
 		cs.close(); // se cierra la llamada a la funcion
 
@@ -120,13 +121,13 @@ public class MealPlanDAO implements MealPlanDAOInterface {
 	@Override
 	public MealPlan mapEntity(CallableStatement cs) throws SQLException {
 		MealPlan mealPlan = this.cache.get(cs.getResultSet().getInt("id"));
-		
+
 		if (mealPlan == null) {
 			mealPlan = new MealPlan(cs.getResultSet().getInt("id"), cs.getResultSet().getString("meal_plan_name"));
-			
+
 			this.cache.put(mealPlan.getId(), mealPlan); // se alamacena en cache la referencia del plan alimenticio
 		}
-		
+
 		return mealPlan;
 	}
 

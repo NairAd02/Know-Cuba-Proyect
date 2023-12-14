@@ -101,10 +101,11 @@ public class SeasonDAO implements SeasonDAOInterface {
 	@Override
 	public Season select(int idSeason) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_season(?)}");
+		Season season = null;
 		cs.setInt(1, idSeason); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		Season season = mapEntity(cs);
+		if(cs.getResultSet().next()) // se situa el puntero
+			season = mapEntity(cs);
 
 		cs.close(); // se cierra la llamada a la funcion
 

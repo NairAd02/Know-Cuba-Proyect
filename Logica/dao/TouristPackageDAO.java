@@ -56,10 +56,11 @@ public class TouristPackageDAO implements TouristPackageDAOInterface{
 	@Override
 	public TouristPackage select(int idTouristPackage) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_tourist_package(?)}");
+		TouristPackage touristPackage = null;
 		cs.setInt(1, idTouristPackage); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la llamada a la funcion
-		cs.getResultSet().next(); // se situa el cursor
-		TouristPackage touristPackage = mapEntity(cs); // se mapea la entidad a objeto
+		if(cs.getResultSet().next()) // se situa el cursor
+			touristPackage = mapEntity(cs); // se mapea la entidad a objeto
 		cs.close(); // se cierra la llamada a la funcion	
 
 		return touristPackage;
@@ -86,7 +87,7 @@ public class TouristPackageDAO implements TouristPackageDAOInterface{
 
 		if (touristPackage == null) { // si no se encuentra almacenado en cache una referencia con ese id
 			touristPackage = new TouristPackage(cs.getResultSet().getInt("id_tourist_package"), cs.getResultSet().getString("name"),
-					 ModalityDAO.getInstancie().selectIntoTouristPackage(cs.getResultSet().getInt("id_tourist_package")));
+					ModalityDAO.getInstancie().selectIntoTouristPackage(cs.getResultSet().getInt("id_tourist_package")));
 
 			this.cache.put(touristPackage.getId(), touristPackage); // se almacena en cache la referencia del paquete turistico
 		}

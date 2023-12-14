@@ -2,8 +2,7 @@ package logica;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import dao.ActivityDAO;
+import dao.ServiceProviderDAO;
 
 public class ServiceProvider extends Provider {
 	private ArrayList<Activity> activities;
@@ -29,18 +28,29 @@ public class ServiceProvider extends Provider {
 	// Metodos para el control de las actividades
 
 	public void addActivity (Activity activity) throws SQLException {
-		int idInsertado = ActivityDAO.getInstancie().insert(activity); // se inserta la actividad en la base de datos	
+		activity.insert(); // se inserta la actividad en la base de datos	
 		this.activities.add(activity); // se inserta la actividad en la logica del negocio
-		activity.setId(idInsertado); // se asigna el id autoincrementable de la base de datos
 	}
 
 	public void deleteActivity (Activity activity) throws SQLException {
-		ActivityDAO.getInstancie().delete(activity.getId()); // se elimina la actividad de la base de datos
+		activity.delete(); // se elimina la actividad de la base de datos
 		this.activities.remove(activity);
 	}
-	
-	public void update (Activity activity) throws SQLException {
-		ActivityDAO.getInstancie().update(activity); // se actualiza la informacion de la actividad en la base de datos
+
+	public void update (Activity activity, String activityDescription) throws SQLException {
+		// se actualizan los datos de la actividad en la logica del negocio
+		activity.setDescription(activityDescription);
+		activity.update(); // se actualiza la informacion de la actividad en la base de datos
+	}
+
+	@Override
+	public void insert() throws SQLException {
+		this.id = ServiceProviderDAO.getInstancie().insert(this);
+	}
+
+	@Override
+	public void update() throws SQLException {
+		ServiceProviderDAO.getInstancie().update(this);
 	}
 
 	// Fin Metodos para el control de las actividades

@@ -65,10 +65,11 @@ public class AccommodationContractDAO implements AccommodationContractDAOInterfa
 	@Override
 	public AccommodationContract select(int idAccommodationContract) throws SQLException  {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_accommodation_contract(?)}");
+		AccommodationContract accommodationContract = null;
 		cs.setInt(1, idAccommodationContract); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		AccommodationContract accommodationContract = mapEntity(cs);
+		if(cs.getResultSet().next()) // se situa el puntero
+		accommodationContract = mapEntity(cs);
 		cs.close(); // se cierra la llamada a la funcion
 
 		return accommodationContract;
@@ -99,12 +100,14 @@ public class AccommodationContractDAO implements AccommodationContractDAOInterfa
 					HotelDAO.getInstancie().select(cs.getResultSet().getInt("hotel_id")), 
 					(ArrayList<AccommodationModality>) AccommodationModalityDAO.getInstancie().selectIntoAccommodationContract(cs.getResultSet().getInt("id_contract")), 
 					cs.getResultSet().getBoolean("state"), cs.getResultSet().getString("type_of_contract"), 
-					(ArrayList<Season>) SeasonDAO.getInstancie().selectIntoAccommodationContract(cs.getResultSet().getInt("id_contract")), cs.getResultSet().getDouble("surcharge"));
+					cs.getResultSet().getDouble("surcharge"), (ArrayList<Season>) SeasonDAO.getInstancie().selectIntoAccommodationContract(cs.getResultSet().getInt("id_contract")));
 
 			this.cache.put(accommodationContract.getId(), accommodationContract); // se almacena en cache la referencia del contrato de alojamiento
 		}
 
 		return accommodationContract;
 	}
+	
+	
 
 }

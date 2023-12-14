@@ -1,8 +1,11 @@
 package logica;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class Season {
+import dao.SeasonDAO;
+
+public class Season implements DUILogic {
 	private int id;
 	private String name;
 	private LocalDate startDate;
@@ -79,6 +82,21 @@ public class Season {
 	public void setAccommodationContractId(int accommodationContractId) {
 		this.accommodationContractId = accommodationContractId;
 	}
-	
-	
+
+	@Override
+	public void insert() throws SQLException {
+		this.id = SeasonDAO.getInstancie().insert(this);
+	}
+
+	@Override
+	public void update() throws SQLException {
+		SeasonDAO.getInstancie().update(this);
+	}
+
+	@Override
+	public void delete() throws SQLException {
+		SeasonDAO.getInstancie().delete(this.id);
+	}
+
+
 }

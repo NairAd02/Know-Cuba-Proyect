@@ -1,6 +1,10 @@
 package logica;
 
-public class Vehicle {
+import java.sql.SQLException;
+
+import dao.VehicleDAO;
+
+public class Vehicle implements DUILogic {
 	private int id;
 	private String lock;
 	private int transportationProviderId;
@@ -34,6 +38,21 @@ public class Vehicle {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	@Override
+	public void insert() throws SQLException {
+		this.id = VehicleDAO.getInstancie().insert(this);
+	}
+
+	@Override
+	public void update() throws SQLException {
+		VehicleDAO.getInstancie().update(this);
+	}
+
+	@Override
+	public void delete() throws SQLException {
+		VehicleDAO.getInstancie().delete(this.id);
 	}
 
 }

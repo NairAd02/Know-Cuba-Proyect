@@ -90,10 +90,11 @@ public class VehicleDAO implements VehicleDAOInterface {
 	@Override
 	public Vehicle select(int idVehicle) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_vehicle(?)}");
+		Vehicle vehicle = null;
 		cs.setInt(1, idVehicle); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		Vehicle vehicle = mapEntity(cs);  
+		if(cs.getResultSet().next()) // se situa el puntero
+			vehicle = mapEntity(cs);  
 		cs.close(); // se cierra la llamada a la funcion
 
 		return vehicle;

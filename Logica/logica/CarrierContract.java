@@ -3,18 +3,18 @@ package logica;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import dao.CostKilometersDAO;
-import dao.EstablishedRouteDAO;
-import dao.HoursKilometersDAO;
-
+import dao.CarrierContractDAO;
 
 
 public  class CarrierContract extends Contract{
 
+
+
 	public CarrierContract(int id, LocalDate startDate, LocalDate terminationDate, LocalDate reconciliationDate,
-			String description, Provider provider, ArrayList<TransportModality> modalitys, boolean state,
-			String typeOfContract) {
-		super(id, startDate, terminationDate, reconciliationDate, description, provider, new ArrayList<Modality>(modalitys), state, typeOfContract);
+			String description, Provider provider, ArrayList<TransportModality> modalitys, boolean state, String typeOfContract,
+			double surcharge) {
+		super(id, startDate, terminationDate, reconciliationDate, description, provider, new ArrayList<Modality>(modalitys), state, typeOfContract,
+				surcharge);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -35,8 +35,8 @@ public  class CarrierContract extends Contract{
 
 		return modalitys;
 	}
-	
-	
+
+
 	public ArrayList<HoursKilometers> getHoursKilometers () {
 		ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
 
@@ -47,8 +47,8 @@ public  class CarrierContract extends Contract{
 
 		return modalitys;
 	}
-	
-	
+
+
 	public ArrayList<EstablishedRoute> getEstablishedRoute () {
 		ArrayList<EstablishedRoute> modalitys = new ArrayList<EstablishedRoute>();
 
@@ -64,30 +64,46 @@ public  class CarrierContract extends Contract{
 
 	// Metodos para el control de las modalidades
 
-	public void addModality (Modality modality) throws SQLException {
-		int idInsertado = -1;
+	
 
-		if (modality instanceof CostKilometers)
-			idInsertado = CostKilometersDAO.getInstancie().insert((CostKilometers) modality); // se inserta la modalidad en la base de datos
-		else if (modality instanceof HoursKilometers)
-			idInsertado = HoursKilometersDAO.getInstancie().insert((HoursKilometers) modality); // se inserta la modalidad en la base de datos
-		else if (modality instanceof EstablishedRoute)
-			idInsertado = EstablishedRouteDAO.getInstancie().insert((EstablishedRoute) modality); // se inserta la modalidad en la base de datos
+	public void updateTransportModalityCostKilometers (CostKilometers costKilometers, Vehicle vehicle, double costKilometersGoing, double costKilometersLap, double costHoursWait) throws SQLException {
+		// se actualiza la informacion de la modalidad a nivel de logica
+		costKilometers.setVehicle(vehicle);
+		costKilometers.setCostKilometersGoing(costKilometersGoing);
+		costKilometers.setCostKilometersLap(costKilometersLap);
+		costKilometers.setCostHoursWait(costHoursWait);
+		costKilometers.update();; // se actualiza la informacion de la modalidad en la base de datos
+	}
 
-		super.addModality(modality);
-		modality.setId(idInsertado); // se asigna el id autoincrementable
+	public void updateTransportationModalityHoursKilometers (HoursKilometers hoursKilometers, Vehicle vehicle, double costKilometersRout, double costHours, double costKilometersRoutAdditionals, double costHoursAdditionals) throws SQLException {
+		// se actualiza la informacion de la modalidad a nivel de logica
+		hoursKilometers.setVehicle(vehicle);
+		hoursKilometers.setCostKilometersRout(costKilometersRout);
+		hoursKilometers.setCostHours(costHours);
+		hoursKilometers.setCostKilometersRoutAdditionals(costKilometersRoutAdditionals);
+		hoursKilometers.setCostHoursAdditionals(costHoursAdditionals);
+		hoursKilometers.update();; // se actualiza la informacion de la modalidad en la base de datos
+	}
+
+	public void updateTransportationModalityEstablishedRoute (EstablishedRoute establishedRoute, Vehicle vehicle, String descriptionRout, double costGoing, double costLap) throws SQLException {
+		// se actualiza la informacion de la modalidad a nivel de logica
+		establishedRoute.setVehicle(vehicle);
+		establishedRoute.setDescriptionRout(descriptionRout);
+		establishedRoute.setCostGoing(costGoing);
+		establishedRoute.setCostLap(costLap);
+		establishedRoute.update();; // se actualiza la informacion de la modalidad en la base de datos
 	}
 
 	@Override
-	public void updateModality(Modality modality) throws SQLException {
+	public void insert() throws SQLException {
+		
+		this.id = CarrierContractDAO.getInstancie().insert(this);
+	}
 
-		if (modality instanceof CostKilometers)
-			CostKilometersDAO.getInstancie().update((CostKilometers) modality); // se actualiza la informacion de la modalidad en la base de datos
-		else if (modality instanceof HoursKilometers)
-			HoursKilometersDAO.getInstancie().update((HoursKilometers) modality); // se actualiza la informacion de la modalidad en la base de datos
-		else if (modality instanceof EstablishedRoute)
-			EstablishedRouteDAO.getInstancie().update((EstablishedRoute) modality); // se actualiza la informacion de la modalidad en la base de datos
-
+	@Override
+	public void update() throws SQLException {
+		CarrierContractDAO.getInstancie().update(this);
+		
 	}
 
 	// Fin Metodos para el control de las modalidades

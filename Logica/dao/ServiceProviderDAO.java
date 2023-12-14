@@ -57,10 +57,11 @@ public class ServiceProviderDAO implements ServiceProviderDAOInterface {
 	@Override
 	public ServiceProvider select(int idServiceProvider) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_service_provider(?)}");
+		ServiceProvider serviceProvider = null;
 		cs.setInt(1, idServiceProvider); // se define el parametro de la funcion
 		cs.execute(); // se ejectuta la llamada a la funcion
-		cs.getResultSet().next(); // se situa el puntero
-		ServiceProvider serviceProvider = mapEntity(cs);
+		if(cs.getResultSet().next()) // se situa el puntero
+			serviceProvider = mapEntity(cs);
 		cs.close(); // se cierra la llamada a la funcion
 
 		return serviceProvider;

@@ -1,15 +1,18 @@
 package logica;
 
+import java.sql.SQLException;
 
-public class Activity {
+import dao.ActivityDAO;
+
+public class Activity implements DUILogic {
 	private int id;
 	private String description;
 	private int idServiceProvider;
-	
+
 	public Activity(int id, String description, int idServiceProvider) {
 		super();
 		this.id = id;
-		
+
 		this.description = description;
 		this.idServiceProvider = idServiceProvider;
 	}
@@ -37,5 +40,20 @@ public class Activity {
 	public void setIdServiceProvider(int idServiceProvider) {
 		this.idServiceProvider = idServiceProvider;
 	}
-	
+
+	@Override
+	public void insert() throws SQLException {
+		this.id = ActivityDAO.getInstancie().insert(this);		
+	}
+
+	@Override
+	public void update() throws SQLException {
+		ActivityDAO.getInstancie().update(this);
+	}
+
+	@Override
+	public void delete() throws SQLException {
+		ActivityDAO.getInstancie().delete(this.id);
+	}
+
 }
