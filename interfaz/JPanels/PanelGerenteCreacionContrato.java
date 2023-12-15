@@ -31,7 +31,7 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	public PanelGerenteCreacionContrato() {
 		setBackground(SystemColor.inactiveCaptionBorder);
 		setLayout(null);
-		
+		setBounds(278, 63, 712, 719);
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 712, 69);
 		panel.setBackground(new Color(18, 95, 115));

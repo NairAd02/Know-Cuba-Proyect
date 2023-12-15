@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +32,9 @@ public class TransportationProviderDAO implements TransportationProviderDAOInter
 	public int insert(TransportationProvider transportationProvider) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_transportation_provider(?, ?)}");
 		// se definen los parametros de la funcion
-		cs.setString(1, transportationProvider.getName());
-		cs.setString(2, transportationProvider.getProvince());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, transportationProvider.getName());
+		cs.setString(3, transportationProvider.getProvince());
 		cs.execute(); // se ejecuta la consulta de la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el id del provedor de transporte insertado
 		cs.close(); // se cierra la llamada a la funcion

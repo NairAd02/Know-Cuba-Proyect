@@ -4,7 +4,6 @@ package JFrames;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 import logica.Controller;
 import logica.Rol;
 import logica.User;
@@ -29,6 +28,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.awt.Cursor;
+import javax.swing.JTextField;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class FrameAdministrador extends JFrame {
 
@@ -41,16 +43,20 @@ public class FrameAdministrador extends JFrame {
 	private int mouseX, mouseY;
 	private JLabel lblDelete;
 	private JLabel lblToRegister;
+	private JTextField textFieldBuscador;
+	private JComboBox<String> comboBoxConexion;
+	private String searchName;
 
-	
+
 	public static FrameAdministrador getInstancie () {
 		if (framAdministrador == null)
 			framAdministrador = new FrameAdministrador();
-		
+
 		return framAdministrador;
 	}
 
 	private FrameAdministrador() {
+		searchName = "";
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 990, 782);
@@ -107,7 +113,7 @@ public class FrameAdministrador extends JFrame {
 				try {
 					Controller.getInstancie().getUser().cerrarConexion();
 				} catch (SQLException e1) {
-					
+
 					e1.printStackTrace();
 				} // se cierra la sesión del usuario
 				System.exit(0);
@@ -224,7 +230,14 @@ public class FrameAdministrador extends JFrame {
 		lblDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-			
+				if (tableUsuario.getSelectedRowCount() != 0) {
+					try {
+						deleteElementsTable();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -246,12 +259,12 @@ public class FrameAdministrador extends JFrame {
 		JLabel lblUsers = new JLabel("USERS");
 		lblUsers.setForeground(SystemColor.info);
 		lblUsers.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblUsers.setBounds(29, 69, 84, 30);
+		lblUsers.setBounds(10, 49, 68, 22);
 		panel_2.add(lblUsers);
 
 		JLabel lblNewLabel = new JLabel("Rol");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel.setBounds(123, 65, 39, 14);
+		lblNewLabel.setBounds(240, 65, 39, 14);
 		panel_2.add(lblNewLabel);
 
 		comboBoxRoles = new JComboBox <Rol>();
@@ -262,10 +275,45 @@ public class FrameAdministrador extends JFrame {
 			}
 		});
 
-		comboBoxRoles.setBounds(172, 62, 119, 22);
+		comboBoxRoles.setBounds(289, 62, 119, 22);
 		panel_2.add(comboBoxRoles);
 
-		this.actualizarTablaUsuarios(Controller.getInstancie().getUsers());
+		JLabel lblNewLabel_1 = new JLabel("State Connection");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel_1.setBounds(465, 65, 119, 14);
+		panel_2.add(lblNewLabel_1);
+
+		comboBoxConexion = new JComboBox<String>();
+		this.llenarComboBoxConexion();
+		comboBoxConexion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actualizarTablaUsuarios();
+			}
+		});
+		comboBoxConexion.setBounds(583, 62, 119, 22);
+		panel_2.add(comboBoxConexion);
+
+		textFieldBuscador = new JTextField();
+		textFieldBuscador.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				searchName = "";
+				if(e.getKeyChar() != ''){ // si la key es distinta del boton delete
+					searchName = textFieldBuscador.getText()+ e.getKeyChar();
+
+				}
+				else{
+					searchName = textFieldBuscador.getText();
+				}
+
+				actualizarTablaUsuarios(); // se actualiza la informacion de los usuarios en la tabla usuario
+			}
+		});
+		textFieldBuscador.setBounds(10, 79, 182, 20);
+		panel_2.add(textFieldBuscador);
+		textFieldBuscador.setColumns(10);
+
+		this.actualizarTablaUsuarios();
 	}
 
 	private void llenarComboBoxRol () {
@@ -275,12 +323,44 @@ public class FrameAdministrador extends JFrame {
 			comboBoxRoles.addItem(r);
 		}
 	}
-	
+
+	private void llenarComboBoxConexion () {
+		comboBoxConexion.addItem("All"); // item que define todos los tipos de connection
+		comboBoxConexion.addItem("Connected"); // item que define el estado conectado
+		comboBoxConexion.addItem("Disconected"); // item que define el estado conectado
+	}
+
 	public void actualizarTablaUsuarios () {
-		if (!((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All"))
-			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(((Rol)comboBoxRoles.getSelectedItem()).getId()));
-		else
+		if (((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
+				searchName.equalsIgnoreCase("")) // no tiene valor ningun filtro
 			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers());
+
+		else if (!((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
+				searchName.equalsIgnoreCase("")) // tiene valor solo el filtro del rol
+			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(((Rol)comboBoxRoles.getSelectedItem()).getId()));
+
+		else if (((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
+				!searchName.equalsIgnoreCase("")) // tiene valor solo el filtro de nombre 
+			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(searchName));
+
+		else if (((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && !((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
+				searchName.equalsIgnoreCase("")) // tiene valor solo el filtro del estado de la conexion 
+			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("Connected")));
+
+		else if (((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && !((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
+				!searchName.equalsIgnoreCase("")) // tiene valor  el filtro de nombre y el  filtro del estado de la coneccion
+			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(searchName, ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("Connected")));
+
+		else if (!((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
+				!searchName.equalsIgnoreCase("")) // tiene valor  el filtro de nombre y el filtro rol
+			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(searchName, ((Rol)comboBoxRoles.getSelectedItem()).getId()));
+
+		else if (!((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && !((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
+				searchName.equalsIgnoreCase("")) // tiene valor  el filtro del rol y el filtro estado de la conexion
+			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(((Rol)comboBoxRoles.getSelectedItem()).getId(), ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("Connected")));
+		else // todos los filtros tienen valor
+			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(searchName, ((Rol)comboBoxRoles.getSelectedItem()).getId(), ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("Connected")));
+
 	}
 
 	private void actualizarTablaUsuarios(HashMap<Integer, ArrayList<User>> usuarios){
@@ -303,12 +383,17 @@ public class FrameAdministrador extends JFrame {
 		}
 	}
 
+	private void deleteElementsTable () throws SQLException {
+		((ModeloTablaUsers) tableUsuario.getModel()).deleteElements(this.tableUsuario.getSelectedRows());
+		this.actualizarTablaUsuarios();
+	}
+
 
 	private void reiniciarTable(JTable table){
 
 		for(int i=0;table.getRowCount()!=0;i++){
 			i=0;
-			((DefaultTableModel) table.getModel()).removeRow(i);
+			((ModeloTablaUsers) table.getModel()).deleteElement(i);
 		}
 	}
 }

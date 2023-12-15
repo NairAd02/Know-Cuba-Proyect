@@ -19,7 +19,7 @@ public class Main {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); // Se establece WindowsLookAndFeel
 		} catch (ClassNotFoundException e1) {
 
 			e1.printStackTrace();
@@ -41,6 +41,8 @@ public class Main {
 
 			e.printStackTrace();
 		}
+		
+		
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

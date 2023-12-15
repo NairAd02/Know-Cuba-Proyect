@@ -40,10 +40,16 @@ public class UserDAO implements UserDAOInterface {
 		if (cs.getResultSet().next()) { // se situa el puntero
 			if (cs.getResultSet().getInt("id_rol") == 1) // usuario con rol Administrator
 				user = AdministratorDAO.getInstancie().select(cs.getResultSet().getInt("id_user"));
+			else if (cs.getResultSet().getInt("id_rol") == 2)
+				user = ManagerDAO.getInstancie().select(cs.getResultSet().getInt("id_user"));
+			else if (cs.getResultSet().getInt("id_rol") == 3)
+				user = DependentDAO.getInstancie().select(cs.getResultSet().getInt("id_user"));
+			else if (cs.getResultSet().getInt("id_rol") == 4)
+				user = PackageDesignerDAO.getInstancie().select(cs.getResultSet().getInt("id_user"));
 		}
 
 		cs.close(); // se cierra la llamada a la funcion
-		
+
 		return user;
 	}
 

@@ -6,7 +6,6 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import logica.Administrator;
 import logica.Controller;
 import logica.Dependent;
@@ -14,7 +13,6 @@ import logica.Manager;
 import logica.PackageDesigner;
 import logica.Rol;
 import logica.User;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -25,10 +23,10 @@ import javax.swing.JComboBox;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 
 public class FrameRegistro extends JFrame {
 
@@ -42,6 +40,9 @@ public class FrameRegistro extends JFrame {
 	private JLabel labelAceptar;
 	private JLabel lblCancelar;
 	private JComboBox <Rol> comboBoxRoles;
+	private JLabel lblX;
+	private int mouseX, mouseY;
+	private JLabel lblErrorCampos;
 
 
 	public FrameRegistro() {
@@ -49,6 +50,22 @@ public class FrameRegistro extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 371, 430);
 		contentPane = new JPanel();
+		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				int x= e.getXOnScreen();
+				int y= e.getYOnScreen();
+
+				setLocation(x - mouseX , y - mouseY );
+			}
+		});
+		contentPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+			}
+		});
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -99,15 +116,21 @@ public class FrameRegistro extends JFrame {
 		labelAceptar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				try {
-					addUser();
-					FrameAdministrador.getInstancie().actualizarTablaUsuarios();
-					FrameAdministrador.getInstancie().setEnabled(true); // se vuelve a habilitar el frame administrador
-					dispose(); // se cierra el frame actual
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if (verificarCampos()) { // si los campos son validos
+					try {
+
+						addUser();
+						FrameAdministrador.getInstancie().actualizarTablaUsuarios();
+						disposeFrame();
+
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
+				else
+					lblErrorCampos.setVisible(true);
+					
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -115,6 +138,7 @@ public class FrameRegistro extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				lblErrorCampos.setVisible(false);
 				labelAceptar.setBackground(SystemColor.info);
 			}
 		});
@@ -140,7 +164,7 @@ public class FrameRegistro extends JFrame {
 		lblCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-
+				disposeFrame();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -163,7 +187,21 @@ public class FrameRegistro extends JFrame {
 		lblRegistro.setBounds(26, 11, 152, 30);
 		panel.add(lblRegistro);
 
-		JLabel lblX = new JLabel("X");
+		lblX = new JLabel("X");
+		lblX.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				disposeFrame();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblX.setForeground(SystemColor.red);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblX.setForeground(SystemColor.black);
+			}
+		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
 		lblX.setForeground(Color.BLACK);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
@@ -175,6 +213,18 @@ public class FrameRegistro extends JFrame {
 		this.llenarComboBoxRol();
 		comboBoxRoles.setBounds(116, 111, 138, 22);
 		panel.add(comboBoxRoles);
+
+		lblErrorCampos = new JLabel("Campos Obligatorios");
+		lblErrorCampos.setVisible(false);
+		lblErrorCampos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblErrorCampos.setForeground(SystemColor.red);
+		lblErrorCampos.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblErrorCampos.setBounds(37, 337, 288, 14);
+		panel.add(lblErrorCampos);
+	}
+
+	private boolean verificarCampos () {
+		return (!this.textFieldUserName.getText().equalsIgnoreCase("") && !this.textFieldPassword.getText().equalsIgnoreCase(""));
 	}
 
 	private void llenarComboBoxRol () {
@@ -182,6 +232,11 @@ public class FrameRegistro extends JFrame {
 		for (Rol r : roles) {
 			comboBoxRoles.addItem(r);
 		}
+	}
+
+	private void disposeFrame() {
+		FrameAdministrador.getInstancie().setEnabled(true); // se vuelve a habilitar el frame administrador
+		dispose(); // se cierra el frame actual
 	}
 
 	public void addUser () throws SQLException {

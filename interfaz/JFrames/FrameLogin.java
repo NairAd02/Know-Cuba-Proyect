@@ -218,18 +218,20 @@ public class FrameLogin extends JFrame {
 
 			}
 			else if (user instanceof Manager) { // se el usuario es manager se inicia el frame manager
-
+				FrameGerente framGerente = FrameGerente.getIntancie();
+				framGerente.setVisible(true);
+				dispose(); // se cierra el frame
 			}
 			else if (user instanceof PackageDesigner) { // se el usuario es diseñador de paquetes se inicia el frame diseñador de paquetes
 
 			}
-			
-			
+
+
 		}
 		else {
 			lblNotificacionRegistro.setVisible(true);
 		}
 	}
-	
-	
+
+
 }

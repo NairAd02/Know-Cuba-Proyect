@@ -32,7 +32,7 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 	public PanelGerenteAsociacionEmpresaProveedorAlojamiento() {
 		setBackground(SystemColor.inactiveCaptionBorder);
 		setLayout(null);
-		
+		setBounds(0, 41, 712, 678);
 		lblAnnadir = new JLabel("");
 		lblAnnadir.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/a\u00F1adir2 - copia.png")));
 		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);

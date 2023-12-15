@@ -1,9 +1,9 @@
 package modelosTablas;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-
 import javax.swing.table.DefaultTableModel;
-
+import logica.Controller;
 import logica.User;
 
 public class ModeloTablaUsers extends DefaultTableModel implements ModelOperations<User> {
@@ -13,7 +13,7 @@ public class ModeloTablaUsers extends DefaultTableModel implements ModelOperatio
 
 	public ModeloTablaUsers(){
 		this.elements = new ArrayList<User>();
-		String[] columnNames = {"User Name", "Password", "Rol", "Start Date Connection", "Last Date Connection", "Connected"};   
+		String[] columnNames = {"User Name", "Password", "Rol", "Start Date Connection", "Last Date Connection", "State Connection"};   
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
 
@@ -25,17 +25,31 @@ public class ModeloTablaUsers extends DefaultTableModel implements ModelOperatio
 		Object[] newRow =  null;
 		this.elements.add(user);
 		newRow = new Object[]{user.getUserName(), user.getPassword(), user.getNameRol(), 
-				(user.getStartDateConnection() != null) ? user.getStartDateConnection() : "----", (user.getLastDateConnection() != null) ? user.getLastDateConnection() : "---", user.isConnected()};
+				(user.getStartDateConnection() != null) ? user.getStartDateConnection() : "----", (user.getLastDateConnection() != null) ? user.getLastDateConnection() : "---", (user.isConnected()) ? "Connected" : "Disconected" };
 
 		addRow(newRow);
 
+	}
+
+	public void deleteElements (int[] rows) throws SQLException {
+
+		for (int i = 0; i < rows.length; i++) {	
+				Controller.getInstancie().deleteUser(this.elements.get(rows[i] - i)); // se eliminan los usuarios seleccionados de la base de datos
+				this.deleteElement(rows[i] - i); // se eliminan de la tabla y de la logica del negocio
+		
+		}
+	}
+
+	public void deleteElement (int i) {
+		this.elements.remove(i);
+		this.removeRow(i);
 	}
 
 	public User getElement (int pos) {
 		return this.elements.get(pos);
 	}
 
-	public boolean isCellEditable(int row, int column){
+	/*public boolean isCellEditable(int row, int column){
 		boolean x=false;
 		if(column==2)
 			x=true;
@@ -45,7 +59,7 @@ public class ModeloTablaUsers extends DefaultTableModel implements ModelOperatio
 		return x;
 
 
-	}
+	}*/
 
 
 

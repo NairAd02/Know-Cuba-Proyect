@@ -104,7 +104,6 @@ public class TouristAgency {
 
 	public void deleteProvider (Provider provider) throws SQLException {
 		provider.delete(); // se elimina al provedor de la base de datos
-
 		if (provider instanceof ServiceProvider)
 			this.providers.get(Provider.serviceProvider).remove(provider); // se elimina al provedor de la logica del negocio
 		else if (provider instanceof TransportationProvider)
@@ -190,6 +189,16 @@ public class TouristAgency {
 
 	public ArrayList<Provider> getProviders (int typeOfProvider) { // metodo para obtener los provedores de un tipo
 		return this.providers.get(typeOfProvider);
+	}
+
+	public ArrayList<Provider> getProviders (String name, int typeOfProvider) { // metodo para obtener los provedores de un tipo
+		ArrayList<Provider> provideres = new ArrayList<Provider>();
+
+		for (Provider provider : this.providers.get(typeOfProvider)) {
+			if (provider.isSameName(name))
+				provideres.add(provider);
+		}
+		return provideres;
 	}
 
 	// Fin Metodos para la obtencion de los datos

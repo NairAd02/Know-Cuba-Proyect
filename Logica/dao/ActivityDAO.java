@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,10 +27,13 @@ public class ActivityDAO implements ActivityDAOInterface {
 
 	@Override
 	public int insert(Activity activity) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_activity(?, ?}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_activity(?, ?)}");
 		// se definen los parámetros de la funcion
-		cs.setString(1, activity.getDescription());
-		cs.setInt(2, activity.getIdServiceProvider());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, activity.getDescription());
+		System.out.println("Descr" + activity.getDescription());
+		System.out.println("Id provider" + activity.getIdServiceProvider());
+		cs.setInt(3, activity.getIdServiceProvider());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -39,7 +43,7 @@ public class ActivityDAO implements ActivityDAOInterface {
 
 	@Override
 	public void delete(int idActivity) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call delete_activity(?}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call delete_activity(?)}");
 		cs.setInt(1, idActivity); // se define el parámetros de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -47,7 +51,7 @@ public class ActivityDAO implements ActivityDAOInterface {
 
 	@Override
 	public void update(Activity activity) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call insert_activity(?, ?}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call insert_activity(?, ?)}");
 		// se definen los parámetros de la funcion
 		cs.setInt(1, activity.getId());
 		cs.setString(2, activity.getDescription());
@@ -60,7 +64,7 @@ public class ActivityDAO implements ActivityDAOInterface {
 	@Override
 	public List<Activity> selectAll() throws SQLException {
 		List<Activity> listActivities = new ArrayList<Activity>();
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_all_activity()");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_all_activity()}");
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		// se crea la lista de actividades con la información obtenida de la base de datos
 		while (cs.getResultSet().next()) {
@@ -75,7 +79,7 @@ public class ActivityDAO implements ActivityDAOInterface {
 	@Override
 	public List<Activity> selectIntoServiceProvider(int idServiceProvider) throws SQLException {
 		List<Activity> listActivities = new ArrayList<Activity>();
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_activity_service_provider(?)");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_activity_service_provider(?)}");
 		cs.setInt(1, idServiceProvider); // se define el parámetros de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		// se crea la lista de actividades con la información obtenida de la base de datos
@@ -91,7 +95,7 @@ public class ActivityDAO implements ActivityDAOInterface {
 
 	@Override
 	public Activity select(int idActivity) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_activity(?)");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_activity(?)}");
 		Activity activity = null;
 		cs.setInt(1, idActivity); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion

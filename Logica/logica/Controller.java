@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import dao.AdministratorDAO;
 import dao.DependentDAO;
 import dao.ManagerDAO;
@@ -77,14 +76,14 @@ public class Controller {
 		else if (user instanceof PackageDesigner) {
 			this.users.get(User.packageDesigner).add(user); // se inserta al usuario en la logica del negocio
 		}
-	
+
 
 	}
 
 	public void addRol (Rol rol) throws SQLException {
 		rol.insert(); // se inserta el rol en la base de datos
 		this.roles.add(rol);
-	
+
 	}
 
 	// Fin Metodos de inserccion
@@ -136,9 +135,91 @@ public class Controller {
 	// Fin Metodos de eliminacion
 
 	// Metodos de obtencion de datos
-	public ArrayList<User> getUsers (int typeOfUser) {
+
+	public HashMap<Integer, ArrayList<User>> getUsers() { // niguno de los tres filtros adquiere valor
+		return this.users;
+	}
+
+	public ArrayList<User> getUsers (String name, int typeOfUser, boolean connected) { // si los tres filtros adquieren valor
+		ArrayList<User> users = new ArrayList<User>();
+
+		for (User user : this.users.get(typeOfUser)) {
+			if (user.connected == connected && user.isSameName(name))
+				users.add(user);
+		}
+
+		return users;
+	}
+
+	public ArrayList<User> getUsers (int typeOfUser) { // // si solo adquiere valor el tipo
 		return this.users.get(typeOfUser);
 	}
+
+	public ArrayList<User> getUsers (String name) { // // si solo adquiere valor nombre de usuario
+		ArrayList<User> users = new ArrayList<User>();
+
+		for (Integer i : User.getKeys()) { // se recorren las llaves del mapa
+			for (User user : this.users.get(i)) { // se recorre la lista de la clave del mapa
+				if (user.isSameName(name))
+					users.add(user);
+			}
+		}
+		return users;
+	}
+
+	public ArrayList<User> getUsers (boolean connected) { // // si solo adquiere valor nombre de usuario
+		ArrayList<User> users = new ArrayList<User>();
+
+		// se recorre el mapa
+
+		for (Integer i : User.getKeys()) { // se recorren las llaves del mapa
+			for (User user : this.users.get(i)) { // se recorre la lista de la clave del mapa
+				if (user.connected == connected)
+					users.add(user);
+			}
+		}
+
+		return users;
+	}
+
+	public ArrayList<User> getUsers (String name, boolean connected) { // si solo adquiere valor el nombre de usuario y el estado de la connexion
+		ArrayList<User> users = new ArrayList<User>();
+		// se recorre el mapa
+
+		for (Integer i : User.getKeys()) { // se recorren las llaves del mapa
+			for (User user : this.users.get(i)) { // se recorre la lista de la clave del mapa
+				if (user.connected == connected && user.isSameName(name))
+					users.add(user);
+			}
+		}
+
+
+		return users;
+	}
+
+	public ArrayList<User> getUsers (String name, int typeOfUser) { // si solo adquiere valor el nombre de usuario y tipo de connexion
+		ArrayList<User> users = new ArrayList<User>();
+		
+		for (User user : this.users.get(typeOfUser)) {
+			if (user.isSameName(name))
+				users.add(user);
+		}
+		
+		return users;
+	}
+
+	public ArrayList<User> getUsers (int typeOfUser, boolean connected) { // si solo adquiere valor el tipo de usuario y el estado de la connexion
+		ArrayList<User> users = new ArrayList<User>();
+
+		for (User user : this.users.get(typeOfUser)) { // se recorre la lista de la clave typeOfUser
+			if (user.connected == connected)
+				users.add(user);
+		}
+
+		return users ;
+	}
+
+
 
 	// Fin Metodos de obtencion de datos
 
@@ -150,10 +231,6 @@ public class Controller {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public HashMap<Integer, ArrayList<User>> getUsers() {
-		return this.users;
 	}
 
 	public void setUsers(HashMap<Integer, ArrayList<User>> users) {

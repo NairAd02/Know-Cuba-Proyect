@@ -1,13 +1,16 @@
 package logica;
 
 import java.sql.SQLException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import dao.UserDAO;
+import utils.BusquedaResultado;
 
-public abstract class User implements DUILogic {
+
+public abstract class User implements DUILogic, LikeName {
 	// Atributos estaticos para el hash
+	public static int all = 0; 
 	public static int administrator = 1;
 	public static int manager = 2;
 	public static int dependent = 3;
@@ -30,6 +33,7 @@ public abstract class User implements DUILogic {
 	protected LocalDate startDateConnection;
 	protected LocalDate lastDateConnection;
 	protected boolean connected;
+	protected BusquedaResultado busquedaResultado;
 
 
 	public User(int id, String userName, String password, Rol rol, LocalDate startDateConnection,
@@ -73,6 +77,40 @@ public abstract class User implements DUILogic {
 	public  void delete() throws SQLException { // Metodo para eliminar al usuario en la base de datos
 		UserDAO.getInstancie().delete(this.id);
 	}
+	
+	// Metodo para comprobar semejanza de nombre
+	public boolean isSameName (String name) {
+		boolean veredicto = false;
+		String nameComparar = "";
+		if(!name.equalsIgnoreCase("")){
+			for (int i = 0, j = 0, l = 0; i < this.userName.length() && !veredicto ; i++) {
+
+				nameComparar += this.userName.charAt(i);
+				
+				j++;
+				if (j == name.length()){			
+					if (name.equalsIgnoreCase(nameComparar)){
+						veredicto = true;
+						this.busquedaResultado = new BusquedaResultado(nameComparar, i - (j - 1), i);
+					}
+					else{
+						nameComparar = "";
+						this.busquedaResultado = null;
+					}
+					j = 0;
+					i = l++;
+				}            
+			}
+		}
+		else{
+			veredicto = true;
+			this.busquedaResultado = null;
+		}
+
+		return veredicto;
+	}
+	
+	// Fin Metodo para comprobar semejanza de nombre
 
 
 	public String getNameRol () {

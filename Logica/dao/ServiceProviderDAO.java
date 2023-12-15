@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +30,9 @@ public class ServiceProviderDAO implements ServiceProviderDAOInterface {
 	public int insert(ServiceProvider serviceProvider) throws SQLException { 
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_service_provider(?, ?)}");
 		// se definen los parametros de la funcion
-		cs.setString(1, serviceProvider.getName());
-		cs.setString(2, serviceProvider.getProvince());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, serviceProvider.getName());
+		cs.setString(3, serviceProvider.getProvince());
 		cs.execute(); // se ejectuta la llamada a la funcion
 		int idIsertado = cs.getInt(1); // se obtiene el retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -84,7 +86,7 @@ public class ServiceProviderDAO implements ServiceProviderDAOInterface {
 
 	@Override
 	public ServiceProvider mapEntity(CallableStatement cs) throws SQLException {
-		ServiceProvider serviceProvider = this.cache.get(cs.getInt("id"));
+		ServiceProvider serviceProvider = this.cache.get(cs.getResultSet().getInt("id"));
 
 		if (serviceProvider == null) { // si no está almacenado en caché
 			serviceProvider = new ServiceProvider(cs.getResultSet().getInt("id"), cs.getResultSet().getString("service_name"), cs.getResultSet().getString("province"), 

@@ -9,13 +9,22 @@ public class Activity implements DUILogic {
 	private String description;
 	private int idServiceProvider;
 
-	public Activity(int id, String description, int idServiceProvider) {
-		super();
+	public Activity(int id, String description, int idServiceProvider) { // Constructor a nivel de base de datos
 		this.id = id;
-
 		this.description = description;
 		this.idServiceProvider = idServiceProvider;
 	}
+	
+	public Activity(String description, int idServiceProvider) { // Constructor a nivel de logica
+		this.description = description;
+		this.idServiceProvider = idServiceProvider;
+	}
+	
+	public Activity(String description) { // Constructor a nivel de logica (proceso de creacion del objeto)
+		this.description = description;
+	}
+	
+	
 
 	public int getId() {
 		return id;

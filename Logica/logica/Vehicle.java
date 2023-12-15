@@ -9,11 +9,19 @@ public class Vehicle implements DUILogic {
 	private String lock;
 	private int transportationProviderId;
 
-	public Vehicle(int id,String lock, int transportationProviderId) {
-		super();
+	public Vehicle(int id,String lock, int transportationProviderId) { // Constructor a nivel de base de datos
 		this.id = id;
 		this.lock = lock;
 		this.transportationProviderId = transportationProviderId;
+	}
+	
+	public Vehicle(String lock, int transportationProviderId) { // Constructor a nivel de logica
+		this.lock = lock;
+		this.transportationProviderId = transportationProviderId;
+	}
+	
+	public Vehicle(String lock) { // Constructor Temporal
+		this.lock = lock;
 	}
 
 	public String getLock() {
