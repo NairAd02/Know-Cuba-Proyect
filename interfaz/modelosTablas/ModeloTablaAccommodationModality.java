@@ -1,37 +1,54 @@
 package modelosTablas;
 
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import logica.AccommodationModality;
 
-public class ModeloTablaAccommodationModality extends DefaultTableModel {
-	
+
+public class ModeloTablaAccommodationModality extends DefaultTableModel implements ModelOperations<AccommodationModality> {
+
 	private static final long serialVersionUID = 1L;
+	private ArrayList<AccommodationModality> elements;
 
 	public ModeloTablaAccommodationModality(){
-		String[] columnNames = {"Contract","Type of room", "Meal plan", "Cant days accommodation", "Price"};   
+		String[] columnNames = {"Type of room", "Meal plan", "Cant days accommodation", "Price"};   
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
- 
+		this.elements = new ArrayList<AccommodationModality>();
+
 	}
 
-	public void addAccommodationModality(){
+	@Override
+	public void addElement(AccommodationModality accommodationModality) {
 		Object[] newRow =  null;
-         
-		newRow = new Object[]{}; 
-         
-
+		this.elements.add(accommodationModality);
+		newRow = new Object[]{accommodationModality.getTypeOfRoomSelect().getName(), accommodationModality.getMealPlanSelect().getName(), accommodationModality.getCantDaysAccommodation(), accommodationModality.getPrice()};
 		addRow(newRow);
-
 	}
-	
+
+
+
+	public AccommodationModality deleteElement (int i) {
+		this.removeRow(i);
+		return this.elements.remove(i);
+	}
+
+	public int cantElements () {
+		return this.elements.size();
+	}
+
+	public AccommodationModality getElement (int pos) {
+		return this.elements.get(pos);
+	}
+
 	public boolean isCellEditable(int row, int column){
 		boolean x=false;
 		if(column==2)
 			x=true;
 		else
 			x=false;
-		
+
 		return x;
-			
-		
+
 	}
 }

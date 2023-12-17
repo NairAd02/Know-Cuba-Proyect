@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import dao.DependentDAO;
+import utils.ConnectionDataBase;
 
 public class Dependent extends User {
 
@@ -21,12 +22,10 @@ public class Dependent extends User {
 	@Override
 	public void update() throws SQLException {
 		DependentDAO.getInstancie().update(this);
-		
 	}
 
 	@Override
 	public void insert() throws SQLException {
-		
 		this.id = DependentDAO.getInstancie().insert(this);
 	}
 

@@ -18,16 +18,17 @@ public abstract class Modality implements DUILogic {
 	protected String typeOfModality;
 
 	public Modality(int id, Contract contract, String typeOfModality) { // Contructor a nivel de base de datos
-		super();
 		this.id = id;
 		this.contract = contract;
 		this.typeOfModality = typeOfModality;
 	}
 
-	public Modality(Contract contract, String typeOfModality) { // Contructor a nivel de logica
-		super();
+	public Modality(Contract contract) { // Contructor a nivel de logica // Constructor a nivel de logica (proceso de creacion del objeto)
 		this.contract = contract;
-		this.typeOfModality = typeOfModality;
+	}
+	
+	public Modality() { // Constructor a nivel de logica (proceso de creacion del objeto)
+		
 	}
 
 	public int getId() {

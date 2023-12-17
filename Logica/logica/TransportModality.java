@@ -11,11 +11,10 @@ public abstract class TransportModality extends Modality{
 		this.typeTransportModality = typeTransportModality;
 	}
 	
-	public TransportModality(Contract contract, String typeOfModality, Vehicle vehicle,
-			String typeTransportModality) { // constructor a nivel de logica
-		super(contract, typeOfModality);
+	public TransportModality(Contract contract, Vehicle vehicle) { // constructor a nivel de logica
+		super(contract);
 		this.vehicle = vehicle;
-		this.typeTransportModality = typeTransportModality;
+		this.typeOfModality = "Transport Modality";
 	}
 
 	public Vehicle getVehicle() {

@@ -47,7 +47,14 @@ public class FrameGerente extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 990, 782);
 		contentPane = new JPanel();
-		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
+		
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
+		JPanel panel = new JPanel();
+		panel.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				int x= e.getXOnScreen();
@@ -56,19 +63,13 @@ public class FrameGerente extends JFrame {
 				setLocation(x - mouseX , y - mouseY );
 			}
 		});
-		contentPane.addMouseListener(new MouseAdapter() {
+		panel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				mouseX = e.getX();
 				mouseY = e.getY();
 			}
 		});
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		setLocationRelativeTo(null);
-		JPanel panel = new JPanel();
 		panel.setBackground(new Color(5, 150, 177));
 		panel.setBounds(0, 0, 990, 65);
 		contentPane.add(panel);

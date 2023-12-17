@@ -18,12 +18,12 @@ public class CostKilometers extends TransportModality{
 		this.costHoursWait = costHoursWait;
 	}
 	
-	public CostKilometers(Contract contract, String typeOfModality, Vehicle vehicle,
-			String typeTransportModality, double costKilometersGoing, double costKilometersLap, double costHoursWait) { // constructor a nivel de logica
-		super(contract, typeOfModality, vehicle, typeTransportModality);
+	public CostKilometers(Contract contract, Vehicle vehicle, double costKilometersGoing, double costKilometersLap, double costHoursWait) { // constructor a nivel de logica
+		super(contract, vehicle);
 		this.costKilometersGoing = costKilometersGoing;
 		this.costKilometersLap = costKilometersLap;
 		this.costHoursWait = costHoursWait;
+		this.typeTransportModality = "Cost Kilometers";
 	}
 
 	public double getCostKilometersGoing() {

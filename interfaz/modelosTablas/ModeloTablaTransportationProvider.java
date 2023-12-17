@@ -22,7 +22,7 @@ public class ModeloTablaTransportationProvider extends DefaultTableModel impleme
 	public void addElement(TransportationProvider transportationProvider) {
 		Object[] newRow =  null;
 		this.elements.add(transportationProvider);
-		newRow = new Object[]{transportationProvider.getName(), transportationProvider.getProvince(), "Show Activities"};
+		newRow = new Object[]{transportationProvider.getName(), transportationProvider.getProvince(), "Show Vehicles"};
 
 		addRow(newRow);
 
@@ -36,9 +36,9 @@ public class ModeloTablaTransportationProvider extends DefaultTableModel impleme
 		}
 	}
 
-	public void deleteElement (int i) {
-		this.elements.remove(i);
+	public TransportationProvider deleteElement (int i) {
 		this.removeRow(i);
+		return this.elements.remove(i);
 	}
 
 	public TransportationProvider getElement (int pos) {

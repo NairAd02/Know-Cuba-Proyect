@@ -8,9 +8,13 @@ public class TypeOfRoom implements DUILogic {
 	private int id;
 	private String name;
 
-	public TypeOfRoom(int id, String name) {
+	public TypeOfRoom(int id, String name) { // Constructor a nivel de base de datos
 		super();
 		this.id = id;
+		this.name = name;
+	}
+
+	public TypeOfRoom(String name) { // Constructor a nivel de logica
 		this.name = name;
 	}
 
@@ -55,6 +59,10 @@ public class TypeOfRoom implements DUILogic {
 
 	public void deleteFromHotel (int idHotel) throws SQLException { // metodo para eliminar el tipo de habitacion de un hotel en especifico
 		TypeOfRoomDAO.getInstancie().deleteFromHotel(idHotel, this.id);
+	}
+
+	public String toString () { // Metodo para definir como se muestra la informacion de la clase
+		return this.name;
 	}
 
 }

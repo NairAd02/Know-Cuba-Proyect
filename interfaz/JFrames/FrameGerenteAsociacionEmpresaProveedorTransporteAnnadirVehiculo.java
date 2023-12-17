@@ -1,9 +1,9 @@
 package JFrames;
 
 import java.awt.Color;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import logica.TransportationProvider;
 import logica.Vehicle;
 import javax.swing.JLabel;
@@ -129,11 +129,11 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 	}
 
 	private void addVehicle () throws SQLException {
-		if (this.transportationProvider != null) { // si es distinto de null se añade a la logica del negocio y a la base de datos 
+		if (this.transportationProvider.getId() != -1) { // si es distinto de -1 se añade a la logica del negocio y a la base de datos 
 			this.transportationProvider.addVehicle(new Vehicle(textFieldLock.getText(), transportationProvider.getId()));
 		}
-		else { // si es igual a null se añade temporalmente en la tabla
-			frameGerenteAsociacionEmpresaProveedorTransporte.addVehicleTemporal(new Vehicle(textFieldLock.getText()));
+		else { // si es igual a -1 se añade solamente a la logica del negocio
+			this.transportationProvider.addVehicleLogic(new Vehicle(textFieldLock.getText(), transportationProvider.getId()));
 		}
 		frameGerenteAsociacionEmpresaProveedorTransporte.actualizarTablaVehicles(); // se actualiza la informacion de la tabla de las actividades
 	}

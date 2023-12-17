@@ -3,11 +3,11 @@ package dao;
 import java.sql.CallableStatement;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import logica.ServiceContract;
-import logica.ServiceModality;
 import utils.ConnectionDataBase;
 
 public class ServiceContractDAO implements ServiceContractDAOInterface{
@@ -30,12 +30,13 @@ public class ServiceContractDAO implements ServiceContractDAOInterface{
 	public int insert(ServiceContract serviceContract) throws SQLException { 
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_service_contract(?, ?, ?, ?, ?, ?)}");
 		// se definen los parametros de la funcion
-		cs.setDate(1, Date.valueOf(serviceContract.getStartDate()));
-		cs.setDate(2, Date.valueOf(serviceContract.getTerminationDate()));
-		cs.setString(3, serviceContract.getDescription());
-		cs.setString(4, serviceContract.getTypeOfContract());
-		cs.setInt(5, serviceContract.getProviderId());
-		cs.setDouble(6, serviceContract.getSurcharge());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setDate(2, Date.valueOf(serviceContract.getStartDate()));
+		cs.setDate(3, Date.valueOf(serviceContract.getTerminationDate()));
+		cs.setString(4, serviceContract.getDescription());
+		cs.setString(5, serviceContract.getTypeOfContract());
+		cs.setInt(6, serviceContract.getProviderId());
+		cs.setDouble(7, serviceContract.getSurcharge());
 		cs.execute(); // se ejecuta la consulta de la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -91,14 +92,21 @@ public class ServiceContractDAO implements ServiceContractDAOInterface{
 
 	@Override
 	public ServiceContract mapEntity(CallableStatement cs) throws SQLException {
-		ServiceContract serviceContract = this.cache.get(cs.getInt("id_contract"));
+		ServiceContract serviceContract = this.cache.get(cs.getResultSet().getInt("id_contract"));
 
 		if (serviceContract == null) { // se no se encuentra alamacena en cache una referencia con ese id
-			serviceContract = new ServiceContract(cs.getResultSet().getInt("id_contract"), cs.getResultSet().getDate("contract_start_date").toLocalDate(), 
-					cs.getResultSet().getDate("contract_termination_date").toLocalDate(), cs.getResultSet().getDate("contract_reconcilation_date").toLocalDate(), 
-					cs.getResultSet().getString("description"), ServiceProviderDAO.getInstancie().select(cs.getResultSet().getInt("service_provider_id")), 
-					(ArrayList<ServiceModality>) ServiceModalityDAO.getInstancie().selectIntoServiceContract(cs.getResultSet().getInt("id_contract")), cs.getResultSet().getBoolean("state"), 
-					cs.getResultSet().getString("type_of_contract"), cs.getResultSet().getDouble("surcharge"));
+			if (cs.getResultSet().getDate("contract_reconcilation_date") != null)
+				serviceContract = new ServiceContract(cs.getResultSet().getInt("id_contract"), cs.getResultSet().getDate("contract_start_date").toLocalDate(), 
+						cs.getResultSet().getDate("contract_termination_date").toLocalDate(), cs.getResultSet().getDate("contract_reconcilation_date").toLocalDate(), 
+						cs.getResultSet().getString("contract_description"), ServiceProviderDAO.getInstancie().select(cs.getResultSet().getInt("service_provider_id")), 
+						cs.getResultSet().getBoolean("state"), 
+						cs.getResultSet().getString("type_of_contract"), cs.getResultSet().getDouble("surcharge"));
+			else
+				serviceContract = new ServiceContract(cs.getResultSet().getInt("id_contract"), cs.getResultSet().getDate("contract_start_date").toLocalDate(), 
+						cs.getResultSet().getDate("contract_termination_date").toLocalDate(), null, 
+						cs.getResultSet().getString("contract_description"), ServiceProviderDAO.getInstancie().select(cs.getResultSet().getInt("service_provider_id")), 
+						cs.getResultSet().getBoolean("state"), 
+						cs.getResultSet().getString("type_of_contract"), cs.getResultSet().getDouble("surcharge"));
 
 			this.cache.put(serviceContract.getId(), serviceContract); // se alamacena en cache la referencia del contrato de servicio
 		}

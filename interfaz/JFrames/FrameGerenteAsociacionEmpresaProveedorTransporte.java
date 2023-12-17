@@ -3,12 +3,13 @@ package JFrames;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import JPanels.PanelGerenteAsociacionEmpresaProveedorTransporte;
 import logica.Controller;
 import logica.TransportationProvider;
 import logica.Vehicle;
 import modelosTablas.ModeloTablaVehicles;
+import utils.ConnectionDataBase;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -38,6 +39,7 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 	private TransportationProvider transportationProvider;
 	private JLabel lblX;
 	private int mouseX, mouseY;
+	private JLabel lblShowVehicles;
 
 
 
@@ -50,9 +52,12 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 		this.transportationProvider = transportationProvider;
 	}
 
-	public FrameGerenteAsociacionEmpresaProveedorTransporte(PanelGerenteAsociacionEmpresaProveedorTransporte ps, TransportationProvider transportationProvider) {
+	public FrameGerenteAsociacionEmpresaProveedorTransporte(PanelGerenteAsociacionEmpresaProveedorTransporte ps, TransportationProvider t) {
 		this.panelGerenteAsociacionEmpresaProveedorTransporte = ps;
-		this.transportationProvider = transportationProvider;
+		if (t != null)
+			this.transportationProvider = t;
+		else
+			this.transportationProvider = new TransportationProvider(); //  se crea un objeto temporal
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 465, 330);
@@ -88,6 +93,15 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if (transportationProvider.getId() != -1) {
+					try {
+						ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas
+						transportationProvider.actualizarVehicles(); // se actualizan los datos del provedor de transporte para evitar inconsistencias
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 				cerrarFrame();
 			}
 			@Override
@@ -106,17 +120,18 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 		lblX.setBounds(427, 0, 38, 38);
 		contentPane.add(lblX);
 
-		JLabel lblName = new JLabel("NAME :");
-		lblName.setForeground(SystemColor.info);
-		lblName.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblName.setBounds(90, 52, 80, 23);
-		contentPane.add(lblName);
+		lblShowVehicles = new JLabel("SHOW VEHICLES");
+		lblShowVehicles.setFont(new Font("Arial Black", Font.PLAIN, 19));
+		lblShowVehicles.setBounds(27, 52, 323, 30);
+		contentPane.add(lblShowVehicles);
 
-		JLabel lblProvince = new JLabel("PROVINCE :");
-		lblProvince.setForeground(SystemColor.info);
-		lblProvince.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblProvince.setBounds(90, 86, 109, 23);
-		contentPane.add(lblProvince);
+		if (this.transportationProvider.getId() == -1) { // Se Habilita la inserccion
+			this.addSeccionName();
+			this.addSeccionProvince();
+			lblShowVehicles.setVisible(false);
+		}
+
+		this.addButtonADD();
 
 		JLabel lblVehicles = new JLabel("VEHICLES");
 		lblVehicles.setForeground(SystemColor.info);
@@ -124,15 +139,7 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 		lblVehicles.setBounds(90, 130, 100, 23);
 		contentPane.add(lblVehicles);
 
-		textFieldName = new JTextField();
-		textFieldName.setColumns(10);
-		textFieldName.setBounds(180, 56, 197, 20);
-		contentPane.add(textFieldName);
 
-		textFieldProvince = new JTextField();
-		textFieldProvince.setColumns(10);
-		textFieldProvince.setBounds(219, 90, 158, 20);
-		contentPane.add(textFieldProvince);
 
 		JPanel panelVehicles = new JPanel();
 		panelVehicles.setBounds(87, 164, 290, 99);
@@ -143,7 +150,7 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 		panelVehicles.add(scrollPane, BorderLayout.CENTER);
 
 		tableVehicles = new JTable();
-		tableVehicles.setModel(new ModeloTablaVehicles(null));
+		tableVehicles.setModel(new ModeloTablaVehicles());
 		scrollPane.setColumnHeaderView(tableVehicles);
 
 		lblAnnadir = new JLabel("ADD");
@@ -199,18 +206,76 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 		lblEliminar.setBounds(310, 133, 67, 20);
 		contentPane.add(lblEliminar);
 
-		lblAdd = new JLabel("ADD");
+
+
+
+
+		this.actualizarTablaVehicles();
+	}
+
+	private void addSeccionName () {
+		JLabel lblName = new JLabel("NAME :");
+		lblName.setForeground(SystemColor.info);
+		lblName.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblName.setBounds(90, 52, 80, 23);
+		contentPane.add(lblName);
+
+		textFieldName = new JTextField();
+		textFieldName.setColumns(10);
+		textFieldName.setBounds(180, 56, 197, 20);
+		contentPane.add(textFieldName);
+	}
+
+	private void addSeccionProvince () {
+		JLabel lblProvince = new JLabel("PROVINCE :");
+		lblProvince.setForeground(SystemColor.info);
+		lblProvince.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblProvince.setBounds(90, 86, 109, 23);
+		contentPane.add(lblProvince);
+
+		textFieldProvince = new JTextField();
+		textFieldProvince.setColumns(10);
+		textFieldProvince.setBounds(219, 90, 158, 20);
+		contentPane.add(textFieldProvince);
+	}
+
+	private void addButtonADD () {
+		String nameButton = "";
+		if (transportationProvider.getId() == -1)
+			nameButton = "ADD";
+		else
+			nameButton = "CONFIRM";
+		lblAdd = new JLabel(nameButton);
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (verificarCampos()) {
-					try {
-						addTransportationProvider();
-						cerrarFrame();
-					} catch (SQLException e1) {
+				if (transportationProvider.getId() == -1) {
+					if (verificarCampos()) {
+						try {
+							addTransportationProvider();
+							ConnectionDataBase.commit(); // se confirman las transacciones realizadas
+							cerrarFrame();
+						} catch (SQLException e1) {
+							try {
+								ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas
+							} catch (SQLException e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							} 
+							e1.printStackTrace();
+						} // se añade el provedor de transporte
+					}
+				}
+				else {
+					if (transportationProvider.cantVehicles() != 0) {
+						try {
+							ConnectionDataBase.commit(); // se confirman las transacciones realizadas
+						} catch (SQLException e1) {
 
-						e1.printStackTrace();
-					} // se añade el provedor de transporte
+							e1.printStackTrace();
+						} 
+						cerrarFrame(); 
+					}
 				}
 			}
 			@Override
@@ -228,15 +293,12 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 		lblAdd.setBackground(SystemColor.info);
 		lblAdd.setBounds(115, 276, 235, 35);
 		contentPane.add(lblAdd);
-
-		this.actualizarTablaVehicles();
 	}
 
-	public void actualizarTablaVehicles () {
-		if (transportationProvider != null)
-			this.actualizarTablaVehicles(transportationProvider.getVehicles()); // se obtienen las actividades del provedor de servicios
-		else
-			this.actualizarTablaVehicles(((ModeloTablaVehicles)tableVehicles.getModel()).getTemporalVehicles()); // se obtienen las actividades en proceso de inserccion
+
+
+	public void actualizarTablaVehicles () {	
+		this.actualizarTablaVehicles(transportationProvider.getVehicles()); // se obtienen los vehiculos del provedor de transporte
 	}
 
 
@@ -250,7 +312,16 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 	}
 
 	private void deleteElementsTable () throws SQLException {
-		((ModeloTablaVehicles) tableVehicles.getModel()).deleteElements(this.tableVehicles.getSelectedRows());
+		int [] rows = tableVehicles.getSelectedRows();
+
+		for (int i = 0; i < rows.length; i++) {
+			if (transportationProvider.getId() == -1)
+				transportationProvider.deleteVehicleLogic(((ModeloTablaVehicles) tableVehicles.getModel()).deleteElement(rows[i] - i)); // se elimina solo el la actividad de la logica del negocio
+			else
+				transportationProvider.deleteVehicle(((ModeloTablaVehicles) tableVehicles.getModel()).deleteElement(rows[i] - i)); // se elimina la actividad de la logica del negocio y de la base de datos
+		}
+
+
 		this.actualizarTablaVehicles();
 	}
 
@@ -263,16 +334,13 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 	}
 
 	private boolean verificarCampos () {
-		return (!this.textFieldName.getText().equalsIgnoreCase("") && !this.textFieldProvince.getText().equalsIgnoreCase(""));
+		return (!this.textFieldName.getText().equalsIgnoreCase("") && !this.textFieldProvince.getText().equalsIgnoreCase("") && ((ModeloTablaVehicles) tableVehicles.getModel()).cantElements() != 0);
 	}
 
-	public void addVehicleTemporal (Vehicle vehicle) {
-		((ModeloTablaVehicles) tableVehicles.getModel()).addElementTemporal(vehicle); // se añade la actividad a la tabla de forma temporal
-	}
 
 	private void addTransportationProvider () throws SQLException {
 		Controller.getInstancie().getTouristAgency().addProvider(new TransportationProvider(textFieldName.getText(), textFieldProvince.getText(), 
-				((ModeloTablaVehicles) tableVehicles.getModel()).getElements())); // se inserta el provedor de servicios a nivel de base de datos
+				transportationProvider.getVehicles())); // se inserta el provedor de servicios a nivel de base de datos
 		panelGerenteAsociacionEmpresaProveedorTransporte.actualizarTablaTransportationProviders(); // se actualiza la informacion de la tabla de provedores
 	}
 

@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,11 +31,12 @@ public class HotelDAO implements HotelDAOInterface {
 	public int insert(Hotel hotel) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_hotel(?, ?, ?, ?, ?)}");
 		// se definen los parametros de la funcion
-		cs.setString(1, hotel.getName());
-		cs.setString(2, hotel.getHotelChain());
-		cs.setString(3, hotel.getProvince());
-		cs.setString(4, hotel.getAddress());
-		cs.setInt(5, hotel.getHotelCategory());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, hotel.getName());
+		cs.setString(3, hotel.getHotelChain());
+		cs.setString(4, hotel.getProvince());
+		cs.setString(5, hotel.getAddress());
+		cs.setInt(6, hotel.getHotelCategory());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -101,7 +103,7 @@ public class HotelDAO implements HotelDAOInterface {
 
 		if (hotel == null) {
 			hotel = new Hotel(cs.getResultSet().getInt("id"), cs.getResultSet().getString("name"), cs.getResultSet().getString("province"),
-					cs.getResultSet().getString("hotel_chain"), cs.getResultSet().getInt("hote_category"), cs.getResultSet().getString("address"), 
+					cs.getResultSet().getString("hotel_chain"), cs.getResultSet().getInt("hotel_category"), cs.getResultSet().getString("address"), 
 					(ArrayList<TypeOfRoom>)TypeOfRoomDAO.getInstancie().selectTypeOfRoomIntoHotel(cs.getResultSet().getInt("id")), (ArrayList<MealPlan>)MealPlanDAO.getInstancie().selectMealPlanIntoHotel(cs.getResultSet().getInt("id")));
 
 			this.cache.put(hotel.getId(), hotel); // se almacena en chace la referencia del hotel

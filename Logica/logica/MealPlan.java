@@ -1,15 +1,19 @@
 package logica;
 
 import java.sql.SQLException;
-
 import dao.MealPlanDAO;
 
 public class MealPlan implements DUILogic{
 	private int id;
 	private String name;
-	public MealPlan(int id, String name) {
+	
+	public MealPlan(int id, String name) { // Constructor a nivel de base de datos
 		super();
 		this.id = id;
+		this.name = name;
+	}
+	
+	public MealPlan(String name) { // Constructor a nivel de logica
 		this.name = name;
 	}
 
@@ -51,6 +55,10 @@ public class MealPlan implements DUILogic{
 	
 	public void deleteFromHotel (int idHotel) throws SQLException {  // metodo para eliminar el plan alimenticio de un hotel en especifico
 		MealPlanDAO.getInstancie().deleteFromHotel(idHotel, this.id);
+	}
+	
+	public String toString () { // Metodo para definir como se muestra la informacion de la clase
+		return this.name;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import dao.PackageDesignerDAO;
+import utils.ConnectionDataBase;
 
 public class PackageDesigner extends User {
 
@@ -21,12 +22,10 @@ public class PackageDesigner extends User {
 	@Override
 	public void update() throws SQLException {
 		PackageDesignerDAO.getInstancie().update(this);
-
 	}
 
 	@Override
-	public void insert() throws SQLException {
-		
+	public void insert() throws SQLException {	
 		this.id = PackageDesignerDAO.getInstancie().insert(this);
 	}
 

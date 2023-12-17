@@ -1,39 +1,29 @@
 package JPanels;
 
 import javax.swing.JPanel;
-
-
 import java.awt.SystemColor;
-
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
-
 import java.awt.BorderLayout;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
 import modelosTablas.ModeloTablaServiceProvider;
-import modelosTablas.ModeloTablaUsers;
+import utils.ConnectionDataBase;
 
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
-
 import JFrames.FrameGerente;
 import JFrames.FrameGerenteAsociacionEmpresaProveedorServicio;
 import logica.Controller;
-import logica.Hotel;
 import logica.Provider;
 import logica.ServiceProvider;
-import logica.User;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -48,11 +38,20 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 	private JLabel lblDelete;
 	private JTextField textFieldBuscadorName;
 	private String searchName;
+	private JLabel lblShowActivities;
 
 	/**
 	 * Create the panel.
 	 */
 	public PanelGerenteAsociacionEmpresaProveedorServicio() {
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				tableServiceProviders.clearSelection();
+				actualizarEstadoButtonDelete();
+				actualizarEstadoButtonShow();
+			}
+		});
 		searchName = "";
 		setBackground(SystemColor.inactiveCaptionBorder);
 		setLayout(null);
@@ -67,6 +66,13 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 		panelTable.add(scrollPaneTable, BorderLayout.CENTER);
 
 		tableServiceProviders = new JTable();
+		tableServiceProviders.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				actualizarEstadoButtonDelete();
+				actualizarEstadoButtonShow();
+			}
+		});
 		tableServiceProviders.setModel(new ModeloTablaServiceProvider());
 		scrollPaneTable.setViewportView(tableServiceProviders);
 
@@ -102,8 +108,14 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 				if (tableServiceProviders.getSelectedRowCount() != 0) {
 					try {
 						deleteElementsTable();
+						ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
 					} catch (SQLException e1) {
-
+						try {
+							ConnectionDataBase.roolback();  // se cancelan las operaciones realizadas a la base de datos
+						} catch (SQLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
 						e1.printStackTrace();
 					} // se eliminan los elementos seleccionados
 				}
@@ -145,13 +157,44 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 		textFieldBuscadorName.setBounds(10, 64, 182, 20);
 		add(textFieldBuscadorName);
 
+		lblShowActivities = new JLabel("SHOW ACTIVITIES");
+		lblShowActivities.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (lblShowActivities.isEnabled()) {
+					FrameGerenteAsociacionEmpresaProveedorServicio frameAddProvedorServicio = new FrameGerenteAsociacionEmpresaProveedorServicio(PanelGerenteAsociacionEmpresaProveedorServicio.this, 
+							((ModeloTablaServiceProvider)	tableServiceProviders.getModel()).getElement(tableServiceProviders.getSelectedRow())); // se manda por parametro null ya que se desea adicionar un provedor de servicios
+					frameAddProvedorServicio.setVisible(true);
+					FrameGerente.getIntancie().setEnabled(false); // se inabilita el frame principal
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+		});
+		lblShowActivities.setOpaque(true);
+		lblShowActivities.setHorizontalAlignment(SwingConstants.CENTER);
+		lblShowActivities.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblShowActivities.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblShowActivities.setBackground(SystemColor.info);
+		lblShowActivities.setBounds(547, 52, 155, 20);
+		add(lblShowActivities);
+
 		lblImage = new JLabel("");
 		lblImage.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/Imagen2.jpg")));
 		lblImage.setBounds(0, 0, 712, 678);
 		add(lblImage);
 
-		this.actualizarTablaServicieProviders();
 
+
+		this.actualizarTablaServicieProviders();
+		this.actualizarEstadoButtonDelete();
+		this.actualizarEstadoButtonShow();
 	}
 
 	public void actualizarTablaServicieProviders () {
@@ -182,6 +225,20 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 			i=0;
 			((ModeloTablaServiceProvider) table.getModel()).deleteElement(i);
 		}
+	}
+
+	private void actualizarEstadoButtonDelete () {
+		if (tableServiceProviders.getSelectedRowCount() != 0)
+			lblDelete.setEnabled(true);
+		else
+			lblDelete.setEnabled(false);
+	}
+
+	private void actualizarEstadoButtonShow () {
+		if (tableServiceProviders.getSelectedRowCount() == 1)
+			lblShowActivities.setEnabled(true);
+		else
+			lblShowActivities.setEnabled(false);
 	}
 
 

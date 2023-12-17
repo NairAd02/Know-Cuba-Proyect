@@ -1,8 +1,12 @@
 package logica;
 
 import java.sql.SQLException;
+
 import java.util.ArrayList;
+
+import dao.ActivityDAO;
 import dao.ServiceProviderDAO;
+
 
 public class ServiceProvider extends Provider {
 	private ArrayList<Activity> activities;
@@ -21,9 +25,17 @@ public class ServiceProvider extends Provider {
 
 
 
-	public ServiceProvider (int id) { // CONSTRUCTOR PARA LAS BUSQUEDAS EN EL BINARYSEARCHTREE
-		super(id);
+	public ServiceProvider () { // Constructor para operaciones temporales
+		super();
+		this.activities = new ArrayList<Activity>();
 	}
+	
+	// Metodos de Carga y obtencion
+	public void actualizarActivities () throws SQLException {
+		this.activities = (ArrayList<Activity>) ActivityDAO.getInstancie().selectIntoServiceProvider(this.id);
+	}
+	
+	// Fin de Metodos de Carga y obtencion
 
 	public ArrayList<Activity> getActivities() {
 		return activities;
@@ -35,8 +47,16 @@ public class ServiceProvider extends Provider {
 
 	// Metodos para el control de las actividades
 
+	public int cantActivities () {
+		return this.activities.size();
+	}
+
 	public void addActivity (Activity activity) throws SQLException {
 		activity.insert(); // se inserta la actividad en la base de datos	
+		this.addActivityLogic(activity); // se inserta la actividad en la logica del negocio
+	}
+
+	public void addActivityLogic (Activity activity) throws SQLException {
 		this.activities.add(activity); // se inserta la actividad en la logica del negocio
 	}
 
@@ -51,14 +71,27 @@ public class ServiceProvider extends Provider {
 
 	public void deleteActivity (Activity activity) throws SQLException {
 		activity.delete(); // se elimina la actividad de la base de datos
+		this.deleteActivityLogic(activity); // se elimina la actividad de la logica del negocio
+	}
+
+	public void deleteActivityLogic (Activity activity) throws SQLException {
 		this.activities.remove(activity);
 	}
 
 	public void update (Activity activity, String activityDescription) throws SQLException {
 		// se actualizan los datos de la actividad en la logica del negocio
-		activity.setDescription(activityDescription);
+		this.updateLogic(activity, activityDescription);
 		activity.update(); // se actualiza la informacion de la actividad en la base de datos
 	}
+
+	public void updateLogic (Activity activity, String activityDescription) throws SQLException {
+		// se actualizan los datos de la actividad en la logica del negocio
+		activity.setDescription(activityDescription);
+	}
+
+	// Fin Metodos para el control de las actividades
+
+
 
 	@Override
 	public void insert() throws SQLException {
@@ -69,9 +102,10 @@ public class ServiceProvider extends Provider {
 	@Override
 	public void update() throws SQLException {
 		ServiceProviderDAO.getInstancie().update(this);
+		
 	}
 
-	// Fin Metodos para el control de las actividades
+
 
 }
 

@@ -5,12 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import logica.CarrierContract;
 import logica.CostKilometers;
 import utils.ConnectionDataBase;
 
 public class CostKilometersDAO implements CostKilometersDAOInterface {
 	private static CostKilometersDAO costKilometersDAO;
 	private HashMap<Integer, CostKilometers> cache; // Atributo para guardar en cache cada referencia creada
+	private CarrierContract carrierContract;
 
 	// PATRON SINGLENTON
 	private CostKilometersDAO () {
@@ -89,10 +92,11 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 	}
 
 	@Override
-	public List<CostKilometers> selectIntoCarrierContract(int idCarrierContract) throws SQLException {
+	public List<CostKilometers> selectIntoCarrierContract(CarrierContract carrierContract) throws SQLException {
+		this.carrierContract = carrierContract;
 		List<CostKilometers> listCostKilometers = new ArrayList<CostKilometers>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transports_modalitys_cost_kilometers_carrier_contract(?)}");
-		cs.setInt(1, idCarrierContract); // se define el parametro de la funcion
+		cs.setInt(1, this.carrierContract.getId()); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamda a la funcion
 
 		while (cs.getResultSet().next()) {
@@ -125,13 +129,13 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 		CostKilometers costKilometers = this.cache.get(cs.getResultSet().getInt("modality_id"));
 
 		if (costKilometers == null) { // si no esta referenciado en cache
-			costKilometers = new CostKilometers(cs.getResultSet().getInt("modality_id"), CarrierContractDAO.getInstancie().select(cs.getResultSet().getInt("carrier_contract_id")), 
+			costKilometers = new CostKilometers(cs.getResultSet().getInt("modality_id"), this.carrierContract, 
 					cs.getResultSet().getString("type_of_modality"), VehicleDAO.getInstancie().select(cs.getResultSet().getInt("vehicle_id")), cs.getResultSet().getString("type_transport_modality"), 
 					cs.getResultSet().getDouble("cost_kilometers_going"), cs.getResultSet().getDouble("cost_kilometers_lap"), cs.getResultSet().getDouble("cost_hours_wait"));
 
 			this.cache.put(costKilometers.getId(), costKilometers); // se alamacena en cache la referencia del la modalidad de transporte
 		}
-		
+
 		return costKilometers;
 	}
 

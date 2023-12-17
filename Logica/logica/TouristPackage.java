@@ -6,6 +6,7 @@ import java.util.HashMap;
 import dao.TouristPackageDAO;
 
 
+
 public class TouristPackage implements DUILogic {
 	private int id;
 	private String name;

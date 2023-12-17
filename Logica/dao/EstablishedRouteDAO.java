@@ -5,12 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import logica.CarrierContract;
 import logica.EstablishedRoute;
 import utils.ConnectionDataBase;
 
 public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 	private static EstablishedRouteDAO establishedRouteDAO;
 	private HashMap<Integer, EstablishedRoute> cache; // Atributo para guardar en cache cada referencia creada
+	private CarrierContract carrierContract;
 
 	// PATRON SINGLENTON
 	private EstablishedRouteDAO () {
@@ -89,10 +92,11 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 	}
 
 	@Override
-	public List<EstablishedRoute> selectIntoCarrierContract(int idCarrierContract) throws SQLException {
+	public List<EstablishedRoute> selectIntoCarrierContract(CarrierContract carrierContract) throws SQLException {
+		this.carrierContract = carrierContract;
 		List<EstablishedRoute> listEstablishedRoute = new ArrayList<EstablishedRoute>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transports_modalitys_established_route_carrier_contract(?)}");
-		cs.setInt(1, idCarrierContract); // se define el parametro de la funcion
+		cs.setInt(1, this.carrierContract.getId()); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la llamada a la funcion
 
 		while (cs.getResultSet().next()) {
@@ -125,7 +129,7 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 		EstablishedRoute establishedRoute = this.cache.get(cs.getResultSet().getInt("modality_id"));
 
 		if (establishedRoute == null) { // se no se encuentra en cache una referencia con ese id
-			establishedRoute = new EstablishedRoute(cs.getResultSet().getInt("modality_id"), CarrierContractDAO.getInstancie().select(cs.getResultSet().getInt("carrier_contract_id")), 
+			establishedRoute = new EstablishedRoute(cs.getResultSet().getInt("modality_id"), this.carrierContract, 
 					cs.getResultSet().getString("type_of_modality"), VehicleDAO.getInstancie().select(cs.getResultSet().getInt("vehicle_id")), cs.getResultSet().getString("type_transport_modality"), 
 					cs.getResultSet().getString("description_rout"), cs.getResultSet().getDouble("cost_going"), cs.getResultSet().getDouble("cost_lap"));
 

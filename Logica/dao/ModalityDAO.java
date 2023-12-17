@@ -24,7 +24,7 @@ public class ModalityDAO implements ModalityDAOInterface{
 
 	@Override
 	public void delete(int idModality) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call delete_modality(?}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call delete_modality(?)}");
 		cs.setInt(1, idModality); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -32,7 +32,7 @@ public class ModalityDAO implements ModalityDAOInterface{
 
 	@Override
 	public void deleteFromTouristPackage(int idModality, int idTouristPackage) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call delete_modality_tourist_package(?, ?}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call delete_modality_tourist_package(?, ?)}");
 		// se definen los parametros de la funcion
 		cs.setInt(1, idModality);
 		cs.setInt(2, idTouristPackage);
@@ -52,7 +52,7 @@ public class ModalityDAO implements ModalityDAOInterface{
 
 	@Override
 	public void insertIntoTouristPackage(int idModality, int idTouristPackage) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call insert_modality_tourist_package(?, ?}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call insert_modality_tourist_package(?, ?)}");
 		// se definen los parametros de la funcion
 		cs.setInt(1, idModality);
 		cs.setInt(2, idTouristPackage);

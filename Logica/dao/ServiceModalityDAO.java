@@ -3,16 +3,19 @@ package dao;
 import java.sql.CallableStatement;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import logica.ServiceContract;
 import logica.ServiceModality;
 import utils.ConnectionDataBase;
 
 public class ServiceModalityDAO implements ServiceModalityDAOInterface {
 	private static ServiceModalityDAO serviceModalityDAO;
 	private HashMap<Integer, ServiceModality> cache;
-
+	private ServiceContract serviceContract;
 	// PATRON SINGLENTON
 	private ServiceModalityDAO () {
 		this.cache = new HashMap<Integer, ServiceModality>();
@@ -29,11 +32,12 @@ public class ServiceModalityDAO implements ServiceModalityDAOInterface {
 	public int insert(ServiceModality serviceModality) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_service_modality(?, ?, ?, ?, ?)}");
 		// se definen los parametros de la funcion
-		cs.setString(1, serviceModality.getTypeOfModality());
-		cs.setInt(2, serviceModality.getContractId());
-		cs.setInt(3, serviceModality.getActivityId());
-		cs.setDate(4, Date.valueOf(serviceModality.getReleasedDate()));
-		cs.setDouble(5, serviceModality.getPrice());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, serviceModality.getTypeOfModality());
+		cs.setInt(3, serviceModality.getContractId());
+		cs.setInt(4, serviceModality.getActivityId());
+		cs.setDate(5, Date.valueOf(serviceModality.getReleasedDate()));
+		cs.setDouble(6, serviceModality.getPrice());
 		cs.execute(); // se ejecuta la consulta de la funcion
 		int idIsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -87,10 +91,11 @@ public class ServiceModalityDAO implements ServiceModalityDAOInterface {
 	}
 
 	@Override
-	public List<ServiceModality> selectIntoServiceContract(int idServiceContract) throws SQLException {
+	public List<ServiceModality> selectIntoServiceContract(ServiceContract serviceContract) throws SQLException {
+		this.serviceContract = serviceContract;
 		List<ServiceModality> listServiceModality = new ArrayList<ServiceModality>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_service_modality_service_contract(?)}");
-		cs.setInt(1, idServiceContract); // se define el parametro de la funcion
+		cs.setInt(1, this.serviceContract.getId()); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la consulta de la funcion
 
 		while (cs.getResultSet().next()) {
@@ -120,11 +125,11 @@ public class ServiceModalityDAO implements ServiceModalityDAOInterface {
 
 	@Override
 	public ServiceModality mapEntity(CallableStatement cs) throws SQLException {
-		ServiceModality serviceModality = this.cache.get(cs.getInt("modality_id"));
+		ServiceModality serviceModality = this.cache.get(cs.getResultSet().getInt("modality_id"));
 
 		if (serviceModality == null) { // Si no se encuentra en cache una referencia con ese id
-			serviceModality = new ServiceModality(cs.getResultSet().getInt("modality_id"), ServiceContractDAO.getInstancie().select(cs.getResultSet().getInt("service_contract_id")), cs.getResultSet().getString("type_of_modality"), 
-					ActivityDAO.getInstancie().select(cs.getInt("activity_id")), cs.getResultSet().getDate("release_date").toLocalDate(), cs.getResultSet().getDouble("price"));
+			serviceModality = new ServiceModality(cs.getResultSet().getInt("modality_id"), this.serviceContract, cs.getResultSet().getString("type_of_modality"), 
+					ActivityDAO.getInstancie().select(cs.getResultSet().getInt("activity_id")), cs.getResultSet().getDate("release_date").toLocalDate(), cs.getResultSet().getDouble("price"));
 
 			this.cache.put(serviceModality.getId(), serviceModality); // se alamacena en cache la referencia de la modalidad de servicio
 		}

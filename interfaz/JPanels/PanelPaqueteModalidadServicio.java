@@ -7,8 +7,14 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import javax.swing.SwingConstants;
 
+import logica.Modality;
+import logica.ServiceModality;
+import modelosTablas.ModeloTablaActivies;
 import modelosTablas.ModeloTablaServiceModality;
 
 import javax.swing.ImageIcon;
@@ -41,6 +47,7 @@ public class PanelPaqueteModalidadServicio extends JPanel {
 		
 		tableModalitys = new JTable();
 		tableModalitys.setModel(new ModeloTablaServiceModality());
+		tableModalitys.setModel(new ModeloTablaServiceModality());
 		scrollPane.setViewportView(tableModalitys);
 		
 		
@@ -53,9 +60,9 @@ public class PanelPaqueteModalidadServicio extends JPanel {
 		lblAtras.setBounds(279, 452, 91, 38);
 		add(lblAtras);
 		
-		JLabel lblService = new JLabel("SERVICE");
+		JLabel lblService = new JLabel("SERVICES MODALITIES");
 		lblService.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblService.setBounds(28, 11, 99, 30);
+		lblService.setBounds(28, 11, 258, 30);
 		add(lblService);
 		
 	
@@ -84,5 +91,41 @@ public class PanelPaqueteModalidadServicio extends JPanel {
 		lblEliminar.setBackground(SystemColor.info);
 		lblEliminar.setBounds(485, 53, 155, 20);
 		add(lblEliminar);
+	}
+	
+	public void actualizarTablaModalitys () {	
+		this.actualizarTablaModalitys(serviceContract.getModalitys()); // se obtienen las actividades del provedor de servicios
+	}
+
+
+	private void actualizarTablaModalitys(ArrayList<Modality> modalitys){
+		reiniciarTable(this.tableModalities);
+
+
+		for (Modality mod : modalitys) {
+			((ModeloTablaServiceModality) tableModalities.getModel()).addElement((ServiceModality) mod);
+		}
+	}
+
+	private void deleteElementsTable () throws SQLException {
+		int [] rows = tableModalities.getSelectedRows();
+
+		for (int i = 0; i < rows.length; i++) {
+			if (serviceContract.getId() == -1)
+				serviceContract.deleteModalityLogic(((ModeloTablaServiceModality) tableModalities.getModel()).deleteElement(rows[i] - i)); // se elimina solo la modalidad de la logica del negocio
+			else
+				serviceContract.deleteModality(((ModeloTablaServiceModality) tableModalities.getModel()).deleteElement(rows[i] - i)); // se elimina la modalidad de la logica del negocio y de la base de datos
+		}
+
+
+		this.actualizarTablaModalitys();
+	}
+
+	private void reiniciarTable(JTable table){
+
+		for(int i=0;table.getRowCount()!=0;i++){
+			i=0;
+			((ModeloTablaActivies) table.getModel()).deleteElement(i);
+		}
 	}
 }

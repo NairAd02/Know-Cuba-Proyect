@@ -13,6 +13,8 @@ import logica.Manager;
 import logica.PackageDesigner;
 import logica.Rol;
 import logica.User;
+import utils.ConnectionDataBase;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -118,13 +120,18 @@ public class FrameRegistro extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				if (verificarCampos()) { // si los campos son validos
 					try {
-
 						addUser();
+						ConnectionDataBase.commit(); // se confirman las transacciones realizadas 
 						FrameAdministrador.getInstancie().actualizarTablaUsuarios();
 						disposeFrame();
 
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
+						try {
+							ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas 
+						} catch (SQLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
 						e1.printStackTrace();
 					}
 				}

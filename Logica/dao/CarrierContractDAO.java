@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import logica.CarrierContract;
-import logica.TransportModality;
 import utils.ConnectionDataBase;
 
 public class CarrierContractDAO implements CarrierContractDAOInterface {
@@ -94,11 +93,16 @@ public class CarrierContractDAO implements CarrierContractDAOInterface {
 		CarrierContract carrierContract = this.cache.get(cs.getResultSet().getInt("id_contract"));
 
 		if (carrierContract == null) { // si no se encuentra referenciado en cache
+			if (cs.getResultSet().getDate("contract_reconcilation_date") != null)
 			carrierContract = new CarrierContract(cs.getResultSet().getInt("id_contract"), cs.getResultSet().getDate("contract_start_date").toLocalDate(), 
 					cs.getResultSet().getDate("contract_termination_date").toLocalDate(), cs.getResultSet().getDate("contract_reconcilation_date").toLocalDate(), cs.getResultSet().getString("contract_description"), 
 					TransportationProviderDAO.getInstancie().select(cs.getResultSet().getInt("transportation_provider_id")), 
-					( ArrayList<TransportModality> )  TransportModalityDAO.getInstancie().selectIntoCarrierContract(cs.getResultSet().getInt("id_contract")), 
 					cs.getResultSet().getBoolean("state"), cs.getResultSet().getString("type_of_contract"), cs.getResultSet().getDouble("surcharge")); // se crea una nueva referencia
+			else
+				carrierContract = new CarrierContract(cs.getResultSet().getInt("id_contract"), cs.getResultSet().getDate("contract_start_date").toLocalDate(), 
+						cs.getResultSet().getDate("contract_termination_date").toLocalDate(), null, cs.getResultSet().getString("contract_description"), 
+						TransportationProviderDAO.getInstancie().select(cs.getResultSet().getInt("transportation_provider_id")), 
+						cs.getResultSet().getBoolean("state"), cs.getResultSet().getString("type_of_contract"), cs.getResultSet().getDouble("surcharge")); // se crea una nueva referencia
 
 			this.cache.put(carrierContract.getId(), carrierContract); // se alamacena la referencia del contrato de transportista en cache
 		}

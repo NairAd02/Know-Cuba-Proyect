@@ -1,11 +1,11 @@
 package logica;
 
 import java.sql.SQLException;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import dao.UserDAO;
 import utils.BusquedaResultado;
+
 
 
 public abstract class User implements DUILogic, LikeName {

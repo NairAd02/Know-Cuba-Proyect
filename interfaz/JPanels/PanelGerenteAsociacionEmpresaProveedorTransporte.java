@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import modelosTablas.ModeloTablaTransportationProvider;
+import utils.ConnectionDataBase;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
@@ -35,11 +37,20 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 	private JLabel lblAnnadir;
 	private JLabel lblDelete;
 	private String searchName;
+	private JLabel lblShowVehicle;
 
 	/**
 	 * Create the panel.
 	 */
 	public PanelGerenteAsociacionEmpresaProveedorTransporte() {
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				tableTransportationProviders.clearSelection();
+				actualizarEstadoButtonDelete();
+				actualizarEstadoButtonShow();
+			}
+		});
 		searchName = "";
 		setBackground(SystemColor.inactiveCaptionBorder);
 		setLayout(null);
@@ -54,6 +65,13 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 		panelTable.add(scrollPaneTable, BorderLayout.CENTER);
 
 		tableTransportationProviders = new JTable();
+		tableTransportationProviders.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				actualizarEstadoButtonDelete();
+				actualizarEstadoButtonShow();
+			}
+		});
 		tableTransportationProviders.setModel(new ModeloTablaTransportationProvider());
 		scrollPaneTable.setViewportView(tableTransportationProviders);
 
@@ -63,8 +81,14 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 			public void mousePressed(MouseEvent e) {
 				try {
 					deleteElementsTable();
+					ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
+					try {
+						ConnectionDataBase.roolback();
+					} catch (SQLException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					} // se cancelan las operaciones realizadas a la base de datos
 					e1.printStackTrace();
 				}
 			}
@@ -130,14 +154,45 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 		textFieldBuscador.setBounds(10, 63, 182, 20);
 		add(textFieldBuscador);
 
+		lblShowVehicle = new JLabel("SHOW VEHICLE");
+		lblShowVehicle.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (lblShowVehicle.isEnabled()) { // Si esta habilitado el button
+					FrameGerenteAsociacionEmpresaProveedorTransporte frameTransportationProvider = new FrameGerenteAsociacionEmpresaProveedorTransporte(PanelGerenteAsociacionEmpresaProveedorTransporte.this, 
+							((ModeloTablaTransportationProvider) tableTransportationProviders.getModel()).getElement(tableTransportationProviders.getSelectedRow()));
+					frameTransportationProvider.setVisible(true);
+					FrameGerente.getIntancie().setEnabled(false); // se inhabilita el frame principal
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+		});
+		lblShowVehicle.setOpaque(true);
+		lblShowVehicle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblShowVehicle.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblShowVehicle.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblShowVehicle.setBackground(SystemColor.info);
+		lblShowVehicle.setBounds(547, 51, 155, 20);
+		add(lblShowVehicle);
+
 		lblImage = new JLabel("");
 		lblImage.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorTransporte.class.getResource("/images/Imagen3.jpg")));
 		lblImage.setBounds(0, 0, 712, 678);
 		add(lblImage);
 
 
-		this.actualizarTablaTransportationProviders();
 
+
+		this.actualizarTablaTransportationProviders();
+		this.actualizarEstadoButtonDelete();
+		this.actualizarEstadoButtonShow();
 	}
 
 	public void actualizarTablaTransportationProviders () {
@@ -171,4 +226,17 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 
 	}
 
+	private void actualizarEstadoButtonDelete () {
+		if (tableTransportationProviders.getSelectedRowCount() != 0)
+			lblDelete.setEnabled(true);
+		else
+			lblDelete.setEnabled(false);
+	}
+
+	private void actualizarEstadoButtonShow () {
+		if (tableTransportationProviders.getSelectedRowCount() == 1)
+			lblShowVehicle.setEnabled(true);
+		else
+			lblShowVehicle.setEnabled(false);
+	}
 }

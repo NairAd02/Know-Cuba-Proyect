@@ -18,12 +18,13 @@ public class EstablishedRoute extends TransportModality{
 		this.costLap = costLap;
 	}
 
-	public EstablishedRoute(Contract contract, String typeOfModality, Vehicle vehicle, String typeTransportModality,
+	public EstablishedRoute(Contract contract, Vehicle vehicle,
 			String descriptionRout, double costGoing, double costLap) { // constructor a nivel de logica
-		super(contract, typeOfModality, vehicle, typeTransportModality);
+		super(contract, vehicle);
 		this.descriptionRout = descriptionRout;
 		this.costGoing = costGoing;
 		this.costLap = costLap;
+		this.typeTransportModality = "Established Route";
 	}
 
 	public String getDescriptionRout() {

@@ -9,6 +9,8 @@ import logica.Dependent;
 import logica.Manager;
 import logica.PackageDesigner;
 import logica.User;
+import utils.ConnectionDataBase;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -127,8 +129,14 @@ public class FrameLogin extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				try {
 					loguarseAlSistema();
+					ConnectionDataBase.commit(); // se confirman las transacciones realizadas
 				} catch (SQLException e1) {
-
+                   try {
+					ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 					e1.printStackTrace();
 				}
 			}

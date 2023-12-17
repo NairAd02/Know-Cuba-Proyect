@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import logica.AccommodationContract;
-import logica.AccommodationModality;
 import logica.Season;
 import utils.ConnectionDataBase;
 
@@ -95,12 +94,18 @@ public class AccommodationContractDAO implements AccommodationContractDAOInterfa
 		AccommodationContract accommodationContract = this.cache.get(cs.getInt("id_contract"));
 
 		if (accommodationContract == null) {
+			if (cs.getResultSet().getDate("contract_reconcilation_date") != null)
 			accommodationContract = new AccommodationContract(cs.getResultSet().getInt("id_contract"), cs.getResultSet().getDate("contract_start_date").toLocalDate(), 
 					cs.getResultSet().getDate("contract_termination_date").toLocalDate(), cs.getResultSet().getDate("contract_reconcilation_date").toLocalDate(), cs.getResultSet().getString("contract_description"), 
 					HotelDAO.getInstancie().select(cs.getResultSet().getInt("hotel_id")), 
-					(ArrayList<AccommodationModality>) AccommodationModalityDAO.getInstancie().selectIntoAccommodationContract(cs.getResultSet().getInt("id_contract")), 
 					cs.getResultSet().getBoolean("state"), cs.getResultSet().getString("type_of_contract"), 
 					cs.getResultSet().getDouble("surcharge"), (ArrayList<Season>) SeasonDAO.getInstancie().selectIntoAccommodationContract(cs.getResultSet().getInt("id_contract")));
+			else
+				accommodationContract = new AccommodationContract(cs.getResultSet().getInt("id_contract"), cs.getResultSet().getDate("contract_start_date").toLocalDate(), 
+						cs.getResultSet().getDate("contract_termination_date").toLocalDate(), null, cs.getResultSet().getString("contract_description"), 
+						HotelDAO.getInstancie().select(cs.getResultSet().getInt("hotel_id")), 
+						cs.getResultSet().getBoolean("state"), cs.getResultSet().getString("type_of_contract"), 
+						cs.getResultSet().getDouble("surcharge"), (ArrayList<Season>) SeasonDAO.getInstancie().selectIntoAccommodationContract(cs.getResultSet().getInt("id_contract")));
 
 			this.cache.put(accommodationContract.getId(), accommodationContract); // se almacena en cache la referencia del contrato de alojamiento
 		}

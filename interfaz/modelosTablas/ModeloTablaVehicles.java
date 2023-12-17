@@ -1,66 +1,24 @@
 package modelosTablas;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
-import logica.TransportationProvider;
 import logica.Vehicle;
 
 public class ModeloTablaVehicles extends DefaultTableModel implements ModelOperations<Vehicle>{
 	
 	private static final long serialVersionUID = 1L;
-	private TransportationProvider transportationProvider;
 	private ArrayList<Vehicle> elements;
-	private ArrayList<Vehicle> temporalVehicles;
 
-	public ModeloTablaVehicles(TransportationProvider transportationProvider){
-		this.transportationProvider = transportationProvider;
+
+	public ModeloTablaVehicles(){
 		String[] columnNames = {"Vehicle-Lock"};   
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
 		this.elements = new ArrayList<Vehicle>();
-		if (this.transportationProvider == null)
-			this.temporalVehicles = new ArrayList<Vehicle>();
 	}
 
 
 	
-	public TransportationProvider getTransportationProvider() {
-		return transportationProvider;
-	}
-
-
-
-	public void setTransportationProvider(TransportationProvider transportationProvider) {
-		this.transportationProvider = transportationProvider;
-	}
-
-
-
-	public ArrayList<Vehicle> getElements() {
-		return elements;
-	}
-
-
-
-	public void setElements(ArrayList<Vehicle> elements) {
-		this.elements = elements;
-	}
-
-
-
-	public ArrayList<Vehicle> getTemporalVehicles() {
-		return temporalVehicles;
-	}
-
-
-
-	public void setTemporalVehicles(ArrayList<Vehicle> temporalVehicles) {
-		this.temporalVehicles = temporalVehicles;
-	}
-
-
-
 	@Override
 	public void addElement(Vehicle vehicle) {
 		Object[] newRow =  null;
@@ -69,26 +27,14 @@ public class ModeloTablaVehicles extends DefaultTableModel implements ModelOpera
 		addRow(newRow);
 	}
 
-	public void addElementTemporal (Vehicle vehicle) {
-		this.temporalVehicles.add(vehicle);
-	}
-
-	public void deleteElements (int[] rows) throws SQLException {
-
-		for (int i = 0; i < rows.length; i++) {
-			if (this.transportationProvider != null)
-				this.transportationProvider.deleteVehicle(this.elements.get(rows[i] - i));// se eliminan los vehiculos seleccionados de la base de datos y de la logica del negocio
-			else
-				this.temporalVehicles.remove(rows[i] - i); // se elimian de la lista temporal
-
-			this.deleteElement(rows[i] - i); // se eliminan de la tabla y de la logica del negocio
-
-		}
-	}
-
-	public void deleteElement (int i) {
-		this.elements.remove(i);
+	
+	public Vehicle deleteElement (int i) {
 		this.removeRow(i);
+		return this.elements.remove(i);
+	}
+	
+	public int cantElements () {
+		return this.elements.size();
 	}
 
 	public Vehicle getElement (int pos) {

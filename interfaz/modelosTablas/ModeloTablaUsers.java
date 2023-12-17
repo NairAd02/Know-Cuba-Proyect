@@ -1,9 +1,7 @@
 package modelosTablas;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
-import logica.Controller;
 import logica.User;
 
 public class ModeloTablaUsers extends DefaultTableModel implements ModelOperations<User> {
@@ -31,18 +29,11 @@ public class ModeloTablaUsers extends DefaultTableModel implements ModelOperatio
 
 	}
 
-	public void deleteElements (int[] rows) throws SQLException {
 
-		for (int i = 0; i < rows.length; i++) {	
-				Controller.getInstancie().deleteUser(this.elements.get(rows[i] - i)); // se eliminan los usuarios seleccionados de la base de datos
-				this.deleteElement(rows[i] - i); // se eliminan de la tabla y de la logica del negocio
-		
-		}
-	}
 
-	public void deleteElement (int i) {
-		this.elements.remove(i);
+	public User deleteElement (int i) {
 		this.removeRow(i);
+		return this.elements.remove(i);
 	}
 
 	public User getElement (int pos) {

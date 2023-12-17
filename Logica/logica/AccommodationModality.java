@@ -1,6 +1,7 @@
 package logica;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import dao.AccommodationModalityDAO;
 
@@ -19,13 +20,24 @@ public class AccommodationModality extends Modality{
 		this.price = price;
 	}
 
-	public AccommodationModality(Contract contract, String typeOfModality, TypeOfRoom typeOfRoomSelect,
+	public AccommodationModality(Contract contract, TypeOfRoom typeOfRoomSelect,
 			MealPlan mealPlanSelect, int cantDaysAccommodation, double price) { // constructor a nivel de logica
-		super(contract, typeOfModality);
+		super(contract);
 		this.typeOfRoomSelect = typeOfRoomSelect;
 		this.mealPlanSelect = mealPlanSelect;
 		this.cantDaysAccommodation = cantDaysAccommodation;
 		this.price = price;
+		this.typeOfModality = "Accommodation Modality";
+	}
+	
+	public AccommodationModality(TypeOfRoom typeOfRoomSelect,
+			MealPlan mealPlanSelect, int cantDaysAccommodation, double price) { // Constructor a nivel de logica (proceso de creacion del objeto)
+		super();
+		this.typeOfRoomSelect = typeOfRoomSelect;
+		this.mealPlanSelect = mealPlanSelect;
+		this.cantDaysAccommodation = cantDaysAccommodation;
+		this.price = price;
+		this.typeOfModality = "Accommodation Modality";
 	}
 
 
@@ -33,7 +45,7 @@ public class AccommodationModality extends Modality{
 		return typeOfRoomSelect;
 	}
 
-	
+
 	public void setTypeOfRoomSelect(TypeOfRoom typeOfRoomSelect) {
 		this.typeOfRoomSelect = typeOfRoomSelect;
 	}
@@ -72,14 +84,16 @@ public class AccommodationModality extends Modality{
 
 	@Override
 	public void insert() throws SQLException {
-		
+
 		this.id = AccommodationModalityDAO.getInstancie().insert(this);
 	}
 
 	@Override
 	public void update() throws SQLException {
 		AccommodationModalityDAO.getInstancie().update(this);
-		
+
 	}
+	
+	
 
 }

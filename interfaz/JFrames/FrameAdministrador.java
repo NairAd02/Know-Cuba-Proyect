@@ -8,6 +8,8 @@ import logica.Controller;
 import logica.Rol;
 import logica.User;
 import modelosTablas.ModeloTablaUsers;
+import utils.ConnectionDataBase;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -61,6 +63,13 @@ public class FrameAdministrador extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 990, 782);
 		contentPane = new JPanel();
+		contentPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				tableUsuario.clearSelection();
+				actualizarEstadoButtonDelete();
+			}
+		});
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
 		setContentPane(contentPane);
@@ -184,6 +193,12 @@ public class FrameAdministrador extends JFrame {
 		panelUsuario.add(scrollPane, BorderLayout.CENTER);
 
 		tableUsuario = new JTable();
+		tableUsuario.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				actualizarEstadoButtonDelete();
+			}
+		});
 		tableUsuario.setModel(new ModeloTablaUsers());
 		scrollPane.setViewportView(tableUsuario);
 
@@ -233,8 +248,14 @@ public class FrameAdministrador extends JFrame {
 				if (tableUsuario.getSelectedRowCount() != 0) {
 					try {
 						deleteElementsTable();
+						ConnectionDataBase.commit(); // // se confirman las transacciones realizadas 
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
+						try {
+							ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas 
+						} catch (SQLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						} 
 						e1.printStackTrace();
 					}
 				}
@@ -314,6 +335,7 @@ public class FrameAdministrador extends JFrame {
 		textFieldBuscador.setColumns(10);
 
 		this.actualizarTablaUsuarios();
+		this.actualizarEstadoButtonDelete();
 	}
 
 	private void llenarComboBoxRol () {
@@ -384,8 +406,14 @@ public class FrameAdministrador extends JFrame {
 	}
 
 	private void deleteElementsTable () throws SQLException {
-		((ModeloTablaUsers) tableUsuario.getModel()).deleteElements(this.tableUsuario.getSelectedRows());
+		int [] rows = tableUsuario.getSelectedRows();
+
+		for (int i = 0; i < rows.length; i++) {
+			Controller.getInstancie().deleteUser( ((ModeloTablaUsers) tableUsuario.getModel()).deleteElement(rows[i] - i));
+		}
+		
 		this.actualizarTablaUsuarios();
+
 	}
 
 
@@ -395,5 +423,12 @@ public class FrameAdministrador extends JFrame {
 			i=0;
 			((ModeloTablaUsers) table.getModel()).deleteElement(i);
 		}
+	}
+
+	private void actualizarEstadoButtonDelete () {
+		if (tableUsuario.getSelectedRowCount() != 0)
+			lblDelete.setEnabled(true);
+		else
+			lblDelete.setEnabled(false);
 	}
 }

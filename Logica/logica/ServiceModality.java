@@ -19,16 +19,26 @@ public class ServiceModality extends Modality{
 		this.price = price;
 	}
 	
-	public ServiceModality(Contract contract, String typeOfModality, Activity activity, LocalDate releasedDate,
-			double price) { // constructo a nivel de logica
-		super(contract, typeOfModality);
+	public ServiceModality(Contract contract, Activity activity, LocalDate releasedDate,
+			double price) { // constructo a nivel de logica  
+		super(contract);
 		this.activity = activity;
 		this.releasedDate = releasedDate;
 		this.price = price;
+		this.typeOfModality = "Service Modality";
+	}
+	
+	public ServiceModality(Activity activity, LocalDate releasedDate,
+			double price) { // Constructor a nivel de logica (proceso de creacion del objeto)
+		super();
+		this.activity = activity;
+		this.releasedDate = releasedDate;
+		this.price = price;
+		this.typeOfModality = "Service Modality";
 	}
 
 	public Activity getActivity() {
-		return activity;
+		return this.activity;
 	}
 
 	public void setActivity(Activity activity) {
@@ -36,7 +46,7 @@ public class ServiceModality extends Modality{
 	}
 
 	public LocalDate getReleasedDate() {
-		return releasedDate;
+		return this.releasedDate;
 	}
 
 	public void setReleasedDate(LocalDate releasedDate) {
@@ -44,7 +54,7 @@ public class ServiceModality extends Modality{
 	}
 
 	public double getPrice() {
-		return price;
+		return this.price;
 	}
 
 	public void setPrice(double price) {

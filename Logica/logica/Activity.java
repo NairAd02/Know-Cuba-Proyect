@@ -14,17 +14,17 @@ public class Activity implements DUILogic {
 		this.description = description;
 		this.idServiceProvider = idServiceProvider;
 	}
-	
+
 	public Activity(String description, int idServiceProvider) { // Constructor a nivel de logica
 		this.description = description;
 		this.idServiceProvider = idServiceProvider;
 	}
-	
+
 	public Activity(String description) { // Constructor a nivel de logica (proceso de creacion del objeto)
 		this.description = description;
 	}
-	
-	
+
+
 
 	public int getId() {
 		return id;
@@ -63,6 +63,10 @@ public class Activity implements DUILogic {
 	@Override
 	public void delete() throws SQLException {
 		ActivityDAO.getInstancie().delete(this.id);
+	}
+
+	public String toString () { // Metodo para definir como será mostrada la informacion de la clase
+		return this.description;
 	}
 
 }

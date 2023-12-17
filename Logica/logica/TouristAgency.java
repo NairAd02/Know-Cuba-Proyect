@@ -165,31 +165,110 @@ public class TouristAgency {
 
 	// Metodos para la obtencion de los datos
 
-	public ArrayList<Contract> getContracts () { // metodo para obtener todos los contrato
-		ArrayList<Contract> contract = new ArrayList<Contract>();
-		contract.addAll(this.contracts.get(Contract.serviceContract)); // se añaden todos los contratos de servicios
-		contract.addAll(this.contracts.get(Contract.carrierContract)); // se añaden todos los contratos de transporte
-		contract.addAll(this.contracts.get(Contract.accommodationContract)); // se añaden todos los contratos de alojamiento
 
-		return contract;
-	}
 
-	public ArrayList<Contract> getContracts (int typeOfContract) { // metodo para obtener los contratos de un tipo
-		return this.contracts.get(typeOfContract);
-	}
 
-	public ArrayList<Provider> getProviders () { // metodo para obtener todos los contrato
-		ArrayList<Provider> providers = new ArrayList<Provider>();
-		providers.addAll(this.providers.get(Provider.serviceProvider)); // se añaden todos los provedores de servicios
-		providers.addAll(this.providers.get(Provider.transportationProvider)); // se añaden todos los provedores de transporte
-		providers.addAll(this.providers.get(Provider.accommodationProvider)); // se añaden todos los provedores de alojamiento
 
-		return providers;
+	public HashMap<Integer, ArrayList<Provider>> getProviders () { // metodo para obtener todos los contrato
+		return this.providers;
 	}
 
 	public ArrayList<Provider> getProviders (int typeOfProvider) { // metodo para obtener los provedores de un tipo
 		return this.providers.get(typeOfProvider);
 	}
+
+	// Metodos para la obtencion de los contratos
+	
+	public HashMap<Integer, ArrayList<Contract>> getContracts () { // metodo para obtener todos los contrato (sin filtros)
+		return this.contracts;
+	}
+
+	public ArrayList<Contract> getContracts (int typeOfContract) { // metodo para obtener los contratos de un tipo (filtro tipo)
+		return this.contracts.get(typeOfContract);
+	}
+
+	public ArrayList<Contract> getContracts (Provider provider) { // metodo para obtener los contratos de un provedor (filtro provedor)
+		ArrayList<Contract> contracts = new ArrayList<Contract>();
+		ArrayList<Integer> keys = Contract.getKeys(); // se obtienen las llaves del mapa
+
+		// Se itera el mapa
+
+		for (Integer i : keys) { // se itera la lista de llaves
+			for (Contract contract : this.contracts.get(i)) { // se itera la lista de contratos asociada a cada clave
+				if (contract.verificarProvedor(provider))
+					contracts.add(contract);	
+			}
+		}
+
+		return contracts;
+	}
+
+	public ArrayList<Contract> getContracts (boolean state) { // metodo para obtener los contratos con un estado en especifico (filtro estado)
+		ArrayList<Contract> contracts = new ArrayList<Contract>();
+		ArrayList<Integer> keys = Contract.getKeys(); // se obtienen las llaves del mapa
+
+		// Se itera el mapa
+
+		for (Integer i : keys) { // se itera la lista de llaves
+			for (Contract contract : this.contracts.get(i)) { // se itera la lista de contratos asociada a cada clave
+				if (contract.isState() == state)
+					contracts.add(contract);	
+			}
+		}
+
+		return contracts;
+	}
+
+	public ArrayList<Contract> getContracts (int typeOfContract, Provider provider) { // metodo para obtener los contratos de un tipo y de un provedor en especifico (filtro tipo, provedor)
+		ArrayList<Contract> contracts = new ArrayList<Contract>();
+
+		for (Contract contract : this.contracts.get(typeOfContract)) { // se iteran los contratos de un tipo en especifico
+			if (contract.verificarProvedor(provider))
+				contracts.add(contract);
+		}
+
+		return contracts;
+	}
+
+	public ArrayList<Contract> getContracts (int typeOfContract, boolean state) { // metodo para obtener los contratos de un tipo y con un estado en especifico (filtro tipo, estado)
+		ArrayList<Contract> contracts = new ArrayList<Contract>();
+
+		for (Contract contract : this.contracts.get(typeOfContract)) { // se iteran los contratos de un tipo en especifico
+			if (contract.isState() == state)
+				contracts.add(contract);
+		}
+
+		return contracts;
+	}
+	
+	public ArrayList<Contract> getContracts (Provider provider, boolean state) { // metodo para obtener los contratos de un provedor con un estado en especifico (filtro provedor, estado)
+		ArrayList<Contract> contracts = new ArrayList<Contract>();
+		ArrayList<Integer> keys = Contract.getKeys(); // se obtienen las llaves del mapa
+
+		// Se itera el mapa
+
+		for (Integer i : keys) { // se itera la lista de llaves
+			for (Contract contract : this.contracts.get(i)) { // se itera la lista de contratos asociada a cada clave
+				if (contract.isState() == state && contract.verificarProvedor(provider))
+					contracts.add(contract);	
+			}
+		}
+
+		return contracts;
+	}
+	
+	public ArrayList<Contract> getContracts (int typeOfContract, Provider provider, boolean state) { // metodo para obtener los contratos de un tipo, de un provedor, con un estado en especifico (filtro tipo, provedor)
+		ArrayList<Contract> contracts = new ArrayList<Contract>();
+
+		for (Contract contract : this.contracts.get(typeOfContract)) { // se iteran los contratos de un tipo en especifico
+			if (contract.isState() == state && contract.verificarProvedor(provider))
+				contracts.add(contract);
+		}
+
+		return contracts;
+	}
+
+	// Fin de Metodos para la obtencion de los contratos
 
 	public ArrayList<Provider> getProviders (String name, int typeOfProvider) { // metodo para obtener los provedores de un tipo
 		ArrayList<Provider> provideres = new ArrayList<Provider>();

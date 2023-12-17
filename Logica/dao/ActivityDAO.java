@@ -31,8 +31,6 @@ public class ActivityDAO implements ActivityDAOInterface {
 		// se definen los parámetros de la funcion
 		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
 		cs.setString(2, activity.getDescription());
-		System.out.println("Descr" + activity.getDescription());
-		System.out.println("Id provider" + activity.getIdServiceProvider());
 		cs.setInt(3, activity.getIdServiceProvider());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion

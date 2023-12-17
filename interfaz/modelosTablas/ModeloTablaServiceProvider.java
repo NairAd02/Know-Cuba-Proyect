@@ -41,9 +41,9 @@ public class ModeloTablaServiceProvider extends DefaultTableModel implements Mod
 		}
 	}
 
-	public void deleteElement (int i) {
-		this.elements.remove(i);
+	public ServiceProvider deleteElement (int i) {
 		this.removeRow(i);
+		return this.elements.remove(i);
 	}
 
 	public ServiceProvider getElement (int pos) {

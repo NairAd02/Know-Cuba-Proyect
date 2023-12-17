@@ -5,12 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import logica.AccommodationContract;
 import logica.AccommodationModality;
 import utils.ConnectionDataBase;
 
 public class AccommodationModalityDAO implements AccommodationModalityDAOInterface {
 	private static AccommodationModalityDAO accommodationModalityDAO;
 	private HashMap<Integer, AccommodationModality> cache; // Atributo para guardar en cache cada referencia creada
+	private AccommodationContract accommodationContract;
 
 	// PATRON SINGLENTON
 	private AccommodationModalityDAO () {
@@ -89,10 +92,11 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 	}
 
 	@Override
-	public List<AccommodationModality> selectIntoAccommodationContract(int idAccommodationContract) throws SQLException { 
+	public List<AccommodationModality> selectIntoAccommodationContract(AccommodationContract accommodationContract) throws SQLException {
+		this.accommodationContract = accommodationContract;
 		List<AccommodationModality> listModalities = new ArrayList<AccommodationModality>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_accommodation_modality_accommodation_contract(?)}");
-		cs.setInt(1, idAccommodationContract); // se define el parametro de la funcion 
+		cs.setInt(1, this.accommodationContract.getId()); // se define el parametro de la funcion 
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 
 		while (cs.getResultSet().next()) {
@@ -124,7 +128,7 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 		AccommodationModality accommodationModality = this.cache.get(cs.getResultSet().getInt("id"));
 
 		if (accommodationModality == null) {
-			accommodationModality = new AccommodationModality(cs.getResultSet().getInt("id"), AccommodationContractDAO.getInstancie().select(cs.getResultSet().getInt("accommodation_contract_id")), 
+			accommodationModality = new AccommodationModality(cs.getResultSet().getInt("id"), this.accommodationContract, 
 					cs.getResultSet().getString("type_of_modality"), TypeOfRoomDAO.getInstancie().select(cs.getResultSet().getInt("type_of_room_id")), 
 					MealPlanDAO.getInstancie().select(cs.getResultSet().getInt("meal_plan_id")), cs.getResultSet().getInt("cant_days_accommodation"), cs.getResultSet().getDouble("price"));
 			this.cache.put(accommodationModality.getId(), accommodationModality); // se añade a cache

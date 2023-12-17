@@ -5,12 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import logica.CarrierContract;
 import logica.HoursKilometers;
 import utils.ConnectionDataBase;
 
 public class HoursKilometersDAO implements HoursKilometersDAOInterface {
 	private static HoursKilometersDAO hoursKilometersDAO;
 	private HashMap<Integer, HoursKilometers> cache; // Atributo para guardar en cache cada referencia creada
+	private CarrierContract carrierContract;
 
 	// PATRON SINGLENTON
 	private HoursKilometersDAO () {
@@ -92,10 +95,11 @@ public class HoursKilometersDAO implements HoursKilometersDAOInterface {
 	}
 
 	@Override
-	public List<HoursKilometers> selectIntoCarrierContract(int idCarrierContract) throws SQLException {
+	public List<HoursKilometers> selectIntoCarrierContract(CarrierContract carrierContract) throws SQLException {
+		this.carrierContract = carrierContract;
 		List<HoursKilometers> listHoursKilometers = new ArrayList<HoursKilometers>();
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_transports_modalitys_hours_kilometers_carrier_contract(?)}");
-		cs.setInt(1, idCarrierContract); // se define el parametro de la funcion
+		cs.setInt(1, this.carrierContract.getId()); // se define el parametro de la funcion
 		cs.execute(); // se ejectuta la llamada a la funcion
 
 		while (cs.getResultSet().next()) {
@@ -128,7 +132,7 @@ public class HoursKilometersDAO implements HoursKilometersDAOInterface {
 		HoursKilometers hoursKilometers = this.cache.get(cs.getResultSet().getInt("modality_id"));
 
 		if (hoursKilometers == null) { // si no se encuentra alamacenada una referencia con ese id
-			hoursKilometers = new HoursKilometers(cs.getResultSet().getInt("modality_id"), CarrierContractDAO.getInstancie().select(cs.getResultSet().getInt("carrier_contract_id")), 
+			hoursKilometers = new HoursKilometers(cs.getResultSet().getInt("modality_id"), this.carrierContract, 
 					cs.getResultSet().getString("type_of_modality"), VehicleDAO.getInstancie().select(cs.getResultSet().getInt("vehicle_id")), cs.getString("type_transport_modality"), 
 					cs.getResultSet().getDouble("cost_kilometers_rout"), cs.getResultSet().getDouble("cost_hours"), cs.getResultSet().getDouble("cost_kilometers_rout_additionals"), 
 					cs.getResultSet().getDouble("cost_hours_additionals")); // se crea una nueva referencia para la modalidad con ese id

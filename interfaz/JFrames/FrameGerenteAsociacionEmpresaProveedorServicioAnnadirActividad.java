@@ -3,11 +3,8 @@ package JFrames;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
 import logica.Activity;
 import logica.ServiceProvider;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -128,11 +125,11 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 	}
 
 	private void addActivity () throws SQLException {
-		if (this.serviceProvider != null) { // si es distinto de null se añade a la logica del negocio y a la base de datos 
+		if (this.serviceProvider.getId() != -1){ // si es distinto a -1 se añade a la logica del negocio y a la base de datos 
 			this.serviceProvider.addActivity(new Activity(textPaneActivityDescription.getText(), this.serviceProvider.getId()));
 		}
-		else { // si es igual a null se añade temporalmente en la tabla
-			frameGerenteAsociacionEmpresaProveedorSerivicio.addActivityTemporal(new Activity(textPaneActivityDescription.getText()));
+		else { // si es igual a -1 se añade a la logica del negocio
+			this.serviceProvider.addActivityLogic(new Activity(textPaneActivityDescription.getText(), this.serviceProvider.getId()));
 		}
 		frameGerenteAsociacionEmpresaProveedorSerivicio.actualizarTablaActivities(); // se actualiza la informacion de la tabla de las actividades
 	}
