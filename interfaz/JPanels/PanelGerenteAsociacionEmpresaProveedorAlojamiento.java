@@ -9,8 +9,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import modelosTablas.ModeloTablaAccommodationProvider;
 import utils.ConnectionDataBase;
-
-import javax.swing.border.LineBorder;
 import JFrames.FrameGerente;
 import JFrames.FrameGerenteAsociacionEmpresaProveedorAlojamiento;
 import logica.Controller;
@@ -33,12 +31,12 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 	private JScrollPane scrollPaneTable;
 	private JPanel panelTable;
 	private JTable tableAccommodationProvider;
-	private JLabel lblImage;
 	private JTextField textFieldBuscador;
 	private JLabel lblAnnadir;
 	private JLabel lblDelete;
 	private JLabel lblShowPlans;
 	private String searchName;
+	private JLabel lblImage;
 
 	/**
 	 * Create the panel.
@@ -63,9 +61,11 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 		panelTable.setLayout(new BorderLayout(0, 0));
 
 		scrollPaneTable = new JScrollPane();
+		scrollPaneTable.setOpaque(false);
 		panelTable.add(scrollPaneTable, BorderLayout.CENTER);
 
 		tableAccommodationProvider = new JTable();
+		tableAccommodationProvider.setOpaque(false);
 		tableAccommodationProvider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -77,7 +77,8 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 		scrollPaneTable.setViewportView(tableAccommodationProvider);
 
 
-		lblShowPlans = new JLabel("SHOW PLANS");
+		lblShowPlans = new JLabel("");
+		lblShowPlans.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/mostrar.png")));
 		lblShowPlans.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -97,15 +98,21 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 
 			}
 		});
-		lblShowPlans.setOpaque(true);
+		
+		JLabel lblName = new JLabel("Name");
+		lblName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblName.setForeground(Color.BLACK);
+		lblName.setFont(new Font("Arial Black", Font.PLAIN, 12));
+		lblName.setBounds(86, 34, 68, 22);
+		add(lblName);
 		lblShowPlans.setHorizontalAlignment(SwingConstants.CENTER);
 		lblShowPlans.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblShowPlans.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblShowPlans.setBackground(SystemColor.info);
-		lblShowPlans.setBounds(547, 52, 155, 20);
+		lblShowPlans.setBounds(564, 19, 67, 52);
 		add(lblShowPlans);
 
-		lblDelete = new JLabel("DELETE");
+		lblDelete = new JLabel("");
+		lblDelete.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/eliminar1.png")));
 		lblDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -133,15 +140,14 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 
 			}
 		});
-		lblDelete.setOpaque(true);
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDelete.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblDelete.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblDelete.setBackground(SystemColor.info);
-		lblDelete.setBounds(547, 32, 155, 20);
+		lblDelete.setBounds(405, 19, 67, 52);
 		add(lblDelete);
 
-		lblAnnadir = new JLabel("ADD");
+		lblAnnadir = new JLabel("");
+		lblAnnadir.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/a\u00F1adir2 - copia.png")));
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -158,12 +164,10 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 
 			}
 		});
-		lblAnnadir.setOpaque(true);
 		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblAnnadir.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblAnnadir.setBackground(SystemColor.info);
-		lblAnnadir.setBounds(547, 11, 155, 20);
+		lblAnnadir.setBounds(245, 19, 68, 52);
 		add(lblAnnadir);
 
 		textFieldBuscador = new JTextField();
@@ -183,11 +187,12 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 			}
 		});
 		textFieldBuscador.setColumns(10);
-		textFieldBuscador.setBounds(10, 64, 182, 20);
+		textFieldBuscador.setBounds(29, 64, 182, 20);
 		add(textFieldBuscador);
-
+		
 		lblImage = new JLabel("");
-		lblImage.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/Imagen1.jpg")));
+		lblImage.setOpaque(true);
+		lblImage.setBackground(new Color(5, 150, 177));
 		lblImage.setBounds(0, 0, 712, 678);
 		add(lblImage);
 

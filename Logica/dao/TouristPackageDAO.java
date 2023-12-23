@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,8 @@ public class TouristPackageDAO implements TouristPackageDAOInterface{
 	@Override
 	public int insert(TouristPackage touristPackage) throws SQLException { 
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_tourist_package(?)}");
-		cs.setString(1, touristPackage.getName()); // se define el parametro de la funcion
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, touristPackage.getName()); // se define el parametro de la funcion
 		cs.execute(); // se ejecuta la llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion

@@ -3,6 +3,7 @@ package dao;
 import java.sql.CallableStatement;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,12 +31,13 @@ public class AccommodationContractDAO implements AccommodationContractDAOInterfa
 	public int insert(AccommodationContract accommodationContract) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_accommodation_contract(?, ?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
-		cs.setDate(1, Date.valueOf(accommodationContract.getStartDate()));
-		cs.setDate(2, Date.valueOf(accommodationContract.getTerminationDate()));
-		cs.setString(3, accommodationContract.getDescription());
-		cs.setString(4, accommodationContract.getTypeOfContract());
-		cs.setInt(5, accommodationContract.getProviderId());
-		cs.setDouble(6, accommodationContract.getSurcharge());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setDate(2, Date.valueOf(accommodationContract.getStartDate()));
+		cs.setDate(3, Date.valueOf(accommodationContract.getTerminationDate()));
+		cs.setString(4, accommodationContract.getDescription());
+		cs.setString(5, accommodationContract.getTypeOfContract());
+		cs.setInt(6, accommodationContract.getProviderId());
+		cs.setDouble(7, accommodationContract.getSurcharge());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el id autoincrementable generado
 		cs.close(); // se cierra la llamada a la funcion
@@ -50,7 +52,7 @@ public class AccommodationContractDAO implements AccommodationContractDAOInterfa
 
 	@Override
 	public void update(AccommodationContract accommodationContract) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call insert_accommodation_contract(?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_accommodation_contract(?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
 		cs.setDate(1, Date.valueOf(accommodationContract.getStartDate()));
 		cs.setDate(2, Date.valueOf(accommodationContract.getTerminationDate()));
@@ -91,7 +93,7 @@ public class AccommodationContractDAO implements AccommodationContractDAOInterfa
 
 	@Override
 	public AccommodationContract mapEntity(CallableStatement cs) throws SQLException {
-		AccommodationContract accommodationContract = this.cache.get(cs.getInt("id_contract"));
+		AccommodationContract accommodationContract = this.cache.get(cs.getResultSet().getInt("id_contract"));
 
 		if (accommodationContract == null) {
 			if (cs.getResultSet().getDate("contract_reconcilation_date") != null)

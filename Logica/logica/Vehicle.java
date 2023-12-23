@@ -14,12 +14,12 @@ public class Vehicle implements DUILogic {
 		this.lock = lock;
 		this.transportationProviderId = transportationProviderId;
 	}
-	
+
 	public Vehicle(String lock, int transportationProviderId) { // Constructor a nivel de logica
 		this.lock = lock;
 		this.transportationProviderId = transportationProviderId;
 	}
-	
+
 	public Vehicle(String lock) { // Constructor Temporal
 		this.lock = lock;
 	}
@@ -61,6 +61,10 @@ public class Vehicle implements DUILogic {
 	@Override
 	public void delete() throws SQLException {
 		VehicleDAO.getInstancie().delete(this.id);
+	}
+
+	public String toString () { // Metodo para definir como se va a mostrar la informacion de la clase
+		return this.lock;
 	}
 
 }

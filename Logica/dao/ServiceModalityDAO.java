@@ -37,7 +37,7 @@ public class ServiceModalityDAO implements ServiceModalityDAOInterface {
 		cs.setInt(3, serviceModality.getContractId());
 		cs.setInt(4, serviceModality.getActivityId());
 		cs.setDate(5, Date.valueOf(serviceModality.getReleasedDate()));
-		cs.setDouble(6, serviceModality.getPrice());
+		cs.setDouble(6, serviceModality.price());
 		cs.execute(); // se ejecuta la consulta de la funcion
 		int idIsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -57,7 +57,7 @@ public class ServiceModalityDAO implements ServiceModalityDAOInterface {
 		cs.setInt(1, serviceModality.getId());
 		cs.setInt(2, serviceModality.getActivityId());
 		cs.setDate(3, Date.valueOf(serviceModality.getReleasedDate()) );
-		cs.setDouble(4, serviceModality.getPrice());
+		cs.setDouble(4, serviceModality.price());
 		cs.execute(); // se ejecuta la consulta de la funcion
 		cs.close(); // se cierra la llamada a la funcion
 	}

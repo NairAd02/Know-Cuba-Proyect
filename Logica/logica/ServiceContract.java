@@ -63,7 +63,7 @@ public class ServiceContract extends Contract{
 	@Override
 	public void insert() throws SQLException {
 		this.id = ServiceContractDAO.getInstancie().insert(this);
-		super.insert();
+		this.insertModalitysIntoDataBase();
 	}
 
 	@Override

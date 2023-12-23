@@ -60,7 +60,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		setBackground(new Color(5, 150, 177));
 		setBounds(0, 0, 700, 512);
 		JPanel panelTable = new JPanel();
-		panelTable.setBounds(28, 93, 640, 359);
+		panelTable.setBounds(10, 93, 680, 359);
 		add(panelTable);
 		panelTable.setLayout(new BorderLayout(0, 0));
 
@@ -97,7 +97,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAnnadir.setBackground(SystemColor.info);
-		lblAnnadir.setBounds(485, 32, 155, 20);
+		lblAnnadir.setBounds(535, 32, 155, 20);
 		add(lblAnnadir);
 
 		lblEliminar = new JLabel("DELETE");
@@ -127,7 +127,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		lblEliminar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEliminar.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblEliminar.setBackground(SystemColor.info);
-		lblEliminar.setBounds(485, 53, 155, 20);
+		lblEliminar.setBounds(535, 53, 155, 20);
 		add(lblEliminar);
 
 		lblAtras = new JLabel("");
@@ -152,7 +152,8 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		lblAtras.setBackground(SystemColor.menu);
 		lblAtras.setBounds(317, 463, 91, 38);
 		add(lblAtras);
-
+		
+		this.actualizarTablaModalitys(); // se actualiza la tabla modalitys con la informacion de las modalidades del contrato
 	}
 
 	public void actualizarTablaModalitys () {	
@@ -162,7 +163,6 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 
 	private void actualizarTablaModalitys(ArrayList<Modality> modalitys){
 		reiniciarTable(this.tableAccommodationModalitys);
-
 
 		for (Modality mod : modalitys) {
 			((ModeloTablaAccommodationModality) tableAccommodationModalitys.getModel()).addElement((AccommodationModality) mod);

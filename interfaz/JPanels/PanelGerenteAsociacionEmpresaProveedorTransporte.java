@@ -38,6 +38,7 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 	private JLabel lblDelete;
 	private String searchName;
 	private JLabel lblShowVehicle;
+	private JLabel lblName;
 
 	/**
 	 * Create the panel.
@@ -75,7 +76,8 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 		tableTransportationProviders.setModel(new ModeloTablaTransportationProvider());
 		scrollPaneTable.setViewportView(tableTransportationProviders);
 
-		lblDelete = new JLabel("DELETE");
+		lblDelete = new JLabel("");
+		lblDelete.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorTransporte.class.getResource("/images/eliminar1.png")));
 		lblDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -101,15 +103,21 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 
 			}
 		});
-		lblDelete.setOpaque(true);
+		
+		lblName = new JLabel("Name");
+		lblName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblName.setForeground(Color.BLACK);
+		lblName.setFont(new Font("Arial Black", Font.PLAIN, 12));
+		lblName.setBounds(86, 34, 68, 22);
+		add(lblName);
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDelete.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblDelete.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblDelete.setBackground(SystemColor.info);
-		lblDelete.setBounds(547, 31, 155, 20);
+		lblDelete.setBounds(405, 19, 67, 52);
 		add(lblDelete);
 
-		lblAnnadir = new JLabel("ADD");
+		lblAnnadir = new JLabel("");
+		lblAnnadir.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorTransporte.class.getResource("/images/a\u00F1adir2 - copia.png")));
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -126,12 +134,10 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 
 			}
 		});
-		lblAnnadir.setOpaque(true);
 		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblAnnadir.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblAnnadir.setBackground(SystemColor.info);
-		lblAnnadir.setBounds(547, 10, 155, 20);
+		lblAnnadir.setBounds(245, 19, 68, 52);
 		add(lblAnnadir);
 
 		textFieldBuscador = new JTextField();
@@ -151,10 +157,11 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 			}
 		});
 		textFieldBuscador.setColumns(10);
-		textFieldBuscador.setBounds(10, 63, 182, 20);
+		textFieldBuscador.setBounds(29, 64, 182, 20);
 		add(textFieldBuscador);
 
-		lblShowVehicle = new JLabel("SHOW VEHICLE");
+		lblShowVehicle = new JLabel("");
+		lblShowVehicle.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorTransporte.class.getResource("/images/mostrar.png")));
 		lblShowVehicle.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -174,17 +181,16 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 
 			}
 		});
-		lblShowVehicle.setOpaque(true);
 		lblShowVehicle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblShowVehicle.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblShowVehicle.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblShowVehicle.setBackground(SystemColor.info);
-		lblShowVehicle.setBounds(547, 51, 155, 20);
+		lblShowVehicle.setBounds(564, 19, 67, 52);
 		add(lblShowVehicle);
 
 		lblImage = new JLabel("");
-		lblImage.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorTransporte.class.getResource("/images/Imagen3.jpg")));
+		lblImage.setOpaque(true);
 		lblImage.setBounds(0, 0, 712, 678);
+		lblImage.setBackground(new Color(5, 150, 177));
 		add(lblImage);
 
 

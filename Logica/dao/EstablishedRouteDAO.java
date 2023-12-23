@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,13 +32,14 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 	public int insert(EstablishedRoute establishedRoute) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_transport_modality_established_route(?, ?, ?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
-		cs.setString(1, establishedRoute.getTypeOfModality());
-		cs.setInt(2, establishedRoute.getVehicleId());
-		cs.setInt(3, establishedRoute.getContractId());
-		cs.setString(4, establishedRoute.getTypeTransportModality());
-		cs.setString(5, establishedRoute.getDescriptionRout());
-		cs.setDouble(6, establishedRoute.getCostGoing());
-		cs.setDouble(7, establishedRoute.getCostLap());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, establishedRoute.getTypeOfModality());
+		cs.setInt(3, establishedRoute.getVehicleId());
+		cs.setInt(4, establishedRoute.getContractId());
+		cs.setString(5, establishedRoute.getTypeTransportModality());
+		cs.setString(6, establishedRoute.getDescriptionRout());
+		cs.setDouble(7, establishedRoute.getCostGoing());
+		cs.setDouble(8, establishedRoute.getCostLap());
 		cs.execute(); // se ejecuta la llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion

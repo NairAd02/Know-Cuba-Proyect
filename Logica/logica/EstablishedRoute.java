@@ -26,6 +26,15 @@ public class EstablishedRoute extends TransportModality{
 		this.costLap = costLap;
 		this.typeTransportModality = "Established Route";
 	}
+	
+	public EstablishedRoute(Vehicle vehicle,
+			String descriptionRout, double costGoing, double costLap) { // constructor a nivel de logica (para el proceso de creación del objeto)
+		super(vehicle);
+		this.descriptionRout = descriptionRout;
+		this.costGoing = costGoing;
+		this.costLap = costLap;
+		this.typeTransportModality = "Established Route";
+	}
 
 	public String getDescriptionRout() {
 		return descriptionRout;
@@ -57,5 +66,12 @@ public class EstablishedRoute extends TransportModality{
 		EstablishedRouteDAO.getInstancie().update(this);
 
 	}
+
+	// Operaciones
+
+	public double price () {
+		return this.costGoing + this.costLap;
+	}
+	// Fin de Operaciones
 
 }

@@ -104,10 +104,20 @@ public class AccommodationContract extends Contract{
 		season.setTypeOfSeason(typeOfSeason);
 	}
 
+	public void insertSeasonIntoDataBase () throws SQLException {
+
+		for (Season season : this.seasons) {
+			season.setAccommodationContractId(this.id); // se actualiza el id del contrato para reflejar que esta temporada pertenece a este contrato
+			season.insert(); // se inserta la temporada en la base de datos
+		}
+
+	}
+
 	@Override
 	public void insert() throws SQLException {
 		this.id = AccommodationContractDAO.getInstancie().insert(this);
-		super.insert();	
+		this.insertModalitysIntoDataBase();
+		this.insertSeasonIntoDataBase();
 	}
 
 	@Override
@@ -137,7 +147,7 @@ public class AccommodationContract extends Contract{
 	public ArrayList<TypeOfRoom> getTypesOfRoomsHotel () {
 		return ((Hotel) this.provider).getTypesOfRooms();
 	}
-	
+
 	public ArrayList<MealPlan> getMealPlansHotel () {
 		return ((Hotel) this.provider).getMealsPlans();
 	}

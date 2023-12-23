@@ -6,7 +6,9 @@ import javax.swing.border.EmptyBorder;
 
 import JPanels.PanelGerenteAsociacionEmpresa;
 import JPanels.PanelGerenteCreacionContrato;
+import dao.UserDAO;
 import logica.Controller;
+import utils.ConnectionDataBase;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -19,6 +21,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
+import java.awt.BorderLayout;
+import javax.swing.BoxLayout;
+import javax.swing.border.MatteBorder;
+import javax.swing.JTree;
 
 public class FrameGerente extends JFrame {
 
@@ -27,8 +33,12 @@ public class FrameGerente extends JFrame {
 	private JPanel contentPane;
 	private JLabel lblSeccionAssociationCompany;
 	private JLabel lblSeccionContractCreation;
-	private JLabel lblX;
 	private int mouseX, mouseY;
+	private JPanel panelLateral;
+	private JPanel panelSecciones;
+	private JPanel panelTitle;
+	private JLabel lblTitle;
+	private JLabel lblX;
 
 
 	/**
@@ -43,18 +53,19 @@ public class FrameGerente extends JFrame {
 	}
 
 	private FrameGerente() {
+		setResizable(false);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 990, 782);
+		setBounds(0, 0, 1920, 1080);
 		contentPane = new JPanel();
-		
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(5, 150, 177));
+		contentPane.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
-		JPanel panel = new JPanel();
-		panel.addMouseMotionListener(new MouseMotionAdapter() {
+		JPanel panelSuperior = new JPanel();
+		panelSuperior.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(0, 0, 0)));
+		panelSuperior.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				int x= e.getXOnScreen();
@@ -63,46 +74,41 @@ public class FrameGerente extends JFrame {
 				setLocation(x - mouseX , y - mouseY );
 			}
 		});
-		panel.addMouseListener(new MouseAdapter() {
+		panelSuperior.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				mouseX = e.getX();
 				mouseY = e.getY();
 			}
 		});
-		panel.setBackground(new Color(5, 150, 177));
-		panel.setBounds(0, 0, 990, 65);
-		contentPane.add(panel);
-		panel.setLayout(null);
-
+		contentPane.setLayout(new BorderLayout(0, 0));
+		panelSuperior.setBackground(new Color(18, 95, 115));
+		contentPane.add(panelSuperior, BorderLayout.NORTH);
+		panelSuperior.setLayout(new BorderLayout(0, 0));
+		
 		JLabel lblManager = new JLabel("MANAGER");
+		lblManager.setForeground(SystemColor.textHighlightText);
 		lblManager.setHorizontalAlignment(SwingConstants.CENTER);
-		lblManager.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblManager.setBounds(59, 16, 142, 32);
-		panel.add(lblManager);
-
-		JSeparator separator = new JSeparator();
-		separator.setForeground(SystemColor.controlText);
-		separator.setBackground(SystemColor.controlText);
-		separator.setBounds(189, 39, 801, 2);
-		panel.add(separator);
-
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setForeground(Color.BLACK);
-		separator_1.setBackground(Color.BLACK);
-		separator_1.setBounds(0, 39, 70, 2);
-		panel.add(separator_1);
-
-		lblX = new JLabel("X");
+		lblManager.setFont(new Font("Arial Black", Font.PLAIN, 32));
+		panelSuperior.add(lblManager, BorderLayout.WEST);
+		
+		lblX = new JLabel("X ");
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Controller.getInstancie().getUser().cerrarConexion();
+					Controller.getInstancie().getUser().cerrarConexion(); // se cierra sesión
+					ConnectionDataBase.getConnectionDataBase().commit(); // se confirman todas las operaciones realizadas a la base de datos
 				} catch (SQLException e1) {
-
+				try {
+					ConnectionDataBase.getConnectionDataBase().rollback(); // se cancelan todas las operaciones realizadas a la base de datos
+				} catch (SQLException e2) {
+					
+					e2.printStackTrace();
+				}
 					e1.printStackTrace();
-				} // se cierra la sesión del usuario
+				} 
 				System.exit(0);
 			}
 			@Override
@@ -111,36 +117,35 @@ public class FrameGerente extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
-		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		lblX.setBackground(SystemColor.menu);
-		lblX.setBounds(952, 0, 38, 38);
-		panel.add(lblX);
+		lblX.setFont(new Font("Arial Black", Font.PLAIN, 34));
+		panelSuperior.add(lblX, BorderLayout.EAST);
 
-		JSeparator separator_2 = new JSeparator();
-		separator_2.setForeground(SystemColor.controlText);
-		separator_2.setBackground(SystemColor.controlText);
-		separator_2.setBounds(0, 63, 990, 2);
-		panel.add(separator_2);
-
-		JPanel panelLateral = new JPanel();
-		panelLateral.setBounds(0, 65, 279, 717);
+		panelLateral = new JPanel();
 		panelLateral.setBackground(new Color(5, 150, 177));
-		contentPane.add(panelLateral);
-		panelLateral.setLayout(null);
-
-		JSeparator separator_2_1 = new JSeparator();
-		separator_2_1.setOrientation(SwingConstants.VERTICAL);
-		separator_2_1.setForeground(SystemColor.controlText);
-		separator_2_1.setBackground(SystemColor.controlText);
-		separator_2_1.setBounds(277, 0, 2, 717);
-		panelLateral.add(separator_2_1);
+		contentPane.add(panelLateral, BorderLayout.WEST);
+		panelLateral.setLayout(new BorderLayout(0, 0));
+		
+		panelSecciones = new JPanel();
+		panelSecciones.setBorder(new MatteBorder(0, 0, 0, 3, (Color) new Color(0, 0, 0)));
+		panelSecciones.setBackground(new Color(18, 95, 115));
+		panelLateral.add(panelSecciones, BorderLayout.CENTER);
+		panelSecciones.setLayout(null);
+		
+		panelTitle = new JPanel();
+		panelTitle.setBorder(new MatteBorder(0, 0, 0, 3, (Color) new Color(0, 0, 0)));
+		panelTitle.setBackground(new Color(18, 95, 115));
+		panelLateral.add(panelTitle, BorderLayout.NORTH);
+		
+		lblTitle = new JLabel("                            ");
+		lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		panelTitle.add(lblTitle);
 
 		lblSeccionAssociationCompany = new JLabel("ASSOCIATION-COMPANY");
+		lblSeccionAssociationCompany.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblSeccionAssociationCompany.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -148,22 +153,23 @@ public class FrameGerente extends JFrame {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lblSeccionAssociationCompany.setBackground(SystemColor.info);
+				lblSeccionAssociationCompany.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
 				definirColorLabelsSecciones(); // se actualizan los colores de los labels se de seleccion de las secciones
 			}
 		});
-		lblSeccionAssociationCompany.setForeground(new Color(0, 0, 0));
+		lblSeccionAssociationCompany.setForeground(SystemColor.textHighlightText);
 		lblSeccionAssociationCompany.setOpaque(true);
 		lblSeccionAssociationCompany.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSeccionAssociationCompany.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblSeccionAssociationCompany.setBackground(new Color(0, 183, 194));
-		lblSeccionAssociationCompany.setBounds(0, 358, 279, 45);
-		panelLateral.add(lblSeccionAssociationCompany);
+		lblSeccionAssociationCompany.setBackground(new Color(18, 95, 115));
+		lblSeccionAssociationCompany.setBounds(0,425, 293, 38);
+		panelSecciones.add(lblSeccionAssociationCompany);
 
 		lblSeccionContractCreation = new JLabel("CONTRACT CREATION");
+		lblSeccionContractCreation.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblSeccionContractCreation.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -171,34 +177,35 @@ public class FrameGerente extends JFrame {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lblSeccionContractCreation.setBackground(SystemColor.info);
+				lblSeccionContractCreation.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
 				definirColorLabelsSecciones(); // se actualizan los colores de los labels se de seleccion de las secciones
 			}
 		});
-		lblSeccionContractCreation.setForeground(new Color(0, 0, 0));
+		lblSeccionContractCreation.setForeground(SystemColor.textHighlightText);
 		lblSeccionContractCreation.setOpaque(true);
 		lblSeccionContractCreation.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSeccionContractCreation.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblSeccionContractCreation.setBackground(new Color(0, 183, 194));
-		lblSeccionContractCreation.setBounds(0, 425, 279, 45);
-		panelLateral.add(lblSeccionContractCreation);
+		lblSeccionContractCreation.setBackground(new Color(18, 95, 115));
+		lblSeccionContractCreation.setBounds(0,495, 293, 38);
+		panelSecciones.add(lblSeccionContractCreation);
+		
+		JTree tree = new JTree();
+		tree.setBounds(25, 591, 72, 64);
+		panelSecciones.add(tree);
 
-		JLabel lblNewLabel_4 = new JLabel("");
-		lblNewLabel_4.setIcon(new ImageIcon(FrameGerente.class.getResource("/images/Imagen5.png")));
-		lblNewLabel_4.setBounds(0, 0, 279, 717);
-		panelLateral.add(lblNewLabel_4);
-
-		this.contentPane.add(new PanelGerenteAsociacionEmpresa()); // se añade el panel gerente asociocion empresa
+		this.contentPane.add(new PanelGerenteAsociacionEmpresa(), BorderLayout.CENTER); // se añade el panel gerente asociocion empresa
 		this.definirColorLabelsSecciones(); // se actualizan los colores de los labels se de seleccion de las secciones
+		
+		
 
 	}
 
 	public void cambiarSeccion (JPanel seccion) {
 		this.contentPane.remove(this.contentPane.getComponentCount() - 1); // se remueve el ultimo panel (este panel va a ser una seccion)
-		this.contentPane.add(seccion); // se adiciona la seccion
+		this.contentPane.add(seccion, BorderLayout.CENTER); // se adiciona la seccion
 		this.repintarFrame(); // se repinta el frame
 		this.definirColorLabelsSecciones();
 	}
@@ -216,15 +223,15 @@ public class FrameGerente extends JFrame {
 
 	private void definirColorLabelSeccionAssociationCompany () {
 		if (this.contentPane.getComponent(this.contentPane.getComponentCount() - 1) instanceof PanelGerenteAsociacionEmpresa) // se esta seleccionada la seccion asociacion empresa
-			this.lblSeccionAssociationCompany.setBackground(SystemColor.info);
+			this.lblSeccionAssociationCompany.setBackground(SystemColor.activeCaptionBorder);
 		else
-			lblSeccionAssociationCompany.setBackground(new Color(0, 183, 194));
+			lblSeccionAssociationCompany.setBackground(new Color(18, 95, 115));
 	}
 
 	private void definirColorLabelSeccionCreationContract () {
 		if (this.contentPane.getComponent(this.contentPane.getComponentCount() - 1) instanceof PanelGerenteCreacionContrato)  // se esta seleccionada la seccion creacion contrato
-			this.lblSeccionContractCreation.setBackground(SystemColor.info);
+			this.lblSeccionContractCreation.setBackground(SystemColor.activeCaptionBorder);
 		else
-			lblSeccionContractCreation.setBackground(new Color(0, 183, 194));
+			lblSeccionContractCreation.setBackground(new Color(18, 95, 115));
 	}
 }

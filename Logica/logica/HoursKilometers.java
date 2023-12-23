@@ -31,6 +31,17 @@ public class HoursKilometers extends TransportModality{
 		this.costHoursAdditionals = costHoursAdditionals;
 		this.typeTransportModality = "Hours Kilometers";
 	}
+	
+	public HoursKilometers(Vehicle vehicle,
+			double costKilometersRout, double costHours, double costKilometersRoutAdditionals,
+			double costHoursAdditionals) { // constructor a nivel de logica (proceso de creación del objeto)
+		super(vehicle);
+		this.costKilometersRout = costKilometersRout;
+		this.costHours = costHours;
+		this.costKilometersRoutAdditionals = costKilometersRoutAdditionals;
+		this.costHoursAdditionals = costHoursAdditionals;
+		this.typeTransportModality = "Hours Kilometers";
+	}
 
 	public double getCostKilometersRout() {
 		return costKilometersRout;
@@ -69,5 +80,13 @@ public class HoursKilometers extends TransportModality{
 		HoursKilometersDAO.getInstancie().update(this);
 
 	}
+
+	// Operaciones
+
+	public double price () {
+		return this.costHours + this.costHoursAdditionals + this.costKilometersRout + this.costKilometersRoutAdditionals;
+	}
+
+	// Fin de operaciones
 
 }

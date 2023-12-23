@@ -178,7 +178,7 @@ public class TouristAgency {
 	}
 
 	// Metodos para la obtencion de los contratos
-	
+
 	public HashMap<Integer, ArrayList<Contract>> getContracts () { // metodo para obtener todos los contrato (sin filtros)
 		return this.contracts;
 	}
@@ -240,7 +240,7 @@ public class TouristAgency {
 
 		return contracts;
 	}
-	
+
 	public ArrayList<Contract> getContracts (Provider provider, boolean state) { // metodo para obtener los contratos de un provedor con un estado en especifico (filtro provedor, estado)
 		ArrayList<Contract> contracts = new ArrayList<Contract>();
 		ArrayList<Integer> keys = Contract.getKeys(); // se obtienen las llaves del mapa
@@ -256,7 +256,7 @@ public class TouristAgency {
 
 		return contracts;
 	}
-	
+
 	public ArrayList<Contract> getContracts (int typeOfContract, Provider provider, boolean state) { // metodo para obtener los contratos de un tipo, de un provedor, con un estado en especifico (filtro tipo, provedor)
 		ArrayList<Contract> contracts = new ArrayList<Contract>();
 
@@ -280,7 +280,72 @@ public class TouristAgency {
 		return provideres;
 	}
 
+
+	// Metodos para la obtencion de modalidades
+
+	public ArrayList<Modality> getAccommodationModalitys () { // Metodo para obtener todas las modalidades de alojamiento de la agencia
+		ArrayList<Modality> accommodationModalitys = new ArrayList<Modality>();
+
+		for (Contract accommodationContract : this.contracts.get(Contract.accommodationContract)) {
+			accommodationModalitys.addAll(accommodationContract.getModalitys());
+		}
+
+		return accommodationModalitys;
+	}
+
+	public ArrayList<Modality> getServiceModalitys () { // Metodo para obtener todas las modalidades de servicio de la agencia
+		ArrayList<Modality> serviceModalitys = new ArrayList<Modality>();
+
+		for (Contract serviceContract : this.contracts.get(Contract.serviceContract)) {
+			serviceModalitys.addAll(serviceContract.getModalitys());
+		}
+
+		return serviceModalitys;
+	}
+
+	public ArrayList<Modality> getTransportModalityCostKilometers () { // Metodo para obtener todas las modalidades de transporte tipo costo por kilometraje de la agencia
+		ArrayList<Modality> transportModalitysCostKilometers  = new ArrayList<Modality>();
+
+		for (Contract carrierContract : this.contracts.get(Contract.carrierContract)) {
+			transportModalitysCostKilometers.addAll( ((CarrierContract) carrierContract).getCostKilometers());
+		}
+
+		return transportModalitysCostKilometers;
+	}
+
+	public ArrayList<Modality> getTransportModalityHoursKilometers () { // Metodo para obtener todas las modalidades de transporte tipo horas por kilometraje de la agencia
+		ArrayList<Modality> transportModalitysHoursKilometers  = new ArrayList<Modality>();
+
+		for (Contract carrierContract : this.contracts.get(Contract.carrierContract)) {
+			transportModalitysHoursKilometers.addAll( ((CarrierContract) carrierContract).getHoursKilometers());
+		}
+
+		return transportModalitysHoursKilometers;
+	}
+	
+	public ArrayList<Modality> getTransportModalityEstablishedRoute () { // Metodo para obtener todas las modalidades de transporte tipo recorridos establecidos de la agencia
+		ArrayList<Modality> transportModalitysEstablishedRoute  = new ArrayList<Modality>();
+
+		for (Contract carrierContract : this.contracts.get(Contract.carrierContract)) {
+			transportModalitysEstablishedRoute.addAll( ((CarrierContract) carrierContract).getEstablishedRoute());
+		}
+
+		return transportModalitysEstablishedRoute;
+	}
+
+	// Fin de Metodos para la obtencion de modalidades 
+
+
+
 	// Fin Metodos para la obtencion de los datos
+
+	// Metodos para la obtencion de los paquetes turisticos
+
+	public ArrayList<TouristPackage> getTouristPackages() {
+		return touristPackages;
+	}
+
+	// Fin de Metodos para la obtencion de los paquetes turisticos
 
 
 	// Metodos de busqueda y obtencion

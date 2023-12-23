@@ -2,9 +2,8 @@ package logica;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-
 import dao.AdministratorDAO;
-import utils.ConnectionDataBase;
+
 
 public class Administrator extends User {
 

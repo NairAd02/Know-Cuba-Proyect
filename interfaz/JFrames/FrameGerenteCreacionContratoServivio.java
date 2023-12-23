@@ -35,6 +35,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
+import java.awt.Cursor;
 
 public class FrameGerenteCreacionContratoServivio extends JFrame {
 
@@ -134,37 +137,38 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 		JLabel lblStartDate = new JLabel("START DATE ");
 		lblStartDate.setForeground(SystemColor.info);
 		lblStartDate.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblStartDate.setBounds(61, 52, 119, 23);
+		lblStartDate.setBounds(58, 72, 119, 23);
 		panelServiceContract.add(lblStartDate);
 
 		JLabel lblEndDate = new JLabel("END DATE ");
 		lblEndDate.setForeground(SystemColor.info);
 		lblEndDate.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblEndDate.setBounds(249, 52, 98, 23);
+		lblEndDate.setBounds(232, 72, 98, 23);
 		panelServiceContract.add(lblEndDate);
 
 		JLabel lblProvider = new JLabel("PROVIDER");
 		lblProvider.setForeground(SystemColor.info);
 		lblProvider.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblProvider.setBounds(420, 52, 98, 23);
+		lblProvider.setBounds(385, 72, 98, 23);
 		panelServiceContract.add(lblProvider);
 
 		dateChooserStartDate = new JDateChooser();
-
-		dateChooserStartDate.setBounds(61, 86, 119, 22);
+		dateChooserStartDate.setBorder(new LineBorder(new Color(0, 0, 0)));
+		dateChooserStartDate.setBounds(58, 106, 119, 22);
 		panelServiceContract.add(dateChooserStartDate);
 
 		dateChooserEndDate = new JDateChooser();
-		dateChooserEndDate.setBounds(232, 86, 119, 22);
+		dateChooserEndDate.setBorder(new LineBorder(new Color(0, 0, 0)));
+		dateChooserEndDate.setBounds(210, 106, 119, 22);
 		panelServiceContract.add(dateChooserEndDate);
 
 
 
 		this.panelCreacionContratoAlojamientoServiceModality = new PanelCreacionContratoServicioServiceModality(FrameGerenteCreacionContratoServivio.this);
-		JLabel lblModalities = new JLabel("DESCRIPTION (OPTIONAL)");
+		JLabel lblModalities = new JLabel("DESCRIPTION");
 		lblModalities.setForeground(SystemColor.info);
 		lblModalities.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblModalities.setBounds(56, 201, 320, 30);
+		lblModalities.setBounds(71, 201, 128, 30);
 		panelServiceContract.add(lblModalities);
 
 		JPanel panelModalities = new JPanel();
@@ -176,9 +180,12 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 		panelModalities.add(scrollPane, BorderLayout.CENTER);
 
 		textPaneDescription = new JTextPane();
+		textPaneDescription.setBounds(58, 242, 591, 195);
 		scrollPane.setViewportView(textPaneDescription);
 
 		lblConfirm = new JLabel("CONFIRM");
+		lblConfirm.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblConfirm.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		lblConfirm.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -263,18 +270,23 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 		lblX.setBounds(662, 0, 38, 38);
 		panelServiceContract.add(lblX);
 
-		JLabel lblSurcharge = new JLabel("Surcharge");
+		JLabel lblSurcharge = new JLabel("SURCHARGE");
 		lblSurcharge.setForeground(SystemColor.info);
 		lblSurcharge.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblSurcharge.setBounds(494, 84, 98, 23);
+		lblSurcharge.setBounds(538, 69, 124, 30);
 		panelServiceContract.add(lblSurcharge);
 
 		spinnerRecargo = new JSpinner();
+		spinnerRecargo.setBorder(new LineBorder(new Color(0, 0, 0)));
 		spinnerRecargo.setModel(new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
-		spinnerRecargo.setBounds(602, 88, 71, 20);
+		spinnerRecargo.setBounds(551, 106, 98, 22);
 		panelServiceContract.add(spinnerRecargo);
 
 		lblShowServicesModalities = new JLabel("SHOW SERVICES MODALITIES");
+		lblShowServicesModalities.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblShowServicesModalities.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblShowServicesModalities.setOpaque(true);
+		lblShowServicesModalities.setHorizontalAlignment(SwingConstants.CENTER);
 		lblShowServicesModalities.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -288,10 +300,10 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 			public void mouseExited(MouseEvent e) {
 			}
 		});
-		lblShowServicesModalities.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblShowServicesModalities.setForeground(SystemColor.info);
 		lblShowServicesModalities.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblShowServicesModalities.setBounds(58, 149, 348, 30);
+		lblShowServicesModalities.setBackground(new Color(18, 95, 115));
+		lblShowServicesModalities.setBounds(176, 149, 348, 30);
 		panelServiceContract.add(lblShowServicesModalities);
 
 
@@ -319,7 +331,7 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 		});
 		lblRestore.setForeground(SystemColor.infoText);
 		lblRestore.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblRestore.setBounds(458, 18, 98, 23);
+		lblRestore.setBounds(500, 18, 98, 23);
 		panelServiceContract.add(lblRestore);
 	}
 

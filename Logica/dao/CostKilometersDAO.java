@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,13 +32,14 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 	public int insert(CostKilometers costKilometers) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_transport_modality_cost_kilometers(?, ?, ?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
-		cs.setString(1, costKilometers.getTypeOfModality());
-		cs.setInt(2, costKilometers.getVehicleId());
-		cs.setInt(3, costKilometers.getContractId());
-		cs.setString(4, costKilometers.getTypeTransportModality());
-		cs.setDouble(5, costKilometers.getCostKilometersGoing());
-		cs.setDouble(6, costKilometers.getCostKilometersLap());
-		cs.setDouble(7, costKilometers.getCostHoursWait());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, costKilometers.getTypeOfModality());
+		cs.setInt(3, costKilometers.getVehicleId());
+		cs.setInt(4, costKilometers.getContractId());
+		cs.setString(5, costKilometers.getTypeTransportModality());
+		cs.setDouble(6, costKilometers.getCostKilometersGoing());
+		cs.setDouble(7, costKilometers.getCostKilometersLap());
+		cs.setDouble(8, costKilometers.getCostHoursWait());
 		cs.execute(); // se ejecuta la consulta de llamda a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion

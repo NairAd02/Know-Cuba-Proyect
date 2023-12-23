@@ -11,6 +11,10 @@ import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 
 public class PanelGerenteAsociacionEmpresa extends JPanel {
 
@@ -19,35 +23,22 @@ public class PanelGerenteAsociacionEmpresa extends JPanel {
 	private JLabel lblTransportationProvider;
 	private JLabel lblAccommodationProvider;
 	private JTextField textFieldBuscadorName;
+	private JPanel panelSuperior;
 
 	/**
 	 * Create the panel.
 	 */
 	public PanelGerenteAsociacionEmpresa() {
-		setLayout(null);
 		setBounds(278, 63, 712, 719);
+		setLayout(new BorderLayout(0, 0));
 		
 
-		JPanel panel_3 = new JPanel();
-		panel_3.setLayout(null);
-		panel_3.setBounds(0, 0, 712, 41);
-		add(panel_3);
-
-		JSeparator separator_1_1 = new JSeparator();
-		separator_1_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1_1.setForeground(Color.BLACK);
-		separator_1_1.setBackground(Color.BLACK);
-		separator_1_1.setBounds(234, 0, 2, 41);
-		panel_3.add(separator_1_1);
-
-		JSeparator separator_1_1_1 = new JSeparator();
-		separator_1_1_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1_1_1.setForeground(Color.BLACK);
-		separator_1_1_1.setBackground(Color.BLACK);
-		separator_1_1_1.setBounds(483, 0, 2, 41);
-		panel_3.add(separator_1_1_1);
+		panelSuperior = new JPanel();
+		panelSuperior.setBackground(new Color(0, 183, 194));
+		add(panelSuperior, BorderLayout.NORTH);
 
 		lblServiceProvider = new JLabel("Service Provider");
+		lblServiceProvider.setBorder(new MatteBorder(1, 1, 2, 2, (Color) new Color(0, 0, 0)));
 		lblServiceProvider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -55,22 +46,23 @@ public class PanelGerenteAsociacionEmpresa extends JPanel {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lblServiceProvider.setBackground(SystemColor.inactiveCaptionBorder);
+				lblServiceProvider.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
 				definirColorLabelsSecciones();
 			}
 		});
+		panelSuperior.setLayout(new BorderLayout(0, 0));
 		lblServiceProvider.setOpaque(true);
 		lblServiceProvider.setHorizontalAlignment(SwingConstants.CENTER);
-		lblServiceProvider.setForeground(SystemColor.info);
-		lblServiceProvider.setFont(new Font("Arial Black", Font.PLAIN, 13));
+		lblServiceProvider.setForeground(SystemColor.textHighlightText);
+		lblServiceProvider.setFont(new Font("Arial Black", Font.PLAIN, 26));
 		lblServiceProvider.setBackground(new Color(18, 95, 115));
-		lblServiceProvider.setBounds(0, 0, 236, 41);
-		panel_3.add(lblServiceProvider);
+		panelSuperior.add(lblServiceProvider, BorderLayout.WEST);
 
 		lblTransportationProvider = new JLabel("Transportation Provider");
+		lblTransportationProvider.setBorder(new MatteBorder(1, 1, 2, 2, (Color) new Color(0, 0, 0)));
 		lblTransportationProvider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -78,7 +70,7 @@ public class PanelGerenteAsociacionEmpresa extends JPanel {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lblTransportationProvider.setBackground(SystemColor.inactiveCaptionBorder);
+				lblTransportationProvider.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
@@ -87,13 +79,13 @@ public class PanelGerenteAsociacionEmpresa extends JPanel {
 		});
 		lblTransportationProvider.setOpaque(true);
 		lblTransportationProvider.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTransportationProvider.setForeground(SystemColor.info);
-		lblTransportationProvider.setFont(new Font("Arial Black", Font.PLAIN, 13));
+		lblTransportationProvider.setForeground(SystemColor.textHighlightText);
+		lblTransportationProvider.setFont(new Font("Arial Black", Font.PLAIN, 26));
 		lblTransportationProvider.setBackground(new Color(18, 95, 115));
-		lblTransportationProvider.setBounds(235, 0, 250, 41);
-		panel_3.add(lblTransportationProvider);
+		panelSuperior.add(lblTransportationProvider, BorderLayout.CENTER);
 
 		lblAccommodationProvider = new JLabel("Accommodation Provider");
+		lblAccommodationProvider.setBorder(new MatteBorder(1, 1, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAccommodationProvider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -101,7 +93,7 @@ public class PanelGerenteAsociacionEmpresa extends JPanel {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lblAccommodationProvider.setBackground(SystemColor.inactiveCaptionBorder);
+				lblAccommodationProvider.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
@@ -110,14 +102,13 @@ public class PanelGerenteAsociacionEmpresa extends JPanel {
 		});
 		lblAccommodationProvider.setOpaque(true);
 		lblAccommodationProvider.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAccommodationProvider.setForeground(SystemColor.info);
-		lblAccommodationProvider.setFont(new Font("Arial Black", Font.PLAIN, 13));
+		lblAccommodationProvider.setForeground(SystemColor.textHighlightText);
+		lblAccommodationProvider.setFont(new Font("Arial Black", Font.PLAIN, 26));
 		lblAccommodationProvider.setBackground(new Color(18, 95, 115));
-		lblAccommodationProvider.setBounds(483, 0, 229, 41);
-		panel_3.add(lblAccommodationProvider);
+		panelSuperior.add(lblAccommodationProvider, BorderLayout.EAST);
 
 		PanelGerenteAsociacionEmpresaProveedorServicio panelGerenteAsociacionEmpresaProveedorServicio = new PanelGerenteAsociacionEmpresaProveedorServicio();
-		add(panelGerenteAsociacionEmpresaProveedorServicio); // se añade la seccion del provedor de servicios
+		add(panelGerenteAsociacionEmpresaProveedorServicio, BorderLayout.CENTER); // se añade la seccion del provedor de servicios
 		
 		
 		this.definirColorLabelsSecciones(); // se define el color de los labels de las secciones
@@ -126,7 +117,7 @@ public class PanelGerenteAsociacionEmpresa extends JPanel {
 
 	public void cambiarSeccion (JPanel seccion) {
 		remove(getComponentCount() - 1); // se remueve el ultimo panel (este panel va a ser una seccion)
-		add(seccion); // se adiciona la seccion
+		add(seccion, BorderLayout.CENTER); // se adiciona la seccion
 		this.repintarPanel(); // se repinta el frame
 		this.definirColorLabelsSecciones(); // se define el color de los labels de las secciones
 	}
@@ -145,21 +136,21 @@ public class PanelGerenteAsociacionEmpresa extends JPanel {
 
 	private void definirColorLabelSeccionServiceProvider () {
 		if (getComponent(getComponentCount() - 1) instanceof PanelGerenteAsociacionEmpresaProveedorServicio) // se esta seleccionada la seccion asociacion empresa
-			this.lblServiceProvider.setBackground(SystemColor.inactiveCaptionBorder);
+			this.lblServiceProvider.setBackground(SystemColor.activeCaptionBorder);
 		else
 			this.lblServiceProvider.setBackground(new Color(18, 95, 115));
 	}
 
 	private void definirColorLabelSeccionTransportationProvider () {
 		if (getComponent(getComponentCount() - 1) instanceof PanelGerenteAsociacionEmpresaProveedorTransporte)  // se esta seleccionada la seccion creacion contrato
-			this.lblTransportationProvider.setBackground(SystemColor.inactiveCaptionBorder);
+			this.lblTransportationProvider.setBackground(SystemColor.activeCaptionBorder);
 		else
 			this.lblTransportationProvider.setBackground(new Color(18, 95, 115));
 	}
 
 	private void definirColorLabelSeccionAccommodationProvider () {
 		if (getComponent(getComponentCount() - 1) instanceof PanelGerenteAsociacionEmpresaProveedorAlojamiento)  // se esta seleccionada la seccion creacion contrato
-			this.lblAccommodationProvider.setBackground(SystemColor.inactiveCaptionBorder);
+			this.lblAccommodationProvider.setBackground(SystemColor.activeCaptionBorder);
 		else
 			this.lblAccommodationProvider.setBackground(new Color(18, 95, 115));
 	}

@@ -16,7 +16,7 @@ public class Season implements DUILogic {
 
 	public Season(int id, String name, LocalDate startDate,
 			LocalDate terminationDate, String description,
-			String typeOfSeason, int accommodationContractId ) {
+			String typeOfSeason, int accommodationContractId ) { // Constructor a nivel de base datos
 		super();
 		this.id = id;
 		this.name = name;
@@ -25,6 +25,29 @@ public class Season implements DUILogic {
 		this.description = description;
 		this.typeOfSeason = typeOfSeason;
 		this.accommodationContractId = accommodationContractId;
+	}
+	
+	public Season(String name, LocalDate startDate,
+			LocalDate terminationDate, String description,
+			String typeOfSeason, int accommodationContractId) { // Constructor a nivel de logica
+		super();
+		this.name = name;
+		this.startDate = startDate;
+		this.terminationDate = terminationDate;
+		this.description = description;
+		this.typeOfSeason = typeOfSeason;
+		this.accommodationContractId = accommodationContractId;
+	}
+	
+	public Season(String name, LocalDate startDate,
+			LocalDate terminationDate, String description,
+			String typeOfSeason) { // Constructor a nivel de logica (para las tareas de inserccion temporales)
+		super();
+		this.name = name;
+		this.startDate = startDate;
+		this.terminationDate = terminationDate;
+		this.description = description;
+		this.typeOfSeason = typeOfSeason;
 	}
 
 	public int getId() {

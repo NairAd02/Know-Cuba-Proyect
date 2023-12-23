@@ -22,7 +22,7 @@ public class ModeloTablaAccommodationModality extends DefaultTableModel implemen
 	public void addElement(AccommodationModality accommodationModality) {
 		Object[] newRow =  null;
 		this.elements.add(accommodationModality);
-		newRow = new Object[]{accommodationModality.getTypeOfRoomSelect().getName(), accommodationModality.getMealPlanSelect().getName(), accommodationModality.getCantDaysAccommodation(), accommodationModality.getPrice()};
+		newRow = new Object[]{accommodationModality.getTypeOfRoomSelect().getName(), accommodationModality.getMealPlanSelect().getName(), accommodationModality.getCantDaysAccommodation(), accommodationModality.price()};
 		addRow(newRow);
 	}
 

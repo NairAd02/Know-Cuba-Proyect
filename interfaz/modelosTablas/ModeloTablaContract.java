@@ -21,7 +21,7 @@ public class ModeloTablaContract extends DefaultTableModel implements ModelOpera
 	public void addElement(Contract contract) {
 		Object[] newRow =  null;
 		this.elements.add(contract);
-		newRow = new Object[]{contract.getId(), contract.getTypeOfContract(), contract.getStartDate(), contract.getTerminationDate(), contract.getReconciliationDate(), 
+		newRow = new Object[]{contract.getId(), contract.getTypeOfContract(), contract.getStartDate(), contract.getTerminationDate(), ( contract.getReconciliationDate() != null ) ? contract.getReconciliationDate() : "-----", 
 				(contract.isState()) ? "Close" : "In Procesing",contract.getProvider().getName(), "Show Modalities" };
 
 		addRow(newRow);

@@ -107,7 +107,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
+		setLocationRelativeTo(null);
 		JLabel lblAccommodationProvider = new JLabel("ACCOMMODATION PROVIDER");
 		lblAccommodationProvider.setFont(new Font("Arial Black", Font.PLAIN, 19));
 		lblAccommodationProvider.setBounds(27, 11, 323, 30);

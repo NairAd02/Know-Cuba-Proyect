@@ -53,7 +53,7 @@ public class ServiceModality extends Modality{
 		this.releasedDate = releasedDate;
 	}
 
-	public double getPrice() {
+	public double price() {
 		return this.price;
 	}
 

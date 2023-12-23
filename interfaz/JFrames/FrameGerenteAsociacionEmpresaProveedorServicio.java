@@ -65,11 +65,8 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 
 	public FrameGerenteAsociacionEmpresaProveedorServicio(PanelGerenteAsociacionEmpresaProveedorServicio ps, ServiceProvider s) {
 		this.panelGerenteAsociacionEmpresaProveedorServicio = ps;
-		if (s != null)
-			this.serviceProvider = s;
-		else
-			this.serviceProvider = new ServiceProvider(); // objeto temporal
-
+		this.serviceProvider = s;
+		
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 465, 330);

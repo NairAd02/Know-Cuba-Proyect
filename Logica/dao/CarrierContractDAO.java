@@ -3,6 +3,7 @@ package dao;
 import java.sql.CallableStatement;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,12 +30,13 @@ public class CarrierContractDAO implements CarrierContractDAOInterface {
 	public int insert(CarrierContract carrierContract) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_carrier_contract(?, ?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
-		cs.setDate(1, Date.valueOf(carrierContract.getStartDate()));
-		cs.setDate(2, Date.valueOf(carrierContract.getTerminationDate()));
-		cs.setString(3, carrierContract.getDescription());
-		cs.setString(4, carrierContract.getTypeOfContract());
-		cs.setInt(5, carrierContract.getProviderId());
-		cs.setDouble(6, carrierContract.getSurcharge());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setDate(2, Date.valueOf(carrierContract.getStartDate()));
+		cs.setDate(3, Date.valueOf(carrierContract.getTerminationDate()));
+		cs.setString(4, carrierContract.getDescription());
+		cs.setString(5, carrierContract.getTypeOfContract());
+		cs.setInt(6, carrierContract.getProviderId());
+		cs.setDouble(7, carrierContract.getSurcharge());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion

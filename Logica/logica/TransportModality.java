@@ -1,5 +1,6 @@
 package logica;
 
+
 public abstract class TransportModality extends Modality{
 	protected Vehicle vehicle;
 	protected String typeTransportModality;
@@ -13,6 +14,12 @@ public abstract class TransportModality extends Modality{
 	
 	public TransportModality(Contract contract, Vehicle vehicle) { // constructor a nivel de logica
 		super(contract);
+		this.vehicle = vehicle;
+		this.typeOfModality = "Transport Modality";
+	}
+	
+	public TransportModality(Vehicle vehicle) { // constructor a nivel de logica (proceso de creacion del objeto)
+		super();
 		this.vehicle = vehicle;
 		this.typeOfModality = "Transport Modality";
 	}
@@ -33,5 +40,6 @@ public abstract class TransportModality extends Modality{
 	public void setTypeTransportModality(String typeTransportModality) {
 		this.typeTransportModality = typeTransportModality;
 	}
-
+	
+	
 }

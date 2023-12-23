@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,12 +32,13 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 	public int insert(AccommodationModality accommodationModality) throws SQLException {
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_accommodation_modality(?, ?, ?, ?, ?, ?)}");	
 		// se definen los parámetros de la funcion
-		cs.setString(1, accommodationModality.getTypeOfModality());
-		cs.setInt(2, accommodationModality.getContractId());
-		cs.setInt(3, accommodationModality.getTypeOfRoomId());
-		cs.setInt(4, accommodationModality.getMealPlanId());
-		cs.setDouble(5, accommodationModality.getPrice());
-		cs.setInt(6, accommodationModality.getCantDaysAccommodation());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, accommodationModality.getTypeOfModality());
+		cs.setInt(3, accommodationModality.getContractId());
+		cs.setInt(4, accommodationModality.getTypeOfRoomId());
+		cs.setInt(5, accommodationModality.getMealPlanId());
+		cs.setDouble(6, accommodationModality.price());
+		cs.setInt(7, accommodationModality.getCantDaysAccommodation());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -56,7 +58,7 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 		cs.setInt(1, accommodationModality.getId());
 		cs.setInt(2, accommodationModality.getTypeOfRoomId());
 		cs.setInt(3, accommodationModality.getMealPlanId());
-		cs.setDouble(4, accommodationModality.getPrice());
+		cs.setDouble(4, accommodationModality.price());
 		cs.setInt(5, accommodationModality.getCantDaysAccommodation());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		cs.close(); // se cierra la llamada a la funcion

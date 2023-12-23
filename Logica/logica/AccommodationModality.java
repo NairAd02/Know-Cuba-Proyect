@@ -1,8 +1,6 @@
 package logica;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import dao.AccommodationModalityDAO;
 
 public class AccommodationModality extends Modality{
@@ -66,8 +64,8 @@ public class AccommodationModality extends Modality{
 		this.cantDaysAccommodation = cantDaysAccommodation;
 	}
 
-	public double getPrice() {
-		return price;
+	public double price() {
+		return this.price;
 	}
 
 	public void setPrice(double price) {

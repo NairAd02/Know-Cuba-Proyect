@@ -20,10 +20,10 @@ public  class CarrierContract extends Contract{
 		// TODO Auto-generated constructor stub
 	}
 
-	public CarrierContract(LocalDate startDate, LocalDate terminationDate, LocalDate reconciliationDate,
-			String description, Provider provider, ArrayList<TransportModality> modalitys,
+	public CarrierContract(LocalDate startDate, LocalDate terminationDate,
+			String description, Provider provider, ArrayList<Modality> modalitys,
 			double surcharge) { // Constructor a nivel de logica
-		super(startDate, terminationDate, description, provider, new ArrayList<Modality>(modalitys),
+		super(startDate, terminationDate, description, provider, modalitys,
 				surcharge);
 		this.typeOfContract = "Carrier Contract";
 	}
@@ -33,6 +33,10 @@ public  class CarrierContract extends Contract{
 	}
 
 	// Metodos de obtencion
+
+	public ArrayList<Vehicle> getVehiclesProvider () {
+		return ((TransportationProvider) this.provider).getVehicles();
+	}
 
 	public ArrayList<CostKilometers> getCostKilometers () {
 		ArrayList<CostKilometers> modalitys = new ArrayList<CostKilometers>();
@@ -121,7 +125,7 @@ public  class CarrierContract extends Contract{
 	@Override
 	public void insert() throws SQLException {
 		this.id = CarrierContractDAO.getInstancie().insert(this);
-		super.insert();
+		this.insertModalitysIntoDataBase();
 	}
 
 	@Override

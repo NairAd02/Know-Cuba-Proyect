@@ -11,6 +11,7 @@ import java.awt.SystemColor;
 import com.toedter.calendar.JDateChooser;
 import JPanels.PanelCreacionContratoAlojamientoAccommodationModality;
 import JPanels.PanelGerenteCreacionContrato;
+import JPanels.PanelGerenteCreacionContratoAlojamientoTemporada;
 import logica.AccommodationContract;
 import logica.Controller;
 import logica.Hotel;
@@ -53,6 +54,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 	private JPanel panelAccommodationContract;
 	private JLabel lblX;
 	private PanelCreacionContratoAlojamientoAccommodationModality panelCreacionContratoAlojamientoAccommodationModality;
+	private PanelGerenteCreacionContratoAlojamientoTemporada panelGerenteCreacionContratoAlojamientoTemporada;
 
 
 
@@ -111,7 +113,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 
 		lblTituloFrame = new JLabel("ACCOMMODATION CONTRACT");
 		lblTituloFrame.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblTituloFrame.setBounds(27, 11, 331, 30);
+		lblTituloFrame.setBounds(27, 11, 422, 30);
 		panelAccommodationContract.add(lblTituloFrame);
 
 		JLabel lblStartDate = new JLabel("START DATE ");
@@ -162,7 +164,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 								ConnectionDataBase.roolback(); // se cancelan las operaciones realizadas sobre la base de datos
 							} catch (SQLException e2) {
 								e2.printStackTrace();
-							} // se cancelan las operaciones realizadas sobre la base de datos
+							} 
 							e1.printStackTrace();
 						}
 					}
@@ -272,15 +274,15 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		lblShowSeasons.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				cambioDePanel(panelGerenteCreacionContratoAlojamientoTemporada);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
+
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+
 			}
 		});
 		lblShowSeasons.setHorizontalAlignment(SwingConstants.CENTER);
@@ -293,7 +295,13 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 
 		this.definirComponentes();
 		this.definirTexto();
+		this.crearSecciones(); // se crean las secciones (seccion accommodation modality y seccion temporadas)
+
+	}
+
+	private void crearSecciones () {
 		this.panelCreacionContratoAlojamientoAccommodationModality = new PanelCreacionContratoAlojamientoAccommodationModality(FrameGerenteCreacionContratoAlojamiento.this);
+		this.panelGerenteCreacionContratoAlojamientoTemporada = new PanelGerenteCreacionContratoAlojamientoTemporada(FrameGerenteCreacionContratoAlojamiento.this);
 	}
 
 	private void addRestore () {
@@ -314,7 +322,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		});
 		lblRestore.setForeground(SystemColor.infoText);
 		lblRestore.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblRestore.setBounds(458, 18, 98, 23);
+		lblRestore.setBounds(500, 18, 98, 23);
 		panelAccommodationContract.add(lblRestore);
 	}
 
@@ -351,9 +359,9 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 	}
 
 	private void llenarComboBoxProviders () {
-		ArrayList<Provider> providers = Controller.getInstancie().getTouristAgency().getProviders(Provider.accommodationProvider); // se obtienen todos los provedores de servicios del sistema
+		ArrayList<Provider> providers = Controller.getInstancie().getTouristAgency().getProviders(Provider.accommodationProvider); // se obtienen todos los provedores de alojamiento del sistema
 
-		for (Provider serviceProvider : providers) { // se itera la lista correspondiente a cada clave del mapa
+		for (Provider serviceProvider : providers) { 
 			comboBoxProvider.addItem((Hotel) serviceProvider);
 		}
 	}
@@ -367,12 +375,12 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		String textoLblTitulo = "";
 
 		if (accommodationContract.getId() == -1) { // add
-			textoLblTitulo = "ADD SERVICE CONTRACT";
+			textoLblTitulo = "ADD ACCOMMODATION CONTRACT";
 			dateChooserStartDate.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			dateChooserEndDate.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		}	
 		else {
-			textoLblTitulo = "UPDATE SERVICE CONTRACT";
+			textoLblTitulo = "UPDATE ACCOMMODATION CONTRACT";
 			this.dateChooserStartDate.setDate(Date.from(this.accommodationContract.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant())); // se establece la fecha de inicio del contrato
 			this.dateChooserEndDate.setDate(Date.from(this.accommodationContract.getTerminationDate().atStartOfDay(ZoneId.systemDefault()).toInstant())); // se establece la fecha de terminacion del contrato
 			this.textPaneDescription.setText(this.accommodationContract.getDescription()); // se establece la descripcion del contrato

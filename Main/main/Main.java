@@ -3,11 +3,9 @@ package main;
 
 import java.awt.EventQueue;
 import java.sql.SQLException;
-
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
 import JFrames.FrameLogin;
 import utils.ConnectionDataBase;
 
@@ -43,7 +41,6 @@ public class Main {
 		}
 		
 		
-
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {

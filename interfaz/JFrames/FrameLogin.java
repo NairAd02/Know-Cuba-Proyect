@@ -131,12 +131,12 @@ public class FrameLogin extends JFrame {
 					loguarseAlSistema();
 					ConnectionDataBase.commit(); // se confirman las transacciones realizadas
 				} catch (SQLException e1) {
-                   try {
-					ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas
-				} catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
+					try {
+						ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas
+					} catch (SQLException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 					e1.printStackTrace();
 				}
 			}
@@ -222,19 +222,17 @@ public class FrameLogin extends JFrame {
 				frameAdministrador.setVisible(true);
 				dispose(); // se cierra el frame
 			}
-			else if (user instanceof Dependent) { // si el usuario es dependiente se inicia el frame dependiente
-
+			else if (user instanceof Dependent || user instanceof PackageDesigner ) { // si el usuario es dependiente se inicia el frame dependiente o  si el usuario es diseñador de paquetes se inicia el frame diseñador de paquetes
+				FramePaquetes framePaquetes = FramePaquetes.getInstancie();
+				framePaquetes.setVisible(true);
+				dispose(); // se cierra el frame
 			}
 			else if (user instanceof Manager) { // se el usuario es manager se inicia el frame manager
 				FrameGerente framGerente = FrameGerente.getIntancie();
 				framGerente.setVisible(true);
 				dispose(); // se cierra el frame
 			}
-			else if (user instanceof PackageDesigner) { // se el usuario es diseñador de paquetes se inicia el frame diseñador de paquetes
-
-			}
-
-
+		
 		}
 		else {
 			lblNotificacionRegistro.setVisible(true);

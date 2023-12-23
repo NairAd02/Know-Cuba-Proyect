@@ -144,9 +144,7 @@ public abstract class Contract implements DUILogic {
 		ContractDAO.getInstancie().delete(this.id);
 	}
 
-	public void insert() throws SQLException {
-		this.insertModalitysIntoDataBase();
-	}
+	
 
 	public int getProviderId () { // Metodo para obtener el indentificador del provedor
 		return this.provider.getId();

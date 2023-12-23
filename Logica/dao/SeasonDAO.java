@@ -3,6 +3,7 @@ package dao;
 import java.sql.CallableStatement;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,12 +30,13 @@ public class SeasonDAO implements SeasonDAOInterface {
 	public int insert(Season season) throws SQLException  { // Metodo para la inserccion de una temporada en la base de datos
 		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_season(?, ?, ?, ?, ?, ?)}");	
 		// se definen los parámetros de la funcion
-		cs.setString(1, season.getName());
-		cs.setDate(2, Date.valueOf(season.getStartDate()));
-		cs.setDate(3, Date.valueOf(season.getTerminationDate()));
-		cs.setString(4, season.getDescription());
-		cs.setString(5, season.getTypeOfSeason());
-		cs.setInt(6, season.getAccommodationContractId());
+		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
+		cs.setString(2, season.getName());
+		cs.setDate(3, Date.valueOf(season.getStartDate()));
+		cs.setDate(4, Date.valueOf(season.getTerminationDate()));
+		cs.setString(5, season.getDescription());
+		cs.setString(6, season.getTypeOfSeason());
+		cs.setInt(7, season.getAccommodationContractId());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -114,7 +116,7 @@ public class SeasonDAO implements SeasonDAOInterface {
 
 	@Override
 	public Season mapEntity(CallableStatement cs) throws SQLException {
-		Season season = this.cache.get(cs.getInt("id"));
+		Season season = this.cache.get(cs.getResultSet().getInt("id"));
 
 		if (season == null) {
 			season = new Season(cs.getResultSet().getInt("id"), cs.getResultSet().getString("season_name") , cs.getResultSet().getDate("season_start_date").toLocalDate() , 

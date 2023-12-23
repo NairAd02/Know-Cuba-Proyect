@@ -9,7 +9,6 @@ import logica.Rol;
 import logica.User;
 import modelosTablas.ModeloTablaUsers;
 import utils.ConnectionDataBase;
-
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -33,6 +32,8 @@ import java.awt.Cursor;
 import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.border.LineBorder;
+
 
 public class FrameAdministrador extends JFrame {
 
@@ -48,6 +49,7 @@ public class FrameAdministrador extends JFrame {
 	private JTextField textFieldBuscador;
 	private JComboBox<String> comboBoxConexion;
 	private String searchName;
+	private JScrollPane scrollPane;
 
 
 	public static FrameAdministrador getInstancie () {
@@ -121,8 +123,14 @@ public class FrameAdministrador extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				try {
 					Controller.getInstancie().getUser().cerrarConexion();
+					ConnectionDataBase.commit(); // confirmar las operaciones realizadas
 				} catch (SQLException e1) {
-
+					try {
+						ConnectionDataBase.roolback(); // cancelar las operaciones realizadas
+					} catch (SQLException e2) {
+						
+						e2.printStackTrace();
+					} // confirmar las operaciones realizadas
 					e1.printStackTrace();
 				} // se cierra la sesión del usuario
 				System.exit(0);
@@ -163,6 +171,7 @@ public class FrameAdministrador extends JFrame {
 		panel_1.add(separator_2_1);
 
 		JLabel lblUserManagement = new JLabel("USER MANAGEMENT");
+		lblUserManagement.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblUserManagement.setOpaque(true);
 		lblUserManagement.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUserManagement.setForeground(Color.BLACK);
@@ -184,15 +193,22 @@ public class FrameAdministrador extends JFrame {
 		contentPane.add(panel_2);
 
 		JPanel panelUsuario = new JPanel();
-		panelUsuario.setOpaque(false);
-		panelUsuario.setBounds(10, 110, 692, 598);
+		panelUsuario.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panelUsuario.setBackground(SystemColor.textHighlight);
+		panelUsuario.setBounds(0, 110, 712, 609);
 		panel_2.add(panelUsuario);
 		panelUsuario.setLayout(new BorderLayout(0, 0));
 
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
+		scrollPane.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
+		scrollPane.setBackground(SystemColor.textHighlight);
 		panelUsuario.add(scrollPane, BorderLayout.CENTER);
 
 		tableUsuario = new JTable();
+		tableUsuario.setForeground(SystemColor.textText);
+		tableUsuario.setBackground(SystemColor.textHighlightText);
+		tableUsuario.setGridColor(SystemColor.activeCaption);
+		tableUsuario.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		tableUsuario.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -277,18 +293,21 @@ public class FrameAdministrador extends JFrame {
 		lblDelete.setBounds(355, 0, 357, 41);
 		panel_3.add(lblDelete);
 
-		JLabel lblUsers = new JLabel("USERS");
-		lblUsers.setForeground(SystemColor.info);
-		lblUsers.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblUsers.setBounds(10, 49, 68, 22);
+		JLabel lblUsers = new JLabel("Users");
+		lblUsers.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsers.setForeground(Color.BLACK);
+		lblUsers.setFont(new Font("Arial Black", Font.PLAIN, 12));
+		lblUsers.setBounds(118, 49, 68, 22);
 		panel_2.add(lblUsers);
 
 		JLabel lblNewLabel = new JLabel("Rol");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel.setBounds(240, 65, 39, 14);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 12));
+		lblNewLabel.setBounds(358, 55, 39, 14);
 		panel_2.add(lblNewLabel);
 
 		comboBoxRoles = new JComboBox <Rol>();
+		comboBoxRoles.setBorder(new LineBorder(new Color(0, 0, 0)));
 		this.llenarComboBoxRol();
 		comboBoxRoles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -296,25 +315,28 @@ public class FrameAdministrador extends JFrame {
 			}
 		});
 
-		comboBoxRoles.setBounds(289, 62, 119, 22);
+		comboBoxRoles.setBounds(318, 77, 119, 22);
 		panel_2.add(comboBoxRoles);
 
 		JLabel lblNewLabel_1 = new JLabel("State Connection");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNewLabel_1.setBounds(465, 65, 119, 14);
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Arial Black", Font.PLAIN, 12));
+		lblNewLabel_1.setBounds(512, 52, 119, 14);
 		panel_2.add(lblNewLabel_1);
 
 		comboBoxConexion = new JComboBox<String>();
+		comboBoxConexion.setBorder(new LineBorder(new Color(0, 0, 0)));
 		this.llenarComboBoxConexion();
 		comboBoxConexion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actualizarTablaUsuarios();
 			}
 		});
-		comboBoxConexion.setBounds(583, 62, 119, 22);
+		comboBoxConexion.setBounds(512, 77, 119, 22);
 		panel_2.add(comboBoxConexion);
 
 		textFieldBuscador = new JTextField();
+		textFieldBuscador.setBorder(new LineBorder(new Color(171, 173, 179)));
 		textFieldBuscador.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -330,7 +352,7 @@ public class FrameAdministrador extends JFrame {
 				actualizarTablaUsuarios(); // se actualiza la informacion de los usuarios en la tabla usuario
 			}
 		});
-		textFieldBuscador.setBounds(10, 79, 182, 20);
+		textFieldBuscador.setBounds(61, 79, 182, 20);
 		panel_2.add(textFieldBuscador);
 		textFieldBuscador.setColumns(10);
 

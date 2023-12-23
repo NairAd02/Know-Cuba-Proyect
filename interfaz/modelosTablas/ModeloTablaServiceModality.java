@@ -21,7 +21,7 @@ public class ModeloTablaServiceModality extends DefaultTableModel implements Mod
 	public void addElement(ServiceModality serviceModality) {
 		Object[] newRow =  null;
 		this.elements.add(serviceModality);
-		newRow = new Object[]{serviceModality.getActivity().getDescription(), serviceModality.getReleasedDate(), serviceModality.getPrice()};
+		newRow = new Object[]{serviceModality.getActivity().getDescription(), serviceModality.getReleasedDate(), serviceModality.price()};
 		addRow(newRow);
 
 	}
