@@ -15,6 +15,9 @@ import utils.ConnectionDataBase;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 import java.awt.SystemColor;
@@ -71,10 +74,14 @@ public class FrameGerente extends JFrame {
 	}
 
 	private FrameGerente() {
+		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice device = env.getDefaultScreenDevice();
+		
 		setResizable(false);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 1920, 1080);
+		device.setFullScreenWindow(this);
+		
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(5, 150, 177));
 		contentPane.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
