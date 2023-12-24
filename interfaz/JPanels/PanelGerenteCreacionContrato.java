@@ -39,6 +39,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 import java.awt.FlowLayout;
 import javax.swing.border.MatteBorder;
+import javax.swing.ImageIcon;
 
 
 public class PanelGerenteCreacionContrato extends JPanel {
@@ -47,21 +48,20 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	private JPanel panelTable;
 	private JScrollPane scrollPaneTable;
 	private JTable tableContracts;
-	private JLabel lblAddServiceContract;
-	private JLabel lblAddTransportationContract;
-	private JLabel lblAddAccommodationContract;
-	private JLabel lblDelete;
 	private JComboBox<String> comboBoxTypeOfContrac;
 	private JComboBox<String> comboBoxState;
 	private JComboBox<Provider> comboBoxProvider;
 	private JLabel lblNewLabel;
-	private JLabel lblUpdate;
 	private JPanel panelContenedorTable;
 	private JPanel panelOpciones;
 	private JPanel panelTitle;
-	private JLabel lblNewLabel_2;
+	private JLabel lblTitleSeccion;
 	private JPanel panelFiltros;
 	private JPanel panelBotones;
+	private JLabel lblAnnadir;
+	private JLabel lblDelete;
+	private JLabel lblUpdate;
+
 
 	/**
 	 * Create the panel.
@@ -75,9 +75,9 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		panelTitle.setBackground(SystemColor.inactiveCaptionBorder);
 		add(panelTitle, BorderLayout.NORTH);
 		
-		lblNewLabel_2 = new JLabel("Contracts");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 32));
-		panelTitle.add(lblNewLabel_2);
+		lblTitleSeccion = new JLabel("Contracts");
+		lblTitleSeccion.setFont(new Font("Tahoma", Font.BOLD, 32));
+		panelTitle.add(lblTitleSeccion);
 
 		
 
@@ -106,6 +106,7 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		tableContracts.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		tableContracts.getTableHeader().setFont(new Font("Arial", Font.BOLD, 24));
 		tableContracts.getTableHeader().setForeground(Color.black);
+		tableContracts.getTableHeader().setBackground(SystemColor.black);
 		tableContracts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -115,6 +116,7 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		});
 		tableContracts.setModel(new ModeloTablaContract());
 		scrollPaneTable.setViewportView(tableContracts);
+		scrollPaneTable.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
 		
 		panelOpciones = new JPanel();
 		panelOpciones.setBackground(new Color(18, 95, 115));
@@ -128,12 +130,32 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		panelOpciones.add(panelFiltros, BorderLayout.CENTER);
 		
 		panelBotones = new JPanel();
-		panelBotones.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
-		panelBotones.setBackground(SystemColor.inactiveCaptionBorder);
-		panelOpciones.add(panelBotones, BorderLayout.NORTH);
+		panelBotones.setBackground(new Color(18, 95, 115));
+		panelOpciones.add(panelBotones, BorderLayout.EAST);
+		
+		lblAnnadir = new JLabel("");
+		lblAnnadir.setIcon(new ImageIcon(PanelGerenteCreacionContrato.class.getResource("/images/Plus.png")));
+		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblAnnadir.setBackground(SystemColor.info);
+		panelBotones.add(lblAnnadir);
+		
+		lblDelete = new JLabel("");
+		lblDelete.setIcon(new ImageIcon(PanelGerenteCreacionContrato.class.getResource("/images/Trash.png")));
+		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDelete.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblDelete.setBackground(SystemColor.info);
+		panelBotones.add(lblDelete);
+		
+		lblUpdate = new JLabel("");
+		lblUpdate.setIcon(new ImageIcon(PanelGerenteCreacionContrato.class.getResource("/images/Edit.png")));
+		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUpdate.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblUpdate.setBackground(SystemColor.info);
+		panelBotones.add(lblUpdate);
+		
 
 		this.addFiltres();
-		this.addButtons();
 		this.actualizarEstadoButtonDelete();
 		this.actualizarEstadoButtonUpdate();
 		this.actualizarTablaContracts(); // se actualiza la informacion de la tabla de contratos
@@ -241,164 +263,7 @@ public class PanelGerenteCreacionContrato extends JPanel {
 
 	}
 	
-	private void addButtons () {
-		lblAddServiceContract = new JLabel("ADD Service Contract");
-		lblAddServiceContract.setForeground(SystemColor.textHighlightText);
-		lblAddServiceContract.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
-		lblAddServiceContract.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblAddServiceContract.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				FrameGerenteCreacionContratoServivio frameCracionServiceContract = new FrameGerenteCreacionContratoServivio(PanelGerenteCreacionContrato.this, new ServiceContract());
-				frameCracionServiceContract.setVisible(true);
-				FrameGerente.getIntancie().setEnabled(false); // se inhabilita el frame principal
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-		});
-		panelTitle.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		lblAddServiceContract.setOpaque(true);
-		lblAddServiceContract.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAddServiceContract.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblAddServiceContract.setBackground(new Color(18, 95, 115));
-		panelBotones.add(lblAddServiceContract);
-
-		lblAddTransportationContract = new JLabel("ADD Transportation Contract");
-		lblAddTransportationContract.setForeground(SystemColor.textHighlightText);
-		lblAddTransportationContract.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
-		lblAddTransportationContract.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblAddTransportationContract.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				FrameGerenteCreacionContratoTransporte frameAddCarrierContract = new FrameGerenteCreacionContratoTransporte(PanelGerenteCreacionContrato.this, new CarrierContract());
-				frameAddCarrierContract.setVisible(true);
-				FrameGerente.getIntancie().setEnabled(false); // se inhabilita el frame principal
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-		});
-		lblAddTransportationContract.setOpaque(true);
-		lblAddTransportationContract.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAddTransportationContract.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblAddTransportationContract.setBackground(new Color(18, 95, 115));
-		panelBotones.add(lblAddTransportationContract);
-
-		lblAddAccommodationContract = new JLabel("ADD Accommodation Contract");
-		lblAddAccommodationContract.setForeground(SystemColor.textHighlightText);
-		lblAddAccommodationContract.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
-		lblAddAccommodationContract.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblAddAccommodationContract.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				FrameGerenteCreacionContratoAlojamiento frameAddAccommodationContract = new FrameGerenteCreacionContratoAlojamiento(PanelGerenteCreacionContrato.this, new AccommodationContract());
-				frameAddAccommodationContract.setVisible(true);
-				FrameGerente.getIntancie().setEnabled(false); // se inhabilita el frame principal
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-		});
-		lblAddAccommodationContract.setOpaque(true);
-		lblAddAccommodationContract.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAddAccommodationContract.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblAddAccommodationContract.setBackground(new Color(18, 95, 115));
-		panelBotones.add(lblAddAccommodationContract);
-
-		lblDelete = new JLabel("DELETE");
-		lblDelete.setForeground(SystemColor.textHighlightText);
-		lblDelete.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
-		lblDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblDelete.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				if (lblDelete.isEnabled()) {
-					try {
-						deleteElementsTable();
-						ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos 
-					} catch (SQLException e1) {
-						try {
-							ConnectionDataBase.roolback(); // se cancelan las operaciones realizadas a la base de datos 
-						} catch (SQLException e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
-						} 
-						e1.printStackTrace();
-					}
-				}
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-		});
-		panelBotones.add(lblDelete);
-		lblDelete.setOpaque(true);
-		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDelete.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblDelete.setBackground(new Color(18, 95, 115));
-
-		lblUpdate = new JLabel("UPDATE");
-		lblUpdate.setForeground(SystemColor.textHighlightText);
-		lblUpdate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblUpdate.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
-		lblUpdate.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				if (lblUpdate.isEnabled()) {
-					Contract contract = ((ModeloTablaContract) tableContracts.getModel()).getElement(tableContracts.getSelectedRow());
-					if (contract instanceof ServiceContract) {
-						FrameGerenteCreacionContratoServivio frameCracionServiceContract = new FrameGerenteCreacionContratoServivio(PanelGerenteCreacionContrato.this, (ServiceContract) contract);
-						frameCracionServiceContract.setVisible(true);
-						FrameGerente.getIntancie().setEnabled(false); // se inhabilita el frame principal
-					}
-					else if (contract instanceof CarrierContract) {
-						FrameGerenteCreacionContratoTransporte frameAddCarrierContract = new FrameGerenteCreacionContratoTransporte(PanelGerenteCreacionContrato.this, new CarrierContract());
-						frameAddCarrierContract.setVisible(true);
-						FrameGerente.getIntancie().setEnabled(false); // se inhabilita el frame principal
-					}
-					else if (contract instanceof AccommodationContract) {
-						FrameGerenteCreacionContratoAlojamiento frameAddAccommodationContract = new FrameGerenteCreacionContratoAlojamiento(PanelGerenteCreacionContrato.this, (AccommodationContract) contract);
-						frameAddAccommodationContract.setVisible(true);
-						FrameGerente.getIntancie().setEnabled(false); // se inhabilita el frame principal
-					}
-				}
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-		});
-		lblUpdate.setOpaque(true);
-		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUpdate.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblUpdate.setBackground(new Color(18, 95, 115));
-		panelBotones.add(lblUpdate);
-	}
+	
 
 	public void actualizarTablaContracts () {
 		if (((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && ((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 

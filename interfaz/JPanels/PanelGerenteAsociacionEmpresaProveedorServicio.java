@@ -42,7 +42,7 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 	private JLabel lblName;
 	private JPanel panelSuperior;
 	private JPanel panelTitle;
-	private JLabel lblNewLabel;
+	private JLabel lblTitleSeccion;
 	private JPanel panelContenedorTable;
 	private JPanel panelOpciones;
 	private JPanel panelFiltros;
@@ -91,9 +91,9 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 		tableServiceProviders.setModel(new ModeloTablaServiceProvider());
 		tableServiceProviders.getTableHeader().setFont(new Font("Arial", Font.BOLD, 24));
 		tableServiceProviders.getTableHeader().setForeground(Color.black);
-		tableServiceProviders.getTableHeader().setBackground(new Color(0, 183, 194));
+		tableServiceProviders.getTableHeader().setBackground(SystemColor.black);
 		scrollPaneTable.setViewportView(tableServiceProviders);
-		
+		scrollPaneTable.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
 		panelOpciones = new JPanel();
 		panelOpciones.setBackground(new Color(18, 95, 115));
 		panelContenedorTable.add(panelOpciones, BorderLayout.NORTH);
@@ -110,24 +110,26 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 		panelOpciones.add(panelBotones, BorderLayout.EAST);
 
 		panelSuperior = new JPanel();
+		panelSuperior.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
+		panelSuperior.setBackground(SystemColor.inactiveCaptionBorder);
 		add(panelSuperior, BorderLayout.NORTH);
-		panelSuperior.setLayout(new BorderLayout(0, 0));
+		panelSuperior.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 
 
 		
-		scrollPaneTable.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
+		
 	
 
 
 
-		lblNewLabel = new JLabel("Services Providers");
-		lblNewLabel.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
-		lblNewLabel.setBackground(SystemColor.inactiveCaptionBorder);
-		lblNewLabel.setOpaque(true);
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 28));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panelSuperior.add(lblNewLabel, BorderLayout.CENTER);
+		lblTitleSeccion = new JLabel("Services Providers");
+		lblTitleSeccion.setBorder(null);
+		lblTitleSeccion.setBackground(SystemColor.inactiveCaptionBorder);
+		lblTitleSeccion.setOpaque(true);
+		lblTitleSeccion.setFont(new Font("Tahoma", Font.BOLD, 32));
+		lblTitleSeccion.setHorizontalAlignment(SwingConstants.CENTER);
+		panelSuperior.add(lblTitleSeccion);
 
 		
 
@@ -180,7 +182,7 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 				FrameGerente.getIntancie().setEnabled(false); // se inabilita el frame principal
 			}
 		});
-		lblAnnadir.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/a\u00F1adir2 - copia.png")));
+		lblAnnadir.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/Plus.png")));
 		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAnnadir.setBackground(SystemColor.info);
@@ -188,7 +190,7 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 		panelBotones.add(lblAnnadir);
 
 		lblDelete = new JLabel("");
-		lblDelete.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/eliminar1.png")));
+		lblDelete.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/Trash.png")));
 		lblDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -223,7 +225,7 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 		panelBotones.add(lblDelete);
 
 		lblShowActivities = new JLabel("");
-		lblShowActivities.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/mostrar.png")));
+		lblShowActivities.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorServicio.class.getResource("/images/Edit.png")));
 		lblShowActivities.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
