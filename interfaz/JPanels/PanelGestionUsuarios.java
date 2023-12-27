@@ -1,260 +1,174 @@
-package JFrames;
+package JPanels;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+
+import JFrames.FrameAdvertencia;
+import JFrames.FrameDecisor;
+import JFrames.FramePrincipal;
+import JFrames.FrameRegistro;
 import logica.Controller;
 import logica.Rol;
 import logica.User;
 import modelosTablas.ModeloTablaUsers;
 import utils.ConnectionDataBase;
+import utils.Semaphore;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
+
+import javax.swing.JScrollPane;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
 import java.awt.SystemColor;
-import javax.swing.ImageIcon;
-import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import javax.swing.JComboBox;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.sql.SQLException;
-import java.awt.Cursor;
-import javax.swing.JTextField;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.border.LineBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
+import javax.swing.border.MatteBorder;
 
-
-public class FrameAdministrador extends JFrame {
+public class PanelGestionUsuarios extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static FrameAdministrador framAdministrador;
-	private JPanel contentPane;
-	private JTable tableUsuario;
-	private JLabel lblX;
-	private JComboBox <Rol> comboBoxRoles;
-	private int mouseX, mouseY;
-	private JLabel lblDelete;
-	private JLabel lblToRegister;
-	private JTextField textFieldBuscador;
-	private JComboBox<String> comboBoxConexion;
-	private String searchName;
+	private JPanel panelTitle;
+	private JPanel panelContenedorTable;
+	private JPanel panelOpciones;
+	private JPanel panelTable;
 	private JScrollPane scrollPane;
+	private JTable tableUsuario;
+	private JPanel panelFiltros;
+	private JPanel panelBotones;
+	private JLabel lblUsers;
+	private JTextField textFieldBuscador;
+	private JComboBox <Rol> comboBoxRoles;
+	private JComboBox<String> comboBoxConexion;
+	private JLabel lblToRegister, lblDelete;
+	private String searchName;
+	private JLabel lblUpdate;
+	
+	private class Eliminar extends Thread { // Hilo para la eliminacion
 
+		public void run () {
+			synchronized (Semaphore.samaphore) { 
+				try {
+					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
+					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación
+						deleteElements(); // se eliminan los elementos seleccionados
+						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-	public static FrameAdministrador getInstancie () {
-		if (framAdministrador == null)
-			framAdministrador = new FrameAdministrador();
-
-		return framAdministrador;
+			}
+		}
 	}
 
-	private FrameAdministrador() {
-		searchName = "";
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 990, 782);
-		contentPane = new JPanel();
-		contentPane.addMouseListener(new MouseAdapter() {
+	private void crearFrameDecisor () {
+		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Seguro que desea eliminar");
+		frameDecisor.setVisible(true);
+		FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
+	}
+
+	private void crearFrameNotificacion () {
+		FrameAdvertencia frameAdvertencia = new FrameAdvertencia("Han sido elimanados correctamente los usuarios seleccionados");
+		frameAdvertencia.setVisible(true);
+	}
+
+
+	public PanelGestionUsuarios() {
+		this.searchName = "";
+		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				tableUsuario.clearSelection();
-				actualizarEstadoButtonDelete();
+				actualizarEstadoButtons(); // se actualiza el estado de los botones
 			}
 		});
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setLocationRelativeTo(null);
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		setLayout(new BorderLayout(0, 0));
 
-		JPanel panel = new JPanel();
-		panel.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				int x= e.getXOnScreen();
-				int y= e.getYOnScreen();
+		panelTitle = new JPanel();
+		panelTitle.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
+		panelTitle.setBackground(SystemColor.inactiveCaptionBorder);
+		add(panelTitle, BorderLayout.NORTH);
 
-				setLocation(x - mouseX , y - mouseY );
-			}
-		});
-		panel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-			}
-		});
-		panel.setLayout(null);
-		panel.setBackground(new Color(5, 150, 177));
-		panel.setBounds(0, 0, 990, 65);
-		contentPane.add(panel);
+		lblUsers = new JLabel("USERS");
+		lblUsers.setBackground(SystemColor.inactiveCaptionBorder);
+		lblUsers.setOpaque(true);
+		lblUsers.setForeground(SystemColor.textText);
+		lblUsers.setFont(new Font("Tahoma", Font.BOLD, 32));
+		panelTitle.add(lblUsers);
 
-		JLabel lblAdministrator = new JLabel("ADMINISTRATOR");
-		lblAdministrator.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdministrator.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblAdministrator.setBounds(59, 16, 181, 32);
-		panel.add(lblAdministrator);
+		panelContenedorTable = new JPanel();
+		add(panelContenedorTable, BorderLayout.CENTER);
+		panelContenedorTable.setLayout(new BorderLayout(0, 0));
 
-		JSeparator separator = new JSeparator();
-		separator.setForeground(SystemColor.controlText);
-		separator.setBackground(SystemColor.controlText);
-		separator.setBounds(245, 39, 745, 2);
-		panel.add(separator);
+		panelOpciones = new JPanel();
+		panelOpciones.setBackground(new Color(18, 95, 115));
+		panelContenedorTable.add(panelOpciones, BorderLayout.NORTH);
+		panelOpciones.setLayout(new BorderLayout(0, 0));
 
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setForeground(Color.BLACK);
-		separator_1.setBackground(Color.BLACK);
-		separator_1.setBounds(0, 39, 54, 9);
-		panel.add(separator_1);
+		panelFiltros = new JPanel();
+		panelFiltros.setBackground(new Color(18, 95, 115));
+		panelOpciones.add(panelFiltros, BorderLayout.WEST);
 
-		lblX = new JLabel("X");
-		lblX.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					Controller.getInstancie().getUser().cerrarConexion();
-					ConnectionDataBase.commit(); // confirmar las operaciones realizadas
-				} catch (SQLException e1) {
-					try {
-						ConnectionDataBase.roolback(); // cancelar las operaciones realizadas
-					} catch (SQLException e2) {
-						
-						e2.printStackTrace();
-					} // confirmar las operaciones realizadas
-					e1.printStackTrace();
-				} // se cierra la sesión del usuario
-				System.exit(0);
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				lblX.setForeground(SystemColor.red);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
-			}
-		});
-		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
-		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		lblX.setBackground(SystemColor.menu);
-		lblX.setBounds(952, 0, 38, 38);
-		panel.add(lblX);
+		panelBotones = new JPanel();
+		panelBotones.setBackground(new Color(18, 95, 115));
+		panelOpciones.add(panelBotones, BorderLayout.EAST);
 
-		JSeparator separator_2 = new JSeparator();
-		separator_2.setForeground(SystemColor.controlText);
-		separator_2.setBackground(SystemColor.controlText);
-		separator_2.setBounds(0, 63, 990, 2);
-		panel.add(separator_2);
-
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		panel_1.setBackground(new Color(5, 150, 177));
-		panel_1.setBounds(0, 65, 279, 717);
-		contentPane.add(panel_1);
-
-		JSeparator separator_2_1 = new JSeparator();
-		separator_2_1.setOrientation(SwingConstants.VERTICAL);
-		separator_2_1.setForeground(SystemColor.controlText);
-		separator_2_1.setBackground(SystemColor.controlText);
-		separator_2_1.setBounds(277, 0, 2, 717);
-		panel_1.add(separator_2_1);
-
-		JLabel lblUserManagement = new JLabel("USER MANAGEMENT");
-		lblUserManagement.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblUserManagement.setOpaque(true);
-		lblUserManagement.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUserManagement.setForeground(Color.BLACK);
-		lblUserManagement.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblUserManagement.setBackground(new Color(0, 183, 194));
-		lblUserManagement.setBounds(0, 358, 279, 45);
-		panel_1.add(lblUserManagement);
-
-		JLabel lblNewLabel_4 = new JLabel("");
-		lblNewLabel_4.setIcon(new ImageIcon(FrameAdministrador.class.getResource("/images/Imagen5.png")));
-		lblNewLabel_4.setBounds(0, 0, 279, 717);
-		panel_1.add(lblNewLabel_4);
-
-		JPanel panel_2 = new JPanel();
-		panel_2.setLayout(null);
-		panel_2.setBackground(SystemColor.inactiveCaptionBorder);
-		panel_2.setBounds(278, 63, 712, 719);
-		panel_2.setBackground(new Color(5, 150, 177));
-		contentPane.add(panel_2);
-
-		JPanel panelUsuario = new JPanel();
-		panelUsuario.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelUsuario.setBackground(SystemColor.textHighlight);
-		panelUsuario.setBounds(0, 110, 712, 609);
-		panel_2.add(panelUsuario);
-		panelUsuario.setLayout(new BorderLayout(0, 0));
+		panelTable = new JPanel();
+		panelContenedorTable.add(panelTable, BorderLayout.CENTER);
+		panelTable.setLayout(new BorderLayout(0, 0));
 
 		scrollPane = new JScrollPane();
-		scrollPane.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
-		scrollPane.setBackground(SystemColor.textHighlight);
-		panelUsuario.add(scrollPane, BorderLayout.CENTER);
+		panelTable.add(scrollPane, BorderLayout.CENTER);
 
 		tableUsuario = new JTable();
-		tableUsuario.setForeground(SystemColor.textText);
-		tableUsuario.setBackground(SystemColor.textHighlightText);
-		tableUsuario.setGridColor(SystemColor.activeCaption);
-		tableUsuario.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		tableUsuario.setRowHeight(30);
+		tableUsuario.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		tableUsuario.getTableHeader().setFont(new Font("Arial", Font.BOLD, 24));
+		tableUsuario.getTableHeader().setForeground(Color.black);
+		tableUsuario.getTableHeader().setBackground(SystemColor.black);
 		tableUsuario.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				actualizarEstadoButtonDelete();
+				actualizarEstadoButtons(); // se actualiza el estado de los botones
 			}
 		});
 		tableUsuario.setModel(new ModeloTablaUsers());
 		scrollPane.setViewportView(tableUsuario);
+		scrollPane.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
 
-		JPanel panel_3 = new JPanel();
-		panel_3.setLayout(null);
-		panel_3.setBounds(0, 0, 712, 41);
-		panel_2.add(panel_3);
+		this.addBotones();
+		this.actualizarEstadoButtons();
+		this.actualizarTablaUsuarios(); // se actualiza la informacion de la tabla de usuarios
 
-		JSeparator separator_1_1 = new JSeparator();
-		separator_1_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1_1.setForeground(Color.BLACK);
-		separator_1_1.setBackground(Color.BLACK);
-		separator_1_1.setBounds(355, 0, 2, 41);
-		panel_3.add(separator_1_1);
-
-		
-
-		
-
-	
-
-		
-
-	
-		//textFieldBuscador.setColumns(10);
-
-		this.actualizarTablaUsuarios();
-		this.actualizarEstadoButtonDelete();
 	}
-	
+
 	private void addBotones () {
-		JLabel lblUsers = new JLabel("Users");
+		JLabel lblUsers = new JLabel("User name");
 		lblUsers.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUsers.setForeground(Color.BLACK);
-		lblUsers.setFont(new Font("Arial Black", Font.PLAIN, 12));
-		lblUsers.setBounds(118, 49, 68, 22);
-		panel_2.add(lblUsers); 
-		
+		lblUsers.setForeground(SystemColor.textHighlightText);
+		lblUsers.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelFiltros.add(lblUsers); 
+
 		textFieldBuscador = new JTextField();
-		textFieldBuscador.setBorder(new LineBorder(new Color(171, 173, 179)));
+		textFieldBuscador.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldBuscador.setColumns(10);
+		
 		textFieldBuscador.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -270,16 +184,17 @@ public class FrameAdministrador extends JFrame {
 				actualizarTablaUsuarios(); // se actualiza la informacion de los usuarios en la tabla usuario
 			}
 		});
-		textFieldBuscador.setBounds(61, 79, 182, 20);
-		panel_2.add(textFieldBuscador);
-		
+
+		panelFiltros.add(textFieldBuscador);
+
 		JLabel lblNewLabel = new JLabel("Rol");
+		lblNewLabel.setForeground(SystemColor.textHighlightText);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 12));
-		lblNewLabel.setBounds(358, 55, 39, 14);
-		panel_2.add(lblNewLabel);
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelFiltros.add(lblNewLabel);
 
 		comboBoxRoles = new JComboBox <Rol>();
+		comboBoxRoles.setFont(new Font("Dialog", Font.PLAIN, 21));
 		comboBoxRoles.setBorder(new LineBorder(new Color(0, 0, 0)));
 		this.llenarComboBoxRol();
 		comboBoxRoles.addActionListener(new ActionListener() {
@@ -288,16 +203,16 @@ public class FrameAdministrador extends JFrame {
 			}
 		});
 
-		comboBoxRoles.setBounds(318, 77, 119, 22);
-		panel_2.add(comboBoxRoles);
-		
+		panelFiltros.add(comboBoxRoles);
+
 		JLabel lblNewLabel_1 = new JLabel("State Connection");
+		lblNewLabel_1.setForeground(SystemColor.textHighlightText);
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setFont(new Font("Arial Black", Font.PLAIN, 12));
-		lblNewLabel_1.setBounds(512, 52, 119, 14);
-		panel_2.add(lblNewLabel_1);
+		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelFiltros.add(lblNewLabel_1);
 
 		comboBoxConexion = new JComboBox<String>();
+		comboBoxConexion.setFont(new Font("Dialog", Font.PLAIN, 21));
 		comboBoxConexion.setBorder(new LineBorder(new Color(0, 0, 0)));
 		this.llenarComboBoxConexion();
 		comboBoxConexion.addActionListener(new ActionListener() {
@@ -305,10 +220,11 @@ public class FrameAdministrador extends JFrame {
 				actualizarTablaUsuarios();
 			}
 		});
-		comboBoxConexion.setBounds(512, 77, 119, 22);
-		panel_2.add(comboBoxConexion);
-		
-		lblToRegister = new JLabel("TO REGISTER");
+
+		panelFiltros.add(comboBoxConexion);
+
+		lblToRegister = new JLabel("");
+		lblToRegister.setIcon(new ImageIcon(PanelGestionUsuarios.class.getResource("/images/Plus.png")));
 		lblToRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblToRegister.addMouseListener(new MouseAdapter() {
 			@Override
@@ -319,7 +235,7 @@ public class FrameAdministrador extends JFrame {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lblToRegister.setBackground(SystemColor.activeCaption);
+				lblToRegister.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
@@ -331,35 +247,28 @@ public class FrameAdministrador extends JFrame {
 		lblToRegister.setForeground(SystemColor.info);
 		lblToRegister.setFont(new Font("Arial Black", Font.PLAIN, 13));
 		lblToRegister.setBackground(new Color(18, 95, 115));
-		lblToRegister.setBounds(0, 0, 357, 41);
-		panel_3.add(lblToRegister);
+		panelBotones.add(lblToRegister);
 
-		lblDelete = new JLabel("DELETE");
+		lblDelete = new JLabel("");
+		lblDelete.setIcon(new ImageIcon(PanelGestionUsuarios.class.getResource("/images/Trash.png")));
 		lblDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (tableUsuario.getSelectedRowCount() != 0) {
-					try {
-						deleteElementsTable();
-						ConnectionDataBase.commit(); // // se confirman las transacciones realizadas 
-					} catch (SQLException e1) {
-						try {
-							ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas 
-						} catch (SQLException e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
-						} 
-						e1.printStackTrace();
-					}
+				if (lblDelete.isEnabled()) {
+					Eliminar eliminarThread = new Eliminar(); // se crea el hilo para la eliminacion
+					eliminarThread.start(); // se inicia la ejecución del hilo
+					crearFrameDecisor(); // se crea el frame decisor, donde el usuario dará su confirmación
 				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lblDelete.setBackground(SystemColor.activeCaption);
+				if (lblDelete.isEnabled())
+				lblDelete.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				if (lblDelete.isEnabled())
 				lblDelete.setBackground(new Color(18, 95, 115));
 			}
 		});
@@ -368,9 +277,32 @@ public class FrameAdministrador extends JFrame {
 		lblDelete.setForeground(SystemColor.info);
 		lblDelete.setFont(new Font("Arial Black", Font.PLAIN, 13));
 		lblDelete.setBackground(new Color(18, 95, 115));
-		lblDelete.setBounds(355, 0, 357, 41);
-		panel_3.add(lblDelete);
+		panelBotones.add(lblDelete);
+
+		lblUpdate = new JLabel("");
+		lblUpdate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (lblUpdate.isEnabled())
+					lblUpdate.setBackground(SystemColor.activeCaptionBorder);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (lblUpdate.isEnabled())
+					lblUpdate.setBackground(new Color(18, 95, 115));
+			}
+		});
+		lblUpdate.setIcon(new ImageIcon(PanelGestionUsuarios.class.getResource("/images/Edit.png")));
+		lblUpdate.setOpaque(true);
+		lblUpdate.setBackground(new Color(18, 95, 115));
+		panelBotones.add(lblUpdate);
 	}
+
 
 	private void llenarComboBoxRol () {
 		ArrayList<Rol> roles = Controller.getInstancie().getRoles();
@@ -384,6 +316,23 @@ public class FrameAdministrador extends JFrame {
 		comboBoxConexion.addItem("All"); // item que define todos los tipos de connection
 		comboBoxConexion.addItem("Connected"); // item que define el estado conectado
 		comboBoxConexion.addItem("Disconected"); // item que define el estado conectado
+	}
+	
+	private void deleteElements () {
+		try {
+			deleteElementsTable(); // se eliminan los elementos seleccionados
+			ConnectionDataBase.commit(); // // se confirman las transacciones realizadas
+			crearFrameNotificacion(); // se crea el frame que notifica que la operacion han sido efectuados con exito
+			actualizarEstadoButtons(); // se actualiza el estado de los botones
+		} catch (SQLException e1) {
+			try {
+				ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas 
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} 
+			e1.printStackTrace();
+		}
 	}
 
 	public void actualizarTablaUsuarios () {
@@ -445,7 +394,7 @@ public class FrameAdministrador extends JFrame {
 		for (int i = 0; i < rows.length; i++) {
 			Controller.getInstancie().deleteUser( ((ModeloTablaUsers) tableUsuario.getModel()).deleteElement(rows[i] - i));
 		}
-		
+
 		this.actualizarTablaUsuarios();
 
 	}
@@ -459,10 +408,23 @@ public class FrameAdministrador extends JFrame {
 		}
 	}
 
+	public void actualizarEstadoButtons () {
+		this.actualizarEstadoButtonDelete();
+		this.actualizarEstadoButtonUpdate();
+	}
+
 	private void actualizarEstadoButtonDelete () {
 		if (tableUsuario.getSelectedRowCount() != 0)
 			lblDelete.setEnabled(true);
 		else
 			lblDelete.setEnabled(false);
 	}
+
+	private void actualizarEstadoButtonUpdate () {
+		if (tableUsuario.getSelectedRowCount() != 0)
+			lblUpdate.setEnabled(true);
+		else
+			lblUpdate.setEnabled(false);
+	}
+
 }

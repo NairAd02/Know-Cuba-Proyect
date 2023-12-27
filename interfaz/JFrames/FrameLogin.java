@@ -218,8 +218,11 @@ public class FrameLogin extends JFrame {
 			user.establecerConexion(); // se indica que el usuario a iniciado sesion en el sistema
 			Controller.getInstancie(user); // se crea el sistema logico
 			if (user instanceof Administrator) { // si el usuario es administrador se inicia el frame administrador
-				FrameAdministrador frameAdministrador = FrameAdministrador.getInstancie();
+				/*FrameAdministrador frameAdministrador = FrameAdministrador.getInstancie();
 				frameAdministrador.setVisible(true);
+				dispose(); // se cierra el frame*/
+				FramePrincipal framGerente = FramePrincipal.getIntancie();
+				framGerente.setVisible(true);
 				dispose(); // se cierra el frame
 			}
 			else if (user instanceof Dependent || user instanceof PackageDesigner ) { // si el usuario es dependiente se inicia el frame dependiente o  si el usuario es diseñador de paquetes se inicia el frame diseñador de paquetes
@@ -228,7 +231,7 @@ public class FrameLogin extends JFrame {
 				dispose(); // se cierra el frame
 			}
 			else if (user instanceof Manager) { // se el usuario es manager se inicia el frame manager
-				FrameGerente framGerente = FrameGerente.getIntancie();
+				FramePrincipal framGerente = FramePrincipal.getIntancie();
 				framGerente.setVisible(true);
 				dispose(); // se cierra el frame
 			}

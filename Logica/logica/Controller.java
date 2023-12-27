@@ -17,6 +17,7 @@ public class Controller {
 	private HashMap<Integer, ArrayList<User>> users; // atributo que representa los usuarios del sistema (Solo cargados con el Rol "Administrator")
 	private ArrayList<Rol> roles; // atributo que representa los roles del sistema (Solo cargados con el Rol "Administrator")
 	private TouristAgency touristAgency;
+	private boolean confirmacion; // atributo especifico para obtener la confirmacion del usuario en las operaciones claves del sistema
 
 
 	private Controller (User user) throws SQLException {
@@ -26,6 +27,7 @@ public class Controller {
 			this.cargarRoles();
 		}
 		this.touristAgency = new TouristAgency();
+		
 	}
 
 
@@ -151,11 +153,11 @@ public class Controller {
 		return users;
 	}
 
-	public ArrayList<User> getUsers (int typeOfUser) { // // si solo adquiere valor el tipo
+	public ArrayList<User> getUsers (int typeOfUser) {  // si solo adquiere valor el tipo
 		return this.users.get(typeOfUser);
 	}
 
-	public ArrayList<User> getUsers (String name) { // // si solo adquiere valor nombre de usuario
+	public ArrayList<User> getUsers (String name) {  // si solo adquiere valor nombre de usuario
 		ArrayList<User> users = new ArrayList<User>();
 
 		for (Integer i : User.getKeys()) { // se recorren las llaves del mapa
@@ -253,4 +255,24 @@ public class Controller {
 		this.touristAgency = touristAgency;
 	}
 
+
+	public static Controller getController() {
+		return controller;
+	}
+
+
+	public static void setController(Controller controller) {
+		Controller.controller = controller;
+	}
+
+
+	public boolean isConfirmacion() {
+		return confirmacion;
+	}
+
+
+	public void setConfirmacion(boolean confirmacion) {
+		this.confirmacion = confirmacion;
+	}
+	
 }

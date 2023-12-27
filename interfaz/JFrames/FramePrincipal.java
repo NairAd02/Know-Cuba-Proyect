@@ -2,24 +2,19 @@ package JFrames;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import JPanels.PanelGerenteAsociacionEmpresa;
 import JPanels.PanelGerenteAsociacionEmpresaProveedorAlojamiento;
 import JPanels.PanelGerenteAsociacionEmpresaProveedorServicio;
 import JPanels.PanelGerenteAsociacionEmpresaProveedorTransporte;
 import JPanels.PanelGerenteCreacionContrato;
-import dao.UserDAO;
+import JPanels.PanelGestionUsuarios;
+import logica.Administrator;
 import logica.Controller;
+import logica.Manager;
 import utils.ConnectionDataBase;
-
+import utils.Semaphore;
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-
 import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
 import java.awt.SystemColor;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -30,27 +25,22 @@ import java.sql.SQLException;
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 import javax.swing.border.MatteBorder;
-import javax.swing.JTree;
-import javax.swing.JComboBox;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import java.awt.Cursor;
 
-public class FrameGerente extends JFrame {
+public class FramePrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static FrameGerente frameGerente;
+	private static FramePrincipal frameGerente;
 	private JPanel contentPane;
 	private JLabel lblSeccionAssociationCompany;
 	private JLabel lblSeccionContractCreation;
 	private int mouseX, mouseY;
 	private JPanel panelLateral;
 	private JPanel panelSecciones;
-	private JPanel panelUser;
+	private JPanel panelNameAplication;
 	private JLabel lblTitle;
 	private JLabel lblX;
-	private JPanel panelNameAplication;
+	private JPanel panelUser;
 	private JLabel lblManager;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
@@ -60,28 +50,54 @@ public class FrameGerente extends JFrame {
 	private JLabel lblTransportationProvider;
 	private JLabel lblAccommodationProvider;
 	private JLabel lblContracts;
+	private JLabel lblUserAdministration;
+	private JLabel lblUsers;
+
+	private class CerrarPrograma extends Thread { // Hilo para cerrar el programa
+		public void run () {
+			synchronized (Semaphore.samaphore) {
+				try {
+					Semaphore.samaphore.wait(); // se pone en espera al hilo
+
+					if (Controller.getInstancie().isConfirmacion()) {
+						cerrarPrograma();
+						Controller.getInstancie().setConfirmacion(false);
+					}
+
+				} catch (InterruptedException e) {
+
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 
-	/**
-	 * Launch the application.
-	 */
 
-	public static FrameGerente getIntancie () {
+
+	public static FramePrincipal getIntancie () {
 		if (frameGerente == null)
-			frameGerente = new FrameGerente();
+			frameGerente = new FramePrincipal();
 
 		return frameGerente;
 	}
 
-	private FrameGerente() {
-		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice device = env.getDefaultScreenDevice();
-		
+
+	private void crearFrameDecisor () {
+		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.this, "Seguro que desea salir del programa");
+		frameDecisor.setVisible(true);
+		setEnabled(false); // se inhabilita el frame
+	}
+
+	private FramePrincipal() {
+		//GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		//GraphicsDevice device = env.getDefaultScreenDevice();
+		//setBounds(0, 0, 390, 1080);
 		setResizable(false);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		device.setFullScreenWindow(this);
-		
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(5, 150, 177));
 		contentPane.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
@@ -117,19 +133,10 @@ public class FrameGerente extends JFrame {
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				try {
-					Controller.getInstancie().getUser().cerrarConexion(); // se cierra sesión
-					ConnectionDataBase.getConnectionDataBase().commit(); // se confirman todas las operaciones realizadas a la base de datos
-				} catch (SQLException e1) {
-					try {
-						ConnectionDataBase.getConnectionDataBase().rollback(); // se cancelan todas las operaciones realizadas a la base de datos
-					} catch (SQLException e2) {
+				CerrarPrograma cerrarProgramaThread = new CerrarPrograma(); // se crea el hilo
+				cerrarProgramaThread.start(); // se ejecuta el hilo
+				crearFrameDecisor();
 
-						e2.printStackTrace();
-					}
-					e1.printStackTrace();
-				} 
-				System.exit(0);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -144,18 +151,18 @@ public class FrameGerente extends JFrame {
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 34));
 		panelSuperior.add(lblX, BorderLayout.EAST);
 
-		panelNameAplication = new JPanel();
-		panelNameAplication.setBackground(new Color(18, 95, 115));
-		panelSuperior.add(panelNameAplication, BorderLayout.WEST);
+		panelUser = new JPanel();
+		panelUser.setBackground(new Color(18, 95, 115));
+		panelSuperior.add(panelUser, BorderLayout.WEST);
 
 		lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(FrameGerente.class.getResource("/images/user.png")));
-		panelNameAplication.add(lblNewLabel_1);
+		lblNewLabel_1.setIcon(new ImageIcon(FramePrincipal.class.getResource("/images/user.png")));
+		panelUser.add(lblNewLabel_1);
 
-		lblNewLabel = new JLabel("Fabio");
+		lblNewLabel = new JLabel(Controller.getInstancie().getUser().getUserName());
 		lblNewLabel.setForeground(SystemColor.textHighlightText);
 		lblNewLabel.setFont(new Font("Arial Black", Font.BOLD, 32));
-		panelNameAplication.add(lblNewLabel);
+		panelUser.add(lblNewLabel);
 
 		panelLateral = new JPanel();
 		panelLateral.setBackground(new Color(5, 150, 177));
@@ -168,21 +175,21 @@ public class FrameGerente extends JFrame {
 		panelLateral.add(panelSecciones, BorderLayout.CENTER);
 		panelSecciones.setLayout(null);
 
-		panelUser = new JPanel();
-		panelUser.setBorder(new MatteBorder(0, 0, 0, 3, (Color) new Color(0, 0, 0)));
-		panelUser.setBackground(new Color(18, 95, 115));
-		panelLateral.add(panelUser, BorderLayout.NORTH);
-		panelUser.setLayout(new BorderLayout(0, 0));
+		panelNameAplication = new JPanel();
+		panelNameAplication.setBorder(new MatteBorder(0, 0, 0, 3, (Color) new Color(0, 0, 0)));
+		panelNameAplication.setBackground(new Color(18, 95, 115));
+		panelLateral.add(panelNameAplication, BorderLayout.NORTH);
+		panelNameAplication.setLayout(new BorderLayout(0, 0));
 
 		lblTitle = new JLabel("");
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitle.setIcon(new ImageIcon(FrameGerente.class.getResource("/images/WhatsApp Image 2023-11-14 at 8.59.57 PM - copia.jpeg")));
+		lblTitle.setIcon(new ImageIcon(FramePrincipal.class.getResource("/images/WhatsApp Image 2023-11-14 at 8.59.57 PM - copia.jpeg")));
 		lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		panelUser.add(lblTitle);
+		panelNameAplication.add(lblTitle);
 
 		JPanel panelTitleAplication = new JPanel();
 		panelTitleAplication.setBackground(new Color(18, 95, 115));
-		panelUser.add(panelTitleAplication, BorderLayout.SOUTH);
+		panelNameAplication.add(panelTitleAplication, BorderLayout.SOUTH);
 		panelTitleAplication.setLayout(new BoxLayout(panelTitleAplication, BoxLayout.Y_AXIS));
 
 		lblManager = new JLabel("  KNOW CUBA  ");
@@ -192,29 +199,11 @@ public class FrameGerente extends JFrame {
 		panelTitleAplication.add(lblManager);
 
 		lblNewLabel_2 = new JLabel("\r\n");
-		panelUser.add(lblNewLabel_2, BorderLayout.NORTH);
+		panelNameAplication.add(lblNewLabel_2, BorderLayout.NORTH);
 
-		lblSeccionAssociationCompany = new JLabel("ASSOCIATION-COMPANY");
-		lblSeccionAssociationCompany.setBorder(new MatteBorder(2, 0, 2, 0, (Color) new Color(0, 0, 0)));
 
-		lblSeccionAssociationCompany.setForeground(SystemColor.textHighlightText);
-		lblSeccionAssociationCompany.setOpaque(true);
-		lblSeccionAssociationCompany.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSeccionAssociationCompany.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblSeccionAssociationCompany.setBackground(new Color(18, 95, 115));
-		lblSeccionAssociationCompany.setBounds(0,79, 296, 38);
-		panelSecciones.add(lblSeccionAssociationCompany);
 
-		lblSeccionContractCreation = new JLabel("CONTRACT CREATION");
-		lblSeccionContractCreation.setBorder(new MatteBorder(2, 0, 2, 0, (Color) new Color(0, 0, 0)));
 
-		lblSeccionContractCreation.setForeground(SystemColor.textHighlightText);
-		lblSeccionContractCreation.setOpaque(true);
-		lblSeccionContractCreation.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSeccionContractCreation.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblSeccionContractCreation.setBackground(new Color(18, 95, 115));
-		lblSeccionContractCreation.setBounds(0,318, 296, 38);
-		panelSecciones.add(lblSeccionContractCreation);
 
 		lblCerrarSesion = new JLabel("Cerrar Sesion");
 		lblCerrarSesion.setHorizontalAlignment(SwingConstants.CENTER);
@@ -223,7 +212,84 @@ public class FrameGerente extends JFrame {
 		lblCerrarSesion.setBounds(0, 792, 278, 46);
 		panelSecciones.add(lblCerrarSesion);
 
-		lblServiceProvider = new JLabel("   - SERVICE-PROVIDER");
+
+
+
+
+		this.addSecciones();
+
+		this.contentPane.add(new PanelGerenteAsociacionEmpresaProveedorServicio(), BorderLayout.CENTER); // se añade el panel gerente asociocion empresa
+		this.definirColorLabelsSecciones(); // se actualizan los colores de los labels se de seleccion de las secciones
+
+
+
+	}
+
+	private void addSecciones () {
+		if (Controller.getInstancie().getUser() instanceof Administrator) { // si el usuario es administrador se añaden todas las secciones
+			this.addSeccionCreateContract(); // se añade la seccion de creacion de contratos
+			this.addSeccionAssociationCompany(); // se añade la seccion de asociasion con proveedores
+			this.addSeccionUsers(); // se añade la seccion de administracion de usarios
+		}
+		else if (Controller.getInstancie().getUser() instanceof Manager) { // si el usuario es administrador se añaden las secciones de creacion de contrato y de asociacion con proveedores
+			this.addSeccionCreateContract(); // se añade la seccion de creacion de contratos
+			this.addSeccionAssociationCompany(); // se añade la seccion de asociasion con proveedores
+		}
+	}
+
+
+	private void addSeccionCreateContract () {
+		lblSeccionContractCreation = new JLabel("CONTRACT CREATION");
+		lblSeccionContractCreation.setBorder(new MatteBorder(2, 0, 2, 0, (Color) new Color(0, 0, 0)));
+
+		lblSeccionContractCreation.setForeground(SystemColor.textHighlightText);
+		lblSeccionContractCreation.setOpaque(true);
+		lblSeccionContractCreation.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSeccionContractCreation.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblSeccionContractCreation.setBackground(new Color(18, 95, 115));
+		lblSeccionContractCreation.setBounds(0,30, 296, 38);
+		panelSecciones.add(lblSeccionContractCreation);
+
+		lblContracts = new JLabel("   - CONTRACTS");
+		lblContracts.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				cambiarSeccion(new PanelGerenteCreacionContrato()); // se cambia la seccion a la de creacion de contratos
+				definirColorLabelsSecciones(); // se actualiza el estado de los botonoes de las secciones
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblContracts.setForeground(SystemColor.activeCaptionBorder);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!(contentPane.getComponent(contentPane.getComponentCount() - 1) instanceof PanelGerenteCreacionContrato))
+					lblContracts.setForeground(SystemColor.textHighlightText);
+			}
+		});
+		lblContracts.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblContracts.setOpaque(true);
+		lblContracts.setHorizontalAlignment(SwingConstants.LEFT);
+		lblContracts.setForeground(SystemColor.textHighlightText);
+		lblContracts.setFont(new Font("Arial Black", Font.PLAIN, 14));
+		lblContracts.setBorder(null);
+		lblContracts.setBackground(new Color(18, 95, 115));
+		lblContracts.setBounds(0, 79, 136, 38);
+		panelSecciones.add(lblContracts);
+	}
+
+	private void addSeccionAssociationCompany () {
+		lblSeccionAssociationCompany = new JLabel("ASSOCIATION COMPANY");
+		lblSeccionAssociationCompany.setBorder(new MatteBorder(2, 0, 2, 0, (Color) new Color(0, 0, 0)));
+		lblSeccionAssociationCompany.setForeground(SystemColor.textHighlightText);
+		lblSeccionAssociationCompany.setOpaque(true);
+		lblSeccionAssociationCompany.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSeccionAssociationCompany.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblSeccionAssociationCompany.setBackground(new Color(18, 95, 115));
+		lblSeccionAssociationCompany.setBounds(0,146, 296, 38);
+		panelSecciones.add(lblSeccionAssociationCompany);
+
+		lblServiceProvider = new JLabel("   - SERVICE PROVIDER");
 		lblServiceProvider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -247,10 +313,10 @@ public class FrameGerente extends JFrame {
 		lblServiceProvider.setFont(new Font("Arial Black", Font.PLAIN, 14));
 		lblServiceProvider.setBorder(null);
 		lblServiceProvider.setBackground(new Color(18, 95, 115));
-		lblServiceProvider.setBounds(0, 128, 244, 38);
+		lblServiceProvider.setBounds(0, 195, 244, 38);
 		panelSecciones.add(lblServiceProvider);
 
-		lblTransportationProvider = new JLabel("   - TRANSPORTATION-PROVIDER");
+		lblTransportationProvider = new JLabel("   - TRANSPORTATION PROVIDER");
 		lblTransportationProvider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -274,10 +340,10 @@ public class FrameGerente extends JFrame {
 		lblTransportationProvider.setFont(new Font("Arial Black", Font.PLAIN, 14));
 		lblTransportationProvider.setBorder(null);
 		lblTransportationProvider.setBackground(new Color(18, 95, 115));
-		lblTransportationProvider.setBounds(0, 177, 271, 38);
+		lblTransportationProvider.setBounds(0, 244, 271, 38);
 		panelSecciones.add(lblTransportationProvider);
 
-		lblAccommodationProvider = new JLabel("   - ACCOMMODATION-PROVIDER");
+		lblAccommodationProvider = new JLabel("   - ACCOMMODATION PROVIDER");
 		lblAccommodationProvider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -301,41 +367,63 @@ public class FrameGerente extends JFrame {
 		lblAccommodationProvider.setFont(new Font("Arial Black", Font.PLAIN, 14));
 		lblAccommodationProvider.setBorder(null);
 		lblAccommodationProvider.setBackground(new Color(18, 95, 115));
-		lblAccommodationProvider.setBounds(0, 226, 271, 38);
+		lblAccommodationProvider.setBounds(0, 293, 271, 38);
 		panelSecciones.add(lblAccommodationProvider);
+	}
 
-		lblContracts = new JLabel("   - CONTRACTS");
-		lblContracts.addMouseListener(new MouseAdapter() {
+	private void addSeccionUsers () {
+		lblUserAdministration = new JLabel("USERS ADMINISTRATION");
+		lblUserAdministration.setOpaque(true);
+		lblUserAdministration.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUserAdministration.setForeground(SystemColor.textHighlightText);
+		lblUserAdministration.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblUserAdministration.setBorder(new MatteBorder(2, 0, 2, 0, (Color) new Color(0, 0, 0)));
+		lblUserAdministration.setBackground(new Color(18, 95, 115));
+		lblUserAdministration.setBounds(0, 361, 296, 38);
+		panelSecciones.add(lblUserAdministration);
+
+		lblUsers = new JLabel("   - USERS");
+		lblUsers.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				cambiarSeccion(new PanelGerenteCreacionContrato()); // se cambia la seccion a la de creacion de contratos
+				cambiarSeccion(new PanelGestionUsuarios()); // se cambia la sección para la sección de usuarios
 				definirColorLabelsSecciones(); // se actualiza el estado de los botonoes de las secciones
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lblContracts.setForeground(SystemColor.activeCaptionBorder);
+				lblUsers.setForeground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (!(contentPane.getComponent(contentPane.getComponentCount() - 1) instanceof PanelGerenteCreacionContrato))
-				lblContracts.setForeground(SystemColor.textHighlightText);
+				if (!(contentPane.getComponent(contentPane.getComponentCount() - 1) instanceof PanelGestionUsuarios))
+					lblUsers.setForeground(SystemColor.textHighlightText);
 			}
 		});
-		lblContracts.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblContracts.setOpaque(true);
-		lblContracts.setHorizontalAlignment(SwingConstants.LEFT);
-		lblContracts.setForeground(SystemColor.textHighlightText);
-		lblContracts.setFont(new Font("Arial Black", Font.PLAIN, 14));
-		lblContracts.setBorder(null);
-		lblContracts.setBackground(new Color(18, 95, 115));
-		lblContracts.setBounds(0, 367, 136, 38);
-		panelSecciones.add(lblContracts);
+		lblUsers.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblUsers.setOpaque(true);
+		lblUsers.setHorizontalAlignment(SwingConstants.LEFT);
+		lblUsers.setForeground(SystemColor.textHighlightText);
+		lblUsers.setFont(new Font("Arial Black", Font.PLAIN, 14));
+		lblUsers.setBorder(null);
+		lblUsers.setBackground(new Color(18, 95, 115));
+		lblUsers.setBounds(0, 410, 244, 38);
+		panelSecciones.add(lblUsers);
+	}
 
-		this.contentPane.add(new PanelGerenteAsociacionEmpresaProveedorServicio(), BorderLayout.CENTER); // se añade el panel gerente asociocion empresa
-		this.definirColorLabelsSecciones(); // se actualizan los colores de los labels se de seleccion de las secciones
+	private void cerrarPrograma () {
+		try {
+			Controller.getInstancie().getUser().cerrarConexion(); // se cierra sesión
+			ConnectionDataBase.getConnectionDataBase().commit(); // se confirman todas las operaciones realizadas a la base de datos
+		} catch (SQLException e1) {
+			try {
+				ConnectionDataBase.getConnectionDataBase().rollback(); // se cancelan todas las operaciones realizadas a la base de datos
+			} catch (SQLException e2) {
 
-
-
+				e2.printStackTrace();
+			}
+			e1.printStackTrace();
+		} 
+		System.exit(0);
 	}
 
 	public void cambiarSeccion (JPanel seccion) {
@@ -352,12 +440,27 @@ public class FrameGerente extends JFrame {
 	}
 
 	public void definirColorLabelsSecciones () {
-		this.definirColorLabelSeccionAssociationCompany();
-		this.definirColorLabelSeccionCreationContract();
-		this.definirColorLabelServicerProvider();
-		this.definirColorLabelTransportProvider();
-		this.definirColorLabelAccommodationProvider();
-		this.definirColorLabelContract();
+		if (Controller.getInstancie().getUser() instanceof Administrator) {
+			// se define el color de todas las secciones
+			this.definirColorLabelSeccionAssociationCompany();
+			this.definirColorLabelSeccionCreationContract();
+			this.definirColorLabelSeccionUserAdministration();
+			this.definirColorLabelServicerProvider();
+			this.definirColorLabelTransportProvider();
+			this.definirColorLabelAccommodationProvider();
+			this.definirColorLabelContract();
+			this.definirColorLabelUser();
+		}
+		else if (Controller.getInstancie().getUser() instanceof Manager) {
+			// se define el color de las secciones de asosacion con las empresas y creacion de contratos
+			this.definirColorLabelSeccionAssociationCompany();
+			this.definirColorLabelSeccionCreationContract();	
+			this.definirColorLabelServicerProvider();
+			this.definirColorLabelTransportProvider();
+			this.definirColorLabelAccommodationProvider();
+			this.definirColorLabelContract();
+		}
+
 	}
 
 	private void definirColorLabelSeccionAssociationCompany () {
@@ -374,6 +477,13 @@ public class FrameGerente extends JFrame {
 			this.lblSeccionContractCreation.setBackground(SystemColor.activeCaptionBorder);
 		else
 			lblSeccionContractCreation.setBackground(new Color(18, 95, 115));
+	}
+
+	private void definirColorLabelSeccionUserAdministration () {
+		if (this.contentPane.getComponent(this.contentPane.getComponentCount() - 1) instanceof PanelGestionUsuarios)  // se esta seleccionada la seccion creacion contrato
+			this.lblUserAdministration.setBackground(SystemColor.activeCaptionBorder);
+		else
+			lblUserAdministration.setBackground(new Color(18, 95, 115));
 	}
 
 	private void definirColorLabelServicerProvider () {
@@ -406,5 +516,12 @@ public class FrameGerente extends JFrame {
 		else
 			lblContracts.setForeground(SystemColor.textHighlightText);
 
-	} 
+	}
+
+	private void definirColorLabelUser () {
+		if (this.contentPane.getComponent(this.contentPane.getComponentCount() - 1) instanceof PanelGestionUsuarios)  // se esta seleccionada la seccion gestion de usuarios
+			lblUsers.setForeground(SystemColor.activeCaptionBorder);
+		else
+			lblUsers.setForeground(SystemColor.textHighlightText);
+	}
 }

@@ -11,7 +11,6 @@ import logica.TypeOfRoom;
 import modelosTablas.ModeloTablaMealPlan;
 import modelosTablas.ModeloTablaTypeOfRoom;
 import utils.ConnectionDataBase;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -77,14 +76,9 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 	}
 
 	public FrameGerenteAsociacionEmpresaProveedorAlojamiento(PanelGerenteAsociacionEmpresaProveedorAlojamiento pa,Hotel h) {
-		if (h != null) 
-			this.hotel = h;
-		else 
-			this.hotel = new Hotel(); // se crea un hotel temporal
-
+		this.hotel = h;
 		this.panelGerenteAsociacionEmpresaProveedorAlojamiento = pa;
 		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -116,7 +110,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (hotel.getId() != -1) {
 					try {
 						ConnectionDataBase.roolback();
@@ -271,7 +265,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblAddMealPlan = new JLabel("ADD");
 		lblAddMealPlan.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirPlanAlimenticio frameAddMealPlan = new FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirPlanAlimenticio(FrameGerenteAsociacionEmpresaProveedorAlojamiento.this);
 				frameAddMealPlan.setVisible(true);
 				setEnabled(false); // se inhabilita el frame
@@ -295,7 +289,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblDeleteMealPlan = new JLabel("DELETE");
 		lblDeleteMealPlan.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (lblDeleteMealPlan.isEnabled()) {
 					try {
 						deleteElementsTableMealPlans();
@@ -405,7 +399,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		JLabel lblAdd = new JLabel(nameButton);
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (hotel.getId() == -1) {
 					if (verificarCampos()) {
 						try {
@@ -533,7 +527,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 	}
 
 	private void cerrarFrame () {
-		FrameGerente.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
+		FramePrincipal.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
 		dispose(); // se cierra este frame
 	}
 

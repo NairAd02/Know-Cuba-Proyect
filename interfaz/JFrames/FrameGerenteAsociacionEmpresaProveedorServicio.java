@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import modelosTablas.ModeloTablaActivies;
 import utils.ConnectionDataBase;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -362,7 +361,7 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 	}
 
 	private void cerrarFrame () {
-		FrameGerente.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
+		FramePrincipal.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
 		dispose(); // se cierra este frame
 	}
 

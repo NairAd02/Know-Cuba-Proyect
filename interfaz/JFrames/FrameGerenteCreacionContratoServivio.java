@@ -98,8 +98,8 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 		this.panelGerenteCreacionContrato = pg;
 		this.serviceContract = sc;
 		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 512);
+		setLocationRelativeTo(FramePrincipal.getIntancie());
+		setSize(700, 512);
 		contentPane = new JPanel();
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -418,7 +418,7 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 
 
 	private void cerrarFrame () {
-		FrameGerente.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
+		FramePrincipal.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
 		dispose(); // se cierra este frame
 	}
 

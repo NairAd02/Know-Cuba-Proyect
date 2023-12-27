@@ -385,7 +385,7 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 	}
 
 	private void cerrarFrame () {
-		FrameGerente.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
+		FramePrincipal.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
 		dispose(); // se cierra este frame
 	}
 

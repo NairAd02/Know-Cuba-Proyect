@@ -2,41 +2,43 @@ package JPanels;
 
 import javax.swing.JPanel;
 
+
+
 import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import JFrames.FrameGerente;
+import JFrames.FrameAdvertencia;
+import JFrames.FrameDecisor;
 import JFrames.FrameGerenteCreacionContratoAlojamiento;
 import JFrames.FrameGerenteCreacionContratoServivio;
 import JFrames.FrameGerenteCreacionContratoTransporte;
+import JFrames.FramePrincipal;
 import logica.AccommodationContract;
 import logica.CarrierContract;
 import logica.Contract;
 import logica.Controller;
 import logica.Provider;
 import logica.ServiceContract;
-
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import modelosTablas.ModeloTablaContract;
 import utils.ConnectionDataBase;
 import utils.ProviderAux;
+import utils.Semaphore;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Cursor;
 import javax.swing.border.LineBorder;
-
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
 import java.awt.FlowLayout;
 import javax.swing.border.MatteBorder;
 import javax.swing.ImageIcon;
@@ -62,10 +64,37 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	private JLabel lblDelete;
 	private JLabel lblUpdate;
 
+	private class Eliminar extends Thread { // Hilo para la eliminacion
 
-	/**
-	 * Create the panel.
-	 */
+		public void run () {
+			synchronized (Semaphore.samaphore) { 
+				try {
+					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
+					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación
+						deleteElements(); // se eliminan los elementos seleccionados
+						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+
+	private void crearFrameDecisor () {
+		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Seguro que desea eliminar");
+		frameDecisor.setVisible(true);
+		FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
+	}
+
+	private void crearFrameNotificacion () {
+		FrameAdvertencia frameAdvertencia = new FrameAdvertencia("Han sido elimanado correctamente los contratos");
+		frameAdvertencia.setVisible(true);
+	}
+
+	
 	public PanelGerenteCreacionContrato() {
 		setBackground(SystemColor.inactiveCaptionBorder);
 		setBounds(278, 63, 712, 719);
@@ -74,12 +103,13 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		panelTitle.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
 		panelTitle.setBackground(SystemColor.inactiveCaptionBorder);
 		add(panelTitle, BorderLayout.NORTH);
-		
+
 		lblTitleSeccion = new JLabel("Contracts");
+		lblTitleSeccion.setForeground(SystemColor.textText);
 		lblTitleSeccion.setFont(new Font("Tahoma", Font.BOLD, 32));
 		panelTitle.add(lblTitleSeccion);
 
-		
+
 
 		panelContenedorTable = new JPanel();
 		panelContenedorTable.addMouseListener(new MouseAdapter() {
@@ -110,50 +140,123 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		tableContracts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				actualizarEstadoButtonDelete();
-				actualizarEstadoButtonUpdate();
+				actualizarEstadoButtons();
 			}
 		});
 		tableContracts.setModel(new ModeloTablaContract());
 		scrollPaneTable.setViewportView(tableContracts);
 		scrollPaneTable.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
-		
+
 		panelOpciones = new JPanel();
 		panelOpciones.setBackground(new Color(18, 95, 115));
 		panelContenedorTable.add(panelOpciones, BorderLayout.NORTH);
 		panelOpciones.setLayout(new BorderLayout(0, 0));
-		
+
 		panelFiltros = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panelFiltros.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		panelFiltros.setBackground(new Color(18, 95, 115));
 		panelOpciones.add(panelFiltros, BorderLayout.CENTER);
-		
+
 		panelBotones = new JPanel();
 		panelBotones.setBackground(new Color(18, 95, 115));
 		panelOpciones.add(panelBotones, BorderLayout.EAST);
-		
+
 		lblAnnadir = new JLabel("");
+		lblAnnadir.setOpaque(true);
+		lblAnnadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAnnadir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (lblAnnadir.isEnabled()) 
+					lblAnnadir.setBackground(SystemColor.activeCaptionBorder);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (lblAnnadir.isEnabled()) 
+					lblAnnadir.setBackground(new Color(18, 95, 115));
+			}
+		});
 		lblAnnadir.setIcon(new ImageIcon(PanelGerenteCreacionContrato.class.getResource("/images/Plus.png")));
 		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblAnnadir.setBackground(SystemColor.info);
+		lblAnnadir.setBackground(new Color(18, 95, 115));
 		panelBotones.add(lblAnnadir);
-		
+
 		lblDelete = new JLabel("");
+		lblDelete.setOpaque(true);
+		lblDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (lblDelete.isEnabled()) {
+					Eliminar eliminar = new Eliminar(); // se crea el nuevo hilo
+					eliminar.start(); // se ejecuta el nuevo hilo
+					crearFrameDecisor(); // se crea el frame decisor, donde el usuario dará su confirmación
+
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (lblDelete.isEnabled()) 
+					lblDelete.setBackground(SystemColor.activeCaptionBorder);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (lblDelete.isEnabled()) 
+					lblDelete.setBackground(new Color(18, 95, 115));
+			}
+		});
 		lblDelete.setIcon(new ImageIcon(PanelGerenteCreacionContrato.class.getResource("/images/Trash.png")));
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDelete.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblDelete.setBackground(SystemColor.info);
+		lblDelete.setBackground(new Color(18, 95, 115));
 		panelBotones.add(lblDelete);
-		
+
 		lblUpdate = new JLabel("");
+		lblUpdate.setOpaque(true);
+		lblUpdate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (lblUpdate.isEnabled()) {
+					Contract contract = ((ModeloTablaContract) tableContracts.getModel()).getElement(tableContracts.getSelectedRow()); // se obtiene el contrato seleccionado
+					JFrame frameUpdate = null;
+					if (contract instanceof ServiceContract) 
+						frameUpdate = new FrameGerenteCreacionContratoServivio(PanelGerenteCreacionContrato.this, (ServiceContract) contract);  // se crea una instancia del frame de update para el contrato de servicio
+
+					else if (contract instanceof CarrierContract) 
+						frameUpdate = new FrameGerenteCreacionContratoTransporte(PanelGerenteCreacionContrato.this, (CarrierContract) contract); // se crea una instancia del frame de update para el contrato de transporte
+
+					else if (contract instanceof AccommodationContract)
+						frameUpdate = new FrameGerenteCreacionContratoAlojamiento(PanelGerenteCreacionContrato.this, (AccommodationContract) contract); // se crea una instancia del frame de update para el contrato de alojamiento
+
+					frameUpdate.setVisible(true);
+					FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
+
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (lblUpdate.isEnabled()) 
+					lblUpdate.setBackground(SystemColor.activeCaptionBorder);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (lblUpdate.isEnabled()) 
+					lblUpdate.setBackground(new Color(18, 95, 115));
+			}
+		});
 		lblUpdate.setIcon(new ImageIcon(PanelGerenteCreacionContrato.class.getResource("/images/Edit.png")));
 		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUpdate.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblUpdate.setBackground(SystemColor.info);
+		lblUpdate.setBackground(new Color(18, 95, 115));
 		panelBotones.add(lblUpdate);
-		
+
 
 		this.addFiltres();
 		this.actualizarEstadoButtonDelete();
@@ -188,6 +291,11 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		comboBoxTypeOfContrac.addItem("Service Contract");
 		comboBoxTypeOfContrac.addItem("Carrier Contract");
 	}
+	
+	private void actualizarEstadoButtons () {
+		this.actualizarEstadoButtonDelete();
+		this.actualizarEstadoButtonUpdate();
+	}
 
 	private void actualizarEstadoButtonDelete () {
 		if (tableContracts.getSelectedRowCount() != 0)
@@ -202,7 +310,7 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		else
 			lblUpdate.setEnabled(false);
 	}
-	
+
 	private void addFiltres () {
 		comboBoxTypeOfContrac = new JComboBox<String>();
 		comboBoxTypeOfContrac.setFont(new Font("Dialog", Font.PLAIN, 21));
@@ -213,13 +321,13 @@ public class PanelGerenteCreacionContrato extends JPanel {
 				actualizarTablaContracts(); // se actualiza la información de la tabla de contratos
 			}
 		});
-		
-				JLabel lblTypeOfContract = new JLabel("Type Of Contract");
-				lblTypeOfContract.setForeground(SystemColor.textHighlightText);
-				lblTypeOfContract.setHorizontalAlignment(SwingConstants.CENTER);
-				lblTypeOfContract.setFont(new Font("Dialog", Font.BOLD, 21));
-				lblTypeOfContract.setBounds(61, 24, 138, 14);
-				panelFiltros.add(lblTypeOfContract);
+
+		JLabel lblTypeOfContract = new JLabel("Type Of Contract");
+		lblTypeOfContract.setForeground(SystemColor.textHighlightText);
+		lblTypeOfContract.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTypeOfContract.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblTypeOfContract.setBounds(61, 24, 138, 14);
+		panelFiltros.add(lblTypeOfContract);
 		comboBoxTypeOfContrac.setBounds(61, 49, 138, 22);
 		panelFiltros.add(comboBoxTypeOfContrac);
 
@@ -251,19 +359,35 @@ public class PanelGerenteCreacionContrato extends JPanel {
 				actualizarTablaContracts(); // se actualiza la información de la tabla de contratos
 			}
 		});
-		
-				lblNewLabel = new JLabel("Provider");
-				lblNewLabel.setForeground(SystemColor.textHighlightText);
-				lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-				lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 21));
-				lblNewLabel.setBounds(301, 24, 119, 14);
-				panelFiltros.add(lblNewLabel);
+
+		lblNewLabel = new JLabel("Provider");
+		lblNewLabel.setForeground(SystemColor.textHighlightText);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblNewLabel.setBounds(301, 24, 119, 14);
+		panelFiltros.add(lblNewLabel);
 		comboBoxProvider.setBounds(301, 49, 119, 22);
 		panelFiltros.add(comboBoxProvider);
 
 	}
-	
-	
+
+	private void deleteElements () {
+		try {
+			deleteElementsTable(); // se eliminan los elementos seleccionados
+			ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
+			crearFrameNotificacion(); // se crea el frame que notifica que la operacion han sido efectuados con exito
+			actualizarEstadoButtons(); // se actualiza el estado de los botones
+		} catch (SQLException e) {
+			try {
+				ConnectionDataBase.roolback(); // se cancelan las operaciones realizadas a la base de datos
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}  
+			e.printStackTrace();
+		}
+	}
+
 
 	public void actualizarTablaContracts () {
 		if (((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && ((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 
@@ -339,7 +463,7 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		}
 	}
 
-	private void deleteElementsTable () throws SQLException {
+	public void deleteElementsTable () throws SQLException {
 		int [] rows = tableContracts.getSelectedRows();
 
 		for (int i = 0; i < rows.length; i++) {

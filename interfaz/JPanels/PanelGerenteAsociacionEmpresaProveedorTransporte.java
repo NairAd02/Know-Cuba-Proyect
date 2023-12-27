@@ -9,12 +9,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import modelosTablas.ModeloTablaTransportationProvider;
 import utils.ConnectionDataBase;
-
+import utils.Semaphore;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-import JFrames.FrameGerente;
+import JFrames.FrameAdvertencia;
+import JFrames.FrameDecisor;
 import JFrames.FrameGerenteAsociacionEmpresaProveedorTransporte;
+import JFrames.FramePrincipal;
 import logica.Controller;
 import logica.Provider;
 import logica.TransportationProvider;
@@ -28,6 +29,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.border.MatteBorder;
 import java.awt.FlowLayout;
+import java.awt.Cursor;
 
 public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 
@@ -49,13 +51,45 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 	/**
 	 * Create the panel.
 	 */
+	
+	private class Eliminar extends Thread { // Hilo para la eliminacion
+
+		public void run () {
+			synchronized (Semaphore.samaphore) { 
+				try {
+					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
+					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación
+						deleteElements(); // se eliminan los elementos seleccionados
+						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+	
+	
+	private void crearFrameDecisor () {
+		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Seguro que desea eliminar los proveedores seleccionados");
+		frameDecisor.setVisible(true);
+		FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
+	}
+
+	private void crearFrameNotificacion () {
+		FrameAdvertencia frameAdvertencia = new FrameAdvertencia("Han sido elimanado correctamente los proveedores de transporte");
+		frameAdvertencia.setVisible(true);
+	}
+	
+	
 	public PanelGerenteAsociacionEmpresaProveedorTransporte() {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				tableTransportationProviders.clearSelection();
-				actualizarEstadoButtonDelete();
-				actualizarEstadoButtonShow();
+				actualizarEstadoButtons(); // se actualiza el estado de los botones
 			}
 		});
 		searchName = "";
@@ -103,8 +137,7 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 		this.addTable();
 		this.addButtons();
 		this.actualizarTablaTransportationProviders();
-		this.actualizarEstadoButtonDelete();
-		this.actualizarEstadoButtonShow();
+		this.actualizarEstadoButtons();
 	}
 
 	private void addTable () {
@@ -136,66 +169,66 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 	}
 
 	private void addButtons () {
+		lblAnnadir = new JLabel("");
+		lblAnnadir.setOpaque(true);
+		lblAnnadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAnnadir.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorTransporte.class.getResource("/images/Plus.png")));
+		lblAnnadir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				FrameGerenteAsociacionEmpresaProveedorTransporte frameTransportationProvider = new FrameGerenteAsociacionEmpresaProveedorTransporte(PanelGerenteAsociacionEmpresaProveedorTransporte.this, null);
+				frameTransportationProvider.setVisible(true);
+				FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+					lblAnnadir.setBackground(SystemColor.activeCaptionBorder);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+					lblAnnadir.setBackground(new Color(18, 95, 115));
+			}
+		});
+		
+		
+		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblAnnadir.setBackground(new Color(18, 95, 115));
+		lblAnnadir.setBounds(245, 19, 68, 52);
+		panelBotones.add(lblAnnadir);
+		
 		lblDelete = new JLabel("");
+		lblDelete.setOpaque(true);
+		lblDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblDelete.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorTransporte.class.getResource("/images/Trash.png")));
 		lblDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				try {
-					deleteElementsTable();
-					ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
-				} catch (SQLException e1) {
-					try {
-						ConnectionDataBase.roolback();
-					} catch (SQLException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					} // se cancelan las operaciones realizadas a la base de datos
-					e1.printStackTrace();
+				if (lblDelete.isEnabled()) {
+					Eliminar eliminar = new Eliminar(); // se crea el nuevo hilo
+					eliminar.start(); // se ejecuta el nuevo hilo
+					crearFrameDecisor(); // se crea el frame decisor, donde el usuario dará su confirmación
 				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-
+				if (lblDelete.isEnabled())
+					lblDelete.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-
+				if (lblDelete.isEnabled())
+					lblDelete.setBackground(new Color(18, 95, 115));
 			}
 		});
 		
-				lblAnnadir = new JLabel("");
-				lblAnnadir.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorTransporte.class.getResource("/images/Plus.png")));
-				lblAnnadir.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mousePressed(MouseEvent e) {
-						FrameGerenteAsociacionEmpresaProveedorTransporte frameTransportationProvider = new FrameGerenteAsociacionEmpresaProveedorTransporte(PanelGerenteAsociacionEmpresaProveedorTransporte.this, null);
-						frameTransportationProvider.setVisible(true);
-						FrameGerente.getIntancie().setEnabled(false); // se inhabilita el frame principal
-					}
-					@Override
-					public void mouseEntered(MouseEvent e) {
-
-					}
-					@Override
-					public void mouseExited(MouseEvent e) {
-
-					}
-				});
-				lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
-				lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
-				lblAnnadir.setBackground(SystemColor.info);
-				lblAnnadir.setBounds(245, 19, 68, 52);
-				panelBotones.add(lblAnnadir);
-
-
-
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDelete.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblDelete.setBackground(SystemColor.info);
+		lblDelete.setBackground(new Color(18, 95, 115));
 		lblDelete.setBounds(405, 19, 67, 52);
 		panelBotones.add(lblDelete);
-
+		
+				
 		lblName = new JLabel("Name");
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblName.setForeground(SystemColor.textHighlightText);
@@ -225,6 +258,8 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 		panelFiltros.add(textFieldBuscador);
 
 		lblShowVehicle = new JLabel("");
+		lblShowVehicle.setOpaque(true);
+		lblShowVehicle.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblShowVehicle.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorTransporte.class.getResource("/images/Edit.png")));
 		lblShowVehicle.addMouseListener(new MouseAdapter() {
 			@Override
@@ -233,21 +268,23 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 					FrameGerenteAsociacionEmpresaProveedorTransporte frameTransportationProvider = new FrameGerenteAsociacionEmpresaProveedorTransporte(PanelGerenteAsociacionEmpresaProveedorTransporte.this, 
 							((ModeloTablaTransportationProvider) tableTransportationProviders.getModel()).getElement(tableTransportationProviders.getSelectedRow()));
 					frameTransportationProvider.setVisible(true);
-					FrameGerente.getIntancie().setEnabled(false); // se inhabilita el frame principal
+					FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
 				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-
+				if (lblShowVehicle.isEnabled())
+				lblShowVehicle.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-
+				if (lblShowVehicle.isEnabled())
+					lblShowVehicle.setBackground(new Color(18, 95, 115));
 			}
 		});
 		lblShowVehicle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblShowVehicle.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblShowVehicle.setBackground(SystemColor.info);
+		lblShowVehicle.setBackground(new Color(18, 95, 115));
 		lblShowVehicle.setBounds(564, 19, 67, 52);
 		panelBotones.add(lblShowVehicle);
 	}
@@ -268,6 +305,23 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 			((ModeloTablaTransportationProvider) tableTransportationProviders.getModel()).addElement((TransportationProvider) prov);
 		}
 	}
+	
+	private void deleteElements () {
+		try {
+			deleteElementsTable();
+			ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
+			crearFrameNotificacion(); // se crea el frame que notificará al usuario que se realizó la operación deseada
+			this.actualizarEstadoButtons(); // se actualiza el estado de los botones
+		} catch (SQLException e1) {
+			try {
+				ConnectionDataBase.roolback();
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} // se cancelan las operaciones realizadas a la base de datos
+			e1.printStackTrace();
+		}
+	}
 
 	private void deleteElementsTable () throws SQLException {
 		((ModeloTablaTransportationProvider) tableTransportationProviders.getModel()).deleteElements(this.tableTransportationProviders.getSelectedRows());
@@ -281,6 +335,11 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 			((ModeloTablaTransportationProvider) table.getModel()).deleteElement(i);
 		}
 
+	}
+	
+	public void actualizarEstadoButtons () {
+		this.actualizarEstadoButtonDelete();
+		this.actualizarEstadoButtonShow();
 	}
 
 	private void actualizarEstadoButtonDelete () {
