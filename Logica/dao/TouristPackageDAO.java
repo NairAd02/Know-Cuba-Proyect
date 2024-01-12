@@ -96,7 +96,7 @@ public class TouristPackageDAO implements TouristPackageDAOInterface {
         TouristPackage touristPackage = this.cache.get(cs.getResultSet().getInt("id_tourist_package"));
 
         if (touristPackage == null) { // si no se encuentra almacenado en cache una referencia con ese id
-            touristPackage = new TouristPackage(cs.getResultSet().getInt("id_tourist_package"), cs.getResultSet().getString("name"), cs.getResultSet().getInt("cantmaxpax"),
+            touristPackage = new TouristPackage(cs.getResultSet().getInt("id_tourist_package"), cs.getResultSet().getString("name"), cs.getResultSet().getInt("cant_max_pax"),
                     cs.getResultSet().getInt("cant_reserves"), cs.getResultSet().getDate("start_date").toLocalDate(), cs.getResultSet().getDate("termination_date").toLocalDate(),
                     ModalityDAO.getInstancie().selectIntoTouristPackage(cs.getResultSet().getInt("id_tourist_package")));
 
