@@ -27,11 +27,12 @@ public class ActivityDAO implements ActivityDAOInterface {
 
 	@Override
 	public int insert(Activity activity) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_activity(?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_activity(?, ?, ?)}");
 		// se definen los parámetros de la funcion
 		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
 		cs.setString(2, activity.getDescription());
 		cs.setInt(3, activity.getIdServiceProvider());
+		cs.setString(4, activity.getName());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -49,7 +50,7 @@ public class ActivityDAO implements ActivityDAOInterface {
 
 	@Override
 	public void update(Activity activity) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call insert_activity(?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_activity(?, ?)}");
 		// se definen los parámetros de la funcion
 		cs.setInt(1, activity.getId());
 		cs.setString(2, activity.getDescription());
@@ -111,7 +112,7 @@ public class ActivityDAO implements ActivityDAOInterface {
 
 		if (activity == null) {
 			activity = new Activity(cs.getResultSet().getInt("id_activity"), 
-					cs.getResultSet().getString("activity_description"), cs.getResultSet().getInt("service_provider_id"));
+					cs.getResultSet().getString("name"), cs.getResultSet().getString("activity_description"), cs.getResultSet().getInt("service_provider_id"));
 
 			this.cache.put(activity.getId(), activity); // se almacena en cache la referencia de la actividad
 		}

@@ -97,13 +97,13 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (!textFieldLock.getText().equalsIgnoreCase("")) {
-					try {
-						addVehicle();
+				/*	try {
+						//addVehicle();
 						cerrarFrame();
 					} catch (SQLException e1) {
 
 						e1.printStackTrace();
-					}
+					}*/
 				}
 			}
 			@Override
@@ -128,7 +128,7 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 		textFieldLock.setColumns(10);
 	}
 
-	private void addVehicle () throws SQLException {
+	/*private void addVehicle () throws SQLException {
 		if (this.transportationProvider.getId() != -1) { // si es distinto de -1 se añade a la logica del negocio y a la base de datos 
 			this.transportationProvider.addVehicle(new Vehicle(textFieldLock.getText(), transportationProvider.getId()));
 		}
@@ -136,7 +136,7 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 			this.transportationProvider.addVehicleLogic(new Vehicle(textFieldLock.getText(), transportationProvider.getId()));
 		}
 		frameGerenteAsociacionEmpresaProveedorTransporte.actualizarTablaVehicles(); // se actualiza la informacion de la tabla de las actividades
-	}
+	}*/
 
 	private void cerrarFrame () {
 		frameGerenteAsociacionEmpresaProveedorTransporte.setEnabled(true);

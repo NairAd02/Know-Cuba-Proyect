@@ -403,7 +403,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 				if (hotel.getId() == -1) {
 					if (verificarCampos()) {
 						try {
-							addAccommodationProvider();
+							//addAccommodationProvider();
 							ConnectionDataBase.commit(); // se confirman las transacciones realizadas
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {
@@ -519,12 +519,12 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 	}
 
 
-	private void addAccommodationProvider () throws SQLException {
+	/*private void addAccommodationProvider () throws SQLException {
 		Controller.getInstancie().getTouristAgency().addProvider(new Hotel(textFieldName.getText(), textFieldProvince.getText(), textFieldHotelChain.getText(), (Integer) spinnerCategory.getValue(), 
 				textFieldDireccion.getText(), hotel.getTypesOfRooms(), hotel.getMealsPlans())); // se inserta el provedor de alojamientos a nivel de logica y de base de datos
 		panelGerenteAsociacionEmpresaProveedorAlojamiento.actualizarTablaAccommodationProviders(); // se actualiza la informacion de la tabla de provedores
 
-	}
+	}*/
 
 	private void cerrarFrame () {
 		FramePrincipal.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal

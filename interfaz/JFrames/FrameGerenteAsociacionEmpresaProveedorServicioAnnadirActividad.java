@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import javax.swing.border.LineBorder;
+import javax.swing.JTextField;
 
 public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad extends JFrame {
 
@@ -25,6 +26,7 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 	private JTextPane textPaneActivityDescription;
 	private JLabel lblX;
 	private int mouseX, mouseY;
+	private JTextField textFieldNameActivity;
 
 
 	public FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad(FrameGerenteAsociacionEmpresaProveedorServicio ps) {
@@ -32,7 +34,7 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 		this.serviceProvider = this.frameGerenteAsociacionEmpresaProveedorSerivicio.getServiceProvider();
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 422, 201);
+		setBounds(100, 100, 429, 331);
 		contentPane = new JPanel();
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -86,14 +88,14 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 		JLabel lblDescription = new JLabel("DESCRIPTION :");
 		lblDescription.setForeground(SystemColor.info);
 		lblDescription.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblDescription.setBounds(27, 52, 132, 23);
+		lblDescription.setBounds(10, 186, 132, 23);
 		contentPane.add(lblDescription);
 
 		JLabel lblAdd = new JLabel("ADD");
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (!textPaneActivityDescription.getText().equalsIgnoreCase("")) {
+				if (verificarCampos()) {
 					try {
 						addActivity();
 						cerrarFrame();
@@ -116,20 +118,35 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAdd.setBackground(SystemColor.info);
-		lblAdd.setBounds(92, 141, 235, 35);
+		lblAdd.setBounds(94, 267, 235, 35);
 		contentPane.add(lblAdd);
 
 		textPaneActivityDescription = new JTextPane();
-		textPaneActivityDescription.setBounds(169, 52, 210, 78);
+		textPaneActivityDescription.setBounds(152, 157, 210, 78);
 		contentPane.add(textPaneActivityDescription);
+		
+		JLabel lblName = new JLabel("NAME :");
+		lblName.setForeground(SystemColor.info);
+		lblName.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblName.setBounds(10, 88, 74, 23);
+		contentPane.add(lblName);
+		
+		textFieldNameActivity = new JTextField();
+		textFieldNameActivity.setBounds(94, 92, 178, 20);
+		contentPane.add(textFieldNameActivity);
+		textFieldNameActivity.setColumns(10);
+	}
+	
+	private boolean verificarCampos () {
+		return !this.textFieldNameActivity.getText().equalsIgnoreCase("");
 	}
 
 	private void addActivity () throws SQLException {
 		if (this.serviceProvider.getId() != -1){ // si es distinto a -1 se añade a la logica del negocio y a la base de datos 
-			this.serviceProvider.addActivity(new Activity(textPaneActivityDescription.getText(), this.serviceProvider.getId()));
+			this.serviceProvider.addActivity(new Activity(this.textFieldNameActivity.getText(), textPaneActivityDescription.getText(), this.serviceProvider.getId()));
 		}
 		else { // si es igual a -1 se añade a la logica del negocio
-			this.serviceProvider.addActivityLogic(new Activity(textPaneActivityDescription.getText(), this.serviceProvider.getId()));
+			this.serviceProvider.addActivityLogic(new Activity(this.textFieldNameActivity.getText(), textPaneActivityDescription.getText()));
 		}
 		frameGerenteAsociacionEmpresaProveedorSerivicio.actualizarTablaActivities(); // se actualiza la informacion de la tabla de las actividades
 	}

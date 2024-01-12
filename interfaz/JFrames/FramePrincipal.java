@@ -6,6 +6,7 @@ import JPanels.PanelGerenteAsociacionEmpresaProveedorAlojamiento;
 import JPanels.PanelGerenteAsociacionEmpresaProveedorServicio;
 import JPanels.PanelGerenteAsociacionEmpresaProveedorTransporte;
 import JPanels.PanelGerenteCreacionContrato;
+import JPanels.PanelGestionPaquetesTuristicos;
 import JPanels.PanelGestionUsuarios;
 import logica.Administrator;
 import logica.Controller;
@@ -52,6 +53,8 @@ public class FramePrincipal extends JFrame {
 	private JLabel lblContracts;
 	private JLabel lblUserAdministration;
 	private JLabel lblUsers;
+	private JLabel lblTouristPackage;
+	private JLabel lblSeccionTouristPackageDesing;
 
 	private class CerrarPrograma extends Thread { // Hilo para cerrar el programa
 		public void run () {
@@ -74,12 +77,15 @@ public class FramePrincipal extends JFrame {
 
 
 
-
 	public static FramePrincipal getIntancie () {
 		if (frameGerente == null)
 			frameGerente = new FramePrincipal();
 
 		return frameGerente;
+	}
+	
+	public static void destruirInstancia () {
+		frameGerente = null;
 	}
 
 
@@ -201,27 +207,31 @@ public class FramePrincipal extends JFrame {
 		lblNewLabel_2 = new JLabel("\r\n");
 		panelNameAplication.add(lblNewLabel_2, BorderLayout.NORTH);
 
-
-
-
-
 		lblCerrarSesion = new JLabel("Cerrar Sesion");
+		lblCerrarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblCerrarSesion.setIcon(new ImageIcon(FramePrincipal.class.getResource("/images/Home.png")));
+		lblCerrarSesion.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				cerrarSesionPrograma();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
 		lblCerrarSesion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCerrarSesion.setForeground(SystemColor.textHighlightText);
 		lblCerrarSesion.setFont(new Font("Arial Black", Font.BOLD, 22));
 		lblCerrarSesion.setBounds(0, 792, 278, 46);
 		panelSecciones.add(lblCerrarSesion);
 
-
-
-
-
 		this.addSecciones();
 
 		this.contentPane.add(new PanelGerenteAsociacionEmpresaProveedorServicio(), BorderLayout.CENTER); // se añade el panel gerente asociocion empresa
 		this.definirColorLabelsSecciones(); // se actualizan los colores de los labels se de seleccion de las secciones
-
-
 
 	}
 
@@ -229,6 +239,7 @@ public class FramePrincipal extends JFrame {
 		if (Controller.getInstancie().getUser() instanceof Administrator) { // si el usuario es administrador se añaden todas las secciones
 			this.addSeccionCreateContract(); // se añade la seccion de creacion de contratos
 			this.addSeccionAssociationCompany(); // se añade la seccion de asociasion con proveedores
+			this.addSeccionTouristPackageDesign(); // se añade la seccion de diseño de paquetes turisticos
 			this.addSeccionUsers(); // se añade la seccion de administracion de usarios
 		}
 		else if (Controller.getInstancie().getUser() instanceof Manager) { // si el usuario es administrador se añaden las secciones de creacion de contrato y de asociacion con proveedores
@@ -371,6 +382,45 @@ public class FramePrincipal extends JFrame {
 		panelSecciones.add(lblAccommodationProvider);
 	}
 
+	private void addSeccionTouristPackageDesign () {
+		lblSeccionTouristPackageDesing = new JLabel("TOURIST PACKAGE DESINGN");
+		lblSeccionTouristPackageDesing.setOpaque(true);
+		lblSeccionTouristPackageDesing.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSeccionTouristPackageDesing.setForeground(SystemColor.textHighlightText);
+		lblSeccionTouristPackageDesing.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblSeccionTouristPackageDesing.setBorder(new MatteBorder(2, 0, 2, 0, (Color) new Color(0, 0, 0)));
+		lblSeccionTouristPackageDesing.setBackground(new Color(18, 95, 115));
+		lblSeccionTouristPackageDesing.setBounds(0, 360, 296, 38);
+		panelSecciones.add(lblSeccionTouristPackageDesing);
+
+		lblTouristPackage = new JLabel("   - TOURIST PACKAGES");
+		lblTouristPackage.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblTouristPackage.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				cambiarSeccion(new PanelGestionPaquetesTuristicos()); // se cambia la seccion a la de provedor de alojamiento
+				definirColorLabelsSecciones(); // se actualiza el estado de los botonoes de las secciones
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblTouristPackage.setForeground(SystemColor.activeCaptionBorder);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!(contentPane.getComponent(contentPane.getComponentCount() - 1) instanceof PanelGestionPaquetesTuristicos))
+					lblTouristPackage.setForeground(SystemColor.textHighlightText);
+			}
+		});
+		lblTouristPackage.setOpaque(true);
+		lblTouristPackage.setHorizontalAlignment(SwingConstants.LEFT);
+		lblTouristPackage.setForeground(SystemColor.textHighlightText);
+		lblTouristPackage.setFont(new Font("Arial Black", Font.PLAIN, 14));
+		lblTouristPackage.setBorder(null);
+		lblTouristPackage.setBackground(new Color(18, 95, 115));
+		lblTouristPackage.setBounds(0, 409, 244, 38);
+		panelSecciones.add(lblTouristPackage);
+	}
+
 	private void addSeccionUsers () {
 		lblUserAdministration = new JLabel("USERS ADMINISTRATION");
 		lblUserAdministration.setOpaque(true);
@@ -379,7 +429,7 @@ public class FramePrincipal extends JFrame {
 		lblUserAdministration.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblUserAdministration.setBorder(new MatteBorder(2, 0, 2, 0, (Color) new Color(0, 0, 0)));
 		lblUserAdministration.setBackground(new Color(18, 95, 115));
-		lblUserAdministration.setBounds(0, 361, 296, 38);
+		lblUserAdministration.setBounds(0, 476, 296, 38);
 		panelSecciones.add(lblUserAdministration);
 
 		lblUsers = new JLabel("   - USERS");
@@ -406,24 +456,50 @@ public class FramePrincipal extends JFrame {
 		lblUsers.setFont(new Font("Arial Black", Font.PLAIN, 14));
 		lblUsers.setBorder(null);
 		lblUsers.setBackground(new Color(18, 95, 115));
-		lblUsers.setBounds(0, 410, 244, 38);
+		lblUsers.setBounds(0, 525, 244, 38);
 		panelSecciones.add(lblUsers);
+
+
 	}
 
 	private void cerrarPrograma () {
 		try {
-			Controller.getInstancie().getUser().cerrarConexion(); // se cierra sesión
+			this.cerrarSesionUser();
 			ConnectionDataBase.getConnectionDataBase().commit(); // se confirman todas las operaciones realizadas a la base de datos
-		} catch (SQLException e1) {
+			System.exit(0);
+		} catch (SQLException e) {
 			try {
 				ConnectionDataBase.getConnectionDataBase().rollback(); // se cancelan todas las operaciones realizadas a la base de datos
-			} catch (SQLException e2) {
-
-				e2.printStackTrace();
-			}
-			e1.printStackTrace();
-		} 
-		System.exit(0);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void cerrarSesionUser () throws SQLException {
+			Controller.getInstancie().getUser().cerrarConexion(); // se cierra sesión
+	}
+	
+	private void cerrarSesionPrograma () {
+		try {
+			this.cerrarSesionUser();
+			ConnectionDataBase.getConnectionDataBase().commit(); // se confirman todas las operaciones realizadas a la base de datos
+			destruirInstancia(); // se destruye la instancia de este frame
+			FrameLogin frameLogin = new FrameLogin();
+			frameLogin.setVisible(true);
+			dispose(); // se cierra el frame actual
+		} catch (SQLException e) {
+			try {
+				ConnectionDataBase.getConnectionDataBase().rollback(); // se cancelan todas las operaciones realizadas a la base de datos
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
+			e.printStackTrace();
+		}
 	}
 
 	public void cambiarSeccion (JPanel seccion) {
@@ -444,12 +520,14 @@ public class FramePrincipal extends JFrame {
 			// se define el color de todas las secciones
 			this.definirColorLabelSeccionAssociationCompany();
 			this.definirColorLabelSeccionCreationContract();
+			this.definirColorLabelSeccionTouristPackageDesing();
 			this.definirColorLabelSeccionUserAdministration();
 			this.definirColorLabelServicerProvider();
 			this.definirColorLabelTransportProvider();
 			this.definirColorLabelAccommodationProvider();
 			this.definirColorLabelContract();
-			this.definirColorLabelUser();
+			this.definirColorLabelTouristPackage();
+			this.definirColorLabelUser();	
 		}
 		else if (Controller.getInstancie().getUser() instanceof Manager) {
 			// se define el color de las secciones de asosacion con las empresas y creacion de contratos
@@ -477,6 +555,13 @@ public class FramePrincipal extends JFrame {
 			this.lblSeccionContractCreation.setBackground(SystemColor.activeCaptionBorder);
 		else
 			lblSeccionContractCreation.setBackground(new Color(18, 95, 115));
+	}
+
+	private void definirColorLabelSeccionTouristPackageDesing () {
+		if (this.contentPane.getComponent(this.contentPane.getComponentCount() - 1) instanceof PanelGestionPaquetesTuristicos)  // se esta seleccionada la seccion creacion contrato
+			this.lblSeccionTouristPackageDesing.setBackground(SystemColor.activeCaptionBorder);
+		else
+			this.lblSeccionTouristPackageDesing.setBackground(new Color(18, 95, 115));
 	}
 
 	private void definirColorLabelSeccionUserAdministration () {
@@ -515,6 +600,14 @@ public class FramePrincipal extends JFrame {
 			lblContracts.setForeground(SystemColor.activeCaptionBorder);
 		else
 			lblContracts.setForeground(SystemColor.textHighlightText);
+
+	}
+
+	private void definirColorLabelTouristPackage () {
+		if (this.contentPane.getComponent(this.contentPane.getComponentCount() - 1) instanceof PanelGestionPaquetesTuristicos)  // se esta seleccionada la seccion creacion contrato
+			lblTouristPackage.setForeground(SystemColor.activeCaptionBorder);
+		else
+			lblTouristPackage.setForeground(SystemColor.textHighlightText);
 
 	}
 

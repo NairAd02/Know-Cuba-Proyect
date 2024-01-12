@@ -80,6 +80,21 @@ public class RolDAO implements RolDAOInterface {
 
 		return listRoles;
 	}
+	
+	@Override
+	public List<Rol> selectAllDiferentAdministrator() throws SQLException {
+		List<Rol> listRoles = new ArrayList<Rol>();
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call get_all_rol_diferent_administrator()}");
+		cs.execute(); // se ejecuta la llamada a la funcion
+
+		while (cs.getResultSet().next()) {
+			listRoles.add(mapEntity(cs)); // se inserta en la lista la entidad mapeada a objeto
+		}
+
+		cs.close(); // se cierra la llamada a la funcion
+
+		return listRoles;
+	}
 
 	@Override
 	public Rol mapEntity(CallableStatement cs) throws SQLException {
@@ -92,5 +107,7 @@ public class RolDAO implements RolDAOInterface {
 
 		return rol;
 	}
+
+
 
 }

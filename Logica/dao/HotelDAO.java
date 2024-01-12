@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import logica.Hotel;
+import logica.HotelModality;
 import logica.MealPlan;
 import logica.TypeOfRoom;
 import utils.ConnectionDataBase;
@@ -29,7 +30,7 @@ public class HotelDAO implements HotelDAOInterface {
 	}
 	@Override
 	public int insert(Hotel hotel) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_hotel(?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_hotel(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 		// se definen los parametros de la funcion
 		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
 		cs.setString(2, hotel.getName());
@@ -37,6 +38,14 @@ public class HotelDAO implements HotelDAOInterface {
 		cs.setString(4, hotel.getProvince());
 		cs.setString(5, hotel.getAddress());
 		cs.setInt(6, hotel.getHotelCategory());
+		cs.setInt(7, hotel.getPhone());
+		cs.setString(8, hotel.getFax());
+		cs.setString(9, hotel.getEmail());
+		cs.setInt(10, hotel.getCantRooms());
+		cs.setInt(11, hotel.getCantFloors());
+		cs.setString(12, hotel.getLocationHotel());
+		cs.setDouble(13, hotel.getDistanceNearestCity());
+		cs.setDouble(14, hotel.getDistanceAirport());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -54,7 +63,7 @@ public class HotelDAO implements HotelDAOInterface {
 
 	@Override
 	public void update(Hotel hotel) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call insert_hotel(?, ?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_hotel(?, ?, ?, ?, ?, ?)}");
 		// se definen los parametros de la funcion
 		cs.setInt(1, hotel.getId());
 		cs.setString(2, hotel.getName());
@@ -103,8 +112,11 @@ public class HotelDAO implements HotelDAOInterface {
 
 		if (hotel == null) {
 			hotel = new Hotel(cs.getResultSet().getInt("id"), cs.getResultSet().getString("name"), cs.getResultSet().getString("province"),
-					cs.getResultSet().getString("hotel_chain"), cs.getResultSet().getInt("hotel_category"), cs.getResultSet().getString("address"), 
-					(ArrayList<TypeOfRoom>)TypeOfRoomDAO.getInstancie().selectTypeOfRoomIntoHotel(cs.getResultSet().getInt("id")), (ArrayList<MealPlan>)MealPlanDAO.getInstancie().selectMealPlanIntoHotel(cs.getResultSet().getInt("id")));
+					cs.getResultSet().getString("hotel_chain"), cs.getResultSet().getInt("hotel_category"), cs.getResultSet().getString("address"), cs.getResultSet().getInt("phone") , cs.getResultSet().getString("fax"),
+					cs.getResultSet().getString("email"), cs.getResultSet().getInt("cant_rooms"), cs.getResultSet().getInt("cant_floors"), cs.getResultSet().getString("location_hotel"), 
+					cs.getResultSet().getDouble("distance_nearest_city"),cs.getResultSet().getDouble("distance_airport"), cs.getResultSet().getDate("date_built").toLocalDate(),
+					(ArrayList<TypeOfRoom>)TypeOfRoomDAO.getInstancie().selectTypeOfRoomIntoHotel(cs.getResultSet().getInt("id")), (ArrayList<MealPlan>)MealPlanDAO.getInstancie().selectMealPlanIntoHotel(cs.getResultSet().getInt("id")),
+                    (ArrayList<HotelModality>) HotelModalityDAO.getInstancie().selectIntoHotel(cs.getResultSet().getInt("id")));
 
 			this.cache.put(hotel.getId(), hotel); // se almacena en chace la referencia del hotel
 		}

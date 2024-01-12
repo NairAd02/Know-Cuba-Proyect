@@ -9,6 +9,7 @@ import java.util.List;
 
 import logica.CarrierContract;
 import logica.CostKilometers;
+import logica.Vehicle;
 import utils.ConnectionDataBase;
 
 public class CostKilometersDAO implements CostKilometersDAOInterface {
@@ -30,16 +31,15 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 
 	@Override
 	public int insert(CostKilometers costKilometers) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_transport_modality_cost_kilometers(?, ?, ?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_transport_modality_cost_kilometers(?, ?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
 		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
 		cs.setString(2, costKilometers.getTypeOfModality());
-		cs.setInt(3, costKilometers.getVehicleId());
-		cs.setInt(4, costKilometers.getContractId());
-		cs.setString(5, costKilometers.getTypeTransportModality());
-		cs.setDouble(6, costKilometers.getCostKilometersGoing());
-		cs.setDouble(7, costKilometers.getCostKilometersLap());
-		cs.setDouble(8, costKilometers.getCostHoursWait());
+		cs.setInt(3, costKilometers.getContractId());
+		cs.setString(4, costKilometers.getTypeTransportModality());
+		cs.setDouble(5, costKilometers.getCostKilometersGoing());
+		cs.setDouble(6, costKilometers.getCostKilometersLap());
+		cs.setDouble(7, costKilometers.getCostHoursWait());
 		cs.execute(); // se ejecuta la consulta de llamda a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -54,13 +54,12 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 
 	@Override
 	public void update(CostKilometers costKilometers) throws SQLException { 
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_transport_modality_cost_kilometers(?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_transport_modality_cost_kilometers(?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
 		cs.setInt(1, costKilometers.getId());
-		cs.setInt(2, costKilometers.getVehicleId());
-		cs.setDouble(3, costKilometers.getCostKilometersGoing());
-		cs.setDouble(4, costKilometers.getCostKilometersLap());
-		cs.setDouble(5, costKilometers.getCostHoursWait());
+		cs.setDouble(2, costKilometers.getCostKilometersGoing());
+		cs.setDouble(3, costKilometers.getCostKilometersLap());
+		cs.setDouble(4, costKilometers.getCostHoursWait());
 		cs.execute(); // se ejecuta la consulta de llamda a la funcion
 		cs.close(); // se cierra la llamada a la funcion
 	}
@@ -132,7 +131,7 @@ public class CostKilometersDAO implements CostKilometersDAOInterface {
 
 		if (costKilometers == null) { // si no esta referenciado en cache
 			costKilometers = new CostKilometers(cs.getResultSet().getInt("modality_id"), this.carrierContract, 
-					cs.getResultSet().getString("type_of_modality"), VehicleDAO.getInstancie().select(cs.getResultSet().getInt("vehicle_id")), cs.getResultSet().getString("type_transport_modality"), 
+					cs.getResultSet().getString("type_of_modality"), (ArrayList<Vehicle>) VehicleDAO.getInstancie().selectIntoTransportModality(cs.getResultSet().getInt("modality_id")), cs.getResultSet().getString("type_transport_modality"),
 					cs.getResultSet().getDouble("cost_kilometers_going"), cs.getResultSet().getDouble("cost_kilometers_lap"), cs.getResultSet().getDouble("cost_hours_wait"));
 
 			this.cache.put(costKilometers.getId(), costKilometers); // se alamacena en cache la referencia del la modalidad de transporte

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import logica.PackageDesigner;
+import logica.Request;
 import utils.ConnectionDataBase;
 
 public class PackageDesignerDAO implements PackageDesignerDAOInterface {
@@ -95,13 +96,13 @@ public class PackageDesignerDAO implements PackageDesignerDAOInterface {
 		if (packageDesigner == null) { // si no se encuentra una referencia con ese id
 			if (cs.getResultSet().getDate("start_date_connection") == null || cs.getResultSet().getDate("last_date_connection") == null )
 				packageDesigner = new PackageDesigner(cs.getResultSet().getInt("id"), cs.getResultSet().getString("user_name"), cs.getResultSet().getString("user_password"), RolDAO.getInstancie().select(cs.getResultSet().getInt("id_rol")), 
-						null, null, cs.getResultSet().getBoolean("connected")); // se crea una nueva referencia para el objeto
+						null, null, cs.getResultSet().getBoolean("connected"), (ArrayList<Request>) RequestDAO.getInstancie().selectIntoUser(cs.getResultSet().getInt("id")), cs.getResultSet().getBoolean("state_password")); // se crea una nueva referencia para el objeto
 			else
 				packageDesigner = new PackageDesigner(cs.getResultSet().getInt("id"), cs.getResultSet().getString("user_name"), cs.getResultSet().getString("user_password"), RolDAO.getInstancie().select(cs.getResultSet().getInt("id_rol")), 
-						cs.getResultSet().getDate("start_date_connection").toLocalDate(), cs.getResultSet().getDate("last_date_connection").toLocalDate(), cs.getResultSet().getBoolean("connected")); // se crea una nueva referencia para el objeto
+						cs.getResultSet().getDate("start_date_connection").toLocalDate(), cs.getResultSet().getDate("last_date_connection").toLocalDate(), cs.getResultSet().getBoolean("connected"),
+						(ArrayList<Request>) RequestDAO.getInstancie().selectIntoUser(cs.getResultSet().getInt("id")), cs.getResultSet().getBoolean("state_password")); // se crea una nueva referencia para el objeto
 
 			this.cache.put(packageDesigner.getId(), packageDesigner); // se almacena en cache la referencia que representa a la entidad usuario
-
 		}
 
 		return packageDesigner;

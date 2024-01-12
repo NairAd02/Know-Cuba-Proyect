@@ -1,6 +1,7 @@
 package logica;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import dao.EstablishedRouteDAO;
 
@@ -10,29 +11,34 @@ public class EstablishedRoute extends TransportModality{
 	private double costLap;
 
 
-	public EstablishedRoute(int id, Contract contract, String typeOfModality, Vehicle vehicle, String typeTransportModality,
+	public EstablishedRoute(int id, Contract contract, String typeOfModality, ArrayList<Vehicle> vehicles, String typeTransportModality,
 			String descriptionRout, double costGoing, double costLap) { // constructor a nivel de base de datos
-		super(id, contract, typeOfModality, vehicle, typeTransportModality);
+		super(id, contract, typeOfModality, vehicles, typeTransportModality);
 		this.descriptionRout = descriptionRout;
 		this.costGoing = costGoing;
 		this.costLap = costLap;
 	}
 
-	public EstablishedRoute(Contract contract, Vehicle vehicle,
+	public EstablishedRoute(Contract contract, ArrayList<Vehicle> vehicles,
 			String descriptionRout, double costGoing, double costLap) { // constructor a nivel de logica
-		super(contract, vehicle);
+		super(contract, vehicles);
 		this.descriptionRout = descriptionRout;
 		this.costGoing = costGoing;
 		this.costLap = costLap;
 		this.typeTransportModality = "Established Route";
 	}
 	
-	public EstablishedRoute(Vehicle vehicle,
+	public EstablishedRoute(ArrayList<Vehicle> vehicles,
 			String descriptionRout, double costGoing, double costLap) { // constructor a nivel de logica (para el proceso de creación del objeto)
-		super(vehicle);
+		super(vehicles);
 		this.descriptionRout = descriptionRout;
 		this.costGoing = costGoing;
 		this.costLap = costLap;
+		this.typeTransportModality = "Established Route";
+	}
+
+	public EstablishedRoute () { // constructor para crear una instancia temporal
+		super();
 		this.typeTransportModality = "Established Route";
 	}
 
@@ -57,14 +63,13 @@ public class EstablishedRoute extends TransportModality{
 
 	@Override
 	public void insert() throws SQLException {
-
 		this.id = EstablishedRouteDAO.getInstancie().insert(this);
+		this.insertVehiclesIntoTransportModality(); // Se insertan todos los vehiculos asignados como parte de esta modalidad en la base de datos
 	}
 
 	@Override
 	public void update() throws SQLException {
 		EstablishedRouteDAO.getInstancie().update(this);
-
 	}
 
 	// Operaciones

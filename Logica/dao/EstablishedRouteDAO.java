@@ -9,6 +9,7 @@ import java.util.List;
 
 import logica.CarrierContract;
 import logica.EstablishedRoute;
+import logica.Vehicle;
 import utils.ConnectionDataBase;
 
 public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
@@ -30,16 +31,15 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 
 	@Override
 	public int insert(EstablishedRoute establishedRoute) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_transport_modality_established_route(?, ?, ?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_transport_modality_established_route(?, ?, ?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
 		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
 		cs.setString(2, establishedRoute.getTypeOfModality());
-		cs.setInt(3, establishedRoute.getVehicleId());
-		cs.setInt(4, establishedRoute.getContractId());
-		cs.setString(5, establishedRoute.getTypeTransportModality());
-		cs.setString(6, establishedRoute.getDescriptionRout());
-		cs.setDouble(7, establishedRoute.getCostGoing());
-		cs.setDouble(8, establishedRoute.getCostLap());
+		cs.setInt(3, establishedRoute.getContractId());
+		cs.setString(4, establishedRoute.getTypeTransportModality());
+		cs.setString(5, establishedRoute.getDescriptionRout());
+		cs.setDouble(6, establishedRoute.getCostGoing());
+		cs.setDouble(7, establishedRoute.getCostLap());
 		cs.execute(); // se ejecuta la llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -54,13 +54,12 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 
 	@Override
 	public void update(EstablishedRoute establishedRoute) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_transport_modality_established_route(?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_transport_modality_established_route(?, ?, ?, ?)}");
 		// Se definen los parametros de la funcion
 		cs.setInt(1, establishedRoute.getId());
-		cs.setInt(2, establishedRoute.getVehicleId());
-		cs.setString(3, establishedRoute.getDescriptionRout());
-		cs.setDouble(4, establishedRoute.getCostGoing());
-		cs.setDouble(5, establishedRoute.getCostLap());
+		cs.setString(2, establishedRoute.getDescriptionRout());
+		cs.setDouble(3, establishedRoute.getCostGoing());
+		cs.setDouble(4, establishedRoute.getCostLap());
 		cs.execute(); // se ejecuta la llamada a la funcion
 		cs.close(); // se cierra la llamada a la funcion
 	}
@@ -131,8 +130,9 @@ public class EstablishedRouteDAO implements EstablishedRouteDAOInterface {
 		EstablishedRoute establishedRoute = this.cache.get(cs.getResultSet().getInt("modality_id"));
 
 		if (establishedRoute == null) { // se no se encuentra en cache una referencia con ese id
-			establishedRoute = new EstablishedRoute(cs.getResultSet().getInt("modality_id"), this.carrierContract, 
-					cs.getResultSet().getString("type_of_modality"), VehicleDAO.getInstancie().select(cs.getResultSet().getInt("vehicle_id")), cs.getResultSet().getString("type_transport_modality"), 
+			establishedRoute = new EstablishedRoute(cs.getResultSet().getInt("modality_id"), this.carrierContract,
+					cs.getResultSet().getString("type_of_modality"), (ArrayList<Vehicle>) VehicleDAO.getInstancie().selectIntoTransportModality(cs.getResultSet().getInt("modality_id")),
+					cs.getResultSet().getString("type_transport_modality"),
 					cs.getResultSet().getString("description_rout"), cs.getResultSet().getDouble("cost_going"), cs.getResultSet().getDouble("cost_lap"));
 
 			this.cache.put(establishedRoute.getId(), establishedRoute); // se alamacena en cache la referencia de la modalidad de transporte

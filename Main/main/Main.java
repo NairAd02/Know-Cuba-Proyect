@@ -2,6 +2,7 @@ package main;
 
 
 import java.awt.EventQueue;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -32,7 +33,7 @@ public class Main {
 			e1.printStackTrace();
 		}
 
-		// Se establece coneccion con la base de datos
+		// Se establece conexion con la base de datos
 		try {
 			ConnectionDataBase.establecerConeccion();
 		} catch (SQLException e) {

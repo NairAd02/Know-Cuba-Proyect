@@ -113,8 +113,8 @@ public abstract class Contract implements DUILogic {
 	public void setProvider(Provider provider) {
 		this.provider = provider;
 	}
-	public ArrayList<Modality> getModalitys() {
-		return modalitys;
+	public ArrayList<Modality> getModalitys() { // Sin Filtros
+		return this.modalitys;
 	}
 	public void setModalitys(ArrayList<Modality> modalitys) {
 		this.modalitys = modalitys;

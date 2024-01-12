@@ -1,10 +1,8 @@
 package logica;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import dao.AdministratorDAO;
 import dao.DependentDAO;
 import dao.ManagerDAO;
 import dao.PackageDesignerDAO;
@@ -48,7 +46,7 @@ public class Controller {
 
 	public void cargarUsuarios () throws SQLException {
 		this.users = new HashMap<Integer, ArrayList<User>>();
-		this.users.put(User.administrator, new ArrayList<User>(AdministratorDAO.getInstancie().selectAll())); // se cargan los usuarios administradores de la base de datos
+		//this.users.put(User.administrator, new ArrayList<User>(AdministratorDAO.getInstancie().selectAll())); // se cargan los usuarios administradores de la base de datos
 		this.users.put(User.dependent, new ArrayList<User>(DependentDAO.getInstancie().selectAll())); // se cargan los usuarios dependientes de la base de datos
 		this.users.put(User.manager, new ArrayList<User>(ManagerDAO.getInstancie().selectAll())); // se cargan los usuarios managers de la base de datos
 		this.users.put(User.packageDesigner, new ArrayList<User>(PackageDesignerDAO.getInstancie().selectAll())); // se cargan los usuarios diseñadores de paquete de la base de datos
@@ -56,7 +54,7 @@ public class Controller {
 
 	public void cargarRoles () throws SQLException {
 		this.roles = new ArrayList<Rol>();
-		this.roles = (ArrayList<Rol>) RolDAO.getInstancie().selectAll();
+		this.roles = (ArrayList<Rol>) RolDAO.getInstancie().selectAllDiferentAdministrator(); // Se seleccionan todos los roles excepto el de administrador
 	}
 
 	// Fin Metodos de Carga de Informacion
@@ -66,10 +64,8 @@ public class Controller {
 	public void addUser (User user) throws SQLException {
 		user.insert(); // se inserta al usuario en la base de datos
 
-		if (user instanceof Administrator) {
-			this.users.get(User.administrator).add(user); // se inserta al usuario en la logica del negocio
-		}
-		else if (user instanceof Dependent) {
+		
+		 if (user instanceof Dependent) {
 			this.users.get(User.dependent).add(user); // se inserta al usuario en la logica del negocio
 		}
 		else if (user instanceof Manager) {
@@ -92,13 +88,10 @@ public class Controller {
 
 	// Metodos de actualizacion
 
-	public void updateUser (User user, String userName, String password, LocalDate stratDateConnection, LocalDate lastDateConnection, boolean isConnected) throws SQLException { // temporal
+	public void updateUser (User user, String userName) throws SQLException { // temporal
 		// se actualiza la informacion del usuario a nivel de logica
 		user.setUserName(userName);
-		user.setPassword(password);
-		if (user.getStartDateConnection() == null) user.setStartDateConnection(stratDateConnection);
-		user.setLastDateConnection(lastDateConnection);
-		user.setConnected(isConnected);
+		
 		user.update(); // se actualiza la informacion del usuario en la base de datos
 	}
 
@@ -115,10 +108,8 @@ public class Controller {
 	public void deleteUser (User user) throws SQLException {
 		user.delete(); // se elimina de la base de datos al usuario
 
-		if (user instanceof Administrator) {
-			this.users.get(User.administrator).remove(user); // se elimina de la logica del negocio al usuario
-		}
-		else if (user instanceof Dependent) {
+		
+		if (user instanceof Dependent) {
 			this.users.get(User.dependent).remove(user); // se elimina de la logica del negocio al usuario	
 		}
 		else if (user instanceof Manager) {

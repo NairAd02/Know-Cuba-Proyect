@@ -1,6 +1,8 @@
 package logica;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import dao.AccommodationModalityDAO;
 
 public class AccommodationModality extends Modality{
@@ -91,7 +93,5 @@ public class AccommodationModality extends Modality{
 		AccommodationModalityDAO.getInstancie().update(this);
 
 	}
-	
-	
 
 }

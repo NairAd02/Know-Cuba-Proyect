@@ -1,30 +1,42 @@
 package logica;
 
 import java.sql.SQLException;
-
 import dao.ActivityDAO;
+
 
 public class Activity implements DUILogic {
 	private int id;
+	private String name;
 	private String description;
 	private int idServiceProvider;
 
-	public Activity(int id, String description, int idServiceProvider) { // Constructor a nivel de base de datos
+
+	public Activity(int id, String name, String description, int idServiceProvider) { // Constructor a nivel de base de datos
 		this.id = id;
+		this.name = name;
 		this.description = description;
 		this.idServiceProvider = idServiceProvider;
 	}
 
-	public Activity(String description, int idServiceProvider) { // Constructor a nivel de logica
+	public Activity(String name, String description, int idServiceProvider) { // Constructor a nivel de logica
+		this.name = name;
 		this.description = description;
 		this.idServiceProvider = idServiceProvider;
 	}
 
-	public Activity(String description) { // Constructor a nivel de logica (proceso de creacion del objeto)
+	public Activity(String name, String description) { // Constructor a nivel de logica (proceso de creacion del objeto)
+		this.name = name;
 		this.description = description;
 	}
 
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public int getId() {
 		return id;

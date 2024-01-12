@@ -2,15 +2,15 @@ package logica;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-
+import java.util.ArrayList;
 import dao.DependentDAO;
-import utils.ConnectionDataBase;
+
 
 public class Dependent extends User {
 
 	public Dependent(int id, String userName, String password, Rol rol, LocalDate startDateConnection,
-			LocalDate lastDateConnection, boolean connected) {
-		super(id, userName, password, rol, startDateConnection, lastDateConnection, connected);
+			LocalDate lastDateConnection, boolean connected, ArrayList<Request> requests, boolean statePassword) {
+		super(id, userName, password, rol, startDateConnection, lastDateConnection, connected, requests, statePassword);
 		// TODO Auto-generated constructor stub
 	} // constructor nivel de base de datos
 	

@@ -10,7 +10,7 @@ public class ModeloTablaTransportModalityEstablishedRoute extends DefaultTableMo
 	private ArrayList<EstablishedRoute> elements;
 
 	public ModeloTablaTransportModalityEstablishedRoute(){
-		String[] columnNames = {"Vehicle", "Description rout", "Cost_going","Cost lap", "Price"};   
+		String[] columnNames = {"Description rout", "Cost_going","Cost lap", "Price"};
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
 		this.elements = new ArrayList<EstablishedRoute>();
@@ -20,7 +20,7 @@ public class ModeloTablaTransportModalityEstablishedRoute extends DefaultTableMo
 	public void addElement(EstablishedRoute establishedRoute) {
 		Object[] newRow =  null;
 		this.elements.add(establishedRoute);
-		newRow = new Object[]{establishedRoute.getVehicle(), establishedRoute.getDescriptionRout(), establishedRoute.getCostGoing(), establishedRoute.getCostLap(), establishedRoute.price()};
+		newRow = new Object[]{establishedRoute.getDescriptionRout(), establishedRoute.getCostGoing(), establishedRoute.getCostLap(), establishedRoute.price()};
 		addRow(newRow);
 	}
 

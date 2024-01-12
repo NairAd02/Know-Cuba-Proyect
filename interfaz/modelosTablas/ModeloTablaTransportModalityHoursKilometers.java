@@ -11,7 +11,7 @@ public class ModeloTablaTransportModalityHoursKilometers extends DefaultTableMod
 
 
 	public ModeloTablaTransportModalityHoursKilometers(){
-		String[] columnNames = {"Vehicle", "Cost Kilometers Rout", "Cost Hours", "Cost Kilometers Rout Additionals", "Cost Hours Additionals", "Price"};   
+		String[] columnNames = {"Cost Kilometers Rout", "Cost Hours", "Cost Kilometers Rout Additionals", "Cost Hours Additionals", "Price"};
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
 		this.elements = new ArrayList<HoursKilometers>();
@@ -21,7 +21,7 @@ public class ModeloTablaTransportModalityHoursKilometers extends DefaultTableMod
 	public void addElement(HoursKilometers hoursKilometers) {
 		Object[] newRow =  null;
 		this.elements.add(hoursKilometers);
-		newRow = new Object[]{hoursKilometers.getVehicle(), hoursKilometers.getCostKilometersRout(), hoursKilometers.getCostHours(), hoursKilometers.getCostKilometersRoutAdditionals(), 
+		newRow = new Object[]{hoursKilometers.getCostKilometersRout(), hoursKilometers.getCostHours(), hoursKilometers.getCostKilometersRoutAdditionals(),
 				hoursKilometers.getCostHoursAdditionals(), hoursKilometers.price()};
 		addRow(newRow);
 	}

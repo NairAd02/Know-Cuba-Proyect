@@ -85,7 +85,96 @@ public class ServiceContract extends Contract{
 
 	// Fin de Metodos de carga
 
+	// Metodos para la Obtenecion de las Modalidades
 
+	public ArrayList<Modality> getModalitys (Activity activity) { // Filtro Actividad
+		ArrayList<Modality> modalitys = new ArrayList<>();
+
+		for (Modality modality : this.modalitys) {
+			ServiceModality serviceModality = (ServiceModality) modality;
+			if (serviceModality.getActivity().equals(activity))
+				modalitys.add(modality);
+		}
+
+		return modalitys;
+	}
+
+	public ArrayList<Modality> getModalitys (LocalDate releasedDateMin, LocalDate releasedDateMax) { // Filtro Actividad
+		ArrayList<Modality> modalitys = new ArrayList<>();
+
+		for (Modality modality : this.modalitys) {
+			ServiceModality serviceModality = (ServiceModality) modality;
+			if (serviceModality.getReleasedDate().isAfter(releasedDateMin) && serviceModality.getReleasedDate().isBefore(releasedDateMax)) // se verifica que la fecha esté en rango
+				modalitys.add(modality);
+		}
+
+		return modalitys;
+	}
+
+	public ArrayList<Modality> getModalitys (double precioMin, double precioMax) { // Filtro Percio
+		ArrayList<Modality> modalitys = new ArrayList<>();
+
+		for (Modality modality : this.modalitys) {
+			ServiceModality serviceModality = (ServiceModality) modality;
+			if (serviceModality.price() >= precioMin && serviceModality.price() <= precioMax) // se verifica que el precio esté en rango
+				modalitys.add(modality);
+		}
+
+		return modalitys;
+	}
+
+	public ArrayList<Modality> getModalitys (Activity activity, LocalDate releasedDateMin, LocalDate releasedDateMax) { // Filtro Actividad + Filtro Precio
+		ArrayList<Modality> modalitys = new ArrayList<>();
+
+		for (Modality modality : this.modalitys) {
+			ServiceModality serviceModality = (ServiceModality) modality;
+			if (serviceModality.getActivity().equals(activity) && serviceModality.getReleasedDate().isAfter(releasedDateMin) && serviceModality.getReleasedDate().isBefore(releasedDateMax)) // se verifica que la modalidad contenga la misma actividad y que la fecha esté en rango
+				modalitys.add(modality);
+		}
+
+		return modalitys;
+	}
+
+	public ArrayList<Modality> getModalitys (Activity activity, double precioMin, double precioMax) { // Filtro Actividad + Filtro Percio
+		ArrayList<Modality> modalitys = new ArrayList<>();
+
+		for (Modality modality : this.modalitys) {
+			ServiceModality serviceModality = (ServiceModality) modality;
+			if (serviceModality.getActivity().equals(activity) && serviceModality.price() >= precioMin && serviceModality.price() <= precioMax) // se verifica que el precio esté en rango y que contenga la actividad
+				modalitys.add(modality);
+		}
+
+		return modalitys;
+	}
+
+	public ArrayList<Modality> getModalitys (LocalDate releasedDateMin, LocalDate releasedDateMax, double precioMin, double precioMax) { // Filtro Fecha de Realizacion + Filtro Percio
+		ArrayList<Modality> modalitys = new ArrayList<>();
+
+		for (Modality modality : this.modalitys) {
+			ServiceModality serviceModality = (ServiceModality) modality;
+			if (serviceModality.getReleasedDate().isAfter(releasedDateMin) && serviceModality.getReleasedDate().isBefore(releasedDateMax) &&
+					serviceModality.price() >= precioMin && serviceModality.price() <= precioMax) // se verifica que el precio esté en rango y .............
+				modalitys.add(modality);
+		}
+
+		return modalitys;
+	}
+
+	public ArrayList<Modality> getModalitys (Activity activity, LocalDate releasedDateMin, LocalDate releasedDateMax, double precioMin, double precioMax) { // Filtro Fecha de Realizacion + Filtro Percio
+		ArrayList<Modality> modalitys = new ArrayList<>();
+
+		for (Modality modality : this.modalitys) {
+			ServiceModality serviceModality = (ServiceModality) modality;
+			if (serviceModality.getActivity().equals(activity) && serviceModality.getReleasedDate().isAfter(releasedDateMin) && serviceModality.getReleasedDate().isBefore(releasedDateMax) &&
+					serviceModality.price() >= precioMin && serviceModality.price() <= precioMax) // se verifica que el precio esté en rango y .........
+				modalitys.add(modality);
+		}
+
+		return modalitys;
+	}
+
+
+	// Fin Metodos para la Obtenecion de las Modalidades
 
 
 }

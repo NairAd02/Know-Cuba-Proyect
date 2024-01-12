@@ -10,6 +10,7 @@ import logica.Manager;
 import logica.PackageDesigner;
 import logica.User;
 import utils.ConnectionDataBase;
+import utils.Semaphore;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -40,6 +41,8 @@ public class FrameLogin extends JFrame {
 	private JLabel lblNotificacionRegistro;
 	private JLabel lblX;
 	private int mouseX, mouseY;
+
+
 
 
 	public FrameLogin() {
@@ -215,27 +218,32 @@ public class FrameLogin extends JFrame {
 		User user = UserDAO.getInstancie().select(textFieldUsername.getText(), textFieldPassword.getText()); // se obtiene la informacion del usuario con ese nombre de usuario y contraseña
 
 		if (user != null) { // se realmente existe un usuario con ese nombre de usuario y contraseña
-			user.establecerConexion(); // se indica que el usuario a iniciado sesion en el sistema
-			Controller.getInstancie(user); // se crea el sistema logico
-			if (user instanceof Administrator) { // si el usuario es administrador se inicia el frame administrador
-				/*FrameAdministrador frameAdministrador = FrameAdministrador.getInstancie();
+			if (user.isStatePassword()) { // si el usuario ya cambió su constraseña
+				user.establecerConexion(); // se indica que el usuario a iniciado sesion en el sistema
+				Controller.getInstancie(user); // se crea el sistema logico
+				if (user instanceof Administrator) { // si el usuario es administrador se inicia el frame administrador
+					/*FrameAdministrador frameAdministrador = FrameAdministrador.getInstancie();
 				frameAdministrador.setVisible(true);
 				dispose(); // se cierra el frame*/
-				FramePrincipal framGerente = FramePrincipal.getIntancie();
-				framGerente.setVisible(true);
-				dispose(); // se cierra el frame
+					FramePrincipal framGerente = FramePrincipal.getIntancie();
+					framGerente.setVisible(true);
+					dispose(); // se cierra el frame
+				}
+				else if (user instanceof Dependent || user instanceof PackageDesigner ) { // si el usuario es dependiente se inicia el frame dependiente o  si el usuario es diseñador de paquetes se inicia el frame diseñador de paquetes
+					FramePaquetes framePaquetes = FramePaquetes.getInstancie();
+					framePaquetes.setVisible(true);
+					dispose(); // se cierra el frame
+				}
+				else if (user instanceof Manager) { // se el usuario es manager se inicia el frame manager
+					FramePrincipal framGerente = FramePrincipal.getIntancie();
+					framGerente.setVisible(true);
+					dispose(); // se cierra el frame
+				}
+
 			}
-			else if (user instanceof Dependent || user instanceof PackageDesigner ) { // si el usuario es dependiente se inicia el frame dependiente o  si el usuario es diseñador de paquetes se inicia el frame diseñador de paquetes
-				FramePaquetes framePaquetes = FramePaquetes.getInstancie();
-				framePaquetes.setVisible(true);
-				dispose(); // se cierra el frame
+			else { // si no la cambió
+				// se abre frame para establecer su contraseña
 			}
-			else if (user instanceof Manager) { // se el usuario es manager se inicia el frame manager
-				FramePrincipal framGerente = FramePrincipal.getIntancie();
-				framGerente.setVisible(true);
-				dispose(); // se cierra el frame
-			}
-		
 		}
 		else {
 			lblNotificacionRegistro.setVisible(true);

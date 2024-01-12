@@ -1,6 +1,7 @@
 package logica;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import dao.HoursKilometersDAO;
 
@@ -11,20 +12,20 @@ public class HoursKilometers extends TransportModality{
 	private double costHoursAdditionals;
 
 
-	public HoursKilometers(int id, Contract contract, String typeOfModality, Vehicle vehicle, String typeTransportModality,
-			double costKilometersRout, double costHours, double costKilometersRoutAdditionals,
-			double costHoursAdditionals) { // constructor a nivel de base de datos
-		super(id, contract, typeOfModality, vehicle, typeTransportModality);
+	public HoursKilometers(int id, Contract contract, String typeOfModality, ArrayList<Vehicle> vehicles, String typeTransportModality,
+						   double costKilometersRout, double costHours, double costKilometersRoutAdditionals,
+						   double costHoursAdditionals) { // constructor a nivel de base de datos
+		super(id, contract, typeOfModality, vehicles, typeTransportModality);
 		this.costKilometersRout = costKilometersRout;
 		this.costHours = costHours;
 		this.costKilometersRoutAdditionals = costKilometersRoutAdditionals;
 		this.costHoursAdditionals = costHoursAdditionals;
 	}
 
-	public HoursKilometers(Contract contract, Vehicle vehicle,
+	public HoursKilometers(Contract contract, ArrayList<Vehicle> vehicles,
 			double costKilometersRout, double costHours, double costKilometersRoutAdditionals,
 			double costHoursAdditionals) { // constructor a nivel de logica
-		super(contract, vehicle);
+		super(contract, vehicles);
 		this.costKilometersRout = costKilometersRout;
 		this.costHours = costHours;
 		this.costKilometersRoutAdditionals = costKilometersRoutAdditionals;
@@ -32,14 +33,19 @@ public class HoursKilometers extends TransportModality{
 		this.typeTransportModality = "Hours Kilometers";
 	}
 	
-	public HoursKilometers(Vehicle vehicle,
+	public HoursKilometers(ArrayList<Vehicle> vehicles,
 			double costKilometersRout, double costHours, double costKilometersRoutAdditionals,
 			double costHoursAdditionals) { // constructor a nivel de logica (proceso de creación del objeto)
-		super(vehicle);
+		super(vehicles);
 		this.costKilometersRout = costKilometersRout;
 		this.costHours = costHours;
 		this.costKilometersRoutAdditionals = costKilometersRoutAdditionals;
 		this.costHoursAdditionals = costHoursAdditionals;
+		this.typeTransportModality = "Hours Kilometers";
+	}
+
+	public HoursKilometers () { // constructor para crear una instancia temporal
+		super();
 		this.typeTransportModality = "Hours Kilometers";
 	}
 
@@ -71,14 +77,13 @@ public class HoursKilometers extends TransportModality{
 
 	@Override
 	public void insert() throws SQLException {
-
 		this.id = HoursKilometersDAO.getInstancie().insert(this);
+		this.insertVehiclesIntoTransportModality(); // Se insertan todos los vehiculos asignados como parte de esta modalidad en la base de datos
 	}
 
 	@Override
 	public void update() throws SQLException {
 		HoursKilometersDAO.getInstancie().update(this);
-
 	}
 
 	// Operaciones

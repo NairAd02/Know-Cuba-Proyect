@@ -60,12 +60,15 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 	}
 
 
-
+	private void crearFrameNotificacion (String mensaje) {
+		FrameAdvertencia frameAdvertencia = new FrameAdvertencia(mensaje);
+		frameAdvertencia.setVisible(true);
+	}
 
 	public FrameGerenteAsociacionEmpresaProveedorServicio(PanelGerenteAsociacionEmpresaProveedorServicio ps, ServiceProvider s) {
 		this.panelGerenteAsociacionEmpresaProveedorServicio = ps;
 		this.serviceProvider = s;
-		
+
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 465, 330);
@@ -271,6 +274,7 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 							cerrarFrame();
 						} catch (SQLException e1) {
 							try {
+								crearFrameNotificacion("Ha ocurrido un error durante la inserccion");
 								ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas
 							} catch (SQLException e2) {
 								// TODO Auto-generated catch block
@@ -357,7 +361,7 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 		Controller.getInstancie().getTouristAgency().addProvider(new ServiceProvider(textFieldServiceProviderName.getText(), textFieldProvince.getText(), 
 				serviceProvider.getActivities())); // se inserta el provedor de servicios a nivel de base de datos
 		panelGerenteAsociacionEmpresaProveedorServicio.actualizarTablaServicieProviders(); // se actualiza la informacion de la tabla de provedores
-
+		crearFrameNotificacion("Se ha insertado con exito el proveedor " + textFieldServiceProviderName.getText());
 	}
 
 	private void cerrarFrame () {

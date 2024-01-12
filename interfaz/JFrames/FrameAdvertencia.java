@@ -15,6 +15,9 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
 import java.awt.Font;
+import javax.swing.JTextPane;
+import javax.swing.border.MatteBorder;
+import java.awt.SystemColor;
 
 public class FrameAdvertencia extends JFrame {
 
@@ -22,17 +25,18 @@ public class FrameAdvertencia extends JFrame {
 	private JPanel contentPane;
 	boolean tiempoTranscurrido = false;
 	Timer timer;
-	private JLabel lblMensaje;
+	private String holaNoHagoNadaAke;
+	private JTextPane textPane;
 
 	public FrameAdvertencia(String mensaje) {
 		setUndecorated(true);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(mensaje);
-		setBounds(100, 100, 355, 90);
+		setBounds(100, 100, 408, 90);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(5, 150, 177));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -44,16 +48,15 @@ public class FrameAdvertencia extends JFrame {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(10, 0, 79, 90);
 		contentPane.add(lblNewLabel);
-
-		lblMensaje = new JLabel(mensaje);
-		lblMensaje.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblMensaje.setBounds(99, 30, 246, 14);
-		contentPane.add(lblMensaje);
-
-		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-		lblNewLabel_2.setBounds(0, 0, 355, 90);
-		contentPane.add(lblNewLabel_2);
+		
+		textPane = new JTextPane();
+		textPane.setEditable(false);
+		textPane.setForeground(SystemColor.textHighlightText);
+		textPane.setFont(new Font("Dialog", Font.PLAIN, 14));
+		textPane.setText(mensaje);
+		textPane.setBackground(new Color(5, 150, 177));
+		textPane.setBounds(99, 33, 299, 46);
+		contentPane.add(textPane);
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		Rectangle bounds = ge.getMaximumWindowBounds();

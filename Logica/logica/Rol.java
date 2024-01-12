@@ -1,9 +1,8 @@
 package logica;
 
 import java.sql.SQLException;
-
 import dao.RolDAO;
-import utils.ConnectionDataBase;
+
 
 public class Rol implements DUILogic {
 	private int id;

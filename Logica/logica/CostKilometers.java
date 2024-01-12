@@ -1,81 +1,86 @@
 package logica;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import dao.CostKilometersDAO;
 
-public class CostKilometers extends TransportModality{
-	private double costKilometersGoing;
-	private double costKilometersLap;
-	private double costHoursWait;
+public class CostKilometers extends TransportModality {
+    private double costKilometersGoing;
+    private double costKilometersLap;
+    private double costHoursWait;
 
 
-	public CostKilometers(int id, Contract contract, String typeOfModality, Vehicle vehicle,
-			String typeTransportModality, double costKilometersGoing, double costKilometersLap, double costHoursWait) { // constructor a nivel de base de datos
-		super(id, contract, typeOfModality, vehicle, typeTransportModality);
-		this.costKilometersGoing = costKilometersGoing;
-		this.costKilometersLap = costKilometersLap;
-		this.costHoursWait = costHoursWait;
-	}
+    public CostKilometers(int id, Contract contract, String typeOfModality, ArrayList<Vehicle> vehicles,
+                          String typeTransportModality, double costKilometersGoing, double costKilometersLap, double costHoursWait) { // constructor a nivel de base de datos
+        super(id, contract, typeOfModality, vehicles, typeTransportModality);
+        this.costKilometersGoing = costKilometersGoing;
+        this.costKilometersLap = costKilometersLap;
+        this.costHoursWait = costHoursWait;
+    }
 
-	public CostKilometers(Contract contract, Vehicle vehicle, double costKilometersGoing, double costKilometersLap, double costHoursWait) { // constructor a nivel de logica
-		super(contract, vehicle);
-		this.costKilometersGoing = costKilometersGoing;
-		this.costKilometersLap = costKilometersLap;
-		this.costHoursWait = costHoursWait;
-		this.typeTransportModality = "Cost Kilometers";
-	}
-	
-	public CostKilometers(Vehicle vehicle, double costKilometersGoing, double costKilometersLap, double costHoursWait) { // Constructor a nivel de logica (proceso de creacion del objeto)
-		super(vehicle);
-		this.costKilometersGoing = costKilometersGoing;
-		this.costKilometersLap = costKilometersLap;
-		this.costHoursWait = costHoursWait;
-		this.typeTransportModality = "Cost Kilometers";
-	}
+    public CostKilometers(Contract contract, ArrayList<Vehicle> vehicles, double costKilometersGoing, double costKilometersLap, double costHoursWait) { // constructor a nivel de logica
+        super(contract, vehicles);
+        this.costKilometersGoing = costKilometersGoing;
+        this.costKilometersLap = costKilometersLap;
+        this.costHoursWait = costHoursWait;
+        this.typeTransportModality = "Cost Kilometers";
+    }
 
-	public double getCostKilometersGoing() {
-		return costKilometersGoing;
-	}
+    public CostKilometers(ArrayList<Vehicle> vehicles, double costKilometersGoing, double costKilometersLap, double costHoursWait) { // Constructor a nivel de logica (proceso de creacion del objeto)
+        super(vehicles);
+        this.costKilometersGoing = costKilometersGoing;
+        this.costKilometersLap = costKilometersLap;
+        this.costHoursWait = costHoursWait;
+        this.typeTransportModality = "Cost Kilometers";
+    }
 
-	public void setCostKilometersGoing(double costKilometersGoing) {
-		this.costKilometersGoing = costKilometersGoing;
-	}
+    public CostKilometers () { // constructor para crear una instancia temporal
+        super();
+        this.typeTransportModality = "Cost Kilometers";
+    }
 
-	public double getCostKilometersLap() {
-		return costKilometersLap;
-	}
+    public double getCostKilometersGoing() {
+        return costKilometersGoing;
+    }
 
-	public void setCostKilometersLap(double costKilometersLap) {
-		this.costKilometersLap = costKilometersLap;
-	}
+    public void setCostKilometersGoing(double costKilometersGoing) {
+        this.costKilometersGoing = costKilometersGoing;
+    }
 
-	public double getCostHoursWait() {
-		return costHoursWait;
-	}
+    public double getCostKilometersLap() {
+        return costKilometersLap;
+    }
 
-	public void setCostHoursWait(double costHoursWait) {
-		this.costHoursWait = costHoursWait;
-	}
+    public void setCostKilometersLap(double costKilometersLap) {
+        this.costKilometersLap = costKilometersLap;
+    }
 
-	@Override
-	public void insert() throws SQLException {
+    public double getCostHoursWait() {
+        return costHoursWait;
+    }
 
-		this.id = CostKilometersDAO.getInstancie().insert(this);
-	}
+    public void setCostHoursWait(double costHoursWait) {
+        this.costHoursWait = costHoursWait;
+    }
 
-	@Override
-	public void update() throws SQLException {
-		CostKilometersDAO.getInstancie().update(this);
+    @Override
+    public void insert() throws SQLException {
+        this.id = CostKilometersDAO.getInstancie().insert(this);
+        this.insertVehiclesIntoTransportModality(); // Se insertan todos los vehiculos asignados como parte de esta modalidad en la base de datos
+    }
 
-	}
+    @Override
+    public void update() throws SQLException {
+        CostKilometersDAO.getInstancie().update(this);
+    }
 
-	//Operaciones
+    //Operaciones
 
-	public double price () {
-		return this.costHoursWait + this.costKilometersGoing + this.costKilometersLap;
-	}
+    public double price() {
+        return this.costHoursWait + this.costKilometersGoing + this.costKilometersLap;
+    }
 
-	//Fin de Operaciones
+    //Fin de Operaciones
 
 }

@@ -203,9 +203,9 @@ public class FrameInformacionPaquete extends JFrame {
 		lblOperation.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-	
+
 				if (verificarCampos()) {
-					
+
 					if (touristPackage.getId() == -1) { // add
 						try {
 							addTouristPackage();
@@ -301,9 +301,7 @@ public class FrameInformacionPaquete extends JFrame {
 	}
 
 	private boolean verificarCampos () {
-		return (!this.textFieldName.getText().equalsIgnoreCase("") && this.touristPackage.getModalitys(Modality.accommodationModality).size() != 0 && 
-				this.touristPackage.getModalitys(Modality.serviceModality).size() != 0 && (this.touristPackage.getModalitys(Modality.costKilometers).size() != 0 ||
-				this.touristPackage.getModalitys(Modality.hoursKilometers).size() != 0 || this.touristPackage.getModalitys(Modality.establishedRoute).size() != 0 ));
+		return (!this.textFieldName.getText().equalsIgnoreCase("") && this.touristPackage.verificarPaquete());
 	}
 
 	private void addTouristPackage () throws SQLException {

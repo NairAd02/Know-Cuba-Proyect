@@ -78,7 +78,7 @@ public class PanelGestionUsuarios extends JPanel {
 	}
 
 	private void crearFrameDecisor () {
-		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Seguro que desea eliminar");
+		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Seguro que desea eliminar los usuarios seleccionados");
 		frameDecisor.setVisible(true);
 		FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
 	}
@@ -229,9 +229,9 @@ public class PanelGestionUsuarios extends JPanel {
 		lblToRegister.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				FrameRegistro frameRegistro = new FrameRegistro(); // se inicia el frame registro
+				FrameRegistro frameRegistro = new FrameRegistro(PanelGestionUsuarios.this, null); // se inicia el frame registro
 				frameRegistro.setVisible(true);
-				setEnabled(false); // se inhbilita el frame actual
+				FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -284,7 +284,11 @@ public class PanelGestionUsuarios extends JPanel {
 		lblUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-
+				if (lblUpdate.isEnabled()) {
+				FrameRegistro frameRegistro = new FrameRegistro(PanelGestionUsuarios.this, ((ModeloTablaUsers) tableUsuario.getModel()).getElement(tableUsuario.getSelectedRow()) ); // se inicia el frame registro
+				frameRegistro.setVisible(true);
+				FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
+				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -373,6 +377,7 @@ public class PanelGestionUsuarios extends JPanel {
 		reiniciarTable(this.tableUsuario);
 
 		for (Integer k : keys) {
+			if (k != 1)
 			for (User user : usuarios.get(k)) {
 				((ModeloTablaUsers) tableUsuario.getModel()).addElement(user);
 			}
