@@ -53,20 +53,21 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 			}
 		});
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		contentPane.setBackground(new Color(5, 150, 177));
+		contentPane.setBackground(new Color(18, 95, 115));
 		setLocationRelativeTo(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JLabel lblServiceProviderActivities = new JLabel("SERVICE PROVIDER ACTIVITIES");
-		lblServiceProviderActivities.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblServiceProviderActivities.setForeground(SystemColor.textHighlightText);
+		lblServiceProviderActivities.setFont(new Font("Dialog", Font.BOLD, 21));
 		lblServiceProviderActivities.setBounds(27, 11, 332, 30);
 		contentPane.add(lblServiceProviderActivities);
 
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				cerrarFrame();
 			}
 			@Override
@@ -75,29 +76,30 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(384, 0, 38, 38);
 		contentPane.add(lblX);
 
 		JLabel lblDescription = new JLabel("DESCRIPTION :");
-		lblDescription.setForeground(SystemColor.info);
-		lblDescription.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblDescription.setBounds(10, 186, 132, 23);
+		lblDescription.setForeground(SystemColor.textHighlightText);
+		lblDescription.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblDescription.setBounds(106, 127, 132, 23);
 		contentPane.add(lblDescription);
 
 		JLabel lblAdd = new JLabel("ADD");
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (verificarCampos()) {
 					try {
 						addActivity();
+						frameGerenteAsociacionEmpresaProveedorSerivicio.actualizarTablaActivities(); // se actualiza la informacion de la tabla de las actividades
 						cerrarFrame();
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
@@ -122,12 +124,12 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 		contentPane.add(lblAdd);
 
 		textPaneActivityDescription = new JTextPane();
-		textPaneActivityDescription.setBounds(152, 157, 210, 78);
+		textPaneActivityDescription.setBounds(106, 161, 210, 78);
 		contentPane.add(textPaneActivityDescription);
 		
 		JLabel lblName = new JLabel("NAME :");
-		lblName.setForeground(SystemColor.info);
-		lblName.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblName.setForeground(SystemColor.textHighlightText);
+		lblName.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblName.setBounds(10, 88, 74, 23);
 		contentPane.add(lblName);
 		
@@ -148,7 +150,7 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 		else { // si es igual a -1 se añade a la logica del negocio
 			this.serviceProvider.addActivityLogic(new Activity(this.textFieldNameActivity.getText(), textPaneActivityDescription.getText()));
 		}
-		frameGerenteAsociacionEmpresaProveedorSerivicio.actualizarTablaActivities(); // se actualiza la informacion de la tabla de las actividades
+		
 	}
 
 	private void cerrarFrame () {

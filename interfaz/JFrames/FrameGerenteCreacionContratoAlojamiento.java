@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.border.LineBorder;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.MatteBorder;
+import java.awt.Insets;
 
 public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 
@@ -53,10 +55,6 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 	private JLabel lblTituloFrame, lblProviderContratado;
 	private JPanel panelAccommodationContract;
 	private JLabel lblX;
-	private PanelCreacionContratoAlojamientoAccommodationModality panelCreacionContratoAlojamientoAccommodationModality;
-	private PanelGerenteCreacionContratoAlojamientoTemporada panelGerenteCreacionContratoAlojamientoTemporada;
-
-
 
 
 
@@ -81,8 +79,9 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		this.accommodationContract = ac;
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 512);
+		setBounds(100, 100, 853, 577);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(18, 95, 115));
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -105,59 +104,67 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		contentPane.setLayout(null);
 
 		panelAccommodationContract = new JPanel();
-		panelAccommodationContract.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panelAccommodationContract.setBorder(new MatteBorder(3, 3, 3, 3, (Color) new Color(0, 0, 0)));
 		panelAccommodationContract.setLayout(null);
-		panelAccommodationContract.setBackground(new Color(5, 150, 177));
-		panelAccommodationContract.setBounds(0, 0, 700, 512);
+		panelAccommodationContract.setBackground(new Color(18, 95, 115));
+		panelAccommodationContract.setBounds(0, 0, 853, 577);
 		contentPane.add(panelAccommodationContract);
 
 		lblTituloFrame = new JLabel("ACCOMMODATION CONTRACT");
-		lblTituloFrame.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblTituloFrame.setBounds(27, 11, 422, 30);
+		lblTituloFrame.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTituloFrame.setForeground(SystemColor.textHighlightText);
+		lblTituloFrame.setFont(new Font("Dialog", Font.BOLD, 26));
+		lblTituloFrame.setBounds(139, 36, 574, 30);
 		panelAccommodationContract.add(lblTituloFrame);
 
 		JLabel lblStartDate = new JLabel("START DATE ");
-		lblStartDate.setForeground(SystemColor.info);
-		lblStartDate.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblStartDate.setBounds(58, 72, 119, 23);
+		lblStartDate.setForeground(SystemColor.textHighlightText);
+		lblStartDate.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblStartDate.setBounds(66, 88, 119, 23);
 		panelAccommodationContract.add(lblStartDate);
 
 		JLabel lblEndDate = new JLabel("END DATE ");
-		lblEndDate.setForeground(SystemColor.info);
-		lblEndDate.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblEndDate.setBounds(232, 72, 98, 23);
+		lblEndDate.setForeground(SystemColor.textHighlightText);
+		lblEndDate.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblEndDate.setBounds(281, 88, 98, 23);
 		panelAccommodationContract.add(lblEndDate);
 
 		JLabel lblProvider = new JLabel("PROVIDER");
-		lblProvider.setForeground(SystemColor.info);
-		lblProvider.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblProvider.setBounds(385, 72, 98, 23);
+		lblProvider.setForeground(SystemColor.textHighlightText);
+		lblProvider.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblProvider.setBounds(486, 88, 98, 23);
 		panelAccommodationContract.add(lblProvider);
 
 		dateChooserStartDate = new JDateChooser();
-		dateChooserStartDate.setBounds(58, 106, 119, 22);
+		dateChooserStartDate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		dateChooserStartDate.setFont(new Font("Dialog", Font.PLAIN, 14));
+		dateChooserStartDate.setBounds(54, 122, 150, 22);
 		panelAccommodationContract.add(dateChooserStartDate);
 
 		dateChooserEndDate = new JDateChooser();
-		dateChooserEndDate.setBounds(222, 106, 119, 22);
+		dateChooserEndDate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		dateChooserEndDate.setFont(new Font("Dialog", Font.PLAIN, 14));
+		dateChooserEndDate.setBounds(254, 122, 150, 22);
 		panelAccommodationContract.add(dateChooserEndDate);
 
 
 		JLabel lblDescription = new JLabel("DESCRIPTION");
-		lblDescription.setForeground(SystemColor.info);
-		lblDescription.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblDescription.setBounds(71, 201, 124, 30);
+		lblDescription.setForeground(SystemColor.textHighlightText);
+		lblDescription.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblDescription.setBounds(27, 230, 124, 30);
 		panelAccommodationContract.add(lblDescription);
 
 		lblConfirm = new JLabel("CONFIRM");
+		lblConfirm.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblConfirm.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (accommodationContract.getId() == -1) {
 					if (verificarCampos()) {
 						try {
 							addAccommodationContract();
 							ConnectionDataBase.commit(); // se confirman las operaciones realizadas sobre la base de datos
+							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
 							cerrarFrame();
 						} catch (SQLException e1) {
 							try {
@@ -174,6 +181,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 						try {
 							updateAccommodationContract();
 							ConnectionDataBase.commit(); // se confirman las operaciones realizadas sobre la base de datos
+							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
 							cerrarFrame();
 						} catch (SQLException e1) {
 							try {
@@ -198,15 +206,15 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		});
 		lblConfirm.setOpaque(true);
 		lblConfirm.setHorizontalAlignment(SwingConstants.CENTER);
-		lblConfirm.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblConfirm.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblConfirm.setBackground(SystemColor.info);
-		lblConfirm.setBounds(232, 458, 235, 35);
+		lblConfirm.setBounds(311, 531, 235, 35);
 		panelAccommodationContract.add(lblConfirm);
 
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (accommodationContract.getId() != -1) {
 					try {
 						ConnectionDataBase.roolback(); // se cancelan todos los cambios realizados a la base de datos
@@ -224,36 +232,44 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
-		lblX.setBounds(662, 0, 38, 38);
+		lblX.setBounds(815, 0, 38, 38);
 		panelAccommodationContract.add(lblX);
 
 		JLabel lblSurcharge = new JLabel("SURCHARGE");
-		lblSurcharge.setForeground(SystemColor.info);
-		lblSurcharge.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblSurcharge.setBounds(538, 69, 124, 30);
+		lblSurcharge.setForeground(SystemColor.textHighlightText);
+		lblSurcharge.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblSurcharge.setBounds(663, 84, 124, 30);
 		panelAccommodationContract.add(lblSurcharge);
 
 		spinnerRecargo = new JSpinner();
+		spinnerRecargo.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		spinnerRecargo.setFont(new Font("Dialog", Font.PLAIN, 14));
 		spinnerRecargo.setModel(new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
-		spinnerRecargo.setBounds(551, 106, 98, 22);
+		spinnerRecargo.setBounds(663, 122, 124, 22);
 		panelAccommodationContract.add(spinnerRecargo);
 
 		textPaneDescription = new JTextPane();
-		textPaneDescription.setBounds(58, 242, 591, 195);
+		textPaneDescription.setMargin(new Insets(8, 8, 8, 8));
+		textPaneDescription.setForeground(SystemColor.textText);
+		textPaneDescription.setFont(new Font("Dialog", Font.PLAIN, 18));
+		textPaneDescription.setBorder(new LineBorder(new Color(0, 0, 0)));
+		textPaneDescription.setBackground(SystemColor.inactiveCaptionBorder);
+		textPaneDescription.setBounds(10, 271, 833, 235);
 		panelAccommodationContract.add(textPaneDescription);
 
 		lblShowAccommodationModalities = new JLabel("SHOW ACCOMMODATION MODALITIES");
+		lblShowAccommodationModalities.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblShowAccommodationModalities.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				cambioDePanel(panelCreacionContratoAlojamientoAccommodationModality); // se cambia a la seccion de accommodations modalities
+				cambioDePanel(new PanelCreacionContratoAlojamientoAccommodationModality(FrameGerenteCreacionContratoAlojamiento.this)); // se cambia a la seccion de accommodations modalities
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -264,17 +280,18 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		});
 		lblShowAccommodationModalities.setHorizontalAlignment(SwingConstants.CENTER);
 		lblShowAccommodationModalities.setOpaque(true);
-		lblShowAccommodationModalities.setForeground(SystemColor.info);
-		lblShowAccommodationModalities.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblShowAccommodationModalities.setBounds(58, 149, 348, 30);
-		lblShowAccommodationModalities.setBackground(new Color(18, 95, 115));
+		lblShowAccommodationModalities.setForeground(SystemColor.textText);
+		lblShowAccommodationModalities.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblShowAccommodationModalities.setBounds(10, 189, 348, 30);
+		lblShowAccommodationModalities.setBackground(SystemColor.info);
 		panelAccommodationContract.add(lblShowAccommodationModalities);
 
 		lblShowSeasons = new JLabel("SHOW SEASONS");
+		lblShowSeasons.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblShowSeasons.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				cambioDePanel(panelGerenteCreacionContratoAlojamientoTemporada);
+				cambioDePanel(new PanelGerenteCreacionContratoAlojamientoTemporada(FrameGerenteCreacionContratoAlojamiento.this));
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -287,29 +304,25 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		});
 		lblShowSeasons.setHorizontalAlignment(SwingConstants.CENTER);
 		lblShowSeasons.setOpaque(true);
-		lblShowSeasons.setForeground(SystemColor.info);
-		lblShowSeasons.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblShowSeasons.setBounds(496, 149, 153, 30);
-		lblShowSeasons.setBackground(new Color(18, 95, 115));
+		lblShowSeasons.setForeground(SystemColor.textText);
+		lblShowSeasons.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblShowSeasons.setBounds(690, 189, 153, 30);
+		lblShowSeasons.setBackground(SystemColor.info);
 		panelAccommodationContract.add(lblShowSeasons);
 
 		this.definirComponentes();
 		this.definirTexto();
-		this.crearSecciones(); // se crean las secciones (seccion accommodation modality y seccion temporadas)
 
 	}
 
-	private void crearSecciones () {
-		this.panelCreacionContratoAlojamientoAccommodationModality = new PanelCreacionContratoAlojamientoAccommodationModality(FrameGerenteCreacionContratoAlojamiento.this);
-		this.panelGerenteCreacionContratoAlojamientoTemporada = new PanelGerenteCreacionContratoAlojamientoTemporada(FrameGerenteCreacionContratoAlojamiento.this);
-	}
+
 
 	private void addRestore () {
 		lblRestore = new JLabel("RESTORE");
 		lblRestore.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				definirTexto();
+				restoreInformation(); // se restuara la informacion del contrato antes de las modificaciones
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -320,31 +333,49 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 
 			}
 		});
-		lblRestore.setForeground(SystemColor.infoText);
+		lblRestore.setForeground(SystemColor.textHighlightText);
 		lblRestore.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblRestore.setBounds(500, 18, 98, 23);
+		lblRestore.setBounds(689, 43, 98, 23);
 		panelAccommodationContract.add(lblRestore);
 	}
 
+	private void restoreInformation () { // Metodo para restaurar la informacion del contrato antes de las modificaciones
+		try {
+			this.restoreModalitys();
+			this.definirTexto();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void restoreModalitys () throws SQLException { // Metodo para restaurar la informacion de las modalidades del contrato antes de las modificaciones
+		ConnectionDataBase.roolback(); // se cancelan todos los cambios realizados a la base de datos
+		accommodationContract.actualizarDatos(); // se actualizan los datos del contrato
+	}
+
 	private void definirComponentes () {
-		if (this.accommodationContract.getId() == -1)
+		if (this.accommodationContract.getId() == -1) // Add
 			this.addComboboxProviders();
 		else {
 			this.addLblProviderContradado();
 			this.addRestore();
 		}
+
 	}
 
 	private void addLblProviderContradado () {
 		lblProviderContratado = new JLabel(this.accommodationContract.getProvider().getName());
-		lblProviderContratado.setForeground(SystemColor.infoText);
-		lblProviderContratado.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblProviderContratado.setBounds(364, 106, 140, 22);
+		lblProviderContratado.setHorizontalAlignment(SwingConstants.CENTER);
+		lblProviderContratado.setForeground(SystemColor.info);
+		lblProviderContratado.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblProviderContratado.setBounds(454, 122, 150, 22);
 		panelAccommodationContract.add(lblProviderContratado);
 	}
 
 	private void addComboboxProviders () {
 		comboBoxProvider = new JComboBox<Provider>();
+		comboBoxProvider.setFont(new Font("Dialog", Font.PLAIN, 14));
 		this.llenarComboBoxProviders();
 		comboBoxProvider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -354,7 +385,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		});
 
 		this.accommodationContract.setProvider((Provider) comboBoxProvider.getSelectedItem());
-		comboBoxProvider.setBounds(376, 106, 152, 22);
+		comboBoxProvider.setBounds(461, 122, 150, 22);
 		panelAccommodationContract.add(comboBoxProvider);
 	}
 
@@ -396,13 +427,12 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		Controller.getInstancie().getTouristAgency().addContract(new AccommodationContract(dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
 				dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), textPaneDescription.getText(), this.accommodationContract.getProvider(), 
 				this.accommodationContract.getModalitys(), (Double) spinnerRecargo.getValue(), this.accommodationContract.getSeasons())); // se inserta el contrato de alojamiento a nivel de base de datos
-		panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
+
 	}
 
 	public void updateAccommodationContract () throws SQLException { // update
 		Controller.getInstancie().getTouristAgency().updateContract(this.accommodationContract, dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
 				dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), textPaneDescription.getText(), (Double) spinnerRecargo.getValue());
-		panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
 	}
 
 	private void cerrarFrame () {

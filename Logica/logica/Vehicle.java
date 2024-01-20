@@ -11,13 +11,13 @@ public class Vehicle implements DUILogic {
 	private int capacityWithoutLuggage;
 	private int capacityWithLuggage;
 	private int totalCapacity;
-	private LocalDate date_of_production;
+	private LocalDate dateOfProduction;
 	private int transportationProviderId;
 
 
 
 	public Vehicle(int id, String lock, String brand, int capacityWithoutLuggage, int capacityWithLuggage,
-			int totalCapacity, LocalDate date_of_production, int transportationProviderId) {
+			int totalCapacity, LocalDate dateOfProduction, int transportationProviderId) {
 		super();
 		this.id = id;
 		this.lock = lock;
@@ -25,29 +25,29 @@ public class Vehicle implements DUILogic {
 		this.capacityWithoutLuggage = capacityWithoutLuggage;
 		this.capacityWithLuggage = capacityWithLuggage;
 		this.totalCapacity = totalCapacity;
-		this.date_of_production = date_of_production;
+		this.dateOfProduction = dateOfProduction;
 		this.transportationProviderId = transportationProviderId;
 	}
 
 	public Vehicle(String lock, String brand, int capacityWithoutLuggage, int capacityWithLuggage,
-			int totalCapacity, LocalDate date_of_production, int transportationProviderId) { // Constructor a nivel de logica
+			int totalCapacity, LocalDate dateOfProduction, int transportationProviderId) { // Constructor a nivel de logica
 		this.lock = lock;
 		this.brand = brand;
 		this.capacityWithoutLuggage = capacityWithoutLuggage;
 		this.capacityWithLuggage = capacityWithLuggage;
 		this.totalCapacity = totalCapacity;
-		this.date_of_production = date_of_production;
+		this.dateOfProduction = dateOfProduction;
 		this.transportationProviderId = transportationProviderId;
 	}
 
 	public Vehicle(String lock, String brand, int capacityWithoutLuggage, int capacityWithLuggage,
-			int totalCapacity, LocalDate date_of_production) { // Constructor Temporal
+			int totalCapacity, LocalDate dateOfProduction) { // Constructor Temporal
 		this.lock = lock;
 		this.brand = brand;
 		this.capacityWithoutLuggage = capacityWithoutLuggage;
 		this.capacityWithLuggage = capacityWithLuggage;
 		this.totalCapacity = totalCapacity;
-		this.date_of_production = date_of_production;
+		this.dateOfProduction = dateOfProduction;
 	}
 
 	public String getLock() {
@@ -86,12 +86,12 @@ public class Vehicle implements DUILogic {
 		this.totalCapacity = totalCapacity;
 	}
 
-	public LocalDate getDate_of_production() {
-		return date_of_production;
+	public LocalDate getDateOfProduction() {
+		return this.dateOfProduction;
 	}
 
-	public void setDate_of_production(LocalDate date_of_production) {
-		this.date_of_production = date_of_production;
+	public void setDateOfProduction(LocalDate dateOfProduction) {
+		this.dateOfProduction = dateOfProduction;
 	}
 
 	public void setLock(String lock) {

@@ -12,6 +12,9 @@ import dao.ServiceContractDAO;
 import dao.ServiceProviderDAO;
 import dao.TouristPackageDAO;
 import dao.TransportationProviderDAO;
+import utils.AusentFilter;
+import utils.FiltersContract;
+import utils.FiltersTouristPackage;
 
 
 public class TouristAgency {
@@ -126,13 +129,25 @@ public class TouristAgency {
     }
 
 
-    public void updateHotel(Hotel hotel, String name, String hotelChain, String province, String address, int hotelCategory) throws SQLException {
+    public void updateHotel(Hotel hotel, String name, String province, String hotelChain, int hotelCategory, String address, int phone,
+                            String fax, String email, int cantRooms, int cantFloors, String locationHotel, double distanceNearestCity,
+                            double distanceAirport, LocalDate dateBuild) throws SQLException {
         // se actualiza la informacion del provedor a nivel de logica
         hotel.setName(name);
         hotel.setHotelChain(hotelChain);
         hotel.setProvince(province);
         hotel.setAddress(address);
         hotel.setHotelCategory(hotelCategory);
+        hotel.setPhone(phone);
+        hotel.setFax(fax);
+        hotel.setEmail(email);
+        hotel.setCantRooms(cantRooms);
+        hotel.setCantFloors(cantFloors);
+        hotel.setLocationHotel(locationHotel);
+        hotel.setDistanceNearestCity(distanceNearestCity);
+        hotel.setDistanceAirport(distanceAirport);
+        hotel.setDateBuild(dateBuild);
+
         hotel.update(); // se actualiza la informacion del provedor a nivel de base de datos
     }
 
@@ -162,6 +177,71 @@ public class TouristAgency {
 
     // Metodos para la obtencion de los datos
 
+    // Metodos para la obtencion de los contratos
+
+    public HashMap<Integer, ArrayList<Contract>> getContracts() { // metodo para obtener todos los contrato (sin filtros)
+        return this.contracts;
+    }
+
+    public static HashMap<Integer, ArrayList<Contract>> hashMapContractsOf() { // Metodo que define una implementacion unica para inicializar los hashMap que trabajen con los contratos
+        HashMap<Integer, ArrayList<Contract>> contract = new HashMap<>();
+        contract.put(Contract.accommodationContract, new ArrayList<Contract>()); // Se crea la seccion de contratos de alojamiento
+        contract.put(Contract.serviceContract, new ArrayList<Contract>()); // Se crea la seccion de contratos de servicio
+        contract.put(Contract.carrierContract, new ArrayList<Contract>()); // Se crea la seccion de contratos de transporte
+
+        return contract;
+    }
+
+    // Metodo de obtencion con filtros
+    public HashMap<Integer, ArrayList<Contract>> getContracts(int typeOfContract, Provider provider, int state, LocalDate startDateMin, LocalDate startDateMax,
+                                                              LocalDate terminationDateMin, LocalDate terminationDateMax) {
+        HashMap<Integer, ArrayList<Contract>> contracts = this.hashMapContractsOf(); // se inicializa el hash map
+
+        // Se aplican los filtros
+
+        // Filtro Tipo de Contrato
+        if (typeOfContract != -1)
+            contracts.put(typeOfContract, FiltersContract.filterTypeOfContract(this.contracts, typeOfContract));
+        else
+            contracts = this.contracts;
+
+        // Filtro Proveedor
+
+        if (provider != null)
+            contracts = FiltersContract.filterProvider(contracts, provider); // se filtra por proveedor
+
+        // Filtro Estado
+
+        if (state != AusentFilter.stateLess) // Si fue seleccionado estado como filtro
+            contracts = FiltersContract.filterState(contracts, (state == Contract.closeState)); // se filtra por estado
+
+        // Filtro Fecha de Inicio
+
+        if (startDateMin != null && startDateMax != null)
+            contracts = FiltersContract.filterStratDate(contracts, startDateMin, startDateMax); // se filtra por el rango de fechas
+        else if (startDateMin != null)
+            contracts = FiltersContract.filterStratDate(contracts, startDateMin, LocalDate.MAX); // se filtra por la fecha minima
+        else if (startDateMax != null)
+            contracts = FiltersContract.filterStratDate(contracts, LocalDate.MIN, startDateMax); // se filtra por la fecha maxima
+
+        // Filtro Fecha de Terminacion
+
+        if (terminationDateMin != null && terminationDateMax != null)
+            contracts = FiltersContract.filterTerminationDate(contracts, terminationDateMin, terminationDateMax); // se filtra por el rango de fechas
+        else if (terminationDateMin != null)
+            contracts = FiltersContract.filterTerminationDate(contracts, terminationDateMin, LocalDate.MAX); // se filtra por la fecha minima
+        else if (terminationDateMax != null)
+            contracts = FiltersContract.filterTerminationDate(contracts, LocalDate.MIN, terminationDateMax); // se filtra por la fecha maxima
+
+
+        return contracts;
+    }
+
+    // Fin de Metodos para la obtencion de los contratos
+
+    // Metodos para la obtencion de los proveedores
+
+    // IMPLEMENTAR FILTROS
 
     public HashMap<Integer, ArrayList<Provider>> getProviders() { // metodo para obtener todos los contrato
         return this.providers;
@@ -170,99 +250,6 @@ public class TouristAgency {
     public ArrayList<Provider> getProviders(int typeOfProvider) { // metodo para obtener los provedores de un tipo
         return this.providers.get(typeOfProvider);
     }
-
-    // Metodos para la obtencion de los contratos
-
-    public HashMap<Integer, ArrayList<Contract>> getContracts() { // metodo para obtener todos los contrato (sin filtros)
-        return this.contracts;
-    }
-
-    public ArrayList<Contract> getContracts(int typeOfContract) { // metodo para obtener los contratos de un tipo (filtro tipo)
-        return this.contracts.get(typeOfContract);
-    }
-
-    public ArrayList<Contract> getContracts(Provider provider) { // metodo para obtener los contratos de un provedor (filtro provedor)
-        ArrayList<Contract> contracts = new ArrayList<Contract>();
-        ArrayList<Integer> keys = Contract.getKeys(); // se obtienen las llaves del mapa
-
-        // Se itera el mapa
-
-        for (Integer i : keys) { // se itera la lista de llaves
-            for (Contract contract : this.contracts.get(i)) { // se itera la lista de contratos asociada a cada clave
-                if (contract.verificarProvedor(provider))
-                    contracts.add(contract);
-            }
-        }
-
-        return contracts;
-    }
-
-    public ArrayList<Contract> getContracts(boolean state) { // metodo para obtener los contratos con un estado en especifico (filtro estado)
-        ArrayList<Contract> contracts = new ArrayList<Contract>();
-        ArrayList<Integer> keys = Contract.getKeys(); // se obtienen las llaves del mapa
-
-        // Se itera el mapa
-
-        for (Integer i : keys) { // se itera la lista de llaves
-            for (Contract contract : this.contracts.get(i)) { // se itera la lista de contratos asociada a cada clave
-                if (contract.isState() == state)
-                    contracts.add(contract);
-            }
-        }
-
-        return contracts;
-    }
-
-    public ArrayList<Contract> getContracts(int typeOfContract, Provider provider) { // metodo para obtener los contratos de un tipo y de un provedor en especifico (filtro tipo, provedor)
-        ArrayList<Contract> contracts = new ArrayList<Contract>();
-
-        for (Contract contract : this.contracts.get(typeOfContract)) { // se iteran los contratos de un tipo en especifico
-            if (contract.verificarProvedor(provider))
-                contracts.add(contract);
-        }
-
-        return contracts;
-    }
-
-    public ArrayList<Contract> getContracts(int typeOfContract, boolean state) { // metodo para obtener los contratos de un tipo y con un estado en especifico (filtro tipo, estado)
-        ArrayList<Contract> contracts = new ArrayList<Contract>();
-
-        for (Contract contract : this.contracts.get(typeOfContract)) { // se iteran los contratos de un tipo en especifico
-            if (contract.isState() == state)
-                contracts.add(contract);
-        }
-
-        return contracts;
-    }
-
-    public ArrayList<Contract> getContracts(Provider provider, boolean state) { // metodo para obtener los contratos de un provedor con un estado en especifico (filtro provedor, estado)
-        ArrayList<Contract> contracts = new ArrayList<Contract>();
-        ArrayList<Integer> keys = Contract.getKeys(); // se obtienen las llaves del mapa
-
-        // Se itera el mapa
-
-        for (Integer i : keys) { // se itera la lista de llaves
-            for (Contract contract : this.contracts.get(i)) { // se itera la lista de contratos asociada a cada clave
-                if (contract.isState() == state && contract.verificarProvedor(provider))
-                    contracts.add(contract);
-            }
-        }
-
-        return contracts;
-    }
-
-    public ArrayList<Contract> getContracts(int typeOfContract, Provider provider, boolean state) { // metodo para obtener los contratos de un tipo, de un provedor, con un estado en especifico (filtro tipo, provedor)
-        ArrayList<Contract> contracts = new ArrayList<Contract>();
-
-        for (Contract contract : this.contracts.get(typeOfContract)) { // se iteran los contratos de un tipo en especifico
-            if (contract.isState() == state && contract.verificarProvedor(provider))
-                contracts.add(contract);
-        }
-
-        return contracts;
-    }
-
-    // Fin de Metodos para la obtencion de los contratos
 
     public ArrayList<Provider> getProviders(String name, int typeOfProvider) { // metodo para obtener los provedores de un tipo
         ArrayList<Provider> provideres = new ArrayList<Provider>();
@@ -274,54 +261,65 @@ public class TouristAgency {
         return provideres;
     }
 
+    // Fin de Metodos para la obtencion de los proveedores
+
 
     // Metodos para la obtencion de modalidades
 
-    public ArrayList<Modality> getAccommodationModalitys() { // Metodo para obtener todas las modalidades de alojamiento de la agencia
+
+    // Metodo de obtencion de modalidades de alojamiento con filtros
+    public ArrayList<Modality> getAccommodationModalitys(TypeOfRoom typeOfRoom, MealPlan mealPlan, HotelModality hotelModality, double priceMin, double priceMax, int cantDaysAccommodationMin, int cantDaysAccommodationMax) { // Metodo para obtener todas las modalidades de alojamiento de la agencia
         ArrayList<Modality> accommodationModalitys = new ArrayList<Modality>();
 
         for (Contract accommodationContract : this.contracts.get(Contract.accommodationContract)) {
-            accommodationModalitys.addAll(accommodationContract.getModalitys());
+            accommodationModalitys.addAll(((AccommodationContract) accommodationContract).getModalitys(typeOfRoom, mealPlan, hotelModality, priceMin, priceMax, cantDaysAccommodationMin, cantDaysAccommodationMax));
         }
-
         return accommodationModalitys;
     }
 
-    public ArrayList<Modality> getServiceModalitys() { // Metodo para obtener todas las modalidades de servicio de la agencia
+    // Metodo de obtencion de modalidades de servicios con filtros
+    public ArrayList<Modality> getServiceModalitys(Activity activity, LocalDate releasedDateMin, LocalDate releasedDateMax, double precioMin, double precioMax) { // Metodo para obtener todas las modalidades de servicio de la agencia
         ArrayList<Modality> serviceModalitys = new ArrayList<Modality>();
 
         for (Contract serviceContract : this.contracts.get(Contract.serviceContract)) {
-            serviceModalitys.addAll(serviceContract.getModalitys());
+            serviceModalitys.addAll(((ServiceContract) serviceContract).getModalitys(activity, releasedDateMin, releasedDateMax, precioMin, precioMax));
         }
 
         return serviceModalitys;
     }
 
-    public ArrayList<Modality> getTransportModalityCostKilometers() { // Metodo para obtener todas las modalidades de transporte tipo costo por kilometraje de la agencia
+    // Metodo de obtencion de modalidades de transporte de tipo costo por kilometraje con filtros
+    public ArrayList<Modality> getTransportModalityCostKilometers(double costKilometersGoingMin, double costKilometersGoingMax, double costKilometersLapMin,
+                                                                  double costKilometersLapMax, double costHoursWaitMin, double costHoursWaitMax) { // Metodo para obtener todas las modalidades de transporte tipo costo por kilometraje de la agencia
         ArrayList<Modality> transportModalitysCostKilometers = new ArrayList<Modality>();
 
         for (Contract carrierContract : this.contracts.get(Contract.carrierContract)) {
-            transportModalitysCostKilometers.addAll(((CarrierContract) carrierContract).getCostKilometers());
+            transportModalitysCostKilometers.addAll(((CarrierContract) carrierContract).getCostKilometers(costKilometersGoingMin, costKilometersGoingMax,
+                    costKilometersLapMin, costKilometersLapMax, costHoursWaitMin, costHoursWaitMax));
         }
 
         return transportModalitysCostKilometers;
     }
 
-    public ArrayList<Modality> getTransportModalityHoursKilometers() { // Metodo para obtener todas las modalidades de transporte tipo horas por kilometraje de la agencia
+    // Metodo de obtencion de modalidades de transporte de tipo horas por kilometraje con filtros
+    public ArrayList<Modality> getTransportModalityHoursKilometers(double costKilometersRoutMin, double costKilometersRoutMax, double costHoursMin, double costHoursMax,
+                                                                   double costKilometersRoutAdditionalsMin, double costKilometersRoutAdditionalsMax, double costHoursAdditionalsMin, double costHoursAdditionalsMax) { // Metodo para obtener todas las modalidades de transporte tipo horas por kilometraje de la agencia
         ArrayList<Modality> transportModalitysHoursKilometers = new ArrayList<Modality>();
 
         for (Contract carrierContract : this.contracts.get(Contract.carrierContract)) {
-            transportModalitysHoursKilometers.addAll(((CarrierContract) carrierContract).getHoursKilometers());
+            transportModalitysHoursKilometers.addAll(((CarrierContract) carrierContract).getHoursKilometers(costKilometersRoutMin, costKilometersRoutMax, costHoursMin, costHoursMax,
+                    costKilometersRoutAdditionalsMin, costKilometersRoutAdditionalsMax, costHoursAdditionalsMin, costHoursAdditionalsMax));
         }
 
         return transportModalitysHoursKilometers;
     }
 
-    public ArrayList<Modality> getTransportModalityEstablishedRoute() { // Metodo para obtener todas las modalidades de transporte tipo recorridos establecidos de la agencia
+    // Metodo de obtencion de modalidades de transporte de tipo horas por kilometraje con filtros
+    public ArrayList<Modality> getTransportModalityEstablishedRoute(double costGoingMin, double costGoingMax, double costLapMin, double costLapMax) { // Metodo para obtener todas las modalidades de transporte tipo recorridos establecidos de la agencia
         ArrayList<Modality> transportModalitysEstablishedRoute = new ArrayList<Modality>();
 
         for (Contract carrierContract : this.contracts.get(Contract.carrierContract)) {
-            transportModalitysEstablishedRoute.addAll(((CarrierContract) carrierContract).getEstablishedRoute());
+            transportModalitysEstablishedRoute.addAll(((CarrierContract) carrierContract).getEstablishedRoute(costGoingMin, costGoingMax, costLapMin, costLapMax));
         }
 
         return transportModalitysEstablishedRoute;
@@ -329,18 +327,75 @@ public class TouristAgency {
 
     // Fin de Metodos para la obtencion de modalidades
 
+    // Metodos para la obtencion de los Paquetes Turisticos
+
+    // Fin de Metodos para la obtencion de los Paquetes Turisticos
+
+    public ArrayList<TouristPackage> getTouristPackages() {
+        return this.touristPackages;
+    }
+
+    public ArrayList<TouristPackage> getTouristPackages(String name, LocalDate startDateMin, LocalDate startDateMax, LocalDate terminationDateMin, LocalDate terminationDateMax,
+                                                        double priceMin, double priceMax, int cantAviablePaxMin, int cantAviablePaxMax) {
+        ArrayList<TouristPackage> touristPackages = this.touristPackages;
+
+        // Se aplican los filtros
+
+        // Filtro Name
+        if (name != null)
+            touristPackages = FiltersTouristPackage.filterName(touristPackages, name); // Se filtra por name
+
+        // Filtro StartDate
+        if (startDateMin != null && startDateMax != null)
+            touristPackages = FiltersTouristPackage.filterStartDate(touristPackages, startDateMin, startDateMax); // se filtra por el rango de fechas
+        else if (startDateMin != null)
+            touristPackages = FiltersTouristPackage.filterStartDate(touristPackages, startDateMin, LocalDate.MAX); // se filtra por la fecha minima
+        else if (startDateMax != null)
+            touristPackages = FiltersTouristPackage.filterStartDate(touristPackages, LocalDate.MIN, startDateMax); // se filtra por la fecha maxima
+
+        // Filtro TerminationDate
+        if (terminationDateMin != null && terminationDateMax != null)
+            touristPackages = FiltersTouristPackage.filterTerminationDate(touristPackages, terminationDateMin, terminationDateMax); // se filtra por el rango de fechas
+        else if (terminationDateMin != null)
+            touristPackages = FiltersTouristPackage.filterTerminationDate(touristPackages, terminationDateMin, LocalDate.MAX); // se filtra por la fecha minima
+        else if (terminationDateMax != null)
+            touristPackages = FiltersTouristPackage.filterTerminationDate(touristPackages, LocalDate.MIN, terminationDateMax); // se filtra por la fecha maxima
+
+        // Filtro Price
+        if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
+            touristPackages = FiltersTouristPackage.filterPrice(touristPackages, priceMin, priceMax); // se filtra por el rango de precios
+        else if (priceMin != AusentFilter.spinnerField)
+            touristPackages = FiltersTouristPackage.filterPrice(touristPackages, priceMin, Double.MAX_VALUE); // se filtra por el precio minimo
+        else if (priceMax != AusentFilter.spinnerField)
+            touristPackages = FiltersTouristPackage.filterPrice(touristPackages, Double.MIN_VALUE, priceMax); // se filtra por el precio maximo
+
+        // Filtro CantAviablePax
+        if (cantAviablePaxMin != AusentFilter.spinnerField && cantAviablePaxMax != AusentFilter.spinnerField)
+            touristPackages = FiltersTouristPackage.filterCantAviablePax(touristPackages, cantAviablePaxMin, cantAviablePaxMax); // se filtra por el rango de cantAviablePax
+        else if (cantAviablePaxMin != AusentFilter.spinnerField)
+            touristPackages = FiltersTouristPackage.filterCantAviablePax(touristPackages, cantAviablePaxMin, Integer.MAX_VALUE); // se filtra por el cantAviablePax minimo
+        else if (cantAviablePaxMax != AusentFilter.spinnerField)
+            touristPackages = FiltersTouristPackage.filterCantAviablePax(touristPackages, Integer.MIN_VALUE, cantAviablePaxMax); // se filtra por el cantAviablePax maximo
+
+        return touristPackages;
+
+    }
 
     // Fin Metodos para la obtencion de los datos
 
-    // Metodos para la obtencion de los paquetes turisticos
-
-    public ArrayList<TouristPackage> getTouristPackages() {
-        return touristPackages;
+    // Operaciones
+    public int cantServicesProviders () { // Metodo para obtener la cantidad de proveedores de servicio de la agencia
+        return this.providers.get(Provider.serviceProvider).size();
     }
 
-    // Fin de Metodos para la obtencion de los paquetes turisticos
+    public int cantAccommodationProviders () { // Metodo para obtener la cantidad de proveedores de alojamiento de la agencia
+        return this.providers.get(Provider.accommodationProvider).size();
+    }
 
+    public int cantTransportProviders () { // Metodo para obtener la cantidad de proveedores de transporte de la agencia
+        return this.providers.get(Provider.transportationProvider).size();
+    }
 
-    // Metodos de busqueda y obtencion
+    // Fin de Operaciones
 
 }

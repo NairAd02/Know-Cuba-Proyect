@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import dao.CarrierContractDAO;
 import dao.TransportModalityDAO;
+import utils.AusentFilter;
+import utils.FiltersTransportModality;
 
 
 public class CarrierContract extends Contract {
@@ -16,7 +18,7 @@ public class CarrierContract extends Contract {
                            double surcharge) throws SQLException { // Constructor a nivel de base de datos
         super(id, startDate, terminationDate, reconciliationDate, description, provider, state, typeOfContract,
                 surcharge);
-        // TODO Auto-generated constructor stub
+
     }
 
     public CarrierContract(LocalDate startDate, LocalDate terminationDate,
@@ -108,111 +110,48 @@ public class CarrierContract extends Contract {
 
 
     // Metodos para la obtenecion de modalidades tipo Costo por Kilometraje
-    public ArrayList<CostKilometers> getCostKilometers() { // Sin filtros
-        ArrayList<CostKilometers> modalitys = new ArrayList<CostKilometers>();
+    public ArrayList<Modality> getCostKilometers() { // Sin filtros
+        ArrayList<Modality> modalitys = new ArrayList<Modality>();
 
         for (Modality m : this.modalitys) {
             if (m instanceof CostKilometers)
-                modalitys.add((CostKilometers) m);
+                modalitys.add(m);
         }
 
         return modalitys;
     }
 
-    public ArrayList<CostKilometers> getCostKilometersFilterCostKilometersGoing(double costKilometersGoingMin, double costKilometersGoingMax) { // Filtro CostKilometersGoing
-        ArrayList<CostKilometers> modalitys = new ArrayList<CostKilometers>();
+    // Metodo de obtencion con Filtros aplicados
+    public ArrayList<Modality> getCostKilometers(double costKilometersGoingMin, double costKilometersGoingMax, double costKilometersLapMin, double costKilometersLapMax, double costHoursWaitMin, double costHoursWaitMax) {
+        ArrayList<Modality> costsKilometers = this.getCostKilometers();
 
-        for (Modality m : this.modalitys) {
-            if (m instanceof CostKilometers) {
-                CostKilometers costKilometers = (CostKilometers) m;
-                if (costKilometers.getCostKilometersGoing() >= costKilometersGoingMin && costKilometers.getCostKilometersGoing() <= costKilometersGoingMax) // si el costo esta en rango
-                    modalitys.add(costKilometers);
-            }
-        }
-        return modalitys;
-    }
+        // Se aplican los filtros
 
-    public ArrayList<CostKilometers> getCostKilometersFilterCostKilometersLap(double costKilometersLapMin, double costKilometersLapMax) { // Filtro CostKilometersLap
-        ArrayList<CostKilometers> modalitys = new ArrayList<CostKilometers>();
+        // Filtro CostKilometersGoing
+        if (costKilometersGoingMin != AusentFilter.spinnerField && costKilometersGoingMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersGoing(costsKilometers, costKilometersGoingMin, costKilometersGoingMax); // se filtra por el rango de costos
+        else if (costKilometersGoingMin != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersGoing(costsKilometers, costKilometersGoingMin, Double.MAX_VALUE); // se filtra solo por le costo minimo
+        else if (costKilometersGoingMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersGoing(costsKilometers, Double.MIN_VALUE, costKilometersGoingMax); // se filtra por el costo maximo
 
-        for (Modality m : this.modalitys) {
-            if (m instanceof CostKilometers) {
-                CostKilometers costKilometers = (CostKilometers) m;
-                if (costKilometers.getCostKilometersLap() >= costKilometersLapMin && costKilometers.getCostKilometersLap() <= costKilometersLapMax) // si el costo esta en rango
-                    modalitys.add(costKilometers);
-            }
-        }
-        return modalitys;
-    }
+        // Filtro CostKilometersLap
+        if (costKilometersLapMin != AusentFilter.spinnerField && costKilometersLapMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersLap(costsKilometers, costKilometersLapMin, costKilometersLapMax); // se filtra por el rango de costos
+        else if (costKilometersLapMin != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersLap(costsKilometers, costKilometersLapMin, Double.MAX_VALUE); // se filtra solo por le costo minimo
+        else if (costKilometersLapMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersLap(costsKilometers, Double.MIN_VALUE, costKilometersLapMax); // se filtra por el costo maximo
 
-    public ArrayList<CostKilometers> getCostKilometersFilterCostHoursWait(double costHoursWaitMin, double costHoursWaitMax) { // Filtro CostHoursWait
-        ArrayList<CostKilometers> modalitys = new ArrayList<CostKilometers>();
+        // Filtro CostHoursWait
+        if (costHoursWaitMin != AusentFilter.spinnerField && costHoursWaitMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostHoursWait(costsKilometers, costHoursWaitMin, costHoursWaitMax);  // se filtra por el rango de costos
+        else if (costHoursWaitMin != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostHoursWait(costsKilometers, costHoursWaitMin, Double.MAX_VALUE);  // se filtra solo por le costo minimo
+        else if (costHoursWaitMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostHoursWait(costsKilometers, Double.MIN_VALUE, costHoursWaitMax);  // se filtra por el costo maximo
 
-        for (Modality m : this.modalitys) {
-            if (m instanceof CostKilometers) {
-                CostKilometers costKilometers = (CostKilometers) m;
-                if (costKilometers.getCostHoursWait() >= costHoursWaitMin && costKilometers.getCostHoursWait() <= costHoursWaitMax) // si el costo esta en rango
-                    modalitys.add(costKilometers);
-            }
-        }
-        return modalitys;
-    }
-
-    public ArrayList<CostKilometers> getCostKilometersFilterCostKilometersGoingAndCostKilometersLap(double costKilometersGoingMin, double costKilometersGoingMax, double costKilometersLapMin, double costKilometersLapMax) { // Filtro CostKilometersGoing + Filtro CostKilometersLap
-        ArrayList<CostKilometers> modalitys = new ArrayList<CostKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof CostKilometers) {
-                CostKilometers costKilometers = (CostKilometers) m;
-                if (costKilometers.getCostKilometersGoing() >= costKilometersGoingMin && costKilometers.getCostKilometersGoing() <= costKilometersGoingMax &&
-                        costKilometers.getCostKilometersLap() >= costKilometersLapMin && costKilometers.getCostKilometersLap() <= costKilometersLapMax) // si los costos estan en rango
-                    modalitys.add(costKilometers);
-            }
-        }
-        return modalitys;
-    }
-
-    public ArrayList<CostKilometers> getCostKilometersFilterCostKilometersGoingAndCostHoursWait(double costKilometersGoingMin, double costKilometersGoingMax, double costHoursWaitMin, double costHoursWaitMax) { // Filtro CostKilometersGoing + Filtro CostHoursWait
-        ArrayList<CostKilometers> modalitys = new ArrayList<CostKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof CostKilometers) {
-                CostKilometers costKilometers = (CostKilometers) m;
-                if (costKilometers.getCostKilometersGoing() >= costKilometersGoingMin && costKilometers.getCostKilometersGoing() <= costKilometersGoingMax &&
-                        costKilometers.getCostHoursWait() >= costHoursWaitMin && costKilometers.getCostHoursWait() <= costHoursWaitMax) // si los costos estan en rango
-                    modalitys.add(costKilometers);
-            }
-        }
-        return modalitys;
-    }
-
-    public ArrayList<CostKilometers> getCostKilometersFilterCostKilometersLapAndCostHoursWait(double costKilometersLapMin, double costKilometersLapMax, double costHoursWaitMin, double costHoursWaitMax) { // Filtro CostKilometersLap + Filtro CostHoursWait
-        ArrayList<CostKilometers> modalitys = new ArrayList<CostKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof CostKilometers) {
-                CostKilometers costKilometers = (CostKilometers) m;
-                if (costKilometers.getCostKilometersLap() >= costKilometersLapMin && costKilometers.getCostKilometersLap() <= costKilometersLapMax &&
-                        costKilometers.getCostHoursWait() >= costHoursWaitMin && costKilometers.getCostHoursWait() <= costHoursWaitMax) // si los costos estan en rango
-                    modalitys.add(costKilometers);
-            }
-        }
-        return modalitys;
-    }
-
-    public ArrayList<CostKilometers> getCostKilometersFilterCostKilometersGoingAndCostKilometersLapAndCostHoursWait(double costKilometersGoingMin, double costKilometersGoingMax, double costKilometersLapMin, double costKilometersLapMax, double costHoursWaitMin, double costHoursWaitMax) { // Filtro CostKilometersGoing + Filtro CostKilometersLap + Filtro CostHoursWait
-        ArrayList<CostKilometers> modalitys = new ArrayList<CostKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof CostKilometers) {
-                CostKilometers costKilometers = (CostKilometers) m;
-                if (costKilometers.getCostKilometersGoing() >= costKilometersGoingMin && costKilometers.getCostKilometersGoing() <= costKilometersGoingMax &&
-                        costKilometers.getCostKilometersLap() >= costKilometersLapMin && costKilometers.getCostKilometersLap() <= costKilometersLapMax &&
-                        costKilometers.getCostHoursWait() >= costHoursWaitMin && costKilometers.getCostHoursWait() <= costHoursWaitMax) // si los costos estan en rango
-                    modalitys.add(costKilometers);
-            }
-        }
-        return modalitys;
+        return costsKilometers;
     }
 
 
@@ -220,182 +159,101 @@ public class CarrierContract extends Contract {
 
     // Metodos para la obtencion de modalidades tipo Horas por Kilometraje
 
-    public ArrayList<HoursKilometers> getHoursKilometers() { // Sin Filtros
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
+    public ArrayList<Modality> getHoursKilometers() { // Sin Filtros
+        ArrayList<Modality> modalitys = new ArrayList<Modality>();
 
         for (Modality m : this.modalitys) {
             if (m instanceof HoursKilometers)
-                modalitys.add((HoursKilometers) m);
+                modalitys.add(m);
         }
 
         return modalitys;
     }
 
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostKilometersRout(double costKilometersRoutMin, double costKilometersRoutMax) { // Filtro CostKilometersRout
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
+    // Metodo de obtencion con Filtros aplicados
+    public ArrayList<Modality> getHoursKilometers(double costKilometersRoutMin, double costKilometersRoutMax, double costHoursMin, double costHoursMax,
+                                                         double costKilometersRoutAdditionalsMin, double costKilometersRoutAdditionalsMax, double costHoursAdditionalsMin, double costHoursAdditionalsMax) {
+        ArrayList<Modality> hoursKilometersList = this.getHoursKilometers();
 
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostKilometersRout() >= costKilometersRoutMin && hoursKilometers.getCostKilometersRout() <= costKilometersRoutMax) // si el costo esta en el rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
+        // Se aplican los filtros
 
-        return modalitys;
-    }
+        // Filtro CostKilometersRout
+        if (costKilometersRoutMin != AusentFilter.spinnerField && costKilometersRoutMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRout(hoursKilometersList, costKilometersRoutMin, costKilometersRoutMax); // se aplica el filtro para el rango de costos
+        else if (costKilometersRoutMin != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRout(hoursKilometersList, costKilometersRoutMin, Double.MAX_VALUE); // se aplica el filtro para el minimo de costos
+        else if (costKilometersRoutMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRout(hoursKilometersList, Double.MIN_VALUE, costKilometersRoutMax); // se aplica el filtro para el maximo de costos
 
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostHours(double costHoursMin, double costHoursMax) { // Filtro CostHours
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
+        // Filtro CostHours
+        if (costHoursMin != AusentFilter.spinnerField && costHoursMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHours(hoursKilometersList, costHoursMin, costHoursMax); // se aplica el filtro para el rango de costos
+        else if (costHoursMin != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHours(hoursKilometersList, costHoursMin, Double.MAX_VALUE); // se aplica el filtro para el minimo de costos
+        else if (costHoursMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHours(hoursKilometersList, Double.MIN_VALUE, costHoursMax); // se aplica el filtro para el maximo de costos
 
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostHours() >= costHoursMin && hoursKilometers.getCostHours() <= costHoursMax) // si el costo esta en el rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
+        // Filtro CostKilometersRoutAdditionals
+        if (costKilometersRoutAdditionalsMin != AusentFilter.spinnerField && costKilometersRoutAdditionalsMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRoutAdditionals(hoursKilometersList, costKilometersRoutAdditionalsMin, costKilometersRoutAdditionalsMax); // se aplica el filtro para el rango de costos
+        else if (costKilometersRoutAdditionalsMin != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRoutAdditionals(hoursKilometersList, costKilometersRoutAdditionalsMin, Double.MAX_VALUE); // se aplica el filtro para el minimo de costos
+        else if (costKilometersRoutAdditionalsMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRoutAdditionals(hoursKilometersList, Double.MIN_VALUE, costKilometersRoutAdditionalsMax); // se aplica el filtro para el maximo de costos
 
-        return modalitys;
-    }
+        // Filtro CostHoursAdditionals
+        if (costHoursAdditionalsMin != AusentFilter.spinnerField && costHoursAdditionalsMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHoursAdditionals(hoursKilometersList, costHoursAdditionalsMin, costHoursAdditionalsMax); // se aplica el filtro para el rango de costos
+        else if (costHoursAdditionalsMin != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHoursAdditionals(hoursKilometersList, costHoursAdditionalsMin, Double.MAX_VALUE); // se aplica el filtro para el minimo de costos
+        else if (costHoursAdditionalsMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHoursAdditionals(hoursKilometersList, Double.MIN_VALUE, costHoursAdditionalsMax); // se aplica el filtro para el maximo de costos
 
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostKilometersRoutAdditionals(double costKilometersRoutAdditionalsMin, double costKilometersRoutAdditionalsMax) { // Filtro CostKilometersRoutAdditionals
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostKilometersRoutAdditionals() >= costKilometersRoutAdditionalsMin && hoursKilometers.getCostKilometersRoutAdditionals() <= costKilometersRoutAdditionalsMax) // si el costo esta en el rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
-
-        return modalitys;
-    }
-
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostHoursAdditionals(double costHoursAdditionalsMin, double costHoursAdditionalsMax) { // Filtro CostHoursAdditionals
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostHoursAdditionals() >= costHoursAdditionalsMin && hoursKilometers.getCostHoursAdditionals() <= costHoursAdditionalsMax) // si el costo esta en el rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
-
-        return modalitys;
-    }
-
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostKilometersRoutAndCostHours(double costKilometersRoutMin, double costKilometersRoutMax, double costHoursMin, double costHoursMax) { // Filtro CostKilometersRout + Filtro CostHours
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostKilometersRout() >= costKilometersRoutMin && hoursKilometers.getCostKilometersRout() <= costKilometersRoutMax &&
-                        hoursKilometers.getCostHours() >= costHoursMin && hoursKilometers.getCostHours() <= costHoursMax) // si los costos estan en rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
-
-        return modalitys;
-    }
-
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostKilometersRoutAndCostKilometersRoutAdditionals(double costKilometersRoutMin, double costKilometersRoutMax, double costKilometersRoutAdditionalsMin, double costKilometersRoutAdditionalsMax) { // Filtro CostKilometersRout + Filtro CostKilometersRoutAdditionals
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostKilometersRout() >= costKilometersRoutMin && hoursKilometers.getCostKilometersRout() <= costKilometersRoutMax &&
-                        hoursKilometers.getCostKilometersRoutAdditionals() >= costKilometersRoutAdditionalsMin && hoursKilometers.getCostKilometersRoutAdditionals() <= costKilometersRoutAdditionalsMax) // si los costos estan en rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
-
-        return modalitys;
-    }
-
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostKilometersRoutAndCostHoursAdditionals(double costKilometersRoutMin, double costKilometersRoutMax, double costHoursAdditionalsMin, double costHoursAdditionalsMax) { // Filtro CostKilometersRout + Filtro CostHoursAdditionals
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostKilometersRout() >= costKilometersRoutMin && hoursKilometers.getCostKilometersRout() <= costKilometersRoutMax &&
-                        hoursKilometers.getCostHoursAdditionals() >= costHoursAdditionalsMin && hoursKilometers.getCostHoursAdditionals() <= costHoursAdditionalsMax) // si los costos estan en rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
-
-        return modalitys;
-    }
-
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostHoursAndCostKilometersRoutAdditionals(double costHoursMin, double costHoursMax, double costKilometersRoutAdditionalsMin, double costKilometersRoutAdditionalsMax) { // Filtro CostHours + Filtro CostKilometersRoutAdditionals
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostHours() >= costHoursMin && hoursKilometers.getCostHours() <= costHoursMax &&
-                        hoursKilometers.getCostKilometersRoutAdditionals() >= costKilometersRoutAdditionalsMin && hoursKilometers.getCostKilometersRoutAdditionals() <= costKilometersRoutAdditionalsMax) // si los costos estan en el rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
-
-        return modalitys;
-    }
-
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostHoursAndCostHoursAdditionals(double costHoursMin, double costHoursMax, double costHoursAdditionalsMin, double costHoursAdditionalsMax) { // Filtro CostHours + Filtro CostHoursAdditionals
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostHours() >= costHoursMin && hoursKilometers.getCostHours() <= costHoursMax &&
-                        hoursKilometers.getCostHoursAdditionals() >= costHoursAdditionalsMin && hoursKilometers.getCostHoursAdditionals() <= costHoursAdditionalsMax) // si los costos estan en el rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
-
-        return modalitys;
-    }
-
-    public ArrayList<HoursKilometers> getHoursKilometersFiltrerCostKilometersRoutAdditionalsAndCostHoursAdditionals(double costKilometersRoutAdditionalsMin, double costKilometersRoutAdditionalsMax, double costHoursAdditionalsMin, double costHoursAdditionalsMax) { // Filtro CostKilometersRoutAdditionals + Filtro CostHoursAdditionals
-        ArrayList<HoursKilometers> modalitys = new ArrayList<HoursKilometers>();
-
-        for (Modality m : this.modalitys) {
-            if (m instanceof HoursKilometers) {
-                HoursKilometers hoursKilometers = (HoursKilometers) m;
-                if (hoursKilometers.getCostKilometersRoutAdditionals() >= costKilometersRoutAdditionalsMin && hoursKilometers.getCostKilometersRoutAdditionals() <= costKilometersRoutAdditionalsMax &&
-                        hoursKilometers.getCostHoursAdditionals() >= costHoursAdditionalsMin && hoursKilometers.getCostHoursAdditionals() <= costHoursAdditionalsMax) // si el costo esta en el rango
-                    modalitys.add(hoursKilometers);
-            }
-        }
-
-        return modalitys;
+        return hoursKilometersList;
     }
 
     // Fin de Metodos para la obtencion de modalidades tipo Horas por Kilometraje
 
     // Metodos para la obtencion de modalidades tipo Recorridos Establecidos
 
-    public ArrayList<EstablishedRoute> getEstablishedRoute() {
-        ArrayList<EstablishedRoute> modalitys = new ArrayList<EstablishedRoute>();
+    public ArrayList<Modality> getEstablishedRoute() {
+        ArrayList<Modality> modalitys = new ArrayList<Modality>();
 
         for (Modality m : this.modalitys) {
             if (m instanceof EstablishedRoute)
-                modalitys.add((EstablishedRoute) m);
+                modalitys.add(m);
         }
 
         return modalitys;
     }
+
+    // Metodo de obtencion con Filtros aplicados
+    public ArrayList<Modality> getEstablishedRoute(double costGoingMin, double costGoingMax, double costLapMin, double costLapMax) {
+        ArrayList<Modality> establishedRouteList = this.getEstablishedRoute();
+
+        // Se aplican los filtros
+
+        // Filtro CostGoing
+        if (costGoingMin != AusentFilter.spinnerField && costGoingMax != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costGoingMin, costGoingMax); // se aplica el filtro para el rango de costos
+        else if (costGoingMin != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costGoingMin, Double.MAX_VALUE); // se aplica el filtro para el costo minimo
+        else if (costGoingMax != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, Double.MIN_VALUE, costGoingMax); // se aplica el filtro para el costo maximo
+
+        // Filtro CostLap
+        if (costLapMin != AusentFilter.spinnerField && costLapMax != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costLapMin, costLapMax); // se aplica el filtro para el rango de costos
+        else if (costLapMin != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costLapMin, Double.MAX_VALUE); // se aplica el filtro para el costo minimo
+        else if (costLapMax != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, Double.MIN_VALUE, costLapMax); // se aplica el filtro para el costo maximo
+
+        return establishedRouteList;
+    }
+
     // Fin de Metodos para la obtencion de modalidades tipo Recorridos Establecidos
-
-
     // Fin Metodos de obtencion
-
     // Fin Metodos para el control de las modalidades
 
 }

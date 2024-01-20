@@ -11,7 +11,7 @@ public class ModeloTablaUsers extends DefaultTableModel implements ModelOperatio
 
 	public ModeloTablaUsers(){
 		this.elements = new ArrayList<User>();
-		String[] columnNames = {"User Name", "Password", "Rol", "Start Date Connection", "Last Date Connection", "State Connection"};   
+		String[] columnNames = {"User Name", "Rol", "Start Date Connection", "Last Date Connection", "State Connection"};   
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
 
@@ -22,7 +22,7 @@ public class ModeloTablaUsers extends DefaultTableModel implements ModelOperatio
 	public void addElement(User user) {
 		Object[] newRow =  null;
 		this.elements.add(user);
-		newRow = new Object[]{user.getUserName(), user.getPassword(), user.getNameRol(), 
+		newRow = new Object[]{user.getUserName(), user.getNameRol(), 
 				(user.getStartDateConnection() != null) ? user.getStartDateConnection() : "----", (user.getLastDateConnection() != null) ? user.getLastDateConnection() : "---", (user.isConnected()) ? "Connected" : "Disconected" };
 
 		addRow(newRow);

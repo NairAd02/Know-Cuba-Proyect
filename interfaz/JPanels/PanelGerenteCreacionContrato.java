@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 
 
+
 import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.JLabel;
@@ -15,6 +16,7 @@ import JFrames.FrameGerenteCreacionContratoAlojamiento;
 import JFrames.FrameGerenteCreacionContratoServivio;
 import JFrames.FrameGerenteCreacionContratoTransporte;
 import JFrames.FramePrincipal;
+import JFrames.FrameSeleccionCrearContrato;
 import logica.AccommodationContract;
 import logica.CarrierContract;
 import logica.Contract;
@@ -25,12 +27,14 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import modelosTablas.ModeloTablaContract;
+import utils.AusentFilter;
 import utils.ConnectionDataBase;
 import utils.ProviderAux;
 import utils.Semaphore;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JComboBox;
@@ -41,7 +45,13 @@ import java.awt.Cursor;
 import javax.swing.border.LineBorder;
 import java.awt.FlowLayout;
 import javax.swing.border.MatteBorder;
+
+import com.toedter.calendar.JDateChooser;
+
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 
 public class PanelGerenteCreacionContrato extends JPanel {
@@ -54,7 +64,7 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	private JComboBox<String> comboBoxState;
 	private JComboBox<Provider> comboBoxProvider;
 	private JLabel lblNewLabel;
-	private JPanel panelContenedorTable;
+	private JPanel panelContenedorTable, panelStartDateConnection, panelLastDateConnection;
 	private JPanel panelOpciones;
 	private JPanel panelTitle;
 	private JLabel lblTitleSeccion;
@@ -62,7 +72,13 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	private JPanel panelBotones;
 	private JLabel lblAnnadir;
 	private JLabel lblDelete;
-	private JLabel lblUpdate;
+	private JLabel lblUpdate, lblUsersStartDateConnectionMin, lblUsersStartDateConnectionMax, lblLastDateMin, lblLastDateMax;
+	private JDateChooser dateChooserStratDateMin, dateChooserStratDateMax, dateChooserTerminationDateMin, dateChooserTerminationDateMax;
+	private JPanel panelTypeOfContractFilter;
+	private JPanel panelContractStateFilter;
+	private JPanel panelProviderFilter;
+	private JLabel lblRestore;
+	private boolean isRestoreFilters;
 
 	private class Eliminar extends Thread { // Hilo para la eliminacion
 
@@ -72,6 +88,7 @@ public class PanelGerenteCreacionContrato extends JPanel {
 					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
 					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación
 						deleteElements(); // se eliminan los elementos seleccionados
+						actualizarTablaContracts(); // se actualiza la informacion de la tabla de contratos
 						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto
 					}
 				} catch (InterruptedException e) {
@@ -94,10 +111,11 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		frameAdvertencia.setVisible(true);
 	}
 
-	
+
 	public PanelGerenteCreacionContrato() {
+		this.isRestoreFilters = false;
 		setBackground(SystemColor.inactiveCaptionBorder);
-		setBounds(278, 63, 712, 719);
+		setBounds(278, 63, 1274, 719);
 		setLayout(new BorderLayout(0, 0));
 		panelTitle = new JPanel();
 		panelTitle.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
@@ -133,8 +151,8 @@ public class PanelGerenteCreacionContrato extends JPanel {
 
 		tableContracts = new JTable();
 		tableContracts.setRowHeight(30);
-		tableContracts.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		tableContracts.getTableHeader().setFont(new Font("Arial", Font.BOLD, 24));
+		tableContracts.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableContracts.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
 		tableContracts.getTableHeader().setForeground(Color.black);
 		tableContracts.getTableHeader().setBackground(SystemColor.black);
 		tableContracts.addMouseListener(new MouseAdapter() {
@@ -168,7 +186,9 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-
+				FrameSeleccionCrearContrato frameSeleccionCrearContrato = new FrameSeleccionCrearContrato(PanelGerenteCreacionContrato.this);
+				frameSeleccionCrearContrato.setVisible(true);
+				FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -291,7 +311,7 @@ public class PanelGerenteCreacionContrato extends JPanel {
 		comboBoxTypeOfContrac.addItem("Service Contract");
 		comboBoxTypeOfContrac.addItem("Carrier Contract");
 	}
-	
+
 	private void actualizarEstadoButtons () {
 		this.actualizarEstadoButtonDelete();
 		this.actualizarEstadoButtonUpdate();
@@ -312,6 +332,146 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	}
 
 	private void addFiltres () {
+
+		panelTypeOfContractFilter = new JPanel();
+		panelTypeOfContractFilter.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelTypeOfContractFilter);
+		panelTypeOfContractFilter.setLayout(new BoxLayout(panelTypeOfContractFilter, BoxLayout.Y_AXIS));
+
+		panelContractStateFilter = new JPanel();
+		panelContractStateFilter.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelContractStateFilter);
+
+		panelProviderFilter = new JPanel();
+		panelProviderFilter.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelProviderFilter);
+
+		panelStartDateConnection = new JPanel();
+		panelStartDateConnection.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelStartDateConnection);
+		panelStartDateConnection.setLayout(new BoxLayout(panelStartDateConnection, BoxLayout.Y_AXIS));
+
+		lblUsersStartDateConnectionMin = new JLabel("Start Date Min:");
+		lblUsersStartDateConnectionMin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsersStartDateConnectionMin.setForeground(SystemColor.textHighlightText);
+		lblUsersStartDateConnectionMin.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelStartDateConnection.add(lblUsersStartDateConnectionMin);
+
+		dateChooserStratDateMin = new JDateChooser();
+		dateChooserStratDateMin.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date"))
+					actualizarTablaContracts(); // se actualiza la informacion de los contratos
+			}
+		});
+
+		panelStartDateConnection.add(dateChooserStratDateMin);
+
+		lblUsersStartDateConnectionMax = new JLabel("Start Date Max:");
+		lblUsersStartDateConnectionMax.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsersStartDateConnectionMax.setForeground(SystemColor.textHighlightText);
+		lblUsersStartDateConnectionMax.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelStartDateConnection.add(lblUsersStartDateConnectionMax);
+
+		dateChooserStratDateMax = new JDateChooser();
+		dateChooserStratDateMax.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date"))
+					actualizarTablaContracts(); // se actualiza la informacion de los contratos
+			}
+		});
+
+		panelStartDateConnection.add(dateChooserStratDateMax);
+
+		panelLastDateConnection = new JPanel();
+		panelLastDateConnection.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelLastDateConnection);
+		panelLastDateConnection.setLayout(new BoxLayout(panelLastDateConnection, BoxLayout.Y_AXIS));
+
+		lblLastDateMin = new JLabel("Termination Date Min:");
+		lblLastDateMin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLastDateMin.setForeground(SystemColor.textHighlightText);
+		lblLastDateMin.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelLastDateConnection.add(lblLastDateMin);
+
+		dateChooserTerminationDateMin = new JDateChooser();
+		dateChooserTerminationDateMin.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date"))
+					actualizarTablaContracts(); // se actualiza la informacion de los contratos
+			}
+		});
+
+		panelLastDateConnection.add(dateChooserTerminationDateMin);
+
+		lblLastDateMax = new JLabel("Termination Date Max:");
+		lblLastDateMax.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLastDateMax.setForeground(SystemColor.textHighlightText);
+		lblLastDateMax.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelLastDateConnection.add(lblLastDateMax);
+
+		dateChooserTerminationDateMax = new JDateChooser();
+		dateChooserTerminationDateMax.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date"))
+					actualizarTablaContracts(); // se actualiza la informacion de los contratos
+			}
+		});
+
+		panelLastDateConnection.add(dateChooserTerminationDateMax);
+
+		lblRestore = new JLabel("  Restore");
+		lblRestore.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				restoreFilters();
+			}
+		});
+		lblRestore.setHorizontalAlignment(SwingConstants.LEFT);
+		lblRestore.setForeground(SystemColor.textHighlightText);
+		lblRestore.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelFiltros.add(lblRestore);
+
+
+
+		this.addTypeOfContractFilter();
+		this.addContractStateFilter();
+		this.addProviderFilter();
+
+
+	}
+
+	private void deleteElements () {
+		try {
+			deleteElementsTable(); // se eliminan los elementos seleccionados
+			ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
+			crearFrameNotificacion(); // se crea el frame que notifica que la operacion han sido efectuados con exito
+		} catch (SQLException e) {
+			try {
+				ConnectionDataBase.roolback(); // se cancelan las operaciones realizadas a la base de datos
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}  
+			e.printStackTrace();
+		}
+	}
+
+	private void restoreFilters () {
+		this.isRestoreFilters = true; // se define el estado de restuaracion de los filtros para evitar llamadas innecesarias a los metodos de actualizar
+		// Se restuaran los filtros por defecto
+		this.comboBoxProvider.setSelectedIndex(0);
+		this.comboBoxState.setSelectedIndex(0);
+		this.comboBoxTypeOfContrac.setSelectedIndex(0);
+		this.dateChooserStratDateMax.setDate(null);
+		this.dateChooserStratDateMin.setDate(null);
+		this.dateChooserTerminationDateMax.setDate(null);
+		this.dateChooserTerminationDateMin.setDate(null);
+		this.isRestoreFilters = false; // se notifica de la finalizacion del proceso de restauracion
+		this.actualizarTablaContracts(); // se actualiza la información de la tabla de contratos
+	}
+
+	private void addTypeOfContractFilter () {
 		comboBoxTypeOfContrac = new JComboBox<String>();
 		comboBoxTypeOfContrac.setFont(new Font("Dialog", Font.PLAIN, 21));
 		comboBoxTypeOfContrac.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -324,19 +484,22 @@ public class PanelGerenteCreacionContrato extends JPanel {
 
 		JLabel lblTypeOfContract = new JLabel("Type Of Contract");
 		lblTypeOfContract.setForeground(SystemColor.textHighlightText);
-		lblTypeOfContract.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTypeOfContract.setHorizontalAlignment(SwingConstants.LEFT);
 		lblTypeOfContract.setFont(new Font("Dialog", Font.BOLD, 21));
 		lblTypeOfContract.setBounds(61, 24, 138, 14);
-		panelFiltros.add(lblTypeOfContract);
+		panelTypeOfContractFilter.add(lblTypeOfContract);
 		comboBoxTypeOfContrac.setBounds(61, 49, 138, 22);
-		panelFiltros.add(comboBoxTypeOfContrac);
+		panelTypeOfContractFilter.add(comboBoxTypeOfContrac);
+	}
 
+	private void addContractStateFilter () {
+		panelContractStateFilter.setLayout(new BoxLayout(panelContractStateFilter, BoxLayout.Y_AXIS));
 		JLabel lblNewLabel_1 = new JLabel("Contract State");
 		lblNewLabel_1.setForeground(SystemColor.textHighlightText);
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 21));
 		lblNewLabel_1.setBounds(522, 24, 119, 14);
-		panelFiltros.add(lblNewLabel_1);
+		panelContractStateFilter.add(lblNewLabel_1);
 
 		comboBoxState = new JComboBox<String>();
 		comboBoxState.setFont(new Font("Dialog", Font.PLAIN, 21));
@@ -348,8 +511,10 @@ public class PanelGerenteCreacionContrato extends JPanel {
 			}
 		});
 		comboBoxState.setBounds(522, 49, 119, 22);
-		panelFiltros.add(comboBoxState);
+		panelContractStateFilter.add(comboBoxState);
+	}
 
+	private void addProviderFilter () {
 		comboBoxProvider = new JComboBox<Provider>();
 		comboBoxProvider.setFont(new Font("Dialog", Font.PLAIN, 21));
 		comboBoxProvider.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -359,86 +524,61 @@ public class PanelGerenteCreacionContrato extends JPanel {
 				actualizarTablaContracts(); // se actualiza la información de la tabla de contratos
 			}
 		});
+		panelProviderFilter.setLayout(new BoxLayout(panelProviderFilter, BoxLayout.Y_AXIS));
 
 		lblNewLabel = new JLabel("Provider");
 		lblNewLabel.setForeground(SystemColor.textHighlightText);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 21));
 		lblNewLabel.setBounds(301, 24, 119, 14);
-		panelFiltros.add(lblNewLabel);
+		panelProviderFilter.add(lblNewLabel);
 		comboBoxProvider.setBounds(301, 49, 119, 22);
-		panelFiltros.add(comboBoxProvider);
-
-	}
-
-	private void deleteElements () {
-		try {
-			deleteElementsTable(); // se eliminan los elementos seleccionados
-			ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
-			crearFrameNotificacion(); // se crea el frame que notifica que la operacion han sido efectuados con exito
-			actualizarEstadoButtons(); // se actualiza el estado de los botones
-		} catch (SQLException e) {
-			try {
-				ConnectionDataBase.roolback(); // se cancelan las operaciones realizadas a la base de datos
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}  
-			e.printStackTrace();
-		}
+		panelProviderFilter.add(comboBoxProvider);
 	}
 
 
 	public void actualizarTablaContracts () {
-		if (((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && ((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 
-				((Provider)	comboBoxProvider.getSelectedItem()).getName().equalsIgnoreCase("All")) // no se seleccionó ningún filtro 
-			this.actualizarTablaContracts(Controller.getInstancie().getTouristAgency().getContracts());
 
-		else if (!((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && ((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 
-				((Provider)	comboBoxProvider.getSelectedItem()).getName().equalsIgnoreCase("All")) // filtro tipo
-			this.actualizarTablaContracts(Controller.getInstancie().getTouristAgency().getContracts(this.determinarTypeOfContract((String) comboBoxTypeOfContrac.getSelectedItem())));
+		this.actualizarTablaContracts(Controller.getInstancie().getTouristAgency().getContracts(this.definirTypeContract(), 
+				(this.comboBoxProvider.getSelectedItem() instanceof ProviderAux) ? null : (Provider) this.comboBoxProvider.getSelectedItem(), 
+						this.definirStateContract(), (this.dateChooserStratDateMin.getDate() != null) ? this.dateChooserStratDateMin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null, 
+								(this.dateChooserStratDateMax.getDate() != null) ? this.dateChooserStratDateMax.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null, 
+										(this.dateChooserTerminationDateMin.getDate() != null) ? this.dateChooserTerminationDateMin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null, 
+												(this.dateChooserTerminationDateMax.getDate() != null) ? this.dateChooserTerminationDateMax.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null));
+		this.actualizarEstadoButtons();
 
-		else if (((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && ((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 
-				!((Provider) comboBoxProvider.getSelectedItem()).getName().equalsIgnoreCase("All"))// filtro proveedor
-			this.actualizarTablaContracts(Controller.getInstancie().getTouristAgency().getContracts((Provider) comboBoxProvider.getSelectedItem()));
-
-		else if (((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && !((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 
-				((Provider) comboBoxProvider.getSelectedItem()).getName().equalsIgnoreCase("All")) // filtro estado
-			this.actualizarTablaContracts(Controller.getInstancie().getTouristAgency().getContracts((((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("Close")) ? true : false ));
-
-		else if (!((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && ((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 
-				!((Provider)	comboBoxProvider.getSelectedItem()).getName().equalsIgnoreCase("All")) // filtro tipo, proveedor
-			this.actualizarTablaContracts(Controller.getInstancie().getTouristAgency().getContracts(this.determinarTypeOfContract( (String) comboBoxTypeOfContrac.getSelectedItem()),
-					(Provider) comboBoxProvider.getSelectedItem()));
-
-		else if (!((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && !((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 
-				((Provider)	comboBoxProvider.getSelectedItem()).getName().equalsIgnoreCase("All")) // filtro tipo, estado
-			this.actualizarTablaContracts(Controller.getInstancie().getTouristAgency().getContracts(this.determinarTypeOfContract((String) comboBoxTypeOfContrac.getSelectedItem()),
-					(((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("Close")) ? true : false));
-
-		else if (((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && !((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 
-				!((Provider) comboBoxProvider.getSelectedItem()).getName().equalsIgnoreCase("All"))// filtro proveedor, estado
-			this.actualizarTablaContracts(Controller.getInstancie().getTouristAgency().getContracts((Provider) comboBoxProvider.getSelectedItem(),
-					(((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("Close")) ? true : false));
-
-		else if (!((String) comboBoxTypeOfContrac.getSelectedItem()).equalsIgnoreCase("All") && !((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("All") && 
-				!((Provider)	comboBoxProvider.getSelectedItem()).getName().equalsIgnoreCase("All")) // filtro tipo, proveedor, estado
-			this.actualizarTablaContracts(Controller.getInstancie().getTouristAgency().getContracts(this.determinarTypeOfContract( (String) comboBoxTypeOfContrac.getSelectedItem()),
-					(Provider) comboBoxProvider.getSelectedItem(), (((String) comboBoxState.getSelectedItem()).equalsIgnoreCase("Close")) ? true : false));
 
 	}
 
-	private int determinarTypeOfContract (String typeOfContract) {
-		int type = -1;
+	private int definirTypeContract () { // Metodo para definir el tipo de contrato seleccionado
+		int typeContract = 0;
+		String typeContractSelected = (String) this.comboBoxTypeOfContrac.getSelectedItem();
 
-		if (typeOfContract.equalsIgnoreCase("Accommodation Contract"))
-			type = Contract.accommodationContract;
-		else if (typeOfContract.equalsIgnoreCase("Service Contract"))
-			type = Contract.serviceContract;
-		else if (typeOfContract.equalsIgnoreCase("Carrier Contract"))
-			type = Contract.carrierContract;
+		if (typeContractSelected.equalsIgnoreCase("Accommodation Contract"))
+			typeContract = Contract.accommodationContract; // se define el tipo como contrato de alojamiento
+		else if (typeContractSelected.equalsIgnoreCase("Service Contract"))
+			typeContract = Contract.serviceContract; // se define el tipo como contrato de servicio
+		else if (typeContractSelected.equalsIgnoreCase("Carrier Contract"))
+			typeContract = Contract.carrierContract; // se define el tipo como contrato de transporte
+		else
+			typeContract = -1;
 
-		return type;
+		return typeContract;
+	}
+
+
+	private int definirStateContract () {
+		int stateContract = 0;
+		String state = (String) this.comboBoxState.getSelectedItem();
+		if (state.equalsIgnoreCase("All"))
+			stateContract = AusentFilter.stateLess;
+		else if (state.equalsIgnoreCase("Close"))
+			stateContract = Contract.closeState;
+		else if (state.equalsIgnoreCase("In Procesing"))
+			stateContract = Contract.earringState;
+
+		return stateContract;
+
 	}
 
 
@@ -454,20 +594,13 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	}
 
 
-	private void actualizarTablaContracts(ArrayList<Contract> contracts){
-		reiniciarTable(this.tableContracts);
 
-
-		for (Contract contr : contracts) {
-			((ModeloTablaContract) tableContracts.getModel()).addElement(contr);
-		}
-	}
 
 	public void deleteElementsTable () throws SQLException {
 		int [] rows = tableContracts.getSelectedRows();
 
 		for (int i = 0; i < rows.length; i++) {
-			Controller.getInstancie().getTouristAgency().deleteContract(((ModeloTablaContract) tableContracts.getModel()).deleteElement(rows[i] - i)); // se elimina el contrato de la base de datos y de la logica del negocio
+			Controller.getInstancie().getTouristAgency().deleteContract(((ModeloTablaContract) tableContracts.getModel()).getElement(rows[i])); // se elimina el contrato de la base de datos y de la logica del negocio
 		}
 
 		this.actualizarTablaContracts();

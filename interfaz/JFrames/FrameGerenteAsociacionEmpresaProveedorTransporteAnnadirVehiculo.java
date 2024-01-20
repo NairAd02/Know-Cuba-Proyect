@@ -13,9 +13,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+import javax.swing.JSpinner;
+import com.toedter.calendar.JDateChooser;
+import javax.swing.SpinnerNumberModel;
 
 public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo extends JFrame {
 
@@ -27,6 +31,14 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 	private JLabel lblAdd;
 	private TransportationProvider transportationProvider;
 	private JLabel lblX;
+	private JTextField textFieldBrand;
+	private JLabel lblMarca;
+	private JLabel lblCapacidadSinEquipaje;
+	private JSpinner spinnercapacityWithoutLuggage;
+	private JLabel lblCapacidadConEquipaje;
+	private JSpinner spinnerCapacityWithLuggage;
+	private JLabel lblFechaDeProduccin;
+	private JDateChooser dateChooserDateProduction;
 
 
 	public FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo(FrameGerenteAsociacionEmpresaProveedorTransporte pt) {
@@ -34,9 +46,10 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 		this.transportationProvider = this.frameGerenteAsociacionEmpresaProveedorTransporte.getTransportationProvider();
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 422, 201);
+		setBounds(100, 100, 497, 327);
 		contentPane = new JPanel();
 		contentPane = new JPanel();
+
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -54,20 +67,21 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 			}
 		});
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		contentPane.setBackground(new Color(5, 150, 177));
+		contentPane.setBackground(new Color(18, 95, 115));
 		setLocationRelativeTo(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JLabel lblTransportProviderVehicles = new JLabel("TRANSPORT PROVIDER VEHICLES");
-		lblTransportProviderVehicles.setFont(new Font("Arial Black", Font.PLAIN, 18));
-		lblTransportProviderVehicles.setBounds(27, 11, 341, 30);
+		lblTransportProviderVehicles.setForeground(SystemColor.textHighlightText);
+		lblTransportProviderVehicles.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblTransportProviderVehicles.setBounds(27, 11, 363, 30);
 		contentPane.add(lblTransportProviderVehicles);
 
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				cerrarFrame();
 			}
 			@Override
@@ -76,34 +90,35 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
-		lblX.setBounds(384, 0, 38, 38);
+		lblX.setBounds(459, 0, 38, 38);
 		contentPane.add(lblX);
 
-		JLabel lblLock = new JLabel("LOCK :");
-		lblLock.setForeground(SystemColor.info);
+		JLabel lblLock = new JLabel("Chapa :");
+		lblLock.setForeground(SystemColor.textHighlightText);
 		lblLock.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblLock.setBounds(112, 74, 70, 23);
+		lblLock.setBounds(22, 52, 70, 23);
 		contentPane.add(lblLock);
 
 		lblAdd = new JLabel("ADD");
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				if (!textFieldLock.getText().equalsIgnoreCase("")) {
-				/*	try {
-						//addVehicle();
+			public void mouseClicked(MouseEvent e) {
+				if (verificarCampos()) {
+					try {
+						addVehicle();
+						frameGerenteAsociacionEmpresaProveedorTransporte.actualizarTablaVehicles(); // se actualiza la informacion de la tabla de las actividades
 						cerrarFrame();
 					} catch (SQLException e1) {
 
 						e1.printStackTrace();
-					}*/
+					}
 				}
 			}
 			@Override
@@ -119,29 +134,77 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAdd.setBackground(SystemColor.info);
-		lblAdd.setBounds(93, 141, 235, 35);
+		lblAdd.setBounds(133, 281, 235, 35);
 		contentPane.add(lblAdd);
 
 		textFieldLock = new JTextField();
-		textFieldLock.setBounds(219, 75, 100, 20);
+		textFieldLock.setBounds(95, 56, 100, 20);
 		contentPane.add(textFieldLock);
 		textFieldLock.setColumns(10);
+
+		textFieldBrand = new JTextField();
+		textFieldBrand.setColumns(10);
+		textFieldBrand.setBounds(384, 56, 100, 20);
+		contentPane.add(textFieldBrand);
+
+		lblMarca = new JLabel("Marca :");
+		lblMarca.setForeground(SystemColor.textHighlightText);
+		lblMarca.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblMarca.setBounds(311, 52, 70, 23);
+		contentPane.add(lblMarca);
+
+		lblCapacidadSinEquipaje = new JLabel("Capacidad sin Equipaje :");
+		lblCapacidadSinEquipaje.setForeground(SystemColor.textHighlightText);
+		lblCapacidadSinEquipaje.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblCapacidadSinEquipaje.setBounds(22, 103, 226, 23);
+		contentPane.add(lblCapacidadSinEquipaje);
+
+		spinnercapacityWithoutLuggage = new JSpinner();
+		spinnercapacityWithoutLuggage.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+		spinnercapacityWithoutLuggage.setBounds(95, 137, 70, 20);
+		contentPane.add(spinnercapacityWithoutLuggage);
+
+		lblCapacidadConEquipaje = new JLabel("Capacidad con Equipaje :");
+		lblCapacidadConEquipaje.setForeground(SystemColor.textHighlightText);
+		lblCapacidadConEquipaje.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblCapacidadConEquipaje.setBounds(258, 103, 226, 23);
+		contentPane.add(lblCapacidadConEquipaje);
+
+		spinnerCapacityWithLuggage = new JSpinner();
+		spinnerCapacityWithLuggage.setBounds(352, 137, 70, 20);
+		contentPane.add(spinnerCapacityWithLuggage);
+
+		lblFechaDeProduccin = new JLabel("Fecha de Producción :");
+		lblFechaDeProduccin.setForeground(SystemColor.textHighlightText);
+		lblFechaDeProduccin.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblFechaDeProduccin.setBounds(143, 178, 211, 23);
+		contentPane.add(lblFechaDeProduccin);
+
+		dateChooserDateProduction = new JDateChooser();
+		dateChooserDateProduction.setBounds(198, 212, 102, 20);
+		contentPane.add(dateChooserDateProduction);
 	}
 
-	/*private void addVehicle () throws SQLException {
+	private boolean verificarCampos () {
+		return !this.textFieldBrand.getText().equalsIgnoreCase("") && !this.textFieldLock.getText().equalsIgnoreCase("") && this.dateChooserDateProduction.getDate() != null;
+	}
+
+	private void addVehicle () throws SQLException {
 		if (this.transportationProvider.getId() != -1) { // si es distinto de -1 se añade a la logica del negocio y a la base de datos 
-			this.transportationProvider.addVehicle(new Vehicle(textFieldLock.getText(), transportationProvider.getId()));
+			this.transportationProvider.addVehicle(new Vehicle(this.textFieldLock.getText(), this.textFieldBrand.getText(), (Integer) this.spinnercapacityWithoutLuggage.getValue(),
+					(Integer)  this.spinnerCapacityWithLuggage.getValue(), (Integer) this.spinnercapacityWithoutLuggage.getValue(),
+					this.dateChooserDateProduction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), this.transportationProvider.getId()));
 		}
 		else { // si es igual a -1 se añade solamente a la logica del negocio
-			this.transportationProvider.addVehicleLogic(new Vehicle(textFieldLock.getText(), transportationProvider.getId()));
+			this.transportationProvider.addVehicleLogic(new Vehicle(this.textFieldLock.getText(), this.textFieldBrand.getText(), (Integer) this.spinnercapacityWithoutLuggage.getValue(),
+					(Integer)  this.spinnerCapacityWithLuggage.getValue(), (Integer) this.spinnercapacityWithoutLuggage.getValue(),
+					this.dateChooserDateProduction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
 		}
-		frameGerenteAsociacionEmpresaProveedorTransporte.actualizarTablaVehicles(); // se actualiza la informacion de la tabla de las actividades
-	}*/
+
+	}
 
 	private void cerrarFrame () {
 		frameGerenteAsociacionEmpresaProveedorTransporte.setEnabled(true);
 		dispose();
 	}
-
-
 }

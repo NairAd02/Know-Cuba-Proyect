@@ -1,4 +1,4 @@
-package JFrames;
+package JPanels;
 
 
 import javax.swing.JFrame;
@@ -25,13 +25,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 
-public class FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JFrame {
+import JFrames.FrameInformacionPaquete;
+
+public class PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	private JTable tableAvailableServices;
 	private JTable tableAssignedServices;
-	private int mouseX, mouseY;
 	private JLabel lblAnnadir;
 	private JLabel lblDenegar;
 	private FrameInformacionPaquete frameInformacionPaquete;
@@ -39,50 +39,18 @@ public class FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JFr
 	private JLabel lblX;
 
 
-	public FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir(FrameInformacionPaquete f) {
+	public PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir(FrameInformacionPaquete f) {
 		this.frameInformacionPaquete = f;
 		this.touristPackage = this.frameInformacionPaquete.getTouristPackage();
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
 		setBounds(100, 100, 600, 360);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				int x= e.getXOnScreen();
-				int y= e.getYOnScreen();
-
-				setLocation(x - mouseX , y - mouseY );
-			}
-		});
-		contentPane.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-				tableAssignedServices.clearSelection();
-				tableAvailableServices.clearSelection();
-				actualizarEstadosBotones();
-			}
-		});
-
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBackground(new Color(5, 150, 177));
-		panel.setLayout(null);
-		panel.setBackground(new Color(5, 150, 177));
-		panel.setBounds(0, 0, 600, 360);
-		contentPane.add(panel);
-		setLocationRelativeTo(null);
+		setLayout(null);
+		setBackground(new Color(18, 95, 115));
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				cerrarFrame(); // se cierra el frame actual
+				
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -98,12 +66,12 @@ public class FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JFr
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(562, 0, 38, 38);
-		panel.add(lblX);
+		add(lblX);
 
 		JLabel lblAvailableServices = new JLabel("AVAILABLE SERVICES");
 		lblAvailableServices.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblAvailableServices.setBounds(25, 33, 275, 19);
-		panel.add(lblAvailableServices);
+		add(lblAvailableServices);
 
 		lblAnnadir = new JLabel("ASIGN");
 		lblAnnadir.addMouseListener(new MouseAdapter() {
@@ -130,12 +98,12 @@ public class FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JFr
 		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAnnadir.setBackground(SystemColor.info);
 		lblAnnadir.setBounds(435, 40, 155, 20);
-		panel.add(lblAnnadir);
+		add(lblAnnadir);
 
 		JLabel lblAssignedServices = new JLabel("ASSIGNED SERVICES");
 		lblAssignedServices.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblAssignedServices.setBounds(25, 173, 275, 19);
-		panel.add(lblAssignedServices);
+		add(lblAssignedServices);
 
 		lblDenegar = new JLabel("DENY");
 		lblDenegar.addMouseListener(new MouseAdapter() {
@@ -160,13 +128,13 @@ public class FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JFr
 		lblDenegar.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblDenegar.setBackground(SystemColor.info);
 		lblDenegar.setBounds(435, 183, 155, 20);
-		panel.add(lblDenegar);
+		add(lblDenegar);
 
 		JLabel lblConfirm = new JLabel("CERRAR");
 		lblConfirm.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				cerrarFrame(); // se cierra el frame actual
+				
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -180,11 +148,11 @@ public class FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JFr
 		lblConfirm.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblConfirm.setBackground(SystemColor.info);
 		lblConfirm.setBounds(182, 311, 235, 35);
-		panel.add(lblConfirm);
+		add(lblConfirm);
 
 		JPanel panelAvailableServices = new JPanel();
 		panelAvailableServices.setBounds(10, 71, 580, 86);
-		panel.add(panelAvailableServices);
+		add(panelAvailableServices);
 		panelAvailableServices.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -203,7 +171,7 @@ public class FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JFr
 		JPanel panelAssignedServices = new JPanel();
 		panelAssignedServices.setOpaque(false);
 		panelAssignedServices.setBounds(10, 214, 580, 86);
-		panel.add(panelAssignedServices);
+		add(panelAssignedServices);
 		panelAssignedServices.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -307,10 +275,7 @@ public class FrameDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JFr
 
 
 
-	private void cerrarFrame () {
-		frameInformacionPaquete.setEnabled(true);
-		dispose();
-	}
+	
 
 	private void actualizarEstadosBotones () {
 		this.estadoLblAsign();

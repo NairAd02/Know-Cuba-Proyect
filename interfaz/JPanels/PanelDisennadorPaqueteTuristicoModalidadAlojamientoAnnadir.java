@@ -1,4 +1,4 @@
-package JFrames;
+package JPanels;
 
 import java.awt.Color;
 import javax.swing.JFrame;
@@ -22,10 +22,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.border.LineBorder;
 
-public class FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends JFrame {
+import JFrames.FrameInformacionPaquete;
+
+public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	private JTable tableAvailableAccommodation;
 	private JTable tableAssignedAccommodations;
 	private JLabel lblAnnadir;
@@ -37,45 +38,17 @@ public class FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 	private JLabel lblX;
 
 
-	public FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir(FrameInformacionPaquete f) {
+	public PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir(FrameInformacionPaquete f) {
 		this.frameInformacionPaquete = f;
 		this.touristPackage = this.frameInformacionPaquete.getTouristPackage();
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		setBounds(100, 100, 600, 360);
-		contentPane = new JPanel();
-		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				int x= e.getXOnScreen();
-				int y= e.getYOnScreen();
-
-				setLocation(x - mouseX , y - mouseY );
-			}
-		});
-		contentPane.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-				tableAssignedAccommodations.clearSelection();
-				tableAvailableAccommodation.clearSelection();
-				actualizarEstadosBotones();
-			}
-		});
-		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		contentPane.setBackground(new Color(5, 150, 177));
-		setBackground(new Color(5, 150, 177));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		setLocationRelativeTo(null);
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBackground(new Color(5, 150, 177));
-		panel.setBounds(0, 0, 600, 360);
-		panel.setBackground(new Color(5, 150, 177));
-		contentPane.add(panel);
-		panel.setLayout(null);
+	
+		setBackground(new Color(18, 95, 115));
+		
+	
+		
+		setLayout(null);
 
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
@@ -97,12 +70,12 @@ public class FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(562, 0, 38, 38);
-		panel.add(lblX);
+		add(lblX);
 
 		JLabel lblAvailableAccommodation = new JLabel("AVAILABLE ACCOMMODATION");
 		lblAvailableAccommodation.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblAvailableAccommodation.setBounds(25, 33, 275, 19);
-		panel.add(lblAvailableAccommodation);
+		add(lblAvailableAccommodation);
 
 		lblAnnadir = new JLabel("ASIGN");
 		lblAnnadir.addMouseListener(new MouseAdapter() {
@@ -129,12 +102,12 @@ public class FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAnnadir.setBackground(SystemColor.info);
 		lblAnnadir.setBounds(435, 40, 155, 20);
-		panel.add(lblAnnadir);
+		add(lblAnnadir);
 
 		JLabel lblAssignedAccommodations = new JLabel("ASSIGNED ACCOMMODATIONS");
 		lblAssignedAccommodations.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblAssignedAccommodations.setBounds(25, 173, 275, 19);
-		panel.add(lblAssignedAccommodations);
+		add(lblAssignedAccommodations);
 
 		lblDenegar = new JLabel("DENY");
 		lblDenegar.addMouseListener(new MouseAdapter() {
@@ -161,7 +134,7 @@ public class FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		lblDenegar.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblDenegar.setBackground(SystemColor.info);
 		lblDenegar.setBounds(435, 183, 155, 20);
-		panel.add(lblDenegar);
+		add(lblDenegar);
 
 		lblConfirm = new JLabel("CERRAR");
 		lblConfirm.addMouseListener(new MouseAdapter() {
@@ -181,11 +154,11 @@ public class FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		lblConfirm.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblConfirm.setBackground(SystemColor.info);
 		lblConfirm.setBounds(182, 311, 235, 35);
-		panel.add(lblConfirm);
+		add(lblConfirm);
 
 		JPanel panelAvailableAccommodation = new JPanel();
 		panelAvailableAccommodation.setBounds(10, 71, 580, 86);
-		panel.add(panelAvailableAccommodation);
+		add(panelAvailableAccommodation);
 		panelAvailableAccommodation.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -204,7 +177,7 @@ public class FrameDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		JPanel panelAssignedAccommodations = new JPanel();
 		panelAssignedAccommodations.setOpaque(false);
 		panelAssignedAccommodations.setBounds(10, 214, 580, 86);
-		panel.add(panelAssignedAccommodations);
+		add(panelAssignedAccommodations);
 		panelAssignedAccommodations.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane_1 = new JScrollPane();

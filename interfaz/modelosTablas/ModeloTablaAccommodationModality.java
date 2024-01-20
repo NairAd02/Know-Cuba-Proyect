@@ -11,7 +11,7 @@ public class ModeloTablaAccommodationModality extends DefaultTableModel implemen
 	private ArrayList<AccommodationModality> elements;
 
 	public ModeloTablaAccommodationModality(){
-		String[] columnNames = {"Type of room", "Meal plan", "Cant days accommodation", "Price"};   
+		String[] columnNames = {"Type of room", "Meal plan", "Hotel Modality" , "Days accommodation", "Price"};   
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
 		this.elements = new ArrayList<AccommodationModality>();
@@ -22,7 +22,8 @@ public class ModeloTablaAccommodationModality extends DefaultTableModel implemen
 	public void addElement(AccommodationModality accommodationModality) {
 		Object[] newRow =  null;
 		this.elements.add(accommodationModality);
-		newRow = new Object[]{accommodationModality.getTypeOfRoomSelect().getName(), accommodationModality.getMealPlanSelect().getName(), accommodationModality.getCantDaysAccommodation(), accommodationModality.price()};
+		newRow = new Object[]{accommodationModality.getTypeOfRoomSelect().getName(), accommodationModality.getMealPlanSelect().getName(), accommodationModality.getHotelModality().getName(), 
+				accommodationModality.getCantDaysAccommodation(), accommodationModality.price()};
 		addRow(newRow);
 	}
 

@@ -1,10 +1,12 @@
-package JFrames;
+package JPanels;
 
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import JFrames.FrameInformacionPaquete;
 import logica.Controller;
 import logica.CostKilometers;
 import logica.EstablishedRoute;
@@ -32,10 +34,9 @@ import javax.swing.JTable;
 import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
 
-public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends JFrame {
+public class PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	private JTable tableAvailableTransportation;
 	private JTable tableAssignedTransports;
 	private int mouseX, mouseY;
@@ -47,7 +48,6 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 	private JLabel labelFlechaAterior;
 	private JLabel labelFlechaSiguiente;
 	private JLabel lblX;
-	private JPanel panel;
 	private Deque<DefaultTableModel> previusModelsAssignedTransports;
 	private Deque<DefaultTableModel> nextsModelsAssignedTransports;
 	private Deque<DefaultTableModel> previusModelsAviableTransports;
@@ -55,45 +55,13 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 	private JLabel lblTitleTable;
 
 
-	public FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir(FrameInformacionPaquete f) {
+	public PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir(FrameInformacionPaquete f) {
 		this.frameInformacionPaquete = f;
 		this.touristPackage = this.frameInformacionPaquete.getTouristPackage();
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
 		setBounds(100, 100, 600, 360);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				int x= e.getXOnScreen();
-				int y= e.getYOnScreen();
-
-				setLocation(x - mouseX , y - mouseY );
-			}
-		});
-		contentPane.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-				tableAssignedTransports.clearSelection();
-				tableAvailableTransportation.clearSelection();
-
-			}
-		});
-
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		setLocationRelativeTo(null);
-		panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setLayout(null);
-		panel.setBackground(new Color(5, 150, 177));
-		panel.setBackground(new Color(5, 150, 177));
-		panel.setBounds(0, 0, 600, 360);
-		contentPane.add(panel);
-
+		setLayout(null);
+		setBackground(new Color(18, 95, 115));
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
@@ -114,12 +82,12 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(562, 0, 38, 38);
-		panel.add(lblX);
+		add(lblX);
 
 		JLabel lblAvailableTransportation = new JLabel("AVAILABLE TRANSPORTATION");
 		lblAvailableTransportation.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblAvailableTransportation.setBounds(25, 11, 275, 19);
-		panel.add(lblAvailableTransportation);
+		add(lblAvailableTransportation);
 
 		lblAnnadir = new JLabel("ASIGN");
 		lblAnnadir.addMouseListener(new MouseAdapter() {
@@ -146,12 +114,12 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAnnadir.setBackground(SystemColor.info);
 		lblAnnadir.setBounds(435, 40, 155, 20);
-		panel.add(lblAnnadir);
+		add(lblAnnadir);
 
 		JLabel lblAssignedTransports = new JLabel("ASSIGNED TRANSPORTS");
 		lblAssignedTransports.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblAssignedTransports.setBounds(25, 173, 275, 19);
-		panel.add(lblAssignedTransports);
+		add(lblAssignedTransports);
 
 		lblDenegar = new JLabel("DENY");
 		lblDenegar.addMouseListener(new MouseAdapter() {
@@ -176,7 +144,7 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 		lblDenegar.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblDenegar.setBackground(SystemColor.info);
 		lblDenegar.setBounds(435, 183, 155, 20);
-		panel.add(lblDenegar);
+		add(lblDenegar);
 
 		lblConfirm = new JLabel("CERRAR");
 		lblConfirm.addMouseListener(new MouseAdapter() {
@@ -198,7 +166,7 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 		lblConfirm.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblConfirm.setBackground(SystemColor.info);
 		lblConfirm.setBounds(182, 311, 235, 35);
-		panel.add(lblConfirm);
+		add(lblConfirm);
 
 		labelFlechaAterior = new JLabel("");
 		labelFlechaAterior.addMouseListener(new MouseAdapter() {
@@ -223,7 +191,7 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 		labelFlechaAterior.setIcon(new ImageIcon(FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir.class.getResource("/images/flecha_izquierda.png")));
 		labelFlechaAterior.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		labelFlechaAterior.setBounds(123, 44, 99, 12);
-		panel.add(labelFlechaAterior);
+		add(labelFlechaAterior);
 
 		labelFlechaSiguiente = new JLabel("");
 		labelFlechaSiguiente.addMouseListener(new MouseAdapter() {
@@ -248,11 +216,11 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 		labelFlechaSiguiente.setIcon(new ImageIcon(FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir.class.getResource("/images/flecha_derecha.png")));
 		labelFlechaSiguiente.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		labelFlechaSiguiente.setBounds(257, 44, 99, 12);
-		panel.add(labelFlechaSiguiente);
+		add(labelFlechaSiguiente);
 
 		JPanel panelAvailableTransportation = new JPanel();
 		panelAvailableTransportation.setBounds(10, 71, 580, 86);
-		panel.add(panelAvailableTransportation);
+		add(panelAvailableTransportation);
 		panelAvailableTransportation.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -271,7 +239,7 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 		JPanel panelAssignedTransports = new JPanel();
 		panelAssignedTransports.setOpaque(false);
 		panelAssignedTransports.setBounds(10, 214, 580, 86);
-		panel.add(panelAssignedTransports);
+		add(panelAssignedTransports);
 		panelAssignedTransports.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -290,7 +258,7 @@ public class FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 		lblTitleTable = new JLabel("( Hours Kilometers ) ");
 		lblTitleTable.setFont(new Font("Arial Black", Font.PLAIN, 12));
 		lblTitleTable.setBounds(308, 5, 173, 30);
-		panel.add(lblTitleTable);
+		add(lblTitleTable);
 
 		this.actualizarTablas(); // se actualiza la informacion de las tablas
 		this.actualizarEstadosBotones();

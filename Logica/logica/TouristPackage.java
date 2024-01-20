@@ -8,9 +8,10 @@ import java.util.HashMap;
 
 import dao.ModalityDAO;
 import dao.TouristPackageDAO;
+import utils.*;
 
 
-public class TouristPackage implements DUILogic {
+public class TouristPackage implements DUILogic, LikeName {
     private int id;
     private String name;
     private int cantMaxPax;
@@ -20,6 +21,7 @@ public class TouristPackage implements DUILogic {
     private LocalDate terminationDate;
 
     private HashMap<Integer, ArrayList<Modality>> modalitys; // modalidades hasheadas por su tipo
+    protected BusquedaResultado busquedaResultado; // Atributo para las tareas de busqueda
 
     public TouristPackage(int id, String name, int cantMaxPax, int cantReserves, LocalDate startDate, LocalDate terminationDate, HashMap<Integer, ArrayList<Modality>> modalitys) { // Constructor a nivel de base de datos
         this.id = id;
@@ -210,34 +212,185 @@ public class TouristPackage implements DUILogic {
     }
 
 
-    @Override
-    public void insert() throws SQLException {
-        this.id = TouristPackageDAO.getInstancie().insert(this);
-        this.insertModalityTouristPackageIntoDataBase();
+    // Metodos para la obtencion de las modalidades de Servicio
+
+    // Metodo de obtencion con Filtros aplicados
+    public ArrayList<Modality> getServicesModalitys(Activity activity, LocalDate releasedDateMin, LocalDate releasedDateMax, double precioMin, double precioMax) {
+        ArrayList<Modality> modalitys = this.getModalitys(Modality.serviceModality);
+        // Filtro Actividad
+        if (activity != null)
+            modalitys = FiltersServiceModality.filterActivity(modalitys, activity); // se filtra por actividad
+
+        // Filtro Fecha de Realizacion
+        if (releasedDateMin != null && releasedDateMax != null)
+            modalitys = FiltersServiceModality.filterReleasedDate(modalitys, releasedDateMin, releasedDateMax); // se filtra por el rango de fechas
+        else if (releasedDateMin != null)
+            modalitys = FiltersServiceModality.filterReleasedDate(modalitys, releasedDateMin, LocalDate.MAX); // se filtra por fecha minima
+        else if (releasedDateMax != null)
+            modalitys = FiltersServiceModality.filterReleasedDate(modalitys, LocalDate.MIN, releasedDateMax); // se filtra por fecha maxima
+
+        // Filtro Precio
+        if (precioMin != AusentFilter.spinnerField && precioMax != AusentFilter.spinnerField)
+            modalitys = FiltersServiceModality.filterPrice(modalitys, precioMin, precioMin); // se filtra por el rango de precios
+        else if (precioMin != AusentFilter.spinnerField)
+            modalitys = FiltersServiceModality.filterPrice(modalitys, precioMin, Double.MAX_VALUE);
+        else if (precioMax != AusentFilter.spinnerField)
+            modalitys = FiltersServiceModality.filterPrice(modalitys, Double.MIN_VALUE, precioMax);
+
+        return modalitys;
+    }
+    // Fin de Metodos para la obtencion de las modalidades de Servicio
+
+    // Metodos para la obtencion de las modalidades de Alojamiento
+    public ArrayList<Modality> getAccommodationModalitys(TypeOfRoom typeOfRoom, MealPlan mealPlan, double priceMin, double priceMax, int cantDaysAccommodationMin, int cantDaysAccommodationMax) {
+        ArrayList<Modality> modalitys = this.getModalitys(Modality.accommodationModality);
+        // Se aplican los filtros
+        // Filtro Tipo de Habitacion
+        if (typeOfRoom != null)
+            modalitys = FiltersAccommodationModality.filterTypeOfRoom(modalitys, typeOfRoom); // se filtra por tipo de habitacion
+        // Filtro plan Alimenticio
+        if (mealPlan != null)
+            modalitys = FiltersAccommodationModality.filterMealPlan(modalitys, mealPlan); // se filtra por plan alimenticio
+
+        // Se filtra por precio
+        if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
+            modalitys = FiltersAccommodationModality.filterPrice(modalitys, priceMin, priceMax); // se filtra por el rango de precios
+        else if (priceMin != AusentFilter.spinnerField)
+            modalitys = FiltersAccommodationModality.filterPrice(modalitys, priceMin, Double.MAX_VALUE); // solo se filtra por el precio minimo
+        else if (priceMax != AusentFilter.spinnerField)
+            modalitys = FiltersAccommodationModality.filterPrice(modalitys, Double.MIN_VALUE, priceMax); // solo se filtra por el precio maximo
+
+        // Se filtra por cantidad de dias de alojamiento
+
+        if (cantDaysAccommodationMin != AusentFilter.spinnerField && cantDaysAccommodationMax != AusentFilter.spinnerField)
+            modalitys = FiltersAccommodationModality.filterCantDaysAccommodations(modalitys, cantDaysAccommodationMin, cantDaysAccommodationMax); // se filtra por el rango de dias
+        else if (cantDaysAccommodationMin != AusentFilter.spinnerField)
+            modalitys = FiltersAccommodationModality.filterCantDaysAccommodations(modalitys, cantDaysAccommodationMin, Integer.MAX_VALUE); // se filtra por la cantidad de dias de alojamiento minima
+        else if (cantDaysAccommodationMax != AusentFilter.spinnerField)
+            modalitys = FiltersAccommodationModality.filterCantDaysAccommodations(modalitys, Integer.MIN_VALUE, cantDaysAccommodationMax); // se filtra por la cantidad de dias de alojamiento maxima
+
+        return modalitys;
+    }
+    // Fin de Metodos para la obtencion de las modalidades de Alojamiento
+
+    // Metodos para la obtencion de las modalidades de Transporte
+
+    // Metodos para la obtencion de las modalidades de Transporte de Tipo Costo por Kilometraje
+
+    // Metodo de obtencion con Filtros aplicados
+    public ArrayList<Modality> getTransportModalitysCostKilometers(double costKilometersGoingMin, double costKilometersGoingMax, double costKilometersLapMin, double costKilometersLapMax, double costHoursWaitMin, double costHoursWaitMax) {
+        ArrayList<Modality> costsKilometers = this.getModalitys(Modality.costKilometers);
+
+        // Se aplican los filtros
+
+        // Filtro CostKilometersGoing
+        if (costKilometersGoingMin != AusentFilter.spinnerField && costKilometersGoingMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersGoing(costsKilometers, costKilometersGoingMin, costKilometersGoingMax); // se filtra por el rango de costos
+        else if (costKilometersGoingMin != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersGoing(costsKilometers, costKilometersGoingMin, Double.MAX_VALUE); // se filtra solo por le costo minimo
+        else if (costKilometersGoingMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersGoing(costsKilometers, Double.MIN_VALUE, costKilometersGoingMax); // se filtra por el costo maximo
+
+        // Filtro CostKilometersLap
+        if (costKilometersLapMin != AusentFilter.spinnerField && costKilometersLapMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersLap(costsKilometers, costKilometersLapMin, costKilometersLapMax); // se filtra por el rango de costos
+        else if (costKilometersLapMin != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersLap(costsKilometers, costKilometersLapMin, Double.MAX_VALUE); // se filtra solo por le costo minimo
+        else if (costKilometersLapMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostKilometersLap(costsKilometers, Double.MIN_VALUE, costKilometersLapMax); // se filtra por el costo maximo
+
+        // Filtro CostHoursWait
+        if (costHoursWaitMin != AusentFilter.spinnerField && costHoursWaitMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostHoursWait(costsKilometers, costHoursWaitMin, costHoursWaitMax);  // se filtra por el rango de costos
+        else if (costHoursWaitMin != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostHoursWait(costsKilometers, costHoursWaitMin, Double.MAX_VALUE);  // se filtra solo por le costo minimo
+        else if (costHoursWaitMax != AusentFilter.spinnerField)
+            costsKilometers = FiltersTransportModality.filterCostHoursWait(costsKilometers, Double.MIN_VALUE, costHoursWaitMax);  // se filtra por el costo maximo
+
+        return costsKilometers;
     }
 
-    private void insertModalityTouristPackageIntoDataBase() throws SQLException { // Metodo para una vez insertado el objeto insertar cada una de sus modalidades en la base de datos
-        ArrayList<Integer> keys = Modality.getKeys(); // se obtienen todas la llaves para iterar el mapa
+    // Fin de Metodos para la obtencion de las modalidades de Transporte de Tipo Costo por Kilometraje
 
-        // Se itera el mapa
-        for (Integer i : keys) {
-            for (Modality modality : this.modalitys.get(i)) { // se itera la lista de modalidades asociadas a esa clave
-                modality.insertIntoPackageTourist(this.id); // se inserta cada modalidad como parte del paquete turistico
-            }
-        }
+    // Metodos para la obtencion de las modalidades de Transporte de Tipo Horas por Kilometraje
+
+    public ArrayList<Modality> getTransportModalitysHoursKilometers(double costKilometersRoutMin, double costKilometersRoutMax, double costHoursMin, double costHoursMax,
+                                                  double costKilometersRoutAdditionalsMin, double costKilometersRoutAdditionalsMax, double costHoursAdditionalsMin, double costHoursAdditionalsMax) {
+        ArrayList<Modality> hoursKilometersList = this.getModalitys(Modality.hoursKilometers);
+
+        // Se aplican los filtros
+
+        // Filtro CostKilometersRout
+        if (costKilometersRoutMin != AusentFilter.spinnerField && costKilometersRoutMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRout(hoursKilometersList, costKilometersRoutMin, costKilometersRoutMax); // se aplica el filtro para el rango de costos
+        else if (costKilometersRoutMin != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRout(hoursKilometersList, costKilometersRoutMin, Double.MAX_VALUE); // se aplica el filtro para el minimo de costos
+        else if (costKilometersRoutMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRout(hoursKilometersList, Double.MIN_VALUE, costKilometersRoutMax); // se aplica el filtro para el maximo de costos
+
+        // Filtro CostHours
+        if (costHoursMin != AusentFilter.spinnerField && costHoursMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHours(hoursKilometersList, costHoursMin, costHoursMax); // se aplica el filtro para el rango de costos
+        else if (costHoursMin != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHours(hoursKilometersList, costHoursMin, Double.MAX_VALUE); // se aplica el filtro para el minimo de costos
+        else if (costHoursMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHours(hoursKilometersList, Double.MIN_VALUE, costHoursMax); // se aplica el filtro para el maximo de costos
+
+        // Filtro CostKilometersRoutAdditionals
+        if (costKilometersRoutAdditionalsMin != AusentFilter.spinnerField && costKilometersRoutAdditionalsMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRoutAdditionals(hoursKilometersList, costKilometersRoutAdditionalsMin, costKilometersRoutAdditionalsMax); // se aplica el filtro para el rango de costos
+        else if (costKilometersRoutAdditionalsMin != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRoutAdditionals(hoursKilometersList, costKilometersRoutAdditionalsMin, Double.MAX_VALUE); // se aplica el filtro para el minimo de costos
+        else if (costKilometersRoutAdditionalsMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostKilometersRoutAdditionals(hoursKilometersList, Double.MIN_VALUE, costKilometersRoutAdditionalsMax); // se aplica el filtro para el maximo de costos
+
+        // Filtro CostHoursAdditionals
+        if (costHoursAdditionalsMin != AusentFilter.spinnerField && costHoursAdditionalsMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHoursAdditionals(hoursKilometersList, costHoursAdditionalsMin, costHoursAdditionalsMax); // se aplica el filtro para el rango de costos
+        else if (costHoursAdditionalsMin != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHoursAdditionals(hoursKilometersList, costHoursAdditionalsMin, Double.MAX_VALUE); // se aplica el filtro para el minimo de costos
+        else if (costHoursAdditionalsMax != AusentFilter.spinnerField)
+            hoursKilometersList = FiltersTransportModality.filterCostHoursAdditionals(hoursKilometersList, Double.MIN_VALUE, costHoursAdditionalsMax); // se aplica el filtro para el maximo de costos
+
+        return hoursKilometersList;
     }
 
 
-    @Override
-    public void update() throws SQLException {
-        TouristPackageDAO.getInstancie().update(this);
-    }
+    // Fin de Metodos para la obtencion de las modalidades de Transporte de Tipo Costo por Kilometraje
+
+    // Metodos para la obtencion de las modalidades de Transporte de Tipo Recorridos Establecidos
 
 
-    @Override
-    public void delete() throws SQLException {
-        TouristPackageDAO.getInstancie().delete(this.id);
+    // Fin de Metodos para la obtencion de las modalidades de Transporte de Tipo Recorridos Establecidos
+
+    // Metodo de obtencion con Filtros aplicados
+    public ArrayList<Modality> getEstablishedRoute(double costGoingMin, double costGoingMax, double costLapMin, double costLapMax) {
+        ArrayList<Modality> establishedRouteList = this.getModalitys(Modality.establishedRoute);
+
+        // Se aplican los filtros
+
+        // Filtro CostGoing
+        if (costGoingMin != AusentFilter.spinnerField && costGoingMax != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costGoingMin, costGoingMax); // se aplica el filtro para el rango de costos
+        else if (costGoingMin != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costGoingMin, Double.MAX_VALUE); // se aplica el filtro para el costo minimo
+        else if (costGoingMax != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, Double.MIN_VALUE, costGoingMax); // se aplica el filtro para el costo maximo
+
+        // Filtro CostLap
+        if (costLapMin != AusentFilter.spinnerField && costLapMax != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costLapMin, costLapMax); // se aplica el filtro para el rango de costos
+        else if (costLapMin != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costLapMin, Double.MAX_VALUE); // se aplica el filtro para el costo minimo
+        else if (costLapMax != AusentFilter.spinnerField)
+            establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, Double.MIN_VALUE, costLapMax); // se aplica el filtro para el costo maximo
+
+        return establishedRouteList;
     }
+
+    // Fin de Metodos para la obtencion de las modalidades de Transporte
+
+
 
     // Fin Metodos para el control de las modalidades
 
@@ -271,12 +424,16 @@ public class TouristPackage implements DUILogic {
         return isContain;
     }
 
+    public int cantAviablePax () {
+        return this.cantMaxPax - this.cantReserves;
+    }
+
     public boolean verificarPaquete() { // Metodo para verificar la validadez de un paquete turistico
         return (!this.modalitys.get(Modality.accommodationModality).isEmpty() || !this.modalitys.get(Modality.serviceModality).isEmpty() || !this.modalitys.get(Modality.costKilometers).isEmpty()
                 || !this.modalitys.get(Modality.establishedRoute).isEmpty() || !this.modalitys.get(Modality.hoursKilometers).isEmpty()); // Un paquete turistico es valido si al menos presenta una modalidad de cualquier tipo
     }
 
-    public double costo() { // Metodo para determinar el costo total de un paquete
+    public double price() { // Metodo para determinar el costo total de un paquete
         ArrayList<Integer> keys = Modality.getKeys(); // se obtienen todas la llaves para iterar el mapa
         double suma = 0;
         // Se itera el mapa
@@ -308,7 +465,6 @@ public class TouristPackage implements DUILogic {
     }
 
     public double precioTransporte() { // Metodo para determinar el precio de la seccion de transporte
-
         return this.precioTransporteCostKilometers() + this.precioTransporteHoursKilometers() + this.precioTransporteEstablishedRoute();
     }
 
@@ -332,7 +488,7 @@ public class TouristPackage implements DUILogic {
 
     private double precioTransporteEstablishedRoute() {
         double precio = 0;
-// Se iteran las modadlidades de trnasporte tipo recorridos establecidos para obtener el precio de cada una
+        // Se iteran las modadlidades de trnasporte tipo recorridos establecidos para obtener el precio de cada una
         for (Modality establishedRoute : this.modalitys.get(Modality.establishedRoute)) {
             precio += establishedRoute.price();
         }
@@ -340,5 +496,71 @@ public class TouristPackage implements DUILogic {
     }
 
     // Fin de Operaciones
+
+    // Metodos DUILogic
+    @Override
+    public void insert() throws SQLException {
+        this.id = TouristPackageDAO.getInstancie().insert(this);
+        this.insertModalityTouristPackageIntoDataBase();
+    }
+
+    private void insertModalityTouristPackageIntoDataBase() throws SQLException { // Metodo para una vez insertado el objeto insertar cada una de sus modalidades en la base de datos
+        ArrayList<Integer> keys = Modality.getKeys(); // se obtienen todas la llaves para iterar el mapa
+
+        // Se itera el mapa
+        for (Integer i : keys) {
+            for (Modality modality : this.modalitys.get(i)) { // se itera la lista de modalidades asociadas a esa clave
+                modality.insertIntoPackageTourist(this.id); // se inserta cada modalidad como parte del paquete turistico
+            }
+        }
+    }
+
+    @Override
+    public void update() throws SQLException {
+        TouristPackageDAO.getInstancie().update(this);
+    }
+
+
+    @Override
+    public void delete() throws SQLException {
+        TouristPackageDAO.getInstancie().delete(this.id);
+    }
+
+
+
+    // Fin de Metodos DUILogic
+
+    // Metodo Like Name
+    @Override
+    public boolean isSameName(String name) {
+        boolean veredicto = false;
+        String nameComparar = "";
+        if(!name.equalsIgnoreCase("")){
+            for (int i = 0, j = 0, l = 0; i < this.name.length() && !veredicto ; i++) {
+
+                nameComparar += this.name.charAt(i);
+
+                j++;
+                if (j == name.length()){
+                    if (name.equalsIgnoreCase(nameComparar)){
+                        veredicto = true;
+                        this.busquedaResultado = new BusquedaResultado(nameComparar, i - (j - 1), i);
+                    }
+                    else{
+                        nameComparar = "";
+                        this.busquedaResultado = null;
+                    }
+                    j = 0;
+                    i = l++;
+                }
+            }
+        }
+        else{
+            veredicto = true;
+            this.busquedaResultado = null;
+        }
+
+        return veredicto;
+    }
 
 }

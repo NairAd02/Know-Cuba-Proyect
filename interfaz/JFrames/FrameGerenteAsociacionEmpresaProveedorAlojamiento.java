@@ -3,14 +3,19 @@ package JFrames;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 import JPanels.PanelGerenteAsociacionEmpresaProveedorAlojamiento;
 import logica.Controller;
 import logica.Hotel;
+import logica.HotelModality;
 import logica.MealPlan;
 import logica.TypeOfRoom;
+import modelosTablas.ModelOperations;
+import modelosTablas.ModeloTablaHotelModality;
 import modelosTablas.ModeloTablaMealPlan;
 import modelosTablas.ModeloTablaTypeOfRoom;
 import utils.ConnectionDataBase;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -24,8 +29,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.border.LineBorder;
+
+import com.toedter.calendar.JDateChooser;
+
+import javax.swing.SpinnerNumberModel;
 
 public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
@@ -45,9 +56,22 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 	private JLabel lblAddMealPlan;
 	private JLabel lblDeleteMealPlan;
 	private JLabel lblX;
-	private int posYTablas, posYButtonADD, posYTypesTable, posYButtonsTables, largoPantalla, mouseX, mouseY;
-	private JLabel lblShowPlans;
-
+	private int mouseX, mouseY;
+	private JTextField textFieldPhone;
+	private JTextField textFieldFax;
+	private JTextField textFieldEmail;
+	private JTextField textFieldLocationHotel;
+	private JPanel panelTableHotelModality;
+	private JTable tableHotelModality;
+	private JLabel lblDeleteHotelModality;
+	private JLabel lblAddHotelModality;
+	private JSpinner spinnerCantRooms;
+	private JSpinner spinnerCantFloors;
+	private JSpinner spinnerDistanceNearestCity;
+	private JSpinner spinnerDistanceAirport;
+	private JLabel lblFechaDeConstruccion;
+	private JDateChooser dateChooserDateBuild;
+	private JLabel lblRestore;
 
 
 	public Hotel getHotel() {
@@ -75,7 +99,24 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		this.tableMealPlan = tableMealPlan;
 	}
 
-	public FrameGerenteAsociacionEmpresaProveedorAlojamiento(PanelGerenteAsociacionEmpresaProveedorAlojamiento pa,Hotel h) {
+	public JPanel getPanelTableHotelModality() {
+		return panelTableHotelModality;
+	}
+
+	public JTable getTableHotelModality() {
+		return tableHotelModality;
+	}
+
+	public void setTableHotelModality(JTable tableHotelModality) {
+		this.tableHotelModality = tableHotelModality;
+	}
+
+	public void setPanelTableHotelModality(JPanel panelTableHotelModality) {
+		this.panelTableHotelModality = panelTableHotelModality;
+	}
+
+
+	public FrameGerenteAsociacionEmpresaProveedorAlojamiento(PanelGerenteAsociacionEmpresaProveedorAlojamiento pa, Hotel h) {
 		this.hotel = h;
 		this.panelGerenteAsociacionEmpresaProveedorAlojamiento = pa;
 		setUndecorated(true);
@@ -83,10 +124,10 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				int x= e.getXOnScreen();
-				int y= e.getYOnScreen();
+				int x = e.getXOnScreen();
+				int y = e.getYOnScreen();
 
-				setLocation(x - mouseX , y - mouseY );
+				setLocation(x - mouseX, y - mouseY);
 			}
 		});
 		contentPane.addMouseListener(new MouseAdapter() {
@@ -94,17 +135,20 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				mouseX = e.getX();
 				mouseY = e.getY();
+				clearSeleccionTables();
+				actualizarEstadoButtons(); // se actualiza el estado de los botones
 			}
 		});
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		contentPane.setBackground(new Color(5, 150, 177));
+		contentPane.setBackground(new Color(18, 95, 115));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
-		JLabel lblAccommodationProvider = new JLabel("ACCOMMODATION PROVIDER");
+		JLabel lblAccommodationProvider = new JLabel("PROVEEDOR DE ALOJAMIENTO");
+		lblAccommodationProvider.setForeground(SystemColor.textHighlightText);
 		lblAccommodationProvider.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblAccommodationProvider.setBounds(27, 11, 323, 30);
+		lblAccommodationProvider.setBounds(27, 11, 341, 30);
 		contentPane.add(lblAccommodationProvider);
 
 		lblX = new JLabel("X");
@@ -122,63 +166,45 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 				}
 				cerrarFrame();
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				lblX.setForeground(SystemColor.red);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
-		lblX.setBounds(492, 0, 38, 38);
+		lblX.setBounds(606, 0, 38, 38);
 		contentPane.add(lblX);
 
 
-		lblShowPlans = new JLabel("SHOW PLANS");
-		lblShowPlans.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblShowPlans.setBounds(27, 54, 323, 30);
-		contentPane.add(lblShowPlans);
+		this.addSeccionName();
+		this.addSeccionProvince();
+		this.addSeccionAddres();
+		this.addSeccionCategory();
+		this.addSeccionHotelChain();
 
-		if (this.hotel.getId() == -1) { // se habilita la edicion
-			this.addSeccionName();
-			this.addSeccionProvince();
-			this.addSeccionAddres();
-			this.addSeccionCategory();
-			this.addSeccionHotelChain();
-			this.posYTablas = 319;
-			this.posYTypesTable = 285;
-			this.posYButtonsTables = 288;
-			this.posYButtonADD = 455;
-			this.largoPantalla = 515;
-			lblShowPlans.setVisible(false);
-		}
-		else {
-			this.posYTablas = 173;
-			this.posYTypesTable = 139;
-			this.posYButtonsTables = 142;
-			this.posYButtonADD = 345;
-			this.largoPantalla = 410;
-		}
 
-		setBounds(100, 100, 530, this.largoPantalla);
+		setBounds(100, 100, 644, 759);
 		setLocationRelativeTo(null);
 
 
 		JLabel lblRoomTypes = new JLabel("ROOM TYPES");
-		lblRoomTypes.setForeground(SystemColor.info);
+		lblRoomTypes.setForeground(SystemColor.textHighlightText);
 		lblRoomTypes.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblRoomTypes.setBounds(27, this.posYTypesTable, 118, 23);
+		lblRoomTypes.setBounds(27, 352, 118, 23);
 		contentPane.add(lblRoomTypes);
 
 
-
 		JPanel panelRoomTypes = new JPanel();
-		panelRoomTypes.setBounds(10, this.posYTablas, 243, 113);
+		panelRoomTypes.setBounds(10, 386, 243, 113);
 		contentPane.add(panelRoomTypes);
 		panelRoomTypes.setLayout(new BorderLayout(0, 0));
 
@@ -186,6 +212,12 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		panelRoomTypes.add(scrollPane, BorderLayout.CENTER);
 
 		tableRoomTypes = new JTable();
+		tableRoomTypes.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				actualizarEstadoButtons(); // se actualiza el estado de los botones
+			}
+		});
 		tableRoomTypes.setModel(new ModeloTablaTypeOfRoom());
 		scrollPane.setViewportView(tableRoomTypes);
 
@@ -197,10 +229,12 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 				frameAddTypeOfRoom.setVisible(true);
 				setEnabled(false); // se inhabilita el frame actual
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 
@@ -210,7 +244,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblAnnadirTypeOfRoom.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAnnadirTypeOfRoom.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAnnadirTypeOfRoom.setBackground(SystemColor.info);
-		lblAnnadirTypeOfRoom.setBounds(155, this.posYButtonsTables, 38, 20);
+		lblAnnadirTypeOfRoom.setBounds(155, 355, 38, 20);
 		contentPane.add(lblAnnadirTypeOfRoom);
 
 		lblDeleteTypeOfRoom = new JLabel("DELETE");
@@ -226,10 +260,12 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 					}
 				}
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 
@@ -239,13 +275,12 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblDeleteTypeOfRoom.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDeleteTypeOfRoom.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblDeleteTypeOfRoom.setBackground(SystemColor.info);
-		lblDeleteTypeOfRoom.setBounds(200, this.posYButtonsTables, 57, 20);
+		lblDeleteTypeOfRoom.setBounds(200, 355, 57, 20);
 		contentPane.add(lblDeleteTypeOfRoom);
 
 
-
 		JPanel panelMealPlan = new JPanel();
-		panelMealPlan.setBounds(267, this.posYTablas, 243, 113);
+		panelMealPlan.setBounds(381, 386, 243, 113);
 		contentPane.add(panelMealPlan);
 		panelMealPlan.setLayout(new BorderLayout(0, 0));
 
@@ -253,13 +288,19 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		panelMealPlan.add(scrollPane_1, BorderLayout.CENTER);
 
 		tableMealPlan = new JTable();
+		tableMealPlan.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				actualizarEstadoButtons(); // se actualiza el estado de los botones
+			}
+		});
 		tableMealPlan.setModel(new ModeloTablaMealPlan());
 		scrollPane_1.setViewportView(tableMealPlan);
 
 		JLabel lblMealPlan = new JLabel("MEAL PLAN");
-		lblMealPlan.setForeground(SystemColor.info);
+		lblMealPlan.setForeground(SystemColor.textHighlightText);
 		lblMealPlan.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblMealPlan.setBounds(290, this.posYTypesTable, 118, 23);
+		lblMealPlan.setBounds(404, 352, 118, 23);
 		contentPane.add(lblMealPlan);
 
 		lblAddMealPlan = new JLabel("ADD");
@@ -270,10 +311,12 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 				frameAddMealPlan.setVisible(true);
 				setEnabled(false); // se inhabilita el frame
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 
@@ -283,7 +326,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblAddMealPlan.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAddMealPlan.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAddMealPlan.setBackground(SystemColor.info);
-		lblAddMealPlan.setBounds(418, this.posYButtonsTables, 38, 20);
+		lblAddMealPlan.setBounds(532, 355, 38, 20);
 		contentPane.add(lblAddMealPlan);
 
 		lblDeleteMealPlan = new JLabel("DELETE");
@@ -299,10 +342,12 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 					}
 				}
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 
@@ -312,90 +357,122 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblDeleteMealPlan.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDeleteMealPlan.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblDeleteMealPlan.setBackground(SystemColor.info);
-		lblDeleteMealPlan.setBounds(463, this.posYButtonsTables, 57, 20);
+		lblDeleteMealPlan.setBounds(577, 355, 57, 20);
 		contentPane.add(lblDeleteMealPlan);
 
 		this.addButtonADD();
-		this.actualizarTablaTypesOfRooms(); // se actualiza la tabla de tipos de habitacion
-		this.actualizarTablaMealPlans(); // se actualiza la tabla de planes alimenticios
+
+		if (this.hotel.getId() != -1) // Update
+			this.actualizarTablas();
+		else
+			this.actualizarEstadoButtons();
 
 	}
 
-	private void addSeccionName () {
-		JLabel lblName = new JLabel("NAME :");
-		lblName.setForeground(SystemColor.info);
+	public void restoreInformation() { // Metodo restuarar la informacion del hotel antes de cualquier modificacion
+		// Actualizar datos del hotel
+		try {
+			this.restoreMealsPlansTypesOfRoomsHotelModalities();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		this.definirCampos();
+		this.actualizarTablas();
+	}
+
+	private void restoreMealsPlansTypesOfRoomsHotelModalities () throws SQLException {
+		ConnectionDataBase.roolback(); // se cancelan las operaciones realizadas sobre la base de datos
+		hotel.actualizarDatos(); // se actualizan los datos del hotel para evitar inconsistencias
+	}
+
+	public void actualizarTablas() {
+		this.actualizarTablaTypesOfRooms(); // se actualiza la tabla de tipos de habitacion
+		this.actualizarTablaMealPlans(); // se actualiza la tabla de planes alimenticios
+		this.actualizarTablaHotelModality(); // Se actualiza la tabla de modalidades de hotel
+	}
+
+	private void addSeccionName() {
+		JLabel lblName = new JLabel("Nombre :");
+		lblName.setForeground(SystemColor.textHighlightText);
 		lblName.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblName.setBounds(127, 65, 80, 23);
+		lblName.setBounds(27, 66, 80, 23);
 		contentPane.add(lblName);
 
 		textFieldName = new JTextField();
 		textFieldName.setColumns(10);
-		textFieldName.setBounds(219, 66, 197, 20);
+		textFieldName.setBounds(109, 70, 197, 20);
 		contentPane.add(textFieldName);
 
 
 	}
 
-	private void addSeccionProvince () {
-		JLabel lblProvince = new JLabel("PROVINCE :");
-		lblProvince.setForeground(SystemColor.info);
+	private void addSeccionProvince() {
+		JLabel lblProvince = new JLabel("Provincia :");
+		lblProvince.setForeground(SystemColor.textHighlightText);
 		lblProvince.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblProvince.setBounds(127, 104, 109, 23);
+		lblProvince.setBounds(27, 105, 109, 23);
 		contentPane.add(lblProvince);
 
 		textFieldProvince = new JTextField();
 		textFieldProvince.setColumns(10);
-		textFieldProvince.setBounds(258, 105, 158, 20);
+		textFieldProvince.setBounds(144, 106, 158, 20);
 		contentPane.add(textFieldProvince);
 	}
 
-	private void addSeccionAddres () {
-		JLabel lblDireccion = new JLabel("DIRECCION :");
-		lblDireccion.setForeground(SystemColor.info);
+	private void addSeccionAddres() {
+		JLabel lblDireccion = new JLabel("Direccion :");
+		lblDireccion.setForeground(SystemColor.textHighlightText);
 		lblDireccion.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblDireccion.setBounds(127, 221, 109, 23);
+		lblDireccion.setBounds(27, 222, 109, 23);
 		contentPane.add(lblDireccion);
 
 		textFieldDireccion = new JTextField();
-		textFieldDireccion.setBounds(330, 222, 86, 20);
+		textFieldDireccion.setBounds(129, 226, 146, 20);
 		contentPane.add(textFieldDireccion);
 		textFieldDireccion.setColumns(10);
 
 	}
 
-	private void addSeccionHotelChain () {
-		JLabel lblHotelChail = new JLabel("HOTEL CHAIN :");
-		lblHotelChail.setForeground(SystemColor.info);
+	private void addSeccionHotelChain() {
+		JLabel lblHotelChail = new JLabel("Cadena Hotelera :");
+		lblHotelChail.setForeground(SystemColor.textHighlightText);
 		lblHotelChail.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblHotelChail.setBounds(127, 143, 138, 23);
+		lblHotelChail.setBounds(27, 144, 158, 23);
 		contentPane.add(lblHotelChail);
 
 		textFieldHotelChain = new JTextField();
-		textFieldHotelChain.setBounds(284, 144, 132, 20);
+		textFieldHotelChain.setBounds(190, 148, 132, 20);
 		contentPane.add(textFieldHotelChain);
 		textFieldHotelChain.setColumns(10);
 	}
 
-	private void addSeccionCategory () {
-		JLabel lblHotelCategory = new JLabel("HOTEL CATEGORY :");
-		lblHotelCategory.setForeground(SystemColor.info);
+	private void addSeccionCategory() {
+		JLabel lblHotelCategory = new JLabel("Categoria Hotel :");
+		lblHotelCategory.setForeground(SystemColor.textHighlightText);
 		lblHotelCategory.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblHotelCategory.setBounds(127, 182, 181, 23);
+		lblHotelCategory.setBounds(27, 183, 158, 23);
 		contentPane.add(lblHotelCategory);
 
 		spinnerCategory = new JSpinner();
-		spinnerCategory.setBounds(359, 183, 57, 20);
+		spinnerCategory.setModel(new SpinnerNumberModel(1, 1, 5, 1));
+		spinnerCategory.setBounds(185, 187, 57, 20);
 		contentPane.add(spinnerCategory);
 
 	}
 
-	private void addButtonADD () {
+	private void crearFrameNotificacion (String mensaje) {
+		FrameAdvertencia frameAdvertencia = new FrameAdvertencia(mensaje);
+		frameAdvertencia.setVisible(true);
+	}
+
+	private void addButtonADD() {
 		String nameButton = "";
 
 		if (this.hotel.getId() == -1)
 			nameButton = "ADD";
 		else
-			nameButton = "CONFIRM";
+			nameButton = "UPDATE";
 		JLabel lblAdd = new JLabel(nameButton);
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
@@ -403,12 +480,14 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 				if (hotel.getId() == -1) {
 					if (verificarCampos()) {
 						try {
-							//addAccommodationProvider();
+							addAccommodationProvider();
 							ConnectionDataBase.commit(); // se confirman las transacciones realizadas
+							crearFrameNotificacion("Se ha añadido correctamente el proveedor de alojamiento: " + textFieldName.getText());
+							panelGerenteAsociacionEmpresaProveedorAlojamiento.actualizarTablaAccommodationProviders(); // se actualiza la informacion de la tabla de provedores
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {
 							try {
-								ConnectionDataBase.roolback();
+								ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas
 							} catch (SQLException e2) {
 								// TODO Auto-generated catch block
 								e2.printStackTrace();
@@ -416,23 +495,33 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 							e1.printStackTrace();
 						}
 					}
-				}
-				else {
-					if (hotel.cantMealPlan() != 0 && hotel.cantTypeOfRoom() != 0) {
+				} else {
+					if (verificarCampos()) {
 						try {
+							updateAccommodationProvider(); // se actualiza la informacion del proveedor de transporte
 							ConnectionDataBase.commit(); // se confirman las transacciones realizadas
+							crearFrameNotificacion("Ha sido actualizada correcatamente la información del proveedor de alojamiento");
+							panelGerenteAsociacionEmpresaProveedorAlojamiento.actualizarTablaAccommodationProviders(); // se actualiza la informacion de la tabla de provedores
+							cerrarFrame();
 						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
+							try {
+								ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas
+							} catch (SQLException e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							}
 							e1.printStackTrace();
-						} 
-						cerrarFrame();
+						}
+
 					}
 				}
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 
@@ -442,20 +531,252 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAdd.setBackground(SystemColor.info);
-		lblAdd.setBounds(155, this.posYButtonADD, 235, 35);
+		lblAdd.setBounds(204, 702, 235, 35);
 		contentPane.add(lblAdd);
+
+		JLabel lblTelefono = new JLabel("Telefono :");
+		lblTelefono.setForeground(SystemColor.textHighlightText);
+		lblTelefono.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblTelefono.setBounds(332, 65, 97, 23);
+		contentPane.add(lblTelefono);
+
+		textFieldPhone = new JTextField();
+		textFieldPhone.setColumns(10);
+		textFieldPhone.setBounds(427, 69, 197, 20);
+		contentPane.add(textFieldPhone);
+
+		JLabel lblFax = new JLabel("Fax :");
+		lblFax.setForeground(SystemColor.textHighlightText);
+		lblFax.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblFax.setBounds(332, 104, 57, 23);
+		contentPane.add(lblFax);
+
+		textFieldFax = new JTextField();
+		textFieldFax.setColumns(10);
+		textFieldFax.setBounds(383, 108, 197, 20);
+		contentPane.add(textFieldFax);
+
+		JLabel lblEmail = new JLabel("Email :");
+		lblEmail.setForeground(SystemColor.textHighlightText);
+		lblEmail.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblEmail.setBounds(332, 142, 66, 23);
+		contentPane.add(lblEmail);
+
+		textFieldEmail = new JTextField();
+		textFieldEmail.setColumns(10);
+		textFieldEmail.setBounds(396, 147, 197, 20);
+		contentPane.add(textFieldEmail);
+
+		JLabel lblCantidadDeHabitaciones = new JLabel("Cant Habitaciones :");
+		lblCantidadDeHabitaciones.setForeground(SystemColor.textHighlightText);
+		lblCantidadDeHabitaciones.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblCantidadDeHabitaciones.setBounds(332, 181, 181, 23);
+		contentPane.add(lblCantidadDeHabitaciones);
+
+		spinnerCantRooms = new JSpinner();
+		spinnerCantRooms.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+		spinnerCantRooms.setBounds(513, 187, 57, 20);
+		contentPane.add(spinnerCantRooms);
+
+		JLabel lblCantPisos = new JLabel("Cant Pisos :");
+		lblCantPisos.setForeground(SystemColor.textHighlightText);
+		lblCantPisos.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblCantPisos.setBounds(332, 219, 118, 23);
+		contentPane.add(lblCantPisos);
+
+		spinnerCantFloors = new JSpinner();
+		spinnerCantFloors.setBounds(447, 226, 57, 20);
+		contentPane.add(spinnerCantFloors);
+
+		JLabel lblLocalizacion = new JLabel("Localizacion :");
+		lblLocalizacion.setForeground(SystemColor.textHighlightText);
+		lblLocalizacion.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblLocalizacion.setBounds(27, 256, 132, 23);
+		contentPane.add(lblLocalizacion);
+
+		textFieldLocationHotel = new JTextField();
+		textFieldLocationHotel.setColumns(10);
+		textFieldLocationHotel.setBounds(156, 257, 146, 20);
+		contentPane.add(textFieldLocationHotel);
+
+		JLabel lblDistCiudadCercana = new JLabel("Dist Ciudad Cercana:");
+		lblDistCiudadCercana.setForeground(SystemColor.textHighlightText);
+		lblDistCiudadCercana.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblDistCiudadCercana.setBounds(332, 256, 190, 23);
+		contentPane.add(lblDistCiudadCercana);
+
+		spinnerDistanceNearestCity = new JSpinner();
+		spinnerDistanceNearestCity.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		spinnerDistanceNearestCity.setBounds(523, 260, 57, 20);
+		contentPane.add(spinnerDistanceNearestCity);
+
+		JLabel lblDistAeropuerto = new JLabel("Dist Aeropuerto:");
+		lblDistAeropuerto.setForeground(SystemColor.textHighlightText);
+		lblDistAeropuerto.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblDistAeropuerto.setBounds(332, 302, 151, 23);
+		contentPane.add(lblDistAeropuerto);
+
+		spinnerDistanceAirport = new JSpinner();
+		spinnerDistanceAirport.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		spinnerDistanceAirport.setBounds(479, 306, 57, 20);
+		contentPane.add(spinnerDistanceAirport);
+
+		panelTableHotelModality = new JPanel();
+		panelTableHotelModality.setBounds(196, 550, 243, 113);
+		contentPane.add(panelTableHotelModality);
+		panelTableHotelModality.setLayout(new BorderLayout(0, 0));
+
+		JScrollPane scrollPane = new JScrollPane();
+		panelTableHotelModality.add(scrollPane, BorderLayout.CENTER);
+
+		tableHotelModality = new JTable();
+		tableHotelModality.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				actualizarEstadoButtons(); // se actualiza el estado de los botones
+			}
+		});
+		tableHotelModality.setModel(new ModeloTablaHotelModality());
+		scrollPane.setViewportView(tableHotelModality);
+
+		JLabel lblModalidadesHotel = new JLabel("Modalidades Hotel");
+		lblModalidadesHotel.setForeground(SystemColor.textHighlightText);
+		lblModalidadesHotel.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblModalidadesHotel.setBounds(144, 516, 168, 23);
+		contentPane.add(lblModalidadesHotel);
+
+		lblAddHotelModality = new JLabel("ADD");
+		lblAddHotelModality.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirHotelModality frameAddHotelModality = new FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirHotelModality(FrameGerenteAsociacionEmpresaProveedorAlojamiento.this);
+				frameAddHotelModality.setVisible(true);
+				setEnabled(false); // se inhabilita el frame actual
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
+		lblAddHotelModality.setOpaque(true);
+		lblAddHotelModality.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAddHotelModality.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblAddHotelModality.setBackground(SystemColor.info);
+		lblAddHotelModality.setBounds(348, 519, 38, 20);
+		contentPane.add(lblAddHotelModality);
+
+		lblDeleteHotelModality = new JLabel("DELETE");
+		lblDeleteHotelModality.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (lblDeleteHotelModality.isEnabled()) {
+					try {
+						deleteElementsTableHotelModality(); // se eliminan los elemtos seleccionados de la tabla hotel modality
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
+		lblDeleteHotelModality.setOpaque(true);
+		lblDeleteHotelModality.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDeleteHotelModality.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblDeleteHotelModality.setBackground(SystemColor.info);
+		lblDeleteHotelModality.setBounds(393, 519, 57, 20);
+		contentPane.add(lblDeleteHotelModality);
+
+		lblFechaDeConstruccion = new JLabel("Fecha Construccion:");
+		lblFechaDeConstruccion.setForeground(SystemColor.textHighlightText);
+		lblFechaDeConstruccion.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblFechaDeConstruccion.setBounds(27, 302, 190, 23);
+		contentPane.add(lblFechaDeConstruccion);
+
+		dateChooserDateBuild = new JDateChooser();
+		dateChooserDateBuild.setBounds(220, 305, 102, 20);
+		contentPane.add(dateChooserDateBuild);
+
+
+		this.definirComponentes();
+		this.definirCampos();
 	}
 
-	public void actualizarTablaTypesOfRooms () { // actualizar tabla de tipos de habitaciones 
-		this.actualizarTablaTypesOfRooms(hotel.getTypesOfRooms()); // se obtienen los tipos de habitaciones del provedor de alojamiento
+	private void definirComponentes () {
+		if (this.hotel.getId() != -1) // Update
+			this.addLblRestore();
 	}
 
-	public void actualizarTablaMealPlans () { // actualizar tabla de planes alimenticios
-		this.actualizarTablaMealPlans(hotel.getMealsPlans()); // se obtienen los tipos de habitaciones del provedor de alojamiento
+	private void addLblRestore () {
+		lblRestore = new JLabel("Restore");
+		lblRestore.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				restoreInformation();
+			}
+		});
+		lblRestore.setForeground(SystemColor.textHighlightText);
+		lblRestore.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblRestore.setBounds(413, 11, 109, 30);
+		contentPane.add(lblRestore);
+	}
+
+	private void definirCampos() {
+		if (this.hotel.getId() != -1) { // Update
+			this.textFieldName.setText(this.hotel.getName());
+			this.textFieldProvince.setText(this.hotel.getProvince());
+			this.textFieldDireccion.setText(this.hotel.getAddress());
+			this.textFieldPhone.setText(String.valueOf(this.hotel.getPhone()));
+			this.textFieldFax.setText(this.hotel.getFax());
+			this.textFieldEmail.setText(this.hotel.getEmail());
+			this.textFieldLocationHotel.setText(this.hotel.getLocationHotel());
+			this.textFieldHotelChain.setText(this.hotel.getHotelChain());
+			this.spinnerCategory.setValue(this.hotel.getHotelCategory());
+			this.spinnerCantFloors.setValue(this.hotel.getCantFloors());
+			this.spinnerCantRooms.setValue(this.hotel.getCantRooms());
+			this.spinnerDistanceAirport.setValue(this.hotel.getDistanceAirport());
+			this.spinnerDistanceNearestCity.setValue(this.hotel.getDistanceNearestCity());
+			this.dateChooserDateBuild.setDate(Date.from(this.hotel.getDateBuild().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		}
+	}
+
+	public void actualizarTablaTypesOfRooms() { // actualizar tabla de tipos de habitaciones
+		this.actualizarTablaTypesOfRooms(hotel.getTypesOfRooms()); // se obtienen los tipos de habitaciones del proveedor de alojamiento
+		this.actualizarEstadoButtons(); // se actualiza el estado de los botones
+	}
+
+	public void actualizarTablaMealPlans() { // actualizar tabla de planes alimenticios
+		this.actualizarTablaMealPlans(hotel.getMealsPlans()); // se obtienen los tipos de habitaciones del proveedor de alojamiento
+		this.actualizarEstadoButtons(); // se actualiza el estado de los botones
+	}
+
+	public void actualizarTablaHotelModality() { // actualizar tabla de modalidades de hotel
+		this.actualizarTablaHotelModality(this.hotel.getHotelsModalitys()); // se obtienen las modalidades de hotel del proveedor de alojamiento
+		this.actualizarEstadoButtons(); // se actualiza el estado de los botones
+	}
+
+	private void actualizarTablaHotelModality(ArrayList<HotelModality> hotelsModalitys) {
+		reiniciarTable(this.tableHotelModality);
+
+
+		for (HotelModality hotelModality : hotelsModalitys) {
+			((ModeloTablaHotelModality) tableHotelModality.getModel()).addElement(hotelModality);
+		}
 	}
 
 
-	private void actualizarTablaTypesOfRooms(ArrayList<TypeOfRoom> typesOfRoom){ // Actualizar tabla tipo de habitacion
+	private void actualizarTablaTypesOfRooms(ArrayList<TypeOfRoom> typesOfRoom) { // Actualizar tabla tipo de habitacion
 		reiniciarTable(this.tableRoomTypes);
 
 
@@ -464,7 +785,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		}
 	}
 
-	private void actualizarTablaMealPlans(ArrayList<MealPlan> mealPlans){ // Actualizar tabla tipo de planes alimenticios
+	private void actualizarTablaMealPlans(ArrayList<MealPlan> mealPlans) { // Actualizar tabla tipo de planes alimenticios
 		reiniciarTable(this.tableMealPlan);
 
 
@@ -473,62 +794,111 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		}
 	}
 
-	private void deleteElementsTableTypesOfRoom () throws SQLException { // Eliminar los elementos de la tabla de tipos de habitaciones
-		int [] rows = tableRoomTypes.getSelectedRows();
+	private void deleteElementsTableTypesOfRoom() throws SQLException { // Eliminar los elementos de la tabla de tipos de habitaciones
+		int[] rows = tableRoomTypes.getSelectedRows();
 
 		for (int i = 0; i < rows.length; i++) {
 			if (hotel.getId() == -1)
-				hotel.deleteTypeOfRoomLogic( ((ModeloTablaTypeOfRoom) tableRoomTypes.getModel()).deleteElement(rows[i] - i)); // se elimina solo el tipo de plan de la logica del negocio
+				hotel.deleteTypeOfRoomLogic(((ModeloTablaTypeOfRoom) tableRoomTypes.getModel()).getElement(rows[i])); // se elimina solo el tipo de plan de la logica del negocio
 			else
-				hotel.deleteTypeOfRoom( ((ModeloTablaTypeOfRoom) tableRoomTypes.getModel()).deleteElement(rows[i] - i)); // se elimina de el tipo de plan de la logica del negocio y de la base de datos
+				hotel.deleteTypeOfRoom(((ModeloTablaTypeOfRoom) tableRoomTypes.getModel()).getElement(rows[i])); // se elimina de el tipo de plan de la logica del negocio y de la base de datos
 		}
 
 
 		this.actualizarTablaTypesOfRooms();
 	}
 
-	private void deleteElementsTableMealPlans () throws SQLException { // Eliminar los elementos de la tabla de los planes alimenticios
-		int [] rows = tableMealPlan.getSelectedRows();
+	private void deleteElementsTableMealPlans() throws SQLException { // Eliminar los elementos de la tabla de los planes alimenticios
+		int[] rows = tableMealPlan.getSelectedRows();
 
 		for (int i = 0; i < rows.length; i++) {
 			if (hotel.getId() == -1)
-				hotel.deleteMealPlanLogic(((ModeloTablaMealPlan) tableMealPlan.getModel()).deleteElement(rows[i] - i)); // se elimina solo el tipo de plan de la logica del negocio
+				hotel.deleteMealPlanLogic(((ModeloTablaMealPlan) tableMealPlan.getModel()).getElement(rows[i])); // se elimina solo el tipo de plan de la logica del negocio
 			else
-				hotel.deleteMealPlan( ((ModeloTablaMealPlan) tableMealPlan.getModel()).deleteElement(rows[i] - i)); // se elimina de el tipo de plan de la logica del negocio y de la base de datos
+				hotel.deleteMealPlan(((ModeloTablaMealPlan) tableMealPlan.getModel()).getElement(rows[i])); // se elimina de el tipo de plan de la logica del negocio y de la base de datos
 		}
 
 
-		this.actualizarTablaTypesOfRooms();
+		this.actualizarTablaMealPlans();
 	}
 
-	private void reiniciarTable(JTable table){
+	private void deleteElementsTableHotelModality() throws SQLException { // Eliminar los elementos de la tabla de tipos de habitaciones
+		int[] rows = this.tableHotelModality.getSelectedRows();
 
-		for(int i=0;table.getRowCount()!=0;i++){
-			i=0;
-			if (table.getModel() instanceof ModeloTablaTypeOfRoom)
-				((ModeloTablaTypeOfRoom) table.getModel()).deleteElement(i);
-			else if (table.getModel() instanceof ModeloTablaMealPlan)
-				((ModeloTablaMealPlan) table.getModel()).deleteElement(i);
+		for (int i = 0; i < rows.length; i++) {
+			if (hotel.getId() == -1)
+				hotel.deleteHotelModalityLogic(((ModeloTablaHotelModality) this.tableHotelModality.getModel()).getElement(rows[i])); // se elimina la modalidad de hotel solo de la logica del negocio
+			else
+				hotel.deleteHotelModality(((ModeloTablaHotelModality) this.tableHotelModality.getModel()).getElement(rows[i])); // se elimina elimina la modalidad de la logica del negocio y de la base de datos
+		}
+
+
+		this.actualizarTablaHotelModality();
+	}
+
+	private void reiniciarTable(JTable table) {
+
+		for (int i = 0; table.getRowCount() != 0; i++) {
+			i = 0;
+			((ModelOperations<?>) table.getModel()).deleteElement(i);
 		}
 	}
 
-	private boolean verificarCampos () {
+	private boolean verificarCampos() {
 		return (!this.textFieldName.getText().equalsIgnoreCase("") && !this.textFieldProvince.getText().equalsIgnoreCase("") && !textFieldHotelChain.getText().equalsIgnoreCase("")
-				&& !textFieldDireccion.getText().equalsIgnoreCase("") && ((ModeloTablaTypeOfRoom) tableRoomTypes.getModel()).cantElements() != 0 && 
-				((ModeloTablaMealPlan) tableMealPlan.getModel()).cantElements() != 0);
+				&& !textFieldDireccion.getText().equalsIgnoreCase("") && this.hotel.cantTypeOfRoom() != 0 &&
+				this.hotel.cantMealPlan() != 0 && this.hotel.cantHotelModality() != 0);
 	}
 
 
-	/*private void addAccommodationProvider () throws SQLException {
-		Controller.getInstancie().getTouristAgency().addProvider(new Hotel(textFieldName.getText(), textFieldProvince.getText(), textFieldHotelChain.getText(), (Integer) spinnerCategory.getValue(), 
-				textFieldDireccion.getText(), hotel.getTypesOfRooms(), hotel.getMealsPlans())); // se inserta el provedor de alojamientos a nivel de logica y de base de datos
-		panelGerenteAsociacionEmpresaProveedorAlojamiento.actualizarTablaAccommodationProviders(); // se actualiza la informacion de la tabla de provedores
+	private void addAccommodationProvider() throws SQLException {
+		Controller.getInstancie().getTouristAgency().addProvider(new Hotel(textFieldName.getText(), textFieldProvince.getText(), textFieldHotelChain.getText(), (Integer) spinnerCategory.getValue(),
+				textFieldDireccion.getText(), Integer.valueOf(this.textFieldPhone.getText()), this.textFieldFax.getText(),
+				this.textFieldEmail.getText(), (Integer) this.spinnerCantRooms.getValue(), (Integer) this.spinnerCantFloors.getValue(),
+				this.textFieldLocationHotel.getText(), (Double) this.spinnerDistanceNearestCity.getValue(), (Double) this.spinnerDistanceAirport.getValue(),
+				this.dateChooserDateBuild.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), this.hotel.getTypesOfRooms(), this.hotel.getMealsPlans(), this.hotel.getHotelsModalitys())); // se inserta el provedor de alojamientos a nivel de logica y de base de datos
 
-	}*/
 
-	private void cerrarFrame () {
+	}
+
+	private void updateAccommodationProvider() throws NumberFormatException, SQLException {
+		Controller.getInstancie().getTouristAgency().updateHotel(this.hotel, textFieldName.getText(), textFieldProvince.getText(), textFieldHotelChain.getText(), (Integer) spinnerCategory.getValue(),
+				textFieldDireccion.getText(), Integer.valueOf(this.textFieldPhone.getText()), this.textFieldFax.getText(),
+				this.textFieldEmail.getText(), (Integer) this.spinnerCantRooms.getValue(), (Integer) this.spinnerCantFloors.getValue(),
+				this.textFieldLocationHotel.getText(), (Double) this.spinnerDistanceNearestCity.getValue(), (Double) this.spinnerDistanceAirport.getValue(),
+				this.dateChooserDateBuild.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+	}
+
+	private void cerrarFrame() {
 		FramePrincipal.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
 		dispose(); // se cierra este frame
 	}
 
+	private void actualizarEstadoButtons () {
+
+		// Estado boton eliminar modalidades de hotel
+		if (this.tableHotelModality.getSelectedRowCount() != 0)
+			this.lblDeleteHotelModality.setEnabled(true);
+		else
+			this.lblDeleteHotelModality.setEnabled(false);
+
+		// Estado boton eliminar planes alimenticios
+		if (this.tableMealPlan.getSelectedRowCount() != 0)
+			this.lblDeleteMealPlan.setEnabled(true);
+		else
+			this.lblDeleteMealPlan.setEnabled(false);
+
+		// Estado boton eliminar tipos de habitaciones
+		if (this.tableRoomTypes.getSelectedRowCount() != 0)
+			this.lblDeleteTypeOfRoom.setEnabled(true);
+		else
+			this.lblDeleteTypeOfRoom.setEnabled(false);
+
+	}
+
+	private void clearSeleccionTables () {
+		this.tableHotelModality.clearSelection();
+		this.tableMealPlan.clearSelection();
+		this.tableRoomTypes.clearSelection();
+	}
 }

@@ -56,5 +56,9 @@ public class HotelModality implements DUILogic {
         HotelModalityDAO.getInstancie().deleteFromHotel(idHotel, this.id);
     }
 
+    public String toString () { // Metodo para definir como será mostrada la información de la clase
+        return this.name;
+    }
+
 
 }

@@ -26,8 +26,9 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 
-public class FrameGerenteCreacionContratoServicioAnnadir extends JFrame {
+public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -42,7 +43,7 @@ public class FrameGerenteCreacionContratoServicioAnnadir extends JFrame {
 	private JLabel lblX;
 
 
-	public FrameGerenteCreacionContratoServicioAnnadir(PanelCreacionContratoServicioServiceModality pm) {
+	public FrameGerenteCreacionContratoServicioAnnadirServiceModality(PanelCreacionContratoServicioServiceModality pm) {
 		this.panelCreacionContratoAlojamientoServiceModality = pm;
 		this.frameGerenteCreacionContratoServivio = this.panelCreacionContratoAlojamientoServiceModality.getFrameGerenteCreacionContratoServivio();
 		this.serviceContract = this.panelCreacionContratoAlojamientoServiceModality.getServiceContract();
@@ -66,8 +67,8 @@ public class FrameGerenteCreacionContratoServicioAnnadir extends JFrame {
 				mouseY = e.getY();
 			}
 		});
-		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		contentPane.setBackground(new Color(5, 150, 177));
+		contentPane.setBorder(new MatteBorder(3, 3, 3, 3, (Color) new Color(0, 0, 0)));
+		contentPane.setBackground(new Color(18, 95, 115));
 		setLocationRelativeTo(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -75,7 +76,7 @@ public class FrameGerenteCreacionContratoServicioAnnadir extends JFrame {
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				cerrarFrame();
 			}
 			@Override
@@ -84,38 +85,39 @@ public class FrameGerenteCreacionContratoServicioAnnadir extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(412, 0, 38, 38);
 		contentPane.add(lblX);
 
 		JLabel lblActivity = new JLabel("ACTIVITY :");
-		lblActivity.setForeground(SystemColor.info);
+		lblActivity.setForeground(SystemColor.textHighlightText);
 		lblActivity.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblActivity.setBounds(82, 72, 119, 23);
 		contentPane.add(lblActivity);
 
 		JLabel lblDate = new JLabel("DATE :");
-		lblDate.setForeground(SystemColor.info);
+		lblDate.setForeground(SystemColor.textHighlightText);
 		lblDate.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblDate.setBounds(82, 123, 77, 23);
 		contentPane.add(lblDate);
 
 		JLabel lblStartDate = new JLabel("PRICE :");
-		lblStartDate.setForeground(SystemColor.info);
+		lblStartDate.setForeground(SystemColor.textHighlightText);
 		lblStartDate.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblStartDate.setBounds(82, 174, 77, 23);
 		contentPane.add(lblStartDate);
 
 		lblAdd = new JLabel("ADD");
+		lblAdd.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (verificarCampos()) {
 					try {
 						addServiceModality();
@@ -136,12 +138,13 @@ public class FrameGerenteCreacionContratoServicioAnnadir extends JFrame {
 		});
 		lblAdd.setOpaque(true);
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblAdd.setBackground(SystemColor.info);
 		lblAdd.setBounds(107, 243, 235, 35);
 		contentPane.add(lblAdd);
 
 		comboBoxActivities = new JComboBox <Activity>();
+		comboBoxActivities.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboBoxActivities.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -150,18 +153,21 @@ public class FrameGerenteCreacionContratoServicioAnnadir extends JFrame {
 		contentPane.add(comboBoxActivities);
 
 		dateChooserReleaseDate = new JDateChooser();
+		dateChooserReleaseDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		dateChooserReleaseDate.setBounds(206, 123, 161, 23);
 		contentPane.add(dateChooserReleaseDate);
 
 		spinnerPrice = new JSpinner();
+		spinnerPrice.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		spinnerPrice.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerPrice.setBounds(267, 178, 100, 20);
 		contentPane.add(spinnerPrice);
-
-		JLabel lblServiceMode = new JLabel("SERVICE MODE");
-		lblServiceMode.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblServiceMode.setBounds(27, 11, 191, 30);
-		contentPane.add(lblServiceMode);
+		
+		JLabel lblTransportationMode = new JLabel("Actividad Planificada");
+		lblTransportationMode.setForeground(SystemColor.textHighlightText);
+		lblTransportationMode.setFont(new Font("Dialog", Font.BOLD, 26));
+		lblTransportationMode.setBounds(92, 8, 265, 30);
+		contentPane.add(lblTransportationMode);
 
 		this.llenarComboboxActivities();
 	}

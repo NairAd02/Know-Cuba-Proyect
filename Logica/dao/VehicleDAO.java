@@ -36,7 +36,7 @@ public class VehicleDAO implements VehicleDAOInterface {
 		cs.setString(4, vehicle.getBrand());
 		cs.setInt(5, vehicle.getCapacityWithoutLuggage());
 		cs.setInt(6, vehicle.getCapacityWithLuggage());
-		cs.setDate(7, Date.valueOf(vehicle.getDate_of_production()));
+		cs.setDate(7, Date.valueOf(vehicle.getDateOfProduction()));
 		cs.setInt(8, vehicle.getTotalCapacity());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1);

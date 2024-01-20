@@ -4,8 +4,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import dao.SeasonDAO;
+import utils.BusquedaResultado;
 
-public class Season implements DUILogic {
+public class Season implements DUILogic, LikeName {
 	private int id;
 	private String name;
 	private LocalDate startDate;
@@ -13,6 +14,7 @@ public class Season implements DUILogic {
 	private String description;
 	private String typeOfSeason;
 	private int accommodationContractId;
+	private BusquedaResultado busquedaResultado; // atributo para las tareas de busqueda
 
 	public Season(int id, String name, LocalDate startDate,
 			LocalDate terminationDate, String description,
@@ -120,6 +122,44 @@ public class Season implements DUILogic {
 	public void delete() throws SQLException {
 		SeasonDAO.getInstancie().delete(this.id);
 	}
+
+	// Operaciones
+	// Metodo para comprobar semejanza de nombre
+	public boolean isSameName(String name) {
+		boolean veredicto = false;
+		String nameComparar = "";
+		if (!name.equalsIgnoreCase("")) {
+			for (int i = 0, j = 0, l = 0; i < this.name.length() && !veredicto; i++) {
+
+				nameComparar += this.name.charAt(i);
+
+				j++;
+				if (j == name.length()) {
+					if (name.equalsIgnoreCase(nameComparar)) {
+						veredicto = true;
+						this.busquedaResultado = new BusquedaResultado(nameComparar, i - (j - 1), i);
+					} else {
+						nameComparar = "";
+						this.busquedaResultado = null;
+					}
+					j = 0;
+					i = l++;
+				}
+			}
+		} else {
+			veredicto = true;
+			this.busquedaResultado = null;
+		}
+
+		return veredicto;
+	}
+
+	public boolean isEqualsType (String type) {
+		return this.typeOfSeason.equalsIgnoreCase(type);
+	}
+
+	// Fin Metodo para comprobar semejanza de nombre
+	// Fin de Operaciones
 
 
 }

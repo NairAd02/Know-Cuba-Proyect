@@ -33,13 +33,6 @@ public class ModeloTablaServiceProvider extends DefaultTableModel implements Mod
 
 	}
 
-	public void deleteElements (int[] rows) throws SQLException {
-
-		for (int i = 0; i < rows.length; i++) {	
-			Controller.getInstancie().getTouristAgency().deleteProvider(this.elements.get(rows[i] - i));// se eliminan los Provedores de servicios seleccionados de la base de datos
-			this.deleteElement(rows[i] - i); // se eliminan de la tabla y de la logica del negocio
-		}
-	}
 
 	public ServiceProvider deleteElement (int i) {
 		this.removeRow(i);

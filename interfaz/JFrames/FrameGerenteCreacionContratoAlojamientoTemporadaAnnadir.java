@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 
 public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFrame {
 
@@ -67,12 +68,13 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 			}
 		});
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		contentPane.setBackground(new Color(5, 150, 177));
+		contentPane.setBackground(new Color(18, 95, 115));
 		setLocationRelativeTo(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JLabel lblSeasonMode = new JLabel("SEASON MODE");
+		lblSeasonMode.setForeground(SystemColor.textHighlightText);
 		lblSeasonMode.setFont(new Font("Arial Black", Font.PLAIN, 19));
 		lblSeasonMode.setBounds(27, 11, 169, 30);
 		contentPane.add(lblSeasonMode);
@@ -80,7 +82,7 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				cerrarFrame();
 			}
 			@Override
@@ -89,53 +91,55 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(427, 0, 38, 38);
 		contentPane.add(lblX);
 
 		JLabel lblName = new JLabel("NAME :");
-		lblName.setForeground(SystemColor.info);
+		lblName.setForeground(SystemColor.textHighlightText);
 		lblName.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblName.setBounds(27, 52, 90, 23);
 		contentPane.add(lblName);
 
 		JLabel lblStartDate = new JLabel("START DATE :");
-		lblStartDate.setForeground(SystemColor.info);
+		lblStartDate.setForeground(SystemColor.textHighlightText);
 		lblStartDate.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblStartDate.setBounds(27, 86, 249, 23);
 		contentPane.add(lblStartDate);
 
 		JLabel lblTer = new JLabel("TERMINATION DATE :");
-		lblTer.setForeground(SystemColor.info);
+		lblTer.setForeground(SystemColor.textHighlightText);
 		lblTer.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblTer.setBounds(27, 120, 197, 23);
 		contentPane.add(lblTer);
 
 		JLabel lblDescription = new JLabel("DESCRIPTION :");
-		lblDescription.setForeground(SystemColor.info);
+		lblDescription.setForeground(SystemColor.textHighlightText);
 		lblDescription.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblDescription.setBounds(27, 154, 146, 23);
 		contentPane.add(lblDescription);
 
 		JLabel lblTypeSeason = new JLabel("TYPE SEASON :");
-		lblTypeSeason.setForeground(SystemColor.info);
+		lblTypeSeason.setForeground(SystemColor.textHighlightText);
 		lblTypeSeason.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblTypeSeason.setBounds(27, 278, 146, 23);
 		contentPane.add(lblTypeSeason);
 
 		lblAdd = new JLabel("ADD");
+		lblAdd.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (verificarCampos()) {
 					try {
 						addSeason();
+						panelGerenteCreacionContratoAlojamientoTemporada.actualizarTablaSeasons(); // se actualiza la información de la tabla de las tempordadas
 						cerrarFrame();
 					} catch (SQLException e1) {
 						e1.printStackTrace();
@@ -151,7 +155,7 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 		});
 		lblAdd.setOpaque(true);
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblAdd.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblAdd.setBackground(SystemColor.info);
 		lblAdd.setBounds(117, 324, 235, 35);
 		contentPane.add(lblAdd);
@@ -186,7 +190,7 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 		this.dateChooserEndDate.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 	}
 
-	private void llenarComboBoxTypeOfSeason () {
+	private void llenarComboBoxTypeOfSeason () { // Temporal
 		this.comboBoxTypeOfSeason.addItem("Alta");
 		this.comboBoxTypeOfSeason.addItem("Baja");
 		this.comboBoxTypeOfSeason.addItem("Media");
@@ -206,7 +210,7 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 					dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), textPaneDescription.getText(), (String) comboBoxTypeOfSeason.getSelectedItem()));
 		}
 
-		this.panelGerenteCreacionContratoAlojamientoTemporada.actualizarTablaSeasons(); // se actualiza la información de la tabla de las tempordadas
+		
 	}
 
 	private void cerrarFrame () {

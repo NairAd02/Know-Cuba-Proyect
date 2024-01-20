@@ -15,7 +15,7 @@ public class Rol implements DUILogic {
 		this.name = name;
 	}
 
-	public Rol (String name) {
+	public Rol (String name) { // Constructor temporal
 		this.id = -1;
 		this.name = name;
 	}

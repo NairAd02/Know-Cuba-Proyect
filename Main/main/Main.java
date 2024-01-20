@@ -2,7 +2,6 @@ package main;
 
 
 import java.awt.EventQueue;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -52,7 +51,7 @@ public class Main {
 				}
 			}
 		});
-
+	
 	}
-
+	
 }

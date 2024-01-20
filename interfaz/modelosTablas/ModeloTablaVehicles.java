@@ -11,7 +11,7 @@ public class ModeloTablaVehicles extends DefaultTableModel implements ModelOpera
 
 
 	public ModeloTablaVehicles(){
-		String[] columnNames = {"Vehicle-Lock"};   
+		String[] columnNames = {"Lock", "Brand", "Capacity Without Luggage", "Capacity With Luggage", "Total Capacity", "Date of production"};   
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
 		this.elements = new ArrayList<Vehicle>();
@@ -23,7 +23,7 @@ public class ModeloTablaVehicles extends DefaultTableModel implements ModelOpera
 	public void addElement(Vehicle vehicle) {
 		Object[] newRow =  null;
 		this.elements.add(vehicle);
-		newRow = new Object[]{vehicle.getLock()};
+		newRow = new Object[]{vehicle.getLock(), vehicle.getBrand(), vehicle.getCapacityWithoutLuggage(), vehicle.getCapacityWithLuggage(), vehicle.getTotalCapacity(), vehicle.getDateOfProduction()};
 		addRow(newRow);
 	}
 

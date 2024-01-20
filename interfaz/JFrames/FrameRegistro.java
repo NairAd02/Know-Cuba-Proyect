@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.border.MatteBorder;
 
 
 public class FrameRegistro extends JFrame {
@@ -81,6 +82,7 @@ public class FrameRegistro extends JFrame {
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 		panel = new JPanel();
+		panel.setBorder(new MatteBorder(3, 3, 3, 3, (Color) new Color(0, 0, 0)));
 		panel.setBounds(0, 0, 371, 393);
 		panel.setBackground(new Color(18, 95, 115));
 		contentPane.add(panel);
@@ -89,19 +91,21 @@ public class FrameRegistro extends JFrame {
 		this.addLblTitleFrame();
 
 		JLabel lblRole = new JLabel("");
-		lblRole.setIcon(new ImageIcon(FrameRegistro.class.getResource("/images/rol.png")));
+		lblRole.setIcon(new ImageIcon(FrameRegistro.class.getResource("/images/Add User Male.png")));
 		lblRole.setForeground(SystemColor.info);
 		lblRole.setFont(new Font("Arial Black", Font.PLAIN, 14));
 		lblRole.setBounds(159, 98, 53, 56);
 		panel.add(lblRole);
 
 		JLabel labelUserName = new JLabel("Username");
-		labelUserName.setForeground(SystemColor.info);
-		labelUserName.setFont(new Font("Arial Black", Font.PLAIN, 14));
+		labelUserName.setForeground(SystemColor.textHighlightText);
+		labelUserName.setFont(new Font("Dialog", Font.BOLD, 16));
 		labelUserName.setBounds(37, 208, 90, 21);
 		panel.add(labelUserName);
 
 		textFieldUserName = new JTextField();
+		textFieldUserName.setForeground(SystemColor.textHighlightText);
+		textFieldUserName.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textFieldUserName.setOpaque(false);
 		textFieldUserName.setColumns(10);
 		textFieldUserName.setBorder(null);
@@ -165,7 +169,7 @@ public class FrameRegistro extends JFrame {
 		});
 		labelAceptar.setOpaque(true);
 		labelAceptar.setHorizontalAlignment(SwingConstants.CENTER);
-		labelAceptar.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		labelAceptar.setFont(new Font("Dialog", Font.BOLD, 14));
 		labelAceptar.setBackground(SystemColor.info);
 		labelAceptar.setBounds(37, 324, 138, 35);
 		panel.add(labelAceptar);
@@ -187,24 +191,24 @@ public class FrameRegistro extends JFrame {
 		});
 		lblCancelar.setOpaque(true);
 		lblCancelar.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCancelar.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblCancelar.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblCancelar.setBackground(SystemColor.info);
 		lblCancelar.setBounds(187, 324, 138, 35);
 		panel.add(lblCancelar);
 
-		if (user == null) // add
+		if (true) // add
 			this.addComboBoxRoles();
 
-		lblErrorCampos = new JLabel("Campos Obligatorios");
+		lblErrorCampos = new JLabel("Campo Obligatorio");
 		lblErrorCampos.setVisible(false);
 		lblErrorCampos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblErrorCampos.setForeground(SystemColor.red);
-		lblErrorCampos.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblErrorCampos.setBounds(37, 304, 288, 14);
+		lblErrorCampos.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		lblErrorCampos.setBounds(37, 281, 288, 21);
 		panel.add(lblErrorCampos);
 
 		lblX = new JLabel("X");
-		lblX.setBounds(345, 0, 16, 29);
+		lblX.setBounds(332, 0, 39, 40);
 		panel.add(lblX);
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
@@ -217,11 +221,11 @@ public class FrameRegistro extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 
@@ -235,12 +239,14 @@ public class FrameRegistro extends JFrame {
 		String text = "";
 
 		if (user == null) // add
-			text = "To Register :";
+			text = "To Register";
 		else // update
 			text = "Update User: " + user.getUserName();
 
 		lblTitleFrame = new JLabel(text);
-		lblTitleFrame.setFont(new Font("Arial Black", Font.PLAIN, 19));
+		lblTitleFrame.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitleFrame.setForeground(SystemColor.textHighlightText);
+		lblTitleFrame.setFont(new Font("Dialog", Font.BOLD, 24));
 		lblTitleFrame.setBounds(10, 46, 352, 30);
 		panel.add(lblTitleFrame);
 	}
@@ -253,8 +259,10 @@ public class FrameRegistro extends JFrame {
 
 	private void addComboBoxRoles () {
 		comboBoxRoles = new JComboBox <Rol>();
+		comboBoxRoles.setFont(new Font("Dialog", Font.PLAIN, 13));
+		
 		this.llenarComboBoxRol();
-		comboBoxRoles.setBounds(116, 165, 138, 22);
+		comboBoxRoles.setBounds(116, 165, 138, 21);
 		panel.add(comboBoxRoles);
 	}
 

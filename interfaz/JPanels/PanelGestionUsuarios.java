@@ -1,6 +1,7 @@
 package JPanels;
 
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,7 +19,9 @@ import logica.Controller;
 import logica.Rol;
 import logica.User;
 import modelosTablas.ModeloTablaUsers;
+import utils.AusentFilter;
 import utils.ConnectionDataBase;
+import utils.FilterUser;
 import utils.Semaphore;
 
 import java.awt.BorderLayout;
@@ -39,6 +42,15 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.border.MatteBorder;
 
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
+
+import javax.swing.BoxLayout;
+import javax.swing.JSpinner;
+import javax.swing.JSlider;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+
 public class PanelGestionUsuarios extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -57,6 +69,17 @@ public class PanelGestionUsuarios extends JPanel {
 	private JLabel lblToRegister, lblDelete;
 	private String searchName;
 	private JLabel lblUpdate;
+	private JPanel panelLastDateConnection;
+	private JLabel lblLastDateMin;
+	private JDateChooser dateChooserLastDateMin;
+	private JLabel lblLastDateMax;
+	private JDateChooser dateChooserLastDateMax;
+	private JPanel panelStartDateConnection;
+	private JLabel lblUsersStartDateConnectionMin;
+	private JDateChooser dateChooserStratDateMin;
+	private JLabel lblUsersStartDateConnectionMax;
+	private JDateChooser dateChooserStratDateMax;
+	
 	
 	private class Eliminar extends Thread { // Hilo para la eliminacion
 
@@ -138,8 +161,8 @@ public class PanelGestionUsuarios extends JPanel {
 
 		tableUsuario = new JTable();
 		tableUsuario.setRowHeight(30);
-		tableUsuario.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		tableUsuario.getTableHeader().setFont(new Font("Arial", Font.BOLD, 24));
+		tableUsuario.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableUsuario.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
 		tableUsuario.getTableHeader().setForeground(Color.black);
 		tableUsuario.getTableHeader().setBackground(SystemColor.black);
 		tableUsuario.addMouseListener(new MouseAdapter() {
@@ -222,7 +245,58 @@ public class PanelGestionUsuarios extends JPanel {
 		});
 
 		panelFiltros.add(comboBoxConexion);
-
+		
+		panelStartDateConnection = new JPanel();
+		panelStartDateConnection.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelStartDateConnection);
+		panelStartDateConnection.setLayout(new BoxLayout(panelStartDateConnection, BoxLayout.Y_AXIS));
+		
+		lblUsersStartDateConnectionMin = new JLabel("Start Date Min:");
+		lblUsersStartDateConnectionMin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsersStartDateConnectionMin.setForeground(SystemColor.textHighlightText);
+		lblUsersStartDateConnectionMin.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelStartDateConnection.add(lblUsersStartDateConnectionMin);
+		
+		dateChooserStratDateMin = new JDateChooser();
+		
+		panelStartDateConnection.add(dateChooserStratDateMin);
+		
+		lblUsersStartDateConnectionMax = new JLabel("Start Date Max:");
+		lblUsersStartDateConnectionMax.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsersStartDateConnectionMax.setForeground(SystemColor.textHighlightText);
+		lblUsersStartDateConnectionMax.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelStartDateConnection.add(lblUsersStartDateConnectionMax);
+		
+		dateChooserStratDateMax = new JDateChooser();
+	
+		panelStartDateConnection.add(dateChooserStratDateMax);
+		
+		panelLastDateConnection = new JPanel();
+		panelLastDateConnection.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelLastDateConnection);
+		panelLastDateConnection.setLayout(new BoxLayout(panelLastDateConnection, BoxLayout.Y_AXIS));
+		
+		lblLastDateMin = new JLabel("Last Date Min:");
+		lblLastDateMin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLastDateMin.setForeground(SystemColor.textHighlightText);
+		lblLastDateMin.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelLastDateConnection.add(lblLastDateMin);
+		
+		dateChooserLastDateMin = new JDateChooser();
+	
+		panelLastDateConnection.add(dateChooserLastDateMin);
+		
+		lblLastDateMax = new JLabel("Last Date Max:");
+		lblLastDateMax.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLastDateMax.setForeground(SystemColor.textHighlightText);
+		lblLastDateMax.setFont(new Font("Dialog", Font.BOLD, 21));
+		panelLastDateConnection.add(lblLastDateMax);
+		
+		dateChooserLastDateMax = new JDateChooser();
+	
+		panelLastDateConnection.add(dateChooserLastDateMax);
+		
+		
 		lblToRegister = new JLabel("");
 		lblToRegister.setIcon(new ImageIcon(PanelGestionUsuarios.class.getResource("/images/Plus.png")));
 		lblToRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -340,36 +414,23 @@ public class PanelGestionUsuarios extends JPanel {
 	}
 
 	public void actualizarTablaUsuarios () {
-		if (((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
-				searchName.equalsIgnoreCase("")) // no tiene valor ningun filtro
-			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers());
-
-		else if (!((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
-				searchName.equalsIgnoreCase("")) // tiene valor solo el filtro del rol
-			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(((Rol)comboBoxRoles.getSelectedItem()).getId()));
-
-		else if (((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
-				!searchName.equalsIgnoreCase("")) // tiene valor solo el filtro de nombre 
-			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(searchName));
-
-		else if (((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && !((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
-				searchName.equalsIgnoreCase("")) // tiene valor solo el filtro del estado de la conexion 
-			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("Connected")));
-
-		else if (((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && !((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
-				!searchName.equalsIgnoreCase("")) // tiene valor  el filtro de nombre y el  filtro del estado de la coneccion
-			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(searchName, ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("Connected")));
-
-		else if (!((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
-				!searchName.equalsIgnoreCase("")) // tiene valor  el filtro de nombre y el filtro rol
-			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(searchName, ((Rol)comboBoxRoles.getSelectedItem()).getId()));
-
-		else if (!((Rol)comboBoxRoles.getSelectedItem()).getName().equalsIgnoreCase("All") && !((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("All") && 
-				searchName.equalsIgnoreCase("")) // tiene valor  el filtro del rol y el filtro estado de la conexion
-			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(((Rol)comboBoxRoles.getSelectedItem()).getId(), ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("Connected")));
-		else // todos los filtros tienen valor
-			this.actualizarTablaUsuarios(Controller.getInstancie().getUsers(searchName, ((Rol)comboBoxRoles.getSelectedItem()).getId(), ((String) comboBoxConexion.getSelectedItem()).equalsIgnoreCase("Connected")));
-
+		int stateConnection = -1;
+		
+		if (this.comboBoxConexion.getSelectedIndex() == 0) // se seleccionó All
+			stateConnection = AusentFilter.stateLess;
+		else if (this.comboBoxConexion.getSelectedIndex() == 1) // se seleccionó connected
+			stateConnection = User.stateConnected;
+		else // Se seleccionó disconect
+			
+			stateConnection = User.stateDisconnect;
+		
+		this.actualizarTablaUsuarios(Controller.getInstancie().getUsers( (!this.searchName.equalsIgnoreCase("")) ? this.searchName : null , 
+				((Rol) this.comboBoxRoles.getSelectedItem()).getId(), stateConnection, 
+				(this.dateChooserStratDateMin.getDate() != null) ? this.dateChooserStratDateMin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null, 
+						(this.dateChooserStratDateMax.getDate() != null) ? this.dateChooserStratDateMax.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null, 
+								(this.dateChooserLastDateMin.getDate() != null) ? this.dateChooserLastDateMin.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null, 
+										(this.dateChooserLastDateMax.getDate() != null) ? this.dateChooserLastDateMax.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null));
+	
 	}
 
 	private void actualizarTablaUsuarios(HashMap<Integer, ArrayList<User>> usuarios){
@@ -384,22 +445,15 @@ public class PanelGestionUsuarios extends JPanel {
 		}
 	}
 
-	private void actualizarTablaUsuarios(ArrayList<User> usuarios){
-		reiniciarTable(this.tableUsuario);
-
-
-		for (User user : usuarios) {
-			((ModeloTablaUsers) tableUsuario.getModel()).addElement(user);
-		}
-	}
 
 	private void deleteElementsTable () throws SQLException {
 		int [] rows = tableUsuario.getSelectedRows();
 
 		for (int i = 0; i < rows.length; i++) {
-			Controller.getInstancie().deleteUser( ((ModeloTablaUsers) tableUsuario.getModel()).deleteElement(rows[i] - i));
+			Controller.getInstancie().deleteUser(((ModeloTablaUsers) tableUsuario.getModel()).getElement(rows[i]));
+			
 		}
-
+		
 		this.actualizarTablaUsuarios();
 
 	}

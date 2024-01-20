@@ -15,6 +15,10 @@ public abstract class Contract implements DUILogic {
 	public static final int accommodationContract = 1;
 	public static final int carrierContract = 2;
 
+	// constantes staticas que definen los estados de un contrato
+	public static final int closeState = 3; // Define el estado cerrado de un contrato
+	public static final int earringState = 4; // Define el estado pendiente de un contrato
+
 	public static ArrayList<Integer> getKeys() {
 		ArrayList<Integer> keys = new ArrayList<Integer>(3);
 		keys.add(serviceContract);

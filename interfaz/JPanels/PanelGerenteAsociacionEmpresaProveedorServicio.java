@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
+import modelosTablas.ModeloTablaAccommodationProvider;
 import modelosTablas.ModeloTablaServiceProvider;
 import utils.ConnectionDataBase;
 import utils.Semaphore;
@@ -62,7 +64,8 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
 					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación
 						deleteElements(); // se eliminan los elementos seleccionados
-						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto
+						actualizarTablaServicieProviders(); // se actualiza la tabla de los proveedores de servicio
+						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto			
 					}
 				} catch (InterruptedException e) {
 
@@ -149,7 +152,6 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 
 
 
-
 		lblTitleSeccion = new JLabel("Services Providers");
 		lblTitleSeccion.setBorder(null);
 		lblTitleSeccion.setBackground(SystemColor.inactiveCaptionBorder);
@@ -162,8 +164,7 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 
 		this.componentes();
 		this.actualizarTablaServicieProviders();
-		this.actualizarEstadoButtons();
-
+		
 	}
 
 	private void componentes () {
@@ -289,6 +290,8 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 			this.actualizarTablaServicieProviders(Controller.getInstancie().getTouristAgency().getProviders(searchName, Provider.serviceProvider));
 		else
 			this.actualizarTablaServicieProviders(Controller.getInstancie().getTouristAgency().getProviders(Provider.serviceProvider));
+		
+		this.actualizarEstadoButtons();
 	}
 
 	private void deleteElements () {
@@ -296,7 +299,7 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 			deleteElementsTable(); // se eliminan los elementos seleccionados
 			ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
 			crearFrameNotificacion(); // se crea el frame que notifica que la operacion han sido efectuados con exito
-			this.actualizarEstadoButtons(); // se actualiza el estado de los botones
+			this.actualizarTablaServicieProviders(); // se actualiza la tabla de los proveedores de servicio
 		} catch (SQLException e1) {
 			try {
 				ConnectionDataBase.roolback();  // se cancelan las operaciones realizadas a la base de datos
@@ -318,9 +321,11 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 		}
 	}
 
-	private void deleteElementsTable () throws SQLException {
-		((ModeloTablaServiceProvider) tableServiceProviders.getModel()).deleteElements(this.tableServiceProviders.getSelectedRows());
-		this.actualizarTablaServicieProviders();
+	public void deleteElementsTable () throws SQLException {
+		int[] rows = this.tableServiceProviders.getSelectedRows();
+		for (int i = 0; i < rows.length; i++) {	
+			Controller.getInstancie().getTouristAgency().deleteProvider(((ModeloTablaServiceProvider) tableServiceProviders.getModel()).getElement(rows[i]));// se eliminan los Provedores de servicios seleccionados de la base de datos	
+		}
 	}
 
 	private void reiniciarTable(JTable table){

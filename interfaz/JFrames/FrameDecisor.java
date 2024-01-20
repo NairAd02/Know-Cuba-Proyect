@@ -124,11 +124,11 @@ public class FrameDecisor extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(384, 0, 38, 38);
@@ -146,7 +146,7 @@ public class FrameDecisor extends JFrame {
 
 	private void cerrarFrame () {
 		synchronized (Semaphore.samaphore) {
-			Semaphore.samaphore.notifyAll(); // se notifica al hilo principal que se despierte
+			Semaphore.samaphore.notifyAll(); // se notifica al hilo de la operacion que se despierte
 		}
 		frame.setEnabled(true);
 		dispose();

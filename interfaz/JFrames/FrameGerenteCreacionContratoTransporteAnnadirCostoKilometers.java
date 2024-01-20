@@ -21,12 +21,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.MatteBorder;
+import javax.swing.ImageIcon;
 
 public class FrameGerenteCreacionContratoTransporteAnnadirCostoKilometers extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JComboBox <Vehicle> comboBoxVehicles;
 	private JSpinner spinnerCostKilometersGoing;
 	private JSpinner spinnerCostKilometersLap;
 	private JSpinner spinnerCostHoursWait;
@@ -36,6 +37,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirCostoKilometers extend
 	private FrameGerenteCreacionContratoTransporte frameGerenteCreacionContratoTransporte;
 	private CarrierContract carrierContract;
 	private int mouseX, mouseY;
+	private JLabel lblSeccionVehicles;
 
 
 	public FrameGerenteCreacionContratoTransporteAnnadirCostoKilometers(PanelCreacionContratoTransporteTransportModality tm) {
@@ -44,10 +46,10 @@ public class FrameGerenteCreacionContratoTransporteAnnadirCostoKilometers extend
 		this.carrierContract = this.panelCreacionContratoTransporteTransportModality.getCarrierContract();
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 465, 330);
+		setBounds(100, 100, 548, 414);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setBackground(new Color(5, 150, 177));
+		contentPane.setBorder(new MatteBorder(3, 3, 3, 3, (Color) new Color(0, 0, 0)));
+		contentPane.setBackground(new Color(18, 95, 115));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -87,63 +89,59 @@ public class FrameGerenteCreacionContratoTransporteAnnadirCostoKilometers extend
 		lblX.setForeground(Color.BLACK);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
-		lblX.setBounds(427, 0, 38, 38);
+		lblX.setBounds(510, 0, 38, 38);
 		contentPane.add(lblX);
 		setLocationRelativeTo(null);
 		JLabel lblTransportationMode = new JLabel("TRANSPORTATION MODE");
+		lblTransportationMode.setForeground(SystemColor.textHighlightText);
 		lblTransportationMode.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblTransportationMode.setBounds(27, 11, 294, 30);
+		lblTransportationMode.setBounds(127, 27, 294, 30);
 		contentPane.add(lblTransportationMode);
 
 		JLabel lblCostKilometers = new JLabel("( Cost Kilometers ) ");
+		lblCostKilometers.setForeground(SystemColor.textHighlightText);
 		lblCostKilometers.setFont(new Font("Arial Black", Font.PLAIN, 15));
-		lblCostKilometers.setBounds(79, 35, 173, 30);
+		lblCostKilometers.setBounds(179, 51, 173, 30);
 		contentPane.add(lblCostKilometers);
 
-		JLabel lblRoomType = new JLabel("VEHICLE :");
-		lblRoomType.setForeground(SystemColor.info);
-		lblRoomType.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblRoomType.setBounds(43, 90, 119, 23);
-		contentPane.add(lblRoomType);
-
-		comboBoxVehicles = new JComboBox <Vehicle>();
-		comboBoxVehicles.setBounds(264, 90, 161, 22);
-		contentPane.add(comboBoxVehicles);
-
 		JLabel lblCostKilometersGoing = new JLabel("COST KILOMETERS GOING :");
-		lblCostKilometersGoing.setForeground(SystemColor.info);
+		lblCostKilometersGoing.setForeground(SystemColor.textHighlightText);
 		lblCostKilometersGoing.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblCostKilometersGoing.setBounds(43, 130, 249, 23);
+		lblCostKilometersGoing.setBounds(71, 174, 249, 23);
 		contentPane.add(lblCostKilometersGoing);
 
 		spinnerCostKilometersGoing = new JSpinner();
+		spinnerCostKilometersGoing.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		spinnerCostKilometersGoing.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
-		spinnerCostKilometersGoing.setBounds(324, 131, 100, 20);
+		spinnerCostKilometersGoing.setBounds(352, 175, 100, 20);
 		contentPane.add(spinnerCostKilometersGoing);
 
 		JLabel lblCostKilometersLap = new JLabel("COST KILOMETERS LAP :");
-		lblCostKilometersLap.setForeground(SystemColor.info);
+		lblCostKilometersLap.setForeground(SystemColor.textHighlightText);
 		lblCostKilometersLap.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblCostKilometersLap.setBounds(43, 170, 225, 23);
+		lblCostKilometersLap.setBounds(71, 214, 225, 23);
 		contentPane.add(lblCostKilometersLap);
 
 		spinnerCostKilometersLap = new JSpinner();
+		spinnerCostKilometersLap.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		spinnerCostKilometersLap.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
-		spinnerCostKilometersLap.setBounds(324, 171, 100, 20);
+		spinnerCostKilometersLap.setBounds(352, 215, 100, 20);
 		contentPane.add(spinnerCostKilometersLap);
 
 		JLabel lblCostHoursWait = new JLabel("COST HOURS WAIT :");
-		lblCostHoursWait.setForeground(SystemColor.info);
+		lblCostHoursWait.setForeground(SystemColor.textHighlightText);
 		lblCostHoursWait.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblCostHoursWait.setBounds(43, 210, 278, 23);
+		lblCostHoursWait.setBounds(71, 254, 278, 23);
 		contentPane.add(lblCostHoursWait);
 
 		spinnerCostHoursWait = new JSpinner();
+		spinnerCostHoursWait.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		spinnerCostHoursWait.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
-		spinnerCostHoursWait.setBounds(324, 211, 100, 20);
+		spinnerCostHoursWait.setBounds(352, 255, 100, 20);
 		contentPane.add(spinnerCostHoursWait);
 
 		lblAdd = new JLabel("ADD");
+		lblAdd.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -164,10 +162,25 @@ public class FrameGerenteCreacionContratoTransporteAnnadirCostoKilometers extend
 		});
 		lblAdd.setOpaque(true);
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblAdd.setBackground(SystemColor.info);
-		lblAdd.setBounds(115, 270, 235, 35);
+		lblAdd.setBounds(163, 357, 235, 35);
 		contentPane.add(lblAdd);
+		
+		lblSeccionVehicles = new JLabel("SECCION VEHICLES");
+		lblSeccionVehicles.setOpaque(true);
+		lblSeccionVehicles.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSeccionVehicles.setForeground(SystemColor.textText);
+		lblSeccionVehicles.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblSeccionVehicles.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
+		lblSeccionVehicles.setBackground(SystemColor.info);
+		lblSeccionVehicles.setBounds(88, 122, 348, 30);
+		contentPane.add(lblSeccionVehicles);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(FrameGerenteCreacionContratoTransporteAnnadirCostoKilometers.class.getResource("/images/Logo 38x38.png")));
+		lblNewLabel.setBounds(10, 11, 38, 38);
+		contentPane.add(lblNewLabel);
 
 		this.llenarComboBoxVehicles();
 	}
@@ -198,5 +211,4 @@ public class FrameGerenteCreacionContratoTransporteAnnadirCostoKilometers extend
 		this.frameGerenteCreacionContratoTransporte.setEnabled(true); // se vuelve a habilitar el frame
 		dispose(); // se cierra el frame actual
 	}
-
 }

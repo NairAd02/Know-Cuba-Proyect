@@ -29,6 +29,7 @@ import javax.swing.border.LineBorder;
 
 import java.awt.event.MouseMotionAdapter;
 import java.awt.Cursor;
+import javax.swing.border.MatteBorder;
 
 
 public class FrameLogin extends JFrame {
@@ -43,8 +44,7 @@ public class FrameLogin extends JFrame {
 	private int mouseX, mouseY;
 
 
-
-
+	
 	public FrameLogin() {
 
 		setUndecorated(true);
@@ -70,7 +70,7 @@ public class FrameLogin extends JFrame {
 				mouseY = e.getY();
 			}
 		});
-		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+		contentPane.setBorder(new MatteBorder(3, 3, 3, 3, (Color) new Color(0, 0, 0)));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
@@ -81,17 +81,20 @@ public class FrameLogin extends JFrame {
 		panel.setLayout(null);
 
 		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new MatteBorder(3, 3, 3, 0, (Color) new Color(0, 0, 0)));
 		panel_1.setBounds(0, 0, 536, 438);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 
 		JLabel lblImage = new JLabel("");
+		lblImage.setBorder(new MatteBorder(3, 3, 3, 0, (Color) new Color(0, 0, 0)));
 		lblImage.setOpaque(true);
 		lblImage.setIcon(new ImageIcon(FrameLogin.class.getResource("/images/13_Cuba - copia.jpg")));
 		lblImage.setBounds(0, 0, 536, 438);
 		panel_1.add(lblImage);
 
 		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new MatteBorder(3, 0, 3, 3, (Color) new Color(0, 0, 0)));
 		panel_2.setBounds(535, 0, 396, 438);
 		panel_2.setBackground(new Color(18, 95, 115));
 		panel.add(panel_2);
@@ -99,8 +102,8 @@ public class FrameLogin extends JFrame {
 
 
 		JLabel lblUsername = new JLabel("Username");
-		lblUsername.setForeground(SystemColor.info);
-		lblUsername.setFont(new Font("Arial Black", Font.PLAIN, 14));
+		lblUsername.setForeground(SystemColor.textHighlightText);
+		lblUsername.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblUsername.setBounds(37, 132, 325, 21);
 		panel_2.add(lblUsername);
 
@@ -109,8 +112,8 @@ public class FrameLogin extends JFrame {
 		panel_2.add(lblIntroducirUsername);
 
 		JLabel labelPassword = new JLabel("Password");
-		labelPassword.setForeground(SystemColor.info);
-		labelPassword.setFont(new Font("Arial Black", Font.PLAIN, 14));
+		labelPassword.setForeground(SystemColor.textHighlightText);
+		labelPassword.setFont(new Font("Dialog", Font.BOLD, 16));
 		labelPassword.setBounds(37, 226, 325, 21);
 		panel_2.add(labelPassword);
 
@@ -119,8 +122,8 @@ public class FrameLogin extends JFrame {
 		panel_2.add(labelIntroducirPassword);
 
 		JCheckBox chckbxShowPassword = new JCheckBox("Show password");
-		chckbxShowPassword.setForeground(Color.BLACK);
-		chckbxShowPassword.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		chckbxShowPassword.setForeground(SystemColor.textHighlightText);
+		chckbxShowPassword.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		chckbxShowPassword.setOpaque(false);
 		chckbxShowPassword.setBounds(37, 294, 121, 23);
 		panel_2.add(chckbxShowPassword);
@@ -153,7 +156,7 @@ public class FrameLogin extends JFrame {
 				lblNotificacionRegistro.setVisible(false);
 			}
 		});
-		lblLogin.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblLogin.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblLogin.setOpaque(true);
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLogin.setBounds(37, 358, 325, 35);
@@ -186,8 +189,8 @@ public class FrameLogin extends JFrame {
 		lblNotificacionRegistro = new JLabel("You have not been registered in the system");
 		lblNotificacionRegistro.setVisible(false);
 		lblNotificacionRegistro.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNotificacionRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		lblNotificacionRegistro.setBounds(78, 324, 239, 14);
+		lblNotificacionRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblNotificacionRegistro.setBounds(58, 324, 284, 21);
 		lblNotificacionRegistro.setForeground(new Color(255, 51, 0));
 		panel_2.add(lblNotificacionRegistro);
 
@@ -203,11 +206,11 @@ public class FrameLogin extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(358, 0, 38, 38);
@@ -218,36 +221,30 @@ public class FrameLogin extends JFrame {
 		User user = UserDAO.getInstancie().select(textFieldUsername.getText(), textFieldPassword.getText()); // se obtiene la informacion del usuario con ese nombre de usuario y contraseña
 
 		if (user != null) { // se realmente existe un usuario con ese nombre de usuario y contraseña
+			Controller.getInstancie(user); // se crea el sistema logico
 			if (user.isStatePassword()) { // si el usuario ya cambió su constraseña
-				user.establecerConexion(); // se indica que el usuario a iniciado sesion en el sistema
-				Controller.getInstancie(user); // se crea el sistema logico
-				if (user instanceof Administrator) { // si el usuario es administrador se inicia el frame administrador
-					/*FrameAdministrador frameAdministrador = FrameAdministrador.getInstancie();
-				frameAdministrador.setVisible(true);
-				dispose(); // se cierra el frame*/
-					FramePrincipal framGerente = FramePrincipal.getIntancie();
-					framGerente.setVisible(true);
-					dispose(); // se cierra el frame
-				}
-				else if (user instanceof Dependent || user instanceof PackageDesigner ) { // si el usuario es dependiente se inicia el frame dependiente o  si el usuario es diseñador de paquetes se inicia el frame diseñador de paquetes
-					FramePaquetes framePaquetes = FramePaquetes.getInstancie();
-					framePaquetes.setVisible(true);
-					dispose(); // se cierra el frame
-				}
-				else if (user instanceof Manager) { // se el usuario es manager se inicia el frame manager
-					FramePrincipal framGerente = FramePrincipal.getIntancie();
-					framGerente.setVisible(true);
-					dispose(); // se cierra el frame
-				}
-
+				this.iniciarAlPrograma();
 			}
 			else { // si no la cambió
-				// se abre frame para establecer su contraseña
+				this.abrirFrameChangeStatePassword(); // se abre el frame para el cambio de la contraseña
 			}
 		}
 		else {
 			lblNotificacionRegistro.setVisible(true);
 		}
+	}
+	
+	private void abrirFrameChangeStatePassword () {
+		FrameChangeStatePassword frameChangeStatePassword = new FrameChangeStatePassword(FrameLogin.this);
+		frameChangeStatePassword.setVisible(true);
+		setEnabled(false); // se inhabilita el frame actual
+	}
+	
+	public void iniciarAlPrograma () throws SQLException {
+		Controller.getInstancie().getUser().establecerConexion(); // se indica que el usuario a iniciado sesion en el sistema
+		FramePrincipal framGerente = FramePrincipal.getIntancie();
+		framGerente.setVisible(true);
+		dispose(); // se cierra el frame
 	}
 
 

@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import dao.TypeOfRoomDAO;
 import logica.Hotel;
+import logica.HotelModality;
+import logica.MealPlan;
 import logica.TypeOfRoom;
 import modelosTablas.ModeloTablaTypeOfRoom;
 import javax.swing.JLabel;
@@ -28,6 +30,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirTipoHabitac
 	private Hotel hotel;
 	private JLabel lblX;
 	private int mouseX, mouseY;
+	private JLabel lblAdd;
 
 
 	public FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirTipoHabitacion(FrameGerenteAsociacionEmpresaProveedorAlojamiento pa) {
@@ -62,7 +65,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirTipoHabitac
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				cerrarFrame();
 			}
 			@Override
@@ -71,11 +74,11 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirTipoHabitac
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(384, 0, 38, 38);
@@ -86,25 +89,27 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirTipoHabitac
 		lblSelectRoomType.setBounds(27, 11, 230, 30);
 		contentPane.add(lblSelectRoomType);
 
-		JLabel lblAdd = new JLabel("ADD");
+		lblAdd = new JLabel("ADD");
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					addTypeOfRoom();
-					cerrarFrame(); // se cierra el frame actual
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+			public void mouseClicked(MouseEvent e) {
+				if (verificarCampos()) {
+					try {
+						addTypeOfRoom();
+						cerrarFrame(); // se cierra el frame actual
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-
+				lblAdd.setBackground(SystemColor.textHighlightText);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-
+				lblAdd.setBackground(SystemColor.info);
 			}
 		});
 		lblAdd.setOpaque(true);
@@ -137,6 +142,13 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirTipoHabitac
 			if (!((ModeloTablaTypeOfRoom) frameGerenteAsociacionEmpresaProveedorAlojamiento.getTableRoomTypes().getModel()).isFindElement(type)) // se no se encuentra añadido ya a la tabla
 				comboBoxTypeOfRoom.addItem(type);
 		}
+
+		if (comboBoxTypeOfRoom.getItemCount() == 0)
+			comboBoxTypeOfRoom.addItem(new TypeOfRoom("No Disponible"));
+	}
+
+	private boolean verificarCampos () {
+		return !(((TypeOfRoom) this.comboBoxTypeOfRoom.getSelectedItem()).getName().equalsIgnoreCase("No Disponible"));
 	}
 
 	private void addTypeOfRoom () throws SQLException {

@@ -11,6 +11,8 @@ import JPanels.PanelGestionUsuarios;
 import logica.Administrator;
 import logica.Controller;
 import logica.Manager;
+import logica.PackageDesigner;
+import logica.TouristPackage;
 import utils.ConnectionDataBase;
 import utils.Semaphore;
 import javax.swing.JLabel;
@@ -55,6 +57,7 @@ public class FramePrincipal extends JFrame {
 	private JLabel lblUsers;
 	private JLabel lblTouristPackage;
 	private JLabel lblSeccionTouristPackageDesing;
+	
 
 	private class CerrarPrograma extends Thread { // Hilo para cerrar el programa
 		public void run () {
@@ -230,7 +233,7 @@ public class FramePrincipal extends JFrame {
 
 		this.addSecciones();
 
-		this.contentPane.add(new PanelGerenteAsociacionEmpresaProveedorServicio(), BorderLayout.CENTER); // se añade el panel gerente asociocion empresa
+		
 		this.definirColorLabelsSecciones(); // se actualizan los colores de los labels se de seleccion de las secciones
 
 	}
@@ -241,10 +244,16 @@ public class FramePrincipal extends JFrame {
 			this.addSeccionAssociationCompany(); // se añade la seccion de asociasion con proveedores
 			this.addSeccionTouristPackageDesign(); // se añade la seccion de diseño de paquetes turisticos
 			this.addSeccionUsers(); // se añade la seccion de administracion de usarios
+			this.contentPane.add(new PanelGerenteAsociacionEmpresaProveedorServicio(), BorderLayout.CENTER);
 		}
-		else if (Controller.getInstancie().getUser() instanceof Manager) { // si el usuario es administrador se añaden las secciones de creacion de contrato y de asociacion con proveedores
+		else if (Controller.getInstancie().getUser() instanceof Manager) { // si el usuario es manager se añaden las secciones de creacion de contrato y de asociacion con proveedores
 			this.addSeccionCreateContract(); // se añade la seccion de creacion de contratos
 			this.addSeccionAssociationCompany(); // se añade la seccion de asociasion con proveedores
+			this.contentPane.add(new PanelGerenteAsociacionEmpresaProveedorServicio(), BorderLayout.CENTER);
+		}
+		else if (Controller.getInstancie().getUser() instanceof PackageDesigner) { // si el usuario es packageDisigner se añaden las secciones de gestión de paquetes turisticos
+			this.addSeccionTouristPackageDesign(); // se añade la seccion de diseño de paquetes turisticos
+			this.contentPane.add(new PanelGestionPaquetesTuristicos(), BorderLayout.CENTER);
 		}
 	}
 
@@ -488,9 +497,9 @@ public class FramePrincipal extends JFrame {
 			this.cerrarSesionUser();
 			ConnectionDataBase.getConnectionDataBase().commit(); // se confirman todas las operaciones realizadas a la base de datos
 			destruirInstancia(); // se destruye la instancia de este frame
-			FrameLogin frameLogin = new FrameLogin();
-			frameLogin.setVisible(true);
-			dispose(); // se cierra el frame actual
+			Controller.destruirInstancie(); // se destruye la instancia de la clase controladora
+			this.abrirFrameLogin(); // se abre el frame login
+			
 		} catch (SQLException e) {
 			try {
 				ConnectionDataBase.getConnectionDataBase().rollback(); // se cancelan todas las operaciones realizadas a la base de datos
@@ -500,6 +509,13 @@ public class FramePrincipal extends JFrame {
 			} 
 			e.printStackTrace();
 		}
+	}
+	
+	private void abrirFrameLogin () {
+		FrameLogin frameLogin = new FrameLogin();
+		frameLogin.setVisible(true);
+		dispose(); // se cierra el frame actual
+		
 	}
 
 	public void cambiarSeccion (JPanel seccion) {
@@ -516,7 +532,7 @@ public class FramePrincipal extends JFrame {
 	}
 
 	public void definirColorLabelsSecciones () {
-		if (Controller.getInstancie().getUser() instanceof Administrator) {
+		if (Controller.getInstancie().getUser() instanceof Administrator) { // User Administrator
 			// se define el color de todas las secciones
 			this.definirColorLabelSeccionAssociationCompany();
 			this.definirColorLabelSeccionCreationContract();
@@ -529,7 +545,7 @@ public class FramePrincipal extends JFrame {
 			this.definirColorLabelTouristPackage();
 			this.definirColorLabelUser();	
 		}
-		else if (Controller.getInstancie().getUser() instanceof Manager) {
+		else if (Controller.getInstancie().getUser() instanceof Manager) { // User Manager
 			// se define el color de las secciones de asosacion con las empresas y creacion de contratos
 			this.definirColorLabelSeccionAssociationCompany();
 			this.definirColorLabelSeccionCreationContract();	
@@ -538,6 +554,10 @@ public class FramePrincipal extends JFrame {
 			this.definirColorLabelAccommodationProvider();
 			this.definirColorLabelContract();
 		}
+		else if (Controller.getInstancie().getUser() instanceof PackageDesigner) {
+			this.definirColorLabelTouristPackage();
+		}
+		
 
 	}
 
@@ -617,4 +637,6 @@ public class FramePrincipal extends JFrame {
 		else
 			lblUsers.setForeground(SystemColor.textHighlightText);
 	}
+
+	
 }

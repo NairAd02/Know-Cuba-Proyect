@@ -26,19 +26,11 @@ public class ModeloTablaAccommodationProvider extends DefaultTableModel implemen
 		Object[] newRow =  null;
 		this.elements.add(hotel);
 		newRow = new Object[]{hotel.getName(), hotel.getProvince(), hotel.getHotelChain(), hotel.getAddress(), hotel.getHotelCategory(), "Show", "Show"};
-
 		addRow(newRow);
 
 	}
 
-	public void deleteElements (int[] rows) throws SQLException {
-
-		for (int i = 0; i < rows.length; i++) {	
-			Controller.getInstancie().getTouristAgency().deleteProvider(this.elements.get(rows[i] - i));// se eliminan los Provedores de servicios seleccionados de la base de datos
-			this.deleteElement(rows[i] - i); // se eliminan de la tabla y de la logica del negocio
-		}
-	}
-
+	
 	public Hotel deleteElement (int i) {
 		this.removeRow(i);
 		return this.elements.remove(i);

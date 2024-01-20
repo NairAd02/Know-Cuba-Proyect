@@ -30,7 +30,7 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 
 	@Override
 	public int insert(AccommodationModality accommodationModality) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_accommodation_modality(?, ?, ?, ?, ?, ?)}");	
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_accommodation_modality(?, ?, ?, ?, ?, ?, ?)}");
 		// se definen los parámetros de la funcion
 		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
 		cs.setString(2, accommodationModality.getTypeOfModality());
@@ -39,6 +39,7 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 		cs.setInt(5, accommodationModality.getMealPlanId());
 		cs.setDouble(6, accommodationModality.price());
 		cs.setInt(7, accommodationModality.getCantDaysAccommodation());
+		cs.setInt(8, accommodationModality.getHotelModalityId());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -53,13 +54,14 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 
 	@Override
 	public void update(AccommodationModality accommodationModality) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call update_accommodation_modality(?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_accommodation_modality(?, ?, ?, ?, ?, ?)}");
 		// se definen los parámetros de la funcion
 		cs.setInt(1, accommodationModality.getId());
 		cs.setInt(2, accommodationModality.getTypeOfRoomId());
 		cs.setInt(3, accommodationModality.getMealPlanId());
 		cs.setDouble(4, accommodationModality.price());
 		cs.setInt(5, accommodationModality.getCantDaysAccommodation());
+		cs.setInt(6, accommodationModality.getHotelModalityId());
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		cs.close(); // se cierra la llamada a la funcion
 	}
@@ -131,7 +133,8 @@ public class AccommodationModalityDAO implements AccommodationModalityDAOInterfa
 
 		if (accommodationModality == null) {
 			accommodationModality = new AccommodationModality(cs.getResultSet().getInt("id"), this.accommodationContract, 
-					cs.getResultSet().getString("type_of_modality"), TypeOfRoomDAO.getInstancie().select(cs.getResultSet().getInt("type_of_room_id")), 
+					cs.getResultSet().getString("type_of_modality"), TypeOfRoomDAO.getInstancie().select(cs.getResultSet().getInt("type_of_room_id")),
+					HotelModalityDAO.getInstancie().select(cs.getResultSet().getInt("hotel_modality_id")),
 					MealPlanDAO.getInstancie().select(cs.getResultSet().getInt("meal_plan_id")), cs.getResultSet().getInt("cant_days_accommodation"), cs.getResultSet().getDouble("price"));
 			this.cache.put(accommodationModality.getId(), accommodationModality); // se añade a cache
 		}

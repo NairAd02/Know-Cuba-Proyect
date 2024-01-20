@@ -12,7 +12,7 @@ public class ModeloTablaActivies extends DefaultTableModel implements ModelOpera
 	private ArrayList<Activity> elements;
 
 	public ModeloTablaActivies(){
-		String[] columnNames = {"Description"};   
+		String[] columnNames = {"Name", "Description"};   
 		this.setColumnIdentifiers(columnNames);
 		this.isCellEditable(getRowCount(), getColumnCount());
 		this.elements = new ArrayList<Activity>();
@@ -25,7 +25,7 @@ public class ModeloTablaActivies extends DefaultTableModel implements ModelOpera
 	public void addElement(Activity activity) {
 		Object[] newRow =  null;
 		this.elements.add(activity);
-		newRow = new Object[]{activity.getDescription()};
+		newRow = new Object[]{activity.getName(), activity.getDescription()};
 		addRow(newRow);
 
 	}

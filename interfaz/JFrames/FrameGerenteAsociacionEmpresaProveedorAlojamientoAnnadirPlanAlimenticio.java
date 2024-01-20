@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import dao.MealPlanDAO;
 import logica.Hotel;
+import logica.HotelModality;
 import logica.MealPlan;
 import modelosTablas.ModeloTablaMealPlan;
 import javax.swing.JLabel;
@@ -69,7 +70,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirPlanAliment
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				cerrarFrame();
 			}
 			@Override
@@ -78,11 +79,11 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirPlanAliment
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(384, 0, 38, 38);
@@ -106,13 +107,15 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirPlanAliment
 		JLabel lblAdd = new JLabel("ADD");
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					addMealPlan();
-					cerrarFrame(); // se cierra el frame actual
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+			public void mouseClicked(MouseEvent e) {
+				if (verificarCampos()) {
+					try {
+						addMealPlan();
+						cerrarFrame(); // se cierra el frame actual
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 			@Override
@@ -139,6 +142,13 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirPlanAliment
 			if (!((ModeloTablaMealPlan) frameGerenteAsociacionEmpresaProveedorAlojamiento.getTableMealPlan().getModel()).isFindElement(meal)) // se no se encuentra añadido ya a la tabla
 				comboBoxMealPlans.addItem(meal);
 		}
+
+		if (comboBoxMealPlans.getItemCount() == 0)
+			comboBoxMealPlans.addItem(new MealPlan("No Disponible"));
+	}
+
+	private boolean verificarCampos () {
+		return !(((MealPlan) this.comboBoxMealPlans.getSelectedItem()).getName().equalsIgnoreCase("No Disponible"));
 	}
 
 	private void addMealPlan () throws SQLException {
@@ -146,7 +156,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirPlanAliment
 			this.hotel.addMealPlan((MealPlan) comboBoxMealPlans.getSelectedItem());
 		}
 		else { // si es igual a 1 se trata de un objeto temporal
-			this.hotel.addMealPlanLogic((MealPlan) comboBoxMealPlans.getSelectedItem()); // solo se inserta en la base de datos
+			this.hotel.addMealPlanLogic((MealPlan) comboBoxMealPlans.getSelectedItem()); // solo se inserta en la logica del negocio
 		}
 		frameGerenteAsociacionEmpresaProveedorAlojamiento.actualizarTablaMealPlans(); // se actualiza la informacion de la tabla de los planes alimenticios
 	}

@@ -29,6 +29,10 @@ public class Activity implements DUILogic {
 		this.description = description;
 	}
 
+	public Activity (String name) { // Constructor temporal para los filtros
+		this.name = name;
+	}
+
 
 	public String getName() {
 		return name;
@@ -78,7 +82,7 @@ public class Activity implements DUILogic {
 	}
 
 	public String toString () { // Metodo para definir como será mostrada la informacion de la clase
-		return this.description;
+		return this.name;
 	}
 
 }

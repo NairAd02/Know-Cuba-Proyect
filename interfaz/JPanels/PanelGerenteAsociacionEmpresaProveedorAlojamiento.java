@@ -132,7 +132,7 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 
 
 		this.actualizarTablaAccommodationProviders();
-		this.actualizarEstadoButtons();
+		
 
 	}
 
@@ -141,6 +141,8 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 			this.actualizarTablaAccommodationProviders(Controller.getInstancie().getTouristAgency().getProviders(searchName, Provider.accommodationProvider));
 		else
 			this.actualizarTablaAccommodationProviders(Controller.getInstancie().getTouristAgency().getProviders(Provider.accommodationProvider));
+		
+		this.actualizarEstadoButtons();
 	}
 
 
@@ -158,7 +160,7 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 			deleteElementsTable();
 			ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
 			crearFrameNotificacion(); // se crea el frame que notifica al usuario que las operaciones fuerón realizadas con éxito
-			this.actualizarEstadoButtons(); // se actualiza el estado de los botones
+			this.actualizarTablaAccommodationProviders(); // se actualiza la informacion de la tabla de los proveedores de servicio
 		} catch (SQLException e1) {
 			try {
 				ConnectionDataBase.roolback(); // se confirman las operaciones realizadas a la base de datos
@@ -170,9 +172,11 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 		}
 	}
 
-	private void deleteElementsTable () throws SQLException {
-		((ModeloTablaAccommodationProvider) tableAccommodationProvider.getModel()).deleteElements(this.tableAccommodationProvider.getSelectedRows());
-		this.actualizarTablaAccommodationProviders();
+	public void deleteElementsTable () throws SQLException {
+		int[] rows = this.tableAccommodationProvider.getSelectedRows();
+		for (int i = 0; i < rows.length; i++) {	
+			Controller.getInstancie().getTouristAgency().deleteProvider(((ModeloTablaAccommodationProvider) tableAccommodationProvider.getModel()).getElement(rows[i]));// se eliminan los Provedores de alojamiento seleccionados de la base de datos	
+		}
 	}
 
 	private void reiniciarTable(JTable table){

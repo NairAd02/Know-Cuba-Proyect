@@ -38,7 +38,7 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 	private JLabel lblX;
 	private int mouseX, mouseY;
 	private JLabel lblAdd;
-	private JLabel lblShowActivities;
+	private JLabel lblRestore;
 
 
 
@@ -68,10 +68,10 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 	public FrameGerenteAsociacionEmpresaProveedorServicio(PanelGerenteAsociacionEmpresaProveedorServicio ps, ServiceProvider s) {
 		this.panelGerenteAsociacionEmpresaProveedorServicio = ps;
 		this.serviceProvider = s;
-
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 465, 330);
+
 		contentPane = new JPanel();
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -87,34 +87,38 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				mouseX = e.getX();
 				mouseY = e.getY();
+				tableActivities.clearSelection();
+				actualizarEstadoButtons(); // se actualiza el estado de los botones
 			}
 		});
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		contentPane.setBackground(new Color(5, 150, 177));
+		contentPane.setBackground(new Color(18, 95, 115));
 		setLocationRelativeTo(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JLabel lblServiceProvider = new JLabel("SERVICE PROVIDER");
-		lblServiceProvider.setFont(new Font("Arial Black", Font.PLAIN, 19));
+		lblServiceProvider.setForeground(SystemColor.textHighlightText);
+		lblServiceProvider.setFont(new Font("Dialog", Font.BOLD, 21));
 		lblServiceProvider.setBounds(27, 11, 231, 30);
 		contentPane.add(lblServiceProvider);
 
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (serviceProvider.getId() != -1) {
 					try {
 						ConnectionDataBase.roolback();
 						serviceProvider.actualizarActivities(); // se actualiza la informacion de las actividades
+						cerrarFrame();
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} // se cancelan las transacciones realizadas
 				}
-				cerrarFrame();
-
+				else
+					cerrarFrame();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -122,36 +126,25 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
+				lblX.setForeground(SystemColor.textHighlightText);
 			}
 		});
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
+		lblX.setForeground(SystemColor.textHighlightText);
 		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.setBackground(SystemColor.menu);
 		lblX.setBounds(427, 0, 38, 38);
 		contentPane.add(lblX);
 
 
-
-		lblShowActivities = new JLabel("SHOW ACTIVITIES");
-		lblShowActivities.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblShowActivities.setBounds(27, 52, 231, 30);
-		contentPane.add(lblShowActivities);
-
-		if (serviceProvider.getId() == -1) { // se habilita la inserccion
-			this.addSeccionName();
-			this.addSeccionProvince();
-			this.lblShowActivities.setVisible(false);
-		}
-
-
+		this.addSeccionName();
+		this.addSeccionProvince();
 		this.addButtonADD();
 
 
 		JLabel lblActivities = new JLabel("ACTIVITIES");
-		lblActivities.setForeground(SystemColor.info);
-		lblActivities.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblActivities.setForeground(SystemColor.textHighlightText);
+		lblActivities.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblActivities.setBounds(90, 130, 117, 23);
 		contentPane.add(lblActivities);
 
@@ -168,6 +161,12 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 		panelActivities.add(scrollPane, BorderLayout.CENTER);
 
 		tableActivities = new JTable();
+		tableActivities.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				actualizarEstadoButtons(); // se actualiza el estado de los botones
+			}
+		});
 		tableActivities.setModel(new ModeloTablaActivies());
 		scrollPane.setViewportView(tableActivities);
 
@@ -226,13 +225,62 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 		lblEliminar.setBounds(310, 133, 67, 20);
 		contentPane.add(lblEliminar);
 
+
+
+		if (this.serviceProvider.getId() != -1) { // Update
+			this.addLblRestore();
+			this.actualizarTablaActivities();
+			this.definirTextos();
+		}
+		else
+			this.actualizarEstadoButtons(); // se actualiza el estado de los botones
+
+
+	}
+
+	private void addLblRestore () {
+		lblRestore = new JLabel("Restore");
+		lblRestore.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (serviceProvider.getId() != -1) {
+					restoreInformation();
+				}
+			}
+		});
+		lblRestore.setForeground(SystemColor.textHighlightText);
+		lblRestore.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblRestore.setBounds(268, 11, 109, 30);
+		contentPane.add(lblRestore);
+	}
+
+	private void restoreInformation () {
+		try {
+			this.restoreActivities();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		this.actualizarTablaActivities();
+		this.definirTextos();
+	}
+
+	private void restoreActivities () throws SQLException {
+		ConnectionDataBase.roolback(); // se cancelan las transacciones realizadas
+		serviceProvider.actualizarActivities(); // se actualiza la informacion de las actividades
+	}
+
+	private void definirTextos () {
+		if (this.serviceProvider.getId() != -1) { // Update
+			this.textFieldServiceProviderName.setText(this.serviceProvider.getName());
+			this.textFieldProvince.setText(this.serviceProvider.getProvince());
+		}
+
 	}
 
 	private void addSeccionName () {
 		JLabel lblName = new JLabel("NAME :");
-		lblName.setForeground(SystemColor.info);
-		lblName.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblName.setForeground(SystemColor.textHighlightText);
+		lblName.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblName.setBounds(90, 52, 80, 23);
 		contentPane.add(lblName);
 
@@ -244,8 +292,8 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 
 	private void addSeccionProvince () {
 		JLabel lblProvince = new JLabel("PROVINCE :");
-		lblProvince.setForeground(SystemColor.info);
-		lblProvince.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblProvince.setForeground(SystemColor.textHighlightText);
+		lblProvince.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblProvince.setBounds(90, 86, 109, 23);
 		contentPane.add(lblProvince);
 
@@ -254,6 +302,9 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 		textFieldProvince.setBounds(219, 90, 158, 20);
 		contentPane.add(textFieldProvince);
 	}
+
+
+
 
 	private void addButtonADD () {
 		String nameLabel = "";
@@ -265,12 +316,14 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 		lblAdd = new JLabel(nameLabel);
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (serviceProvider.getId() == -1) {
 					if (verificarCampos()) {
 						try {
 							addServiceProvider();
 							ConnectionDataBase.commit(); // se confirman las transacciones realizadas
+							crearFrameNotificacion("Se ha insertado con exito el proveedor " + textFieldServiceProviderName.getText());
+							panelGerenteAsociacionEmpresaProveedorServicio.actualizarTablaServicieProviders(); // se actualiza la informacion de la tabla de provedores
 							cerrarFrame();
 						} catch (SQLException e1) {
 							try {
@@ -285,10 +338,13 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 					}
 				}
 				else {
-					if (serviceProvider.cantActivities() != 0) {
+					if (verificarCampos()) {
 						cerrarFrame();
 						try {
+							updateServiceProvider();
 							ConnectionDataBase.commit(); // se confirman las transacciones realizadas
+							crearFrameNotificacion("Ha sido actualizada correcatamente la información del proveedor de servicios");
+							panelGerenteAsociacionEmpresaProveedorServicio.actualizarTablaServicieProviders(); // se actualiza la informacion de la tabla de provedores
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						} 
@@ -316,6 +372,7 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 
 	public void actualizarTablaActivities () {	
 		this.actualizarTablaActivities(serviceProvider.getActivities()); // se obtienen las actividades del provedor de servicios
+		this.actualizarEstadoButtons(); // se actualiza el estado de los botones
 	}
 
 
@@ -333,9 +390,9 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 
 		for (int i = 0; i < rows.length; i++) {
 			if (serviceProvider.getId() == -1)
-				serviceProvider.deleteActivityLogic( ((ModeloTablaActivies) tableActivities.getModel()).deleteElement(rows[i] - i)); // se elimina solo el la actividad de la logica del negocio
+				serviceProvider.deleteActivityLogic( ((ModeloTablaActivies) tableActivities.getModel()).getElement(rows[i])); // se elimina solo el la actividad de la logica del negocio
 			else
-				serviceProvider.deleteActivity(((ModeloTablaActivies) tableActivities.getModel()).deleteElement(rows[i] - i)); // se elimina la actividad de la logica del negocio y de la base de datos
+				serviceProvider.deleteActivity(((ModeloTablaActivies) tableActivities.getModel()).getElement(rows[i])); // se elimina la actividad de la logica del negocio y de la base de datos
 		}
 
 
@@ -352,7 +409,7 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 
 	private boolean verificarCampos () {
 		return (!this.textFieldServiceProviderName.getText().equalsIgnoreCase("") && !this.textFieldProvince.getText().equalsIgnoreCase("") && 
-				serviceProvider.getActivities().size() != 0);
+				serviceProvider.cantActivities() != 0);
 	}
 
 
@@ -360,13 +417,26 @@ public class FrameGerenteAsociacionEmpresaProveedorServicio extends JFrame {
 	private void addServiceProvider () throws SQLException {
 		Controller.getInstancie().getTouristAgency().addProvider(new ServiceProvider(textFieldServiceProviderName.getText(), textFieldProvince.getText(), 
 				serviceProvider.getActivities())); // se inserta el provedor de servicios a nivel de base de datos
-		panelGerenteAsociacionEmpresaProveedorServicio.actualizarTablaServicieProviders(); // se actualiza la informacion de la tabla de provedores
-		crearFrameNotificacion("Se ha insertado con exito el proveedor " + textFieldServiceProviderName.getText());
+	}
+
+	private void updateServiceProvider () throws SQLException {
+		Controller.getInstancie().getTouristAgency().updateServiceProvider(this.serviceProvider, this.textFieldServiceProviderName.getText(), this.textFieldProvince.getText());
 	}
 
 	private void cerrarFrame () {
 		FramePrincipal.getIntancie().setEnabled(true); // se vuelve a habilitar el frame principal
 		dispose(); // se cierra este frame
+	}
+
+	private void actualizarEstadoButtons () {
+
+		// Estado boton eliminar modalidades de hotel
+		if (this.tableActivities.getSelectedRowCount() != 0)
+			this.lblEliminar.setEnabled(true);
+		else
+			this.lblEliminar.setEnabled(false);
+
+
 	}
 
 }

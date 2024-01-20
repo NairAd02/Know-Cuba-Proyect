@@ -7,6 +7,8 @@ import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import modelosTablas.ModeloTablaServiceProvider;
 import modelosTablas.ModeloTablaTransportationProvider;
 import utils.ConnectionDataBase;
 import utils.Semaphore;
@@ -60,6 +62,7 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
 					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación
 						deleteElements(); // se eliminan los elementos seleccionados
+						actualizarTablaTransportationProviders(); // se actualiza la informacion de la tabla de los proveedores de transporte
 						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto
 					}
 				} catch (InterruptedException e) {
@@ -137,7 +140,6 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 		this.addTable();
 		this.addButtons();
 		this.actualizarTablaTransportationProviders();
-		this.actualizarEstadoButtons();
 	}
 
 	private void addTable () {
@@ -176,7 +178,7 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				FrameGerenteAsociacionEmpresaProveedorTransporte frameTransportationProvider = new FrameGerenteAsociacionEmpresaProveedorTransporte(PanelGerenteAsociacionEmpresaProveedorTransporte.this, null);
+				FrameGerenteAsociacionEmpresaProveedorTransporte frameTransportationProvider = new FrameGerenteAsociacionEmpresaProveedorTransporte(PanelGerenteAsociacionEmpresaProveedorTransporte.this, new TransportationProvider());
 				frameTransportationProvider.setVisible(true);
 				FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
 			}
@@ -294,6 +296,8 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 			this.actualizarTablaTransportationProviders(Controller.getInstancie().getTouristAgency().getProviders(searchName, Provider.transportationProvider));
 		else
 			this.actualizarTablaTransportationProviders(Controller.getInstancie().getTouristAgency().getProviders(Provider.transportationProvider));
+		
+		this.actualizarEstadoButtons(); // se actualiza el estado de los botones
 	}
 
 
@@ -311,7 +315,6 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 			deleteElementsTable();
 			ConnectionDataBase.commit(); // se confirman las operaciones realizadas a la base de datos
 			crearFrameNotificacion(); // se crea el frame que notificará al usuario que se realizó la operación deseada
-			this.actualizarEstadoButtons(); // se actualiza el estado de los botones
 		} catch (SQLException e1) {
 			try {
 				ConnectionDataBase.roolback();
@@ -323,9 +326,11 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 		}
 	}
 
-	private void deleteElementsTable () throws SQLException {
-		((ModeloTablaTransportationProvider) tableTransportationProviders.getModel()).deleteElements(this.tableTransportationProviders.getSelectedRows());
-		this.actualizarTablaTransportationProviders();
+	public void deleteElementsTable () throws SQLException {
+		int[] rows = this.tableTransportationProviders.getSelectedRows();
+		for (int i = 0; i < rows.length; i++) {	
+			Controller.getInstancie().getTouristAgency().deleteProvider(((ModeloTablaTransportationProvider) tableTransportationProviders.getModel()).getElement(rows[i])); // se eliminan los Provedores de transporte seleccionados de la base de datos	
+		}
 	}
 
 	private void reiniciarTable(JTable table){
@@ -334,7 +339,6 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 			i=0;
 			((ModeloTablaTransportationProvider) table.getModel()).deleteElement(i);
 		}
-
 	}
 	
 	public void actualizarEstadoButtons () {

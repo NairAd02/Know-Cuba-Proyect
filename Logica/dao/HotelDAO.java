@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.CallableStatement;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class HotelDAO implements HotelDAOInterface {
 	}
 	@Override
 	public int insert(Hotel hotel) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_hotel(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_hotel(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 		// se definen los parametros de la funcion
 		cs.registerOutParameter(1, Types.INTEGER); // se registra el parametro de retorno
 		cs.setString(2, hotel.getName());
@@ -46,6 +47,7 @@ public class HotelDAO implements HotelDAOInterface {
 		cs.setString(12, hotel.getLocationHotel());
 		cs.setDouble(13, hotel.getDistanceNearestCity());
 		cs.setDouble(14, hotel.getDistanceAirport());
+		cs.setDate(15, Date.valueOf(hotel.getDateBuild()));
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		int idInsertado = cs.getInt(1); // se obtiene el valor de retorno de la funcion
 		cs.close(); // se cierra la llamada a la funcion
@@ -63,7 +65,7 @@ public class HotelDAO implements HotelDAOInterface {
 
 	@Override
 	public void update(Hotel hotel) throws SQLException {
-		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_hotel(?, ?, ?, ?, ?, ?)}");
+		CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{call update_hotel(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 		// se definen los parametros de la funcion
 		cs.setInt(1, hotel.getId());
 		cs.setString(2, hotel.getName());
@@ -71,6 +73,16 @@ public class HotelDAO implements HotelDAOInterface {
 		cs.setString(4, hotel.getProvince());
 		cs.setString(5, hotel.getAddress());
 		cs.setInt(6, hotel.getHotelCategory());
+		cs.setInt(7, hotel.getPhone());
+		cs.setString(8, hotel.getFax());
+		cs.setString(9, hotel.getEmail());
+		cs.setInt(10, hotel.getCantRooms());
+		cs.setInt(11, hotel.getCantFloors());
+		cs.setString(12, hotel.getLocationHotel());
+		cs.setDouble(13, hotel.getDistanceNearestCity());
+		cs.setDouble(14, hotel.getDistanceAirport());
+		cs.setDate(15, Date.valueOf(hotel.getDateBuild()));
+		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		cs.execute(); // se ejecuta la consulta de llamada a la funcion
 		cs.close(); // se cierra la llamada a la funcion
 	}
