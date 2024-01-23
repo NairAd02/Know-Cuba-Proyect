@@ -13,6 +13,10 @@ public class HotelModality implements DUILogic {
         this.name = name;
     }
 
+    public void actualizarCampos (String name) { // Metodo para actualizar los atributos de la clase
+        this.name = name;
+    }
+
     public HotelModality(String name) { // Constructor a nivel de logica
         this.name = name;
     }

@@ -3,26 +3,23 @@ package JFrames;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.border.MatteBorder;
-
 import JPanels.PanelGerenteCreacionContrato;
 import logica.AccommodationContract;
 import logica.CarrierContract;
 import logica.Controller;
 import logica.ServiceContract;
-
 import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.SwingConstants;
+import java.awt.Cursor;
 
 public class FrameSeleccionCrearContrato extends JFrame {
 
@@ -127,6 +124,7 @@ public class FrameSeleccionCrearContrato extends JFrame {
 		panelContratos.setLayout(null);
 
 		lblServiceContract = new JLabel("Service Contract");
+		lblServiceContract.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblServiceContract.setHorizontalAlignment(SwingConstants.CENTER);
 		lblServiceContract.addMouseListener(new MouseAdapter() {
 			@Override
@@ -139,11 +137,11 @@ public class FrameSeleccionCrearContrato extends JFrame {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-
+				lblServiceContract.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-
+				lblServiceContract.setBackground(new Color(6, 95, 115));
 			}
 		});
 		lblServiceContract.setBounds(10, 27, 264, 41);
@@ -155,6 +153,7 @@ public class FrameSeleccionCrearContrato extends JFrame {
 		panelContratos.add(lblServiceContract);
 
 		lblAccommodationContract = new JLabel("Accommodation Contract");
+		lblAccommodationContract.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAccommodationContract.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAccommodationContract.addMouseListener(new MouseAdapter() {
 			@Override
@@ -170,14 +169,15 @@ public class FrameSeleccionCrearContrato extends JFrame {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				lblAccommodationContract.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				lblAccommodationContract.setBackground(new Color(18, 95, 115));
 			}
 		});
 		lblAccommodationContract.setBounds(299, 27, 418, 41);
 		lblAccommodationContract.setBackground(new Color(18, 95, 115));
-
 		lblAccommodationContract.setOpaque(true);
 		lblAccommodationContract.setForeground(SystemColor.textHighlightText);
 		lblAccommodationContract.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
@@ -185,6 +185,7 @@ public class FrameSeleccionCrearContrato extends JFrame {
 		panelContratos.add(lblAccommodationContract);
 
 		lblCarrierContract = new JLabel("Carrier Contract");
+		lblCarrierContract.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblCarrierContract.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCarrierContract.addMouseListener(new MouseAdapter() {
 			@Override
@@ -197,9 +198,11 @@ public class FrameSeleccionCrearContrato extends JFrame {
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				lblCarrierContract.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				lblCarrierContract.setBackground(new Color(18, 95, 115));
 			}
 		});
 		lblCarrierContract.setBounds(743, 27, 276, 41);

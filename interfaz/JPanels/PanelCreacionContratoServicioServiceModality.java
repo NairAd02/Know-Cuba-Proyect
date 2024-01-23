@@ -1,11 +1,8 @@
 package JPanels;
 
 import java.awt.BorderLayout;
-
-
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.ItemSelectable;
 import java.awt.SystemColor;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -14,14 +11,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
+import JFrames.FrameDecisor;
 import JFrames.FrameGerenteCreacionContratoServicioAnnadirServiceModality;
 import JFrames.FrameGerenteCreacionContratoServivio;
+import JFrames.FramePrincipal;
 import logica.Activity;
+import logica.Controller;
 import logica.Modality;
 import logica.ServiceContract;
 import logica.ServiceModality;
 import modelosTablas.ModeloTablaServiceModality;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -31,15 +30,13 @@ import java.util.ArrayList;
 import javax.swing.border.LineBorder;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
-
 import com.toedter.calendar.JDateChooser;
 import utils.AusentFilter;
+import utils.Semaphore;
 
 import javax.swing.border.MatteBorder;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SpinnerNumberModel;
 import java.beans.PropertyChangeListener;
@@ -63,6 +60,32 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 	private JSpinner spinnerPriceMin;
 	private JSpinner spinnerPriceMax;
 	private boolean isRestoreFilters;
+	private JLabel lblUpdate;
+	
+	private class Eliminar extends Thread { // Hilo para la eliminacion
+
+		public void run () {
+			synchronized (Semaphore.samaphore) { 
+				try {
+					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
+					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación				
+						deleteSelectedElements(); // se eliminan las modalidades seleccionadas 
+						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto			
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+
+	private void crearFrameDecisor () {
+		FrameDecisor frameDecisor = new FrameDecisor(frameGerenteCreacionContratoServivio, "Seguro que desea eliminar");
+		frameDecisor.setVisible(true);
+		frameGerenteCreacionContratoServivio.setEnabled(false); // se inhabilita el frame principal
+	}
 
 
 	public FrameGerenteCreacionContratoServivio getFrameGerenteCreacionContratoServivio() {
@@ -222,7 +245,7 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 					actualizarTablaModalitys();
 			}
 		});
-		spinnerPriceMin.setModel(new SpinnerNumberModel(Double.valueOf(-1), null, null, Double.valueOf(1)));
+		spinnerPriceMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMin.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMin.setBounds(659, 121, 53, 20);
 		add(spinnerPriceMin);
@@ -243,7 +266,7 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 
 			}
 		});
-		spinnerPriceMax.setModel(new SpinnerNumberModel(Double.valueOf(-1), null, null, Double.valueOf(1)));
+		spinnerPriceMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMax.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMax.setBounds(761, 121, 53, 20);
 		add(spinnerPriceMax);
@@ -317,8 +340,8 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 		this.isRestoreFilters = true; // se indica que va a empezar una restauracion de los filtros
 		this.comboBoxActivities.setSelectedIndex(0);
 		// se restuara el filtro del precio
-		this.spinnerPriceMax.setValue(-1.0);
-		this.spinnerPriceMin.setValue(-1.0);
+		this.spinnerPriceMax.setValue(0.0);
+		this.spinnerPriceMin.setValue(0.0);
 		// se restaura el filtro de la fecha de realizacion
 		this.dateChooserReleaseDateMax.setDate(null);
 		this.dateChooserReleaseDateMin.setDate(null);
@@ -332,7 +355,7 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				FrameGerenteCreacionContratoServicioAnnadirServiceModality frameServiceModalityAdd = new FrameGerenteCreacionContratoServicioAnnadirServiceModality(PanelCreacionContratoServicioServiceModality.this);
+				FrameGerenteCreacionContratoServicioAnnadirServiceModality frameServiceModalityAdd = new FrameGerenteCreacionContratoServicioAnnadirServiceModality(PanelCreacionContratoServicioServiceModality.this, null);
 				frameServiceModalityAdd.setVisible(true);
 				frameGerenteCreacionContratoServivio.setEnabled(false); // se inhabilita el frame
 			}
@@ -360,12 +383,9 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (lblEliminar.isEnabled()) {
-					try {
-						deleteElementsTable();
-					} catch (SQLException e1) {
-
-						e1.printStackTrace();
-					}
+					Eliminar eliminar = new Eliminar(); // se crea el nuevo hilo
+					eliminar.start(); // se ejecuta el nuevo hilo
+					crearFrameDecisor(); // se crea el frame decisor, donde el usuario dará su confirmación
 				}
 
 			}
@@ -380,6 +400,33 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 
 			}
 		});
+		
+		lblUpdate = new JLabel("");
+		lblUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (lblUpdate.isEnabled()) {
+					FrameGerenteCreacionContratoServicioAnnadirServiceModality frameServiceModalityAdd = new FrameGerenteCreacionContratoServicioAnnadirServiceModality(PanelCreacionContratoServicioServiceModality.this,
+							((ModeloTablaServiceModality) tableServiceModalitys.getModel()).getElement(tableServiceModalitys.getSelectedRow()));
+					frameServiceModalityAdd.setVisible(true);
+					frameGerenteCreacionContratoServivio.setEnabled(false); // se inhabilita el frame
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+		});
+		lblUpdate.setIcon(new ImageIcon(PanelCreacionContratoServicioServiceModality.class.getResource("/images/Edit.png")));
+		lblUpdate.setOpaque(true);
+		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUpdate.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblUpdate.setBackground(new Color(18, 95, 115));
+		panelBotones.add(lblUpdate);
 		lblEliminar.setOpaque(true);
 		lblEliminar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEliminar.setFont(new Font("Arial Black", Font.PLAIN, 11));
@@ -416,6 +463,15 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 			((ModeloTablaServiceModality) tableServiceModalitys.getModel()).addElement((ServiceModality) mod);
 		}
 	}
+	
+	private void deleteSelectedElements () {
+		try {
+			this.deleteElementsTable();
+			FramePrincipal.mostarFrameNotificacion("Las modalidades seleccionadas han sido eliminadas con éxito");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void deleteElementsTable() throws SQLException {
 		int[] rows = tableServiceModalitys.getSelectedRows();
@@ -440,9 +496,13 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 	}
 
 	private void actualizarEstadoButtons() {
-		if (this.tableServiceModalitys.getSelectedRowCount() != 0)
+		if (this.tableServiceModalitys.getSelectedRowCount() != 0) {
 			this.lblEliminar.setEnabled(true);
-		else
+			this.lblUpdate.setEnabled(true);
+		}
+		else {
 			this.lblEliminar.setEnabled(false);
+			this.lblUpdate.setEnabled(false);
+		}
 	}
 }

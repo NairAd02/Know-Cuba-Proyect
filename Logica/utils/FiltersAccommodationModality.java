@@ -18,16 +18,6 @@ public class FiltersAccommodationModality {
         return modalitysFilter;
     }
 
-    public static ArrayList<Modality> filterPrice(ArrayList<Modality> modalitys, double priceMin, double priceMax) { // Filtro Precio
-        ArrayList<Modality> modalitysFilter = new ArrayList<>();
-
-        for (Modality modality : modalitys) {
-            AccommodationModality accommodationModality = (AccommodationModality) modality;
-            if (accommodationModality.price() >= priceMin && accommodationModality.price() <= priceMax) // Si esta en el rango de precio
-                modalitysFilter.add(modality);
-        }
-        return modalitysFilter;
-    }
 
     public static ArrayList<Modality> filterTypeOfRoom(ArrayList<Modality> modalitys, TypeOfRoom typeOfRoom) { // Filtro Tipo de Habitacion
         ArrayList<Modality> modalitysFilter = new ArrayList<>();

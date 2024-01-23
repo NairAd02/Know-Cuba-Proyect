@@ -29,6 +29,12 @@ public class Activity implements DUILogic {
 		this.description = description;
 	}
 
+	public void actualizarCampos (String name, String description, int idServiceProvider) { // Metodo para actualizar los campos de la clase
+		this.name = name;
+		this.description = description;
+		this.idServiceProvider = idServiceProvider;
+	}
+
 	public Activity (String name) { // Constructor temporal para los filtros
 		this.name = name;
 	}

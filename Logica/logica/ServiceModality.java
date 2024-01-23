@@ -2,79 +2,89 @@ package logica;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import dao.ServiceModalityDAO;
 
-public class ServiceModality extends Modality{
-	private Activity activity;
-	private LocalDate releasedDate;
-	private double price;
+public class ServiceModality extends Modality {
+    private Activity activity;
+    private LocalDate releasedDate;
+    private double price;
 
 
-	public ServiceModality(int id, Contract contract, String typeOfModality, Activity activity, LocalDate releasedDate,
-			double price) { // constructo a nivel de base de datos
-		super(id, contract, typeOfModality);
-		this.activity = activity;
-		this.releasedDate = releasedDate;
-		this.price = price;
-	}
-	
-	public ServiceModality(Contract contract, Activity activity, LocalDate releasedDate,
-			double price) { // constructo a nivel de logica  
-		super(contract);
-		this.activity = activity;
-		this.releasedDate = releasedDate;
-		this.price = price;
-		this.typeOfModality = "Service Modality";
-	}
-	
-	public ServiceModality(Activity activity, LocalDate releasedDate,
-			double price) { // Constructor a nivel de logica (proceso de creacion del objeto)
-		super();
-		this.activity = activity;
-		this.releasedDate = releasedDate;
-		this.price = price;
-		this.typeOfModality = "Service Modality";
-	}
+    public ServiceModality(int id, Contract contract, String typeOfModality, Activity activity, LocalDate releasedDate,
+                           double price) { // constructo a nivel de base de datos
+        super(id, contract, typeOfModality);
+        this.activity = activity;
+        this.releasedDate = releasedDate;
+        this.price = price;
+    }
 
-	public Activity getActivity() {
-		return this.activity;
-	}
+    public ServiceModality(Contract contract, Activity activity, LocalDate releasedDate,
+                           double price) { // constructo a nivel de logica
+        super(contract);
+        this.activity = activity;
+        this.releasedDate = releasedDate;
+        this.price = price;
+        this.typeOfModality = "Service Modality";
+    }
 
-	public void setActivity(Activity activity) {
-		this.activity = activity;
-	}
+    public ServiceModality(Activity activity, LocalDate releasedDate,
+                           double price) { // Constructor a nivel de logica (proceso de creacion del objeto)
+        super();
+        this.activity = activity;
+        this.releasedDate = releasedDate;
+        this.price = price;
+        this.typeOfModality = "Service Modality";
+    }
 
-	public LocalDate getReleasedDate() {
-		return this.releasedDate;
-	}
+    public void actualizarCampos(Contract contract, String typeOfModality, Activity activity, LocalDate releasedDate,
+                                 double price) { // Metodo para actualizar los atributos de la clase
+        super.actualizarCampos(contract, typeOfModality);
+        this.activity = activity;
+        this.releasedDate = releasedDate;
+        this.price = price;
+    }
 
-	public void setReleasedDate(LocalDate releasedDate) {
-		this.releasedDate = releasedDate;
-	}
 
-	public double price() {
-		return this.price;
-	}
+    public Activity getActivity() {
+        return this.activity;
+    }
 
-	public void setPrice(double price) {
-		this.price = price;
-	}
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 
-	public int getActivityId () {
-		return this.activity.getId();
-	}
+    public LocalDate getReleasedDate() {
+        return this.releasedDate;
+    }
 
-	@Override
-	public void insert() throws SQLException {
-		
-		this.id = ServiceModalityDAO.getInstancie().insert(this);
-	}
+    public void setReleasedDate(LocalDate releasedDate) {
+        this.releasedDate = releasedDate;
+    }
 
-	@Override
-	public void update() throws SQLException {
-		ServiceModalityDAO.getInstancie().update(this);
-		
-	}
+    public double price() {
+        return this.price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getActivityId() {
+        return this.activity.getId();
+    }
+
+    @Override
+    public void insert() throws SQLException {
+
+        this.id = ServiceModalityDAO.getInstancie().insert(this);
+    }
+
+    @Override
+    public void update() throws SQLException {
+        ServiceModalityDAO.getInstancie().update(this);
+
+    }
 
 }

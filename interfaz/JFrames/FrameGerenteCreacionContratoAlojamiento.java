@@ -35,6 +35,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.MatteBorder;
 import java.awt.Insets;
+import javax.swing.ImageIcon;
 
 public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 
@@ -55,6 +56,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 	private JLabel lblTituloFrame, lblProviderContratado;
 	private JPanel panelAccommodationContract;
 	private JLabel lblX;
+	private JLabel lblNewLabel;
 
 
 
@@ -182,6 +184,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 							updateAccommodationContract();
 							ConnectionDataBase.commit(); // se confirman las operaciones realizadas sobre la base de datos
 							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
+							FramePrincipal.mostarFrameNotificacion("Ha sido modaficada correctamente la información del contrato de alojamiento: " + + accommodationContract.getId()); // se notifica de la accion realizada al usuario
 							cerrarFrame();
 						} catch (SQLException e1) {
 							try {
@@ -309,6 +312,11 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		lblShowSeasons.setBounds(690, 189, 153, 30);
 		lblShowSeasons.setBackground(SystemColor.info);
 		panelAccommodationContract.add(lblShowSeasons);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(FrameGerenteCreacionContratoAlojamiento.class.getResource("/images/Logo 38x38.png")));
+		lblNewLabel.setBounds(10, 16, 38, 38);
+		panelAccommodationContract.add(lblNewLabel);
 
 		this.definirComponentes();
 		this.definirTexto();
@@ -323,6 +331,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				restoreInformation(); // se restuara la informacion del contrato antes de las modificaciones
+				FramePrincipal.mostarFrameNotificacion("Los datos del contrato de alojamiento: " + accommodationContract.getId() + " han sido restaurados con éxito"); // se notifica de la accion realizada al usuario
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -424,10 +433,12 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 	}
 
 	public void addAccommodationContract () throws SQLException { // add
-		Controller.getInstancie().getTouristAgency().addContract(new AccommodationContract(dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
+		AccommodationContract accommodationContract = new AccommodationContract(dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
 				dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), textPaneDescription.getText(), this.accommodationContract.getProvider(), 
-				this.accommodationContract.getModalitys(), (Double) spinnerRecargo.getValue(), this.accommodationContract.getSeasons())); // se inserta el contrato de alojamiento a nivel de base de datos
-
+				this.accommodationContract.getModalitys(), (Double) spinnerRecargo.getValue(), this.accommodationContract.getSeasons());
+		
+		Controller.getInstancie().getTouristAgency().addContract(accommodationContract); // se inserta el contrato de alojamiento a nivel de base de datos
+		FramePrincipal.mostarFrameNotificacion("Ha sido insertado correctamente el contrato de alojamiento: " + accommodationContract.getId()); // se notifica de la accion realizada al usuario
 	}
 
 	public void updateAccommodationContract () throws SQLException { // update

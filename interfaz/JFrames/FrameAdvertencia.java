@@ -35,7 +35,7 @@ public class FrameAdvertencia extends JFrame {
 		setTitle(mensaje);
 		setBounds(100, 100, 408, 90);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(5, 150, 177));
+		contentPane.setBackground(new Color(18, 95, 115));
 		contentPane.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -44,9 +44,9 @@ public class FrameAdvertencia extends JFrame {
 		panel.setBackground(getForeground());*/
 
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(FrameAdvertencia.class.getResource("/images/WhatsApp Image 2023-11-14 at 8.59.57 PM - copia - copia.jpeg")));
+		lblNewLabel.setIcon(new ImageIcon(FrameAdvertencia.class.getResource("/images/Chat Message.png")));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(10, 0, 79, 90);
+		lblNewLabel.setBounds(10, 11, 79, 68);
 		contentPane.add(lblNewLabel);
 		
 		textPane = new JTextPane();
@@ -54,8 +54,8 @@ public class FrameAdvertencia extends JFrame {
 		textPane.setForeground(SystemColor.textHighlightText);
 		textPane.setFont(new Font("Dialog", Font.PLAIN, 14));
 		textPane.setText(mensaje);
-		textPane.setBackground(new Color(5, 150, 177));
-		textPane.setBounds(99, 33, 299, 46);
+		textPane.setBackground(new Color(18, 95, 115));
+		textPane.setBounds(99, 22, 299, 46);
 		contentPane.add(textPane);
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();

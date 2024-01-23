@@ -7,13 +7,16 @@ import java.awt.SystemColor;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+import JFrames.FrameDecisor;
 import JFrames.FrameGerenteCreacionContratoAlojamiento;
 import JFrames.FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir;
+import JFrames.FramePrincipal;
 import logica.AccommodationContract;
+import logica.Controller;
 import logica.Season;
 import modelosTablas.ModeloTablaSeasons;
 import utils.AusentFilter;
-
+import utils.Semaphore;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ImageIcon;
@@ -23,12 +26,10 @@ import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-import javax.swing.JSpinner;
 import com.toedter.calendar.JDateChooser;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
@@ -57,15 +58,37 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 	private int mouseX, mouseY;
 	private String searchName;
 	private boolean isRestoreFilters; // atributo para definir el estado del proceso de restauracion de los filtros
+	private JLabel lblUpdate;
 
-	/**
-	 * Create the panel.
-	 */
+	private class Eliminar extends Thread { // Hilo para la eliminacion
 
+		public void run () {
+			synchronized (Semaphore.samaphore) { 
+				try {
+					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
+					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación				
+						deleteSelectedElements(); // se eliminan las modalidades seleccionadas 
+						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto			
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+
+	private void crearFrameDecisor () {
+		FrameDecisor frameDecisor = new FrameDecisor(frameGerenteCreacionContratoAlojamiento, "Seguro que desea eliminar");
+		frameDecisor.setVisible(true);
+		frameGerenteCreacionContratoAlojamiento.setEnabled(false); // se inhabilita el frame principal
+	}
 
 	public PanelGerenteCreacionContratoAlojamientoTemporada(FrameGerenteCreacionContratoAlojamiento ca) {
 		this.isRestoreFilters = false;
 		this.searchName = "";
+
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -144,7 +167,7 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 		lblAtras.setForeground(Color.BLACK);
 		lblAtras.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblAtras.setBackground(SystemColor.menu);
-		lblAtras.setBounds(0, 0, 53, 43);
+		lblAtras.setBounds(10, 11, 53, 43);
 		add(lblAtras);
 
 		panelBotones = new JPanel();
@@ -301,7 +324,7 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir frameAddSeason = new FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir(PanelGerenteCreacionContratoAlojamientoTemporada.this);
+				FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir frameAddSeason = new FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir(PanelGerenteCreacionContratoAlojamientoTemporada.this, null);
 				frameAddSeason.setVisible(true);
 				frameGerenteCreacionContratoAlojamiento.setEnabled(false); // se inhabilita el frame
 			}
@@ -326,12 +349,12 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 		lblEliminar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				try {
-					deleteElementsTable(); // se eliminan las temporadas seleccionadas
-				} catch (SQLException e1) {
+				if (lblEliminar.isEnabled()) {
+					Eliminar eliminar = new Eliminar(); // se crea el nuevo hilo
+					eliminar.start(); // se ejecuta el nuevo hilo
+					crearFrameDecisor(); // se crea el frame decisor, donde el usuario dará su confirmación
+				}
 
-					e1.printStackTrace();
-				} 
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -342,6 +365,33 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 
 			}
 		});
+
+		lblUpdate = new JLabel("");
+		lblUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (lblUpdate.isEnabled()) {
+					FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir frameAddSeason = new FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir(PanelGerenteCreacionContratoAlojamientoTemporada.this, 
+							((ModeloTablaSeasons) tableSeason.getModel()).getElement(tableSeason.getSelectedRow()));
+					frameAddSeason.setVisible(true);
+					frameGerenteCreacionContratoAlojamiento.setEnabled(false); // se inhabilita el frame
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+		});
+		lblUpdate.setIcon(new ImageIcon(PanelGerenteCreacionContratoAlojamientoTemporada.class.getResource("/images/Edit.png")));
+		lblUpdate.setOpaque(true);
+		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUpdate.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblUpdate.setBackground(new Color(18, 95, 115));
+		panelBotones.add(lblUpdate);
 		lblEliminar.setOpaque(true);
 		lblEliminar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEliminar.setFont(new Font("Arial Black", Font.PLAIN, 11));
@@ -366,7 +416,7 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 	public void setAccommodationContract(AccommodationContract accommodationContract) {
 		this.accommodationContract = accommodationContract;
 	}
-	
+
 	private void llenarComboBoxTypeOfSeason () { // Temporal
 		this.comboBoxTypeOfSeason.addItem("All");
 		this.comboBoxTypeOfSeason.addItem("Alta");
@@ -378,6 +428,7 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 		this.isRestoreFilters = true; // se define el estado de restuaracion de los filtros para evitar llamadas innecesarias a los metodos de actualizar
 		// Se restuaran los filtros por defecto
 		this.textFieldName.setText("");
+		this.searchName = "";
 		this.comboBoxTypeOfSeason.setSelectedIndex(0);
 		this.dateChooserStratDateMin.setDate(null);
 		this.dateChooserStratDateMax.setDate(null);
@@ -397,7 +448,7 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 	}
 
 	private String definirName () { // Metodo para definir el nombre seleccionado en el filtro
-		String name = this.textFieldName.getText();
+		String name = this.searchName;
 
 		if (name.equalsIgnoreCase("")) // si el filtro del nombre está vacio
 			name = null;
@@ -425,6 +476,15 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 		}
 	}
 
+	private void deleteSelectedElements () {
+		try {
+			this.deleteElementsTable();
+			FramePrincipal.mostarFrameNotificacion("Han sido eliminados correctamente las temporadas seleccionadas");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void deleteElementsTable () throws SQLException {
 		int [] rows = tableSeason.getSelectedRows();
 
@@ -448,9 +508,13 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 	}
 
 	private void actualizarEstadoButtons() {
-		if (this.tableSeason.getSelectedRowCount() != 0)
+		if (this.tableSeason.getSelectedRowCount() != 0) {
 			this.lblEliminar.setEnabled(true);
-		else
+			this.lblUpdate.setEnabled(true);
+		}
+		else {
 			this.lblEliminar.setEnabled(false);
+			this.lblUpdate.setEnabled(false);
+		}
 	}
 }

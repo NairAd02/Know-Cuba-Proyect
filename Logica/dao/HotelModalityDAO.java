@@ -15,16 +15,17 @@ public class HotelModalityDAO implements HotelModalityDAOInterface {
     private HashMap<Integer, HotelModality> cache; // Atributo para guardar en cache cada referencia creada
 
     // PATRON SINGLENTON
-    private HotelModalityDAO () {
+    private HotelModalityDAO() {
         this.cache = new HashMap<Integer, HotelModality>();
     }
 
-    public static HotelModalityDAO getInstancie () {
+    public static HotelModalityDAO getInstancie() {
         if (hotelModalityDAO == null)
             hotelModalityDAO = new HotelModalityDAO();
 
         return hotelModalityDAO;
     }
+
     @Override
     public int insert(HotelModality hotelModality) throws SQLException {
         CallableStatement cs = ConnectionDataBase.getConnectionDataBase().prepareCall("{? = call insert_hotel_modality(?)}");
@@ -44,6 +45,7 @@ public class HotelModalityDAO implements HotelModalityDAOInterface {
         cs.setInt(1, idHotelModality); // se define el parámetros de la funcion
         cs.execute(); // se ejecuta la consulta de llamada a la funcion
         cs.close(); // se cierra la llamada a la funcion
+        this.cache.remove(idHotelModality); // se elimina la modalidad de hotel de la base de datos
     }
 
     @Override
@@ -93,7 +95,8 @@ public class HotelModalityDAO implements HotelModalityDAOInterface {
         if (hotelModality == null) { // si la entidad no se encuentra mapeada a objeto
             hotelModality = new HotelModality(cs.getResultSet().getInt("id"), cs.getResultSet().getString("name"));
             this.cache.put(hotelModality.getId(), hotelModality); // se mapea la entidad a objeto
-        }
+        } else
+            hotelModality.actualizarCampos(cs.getResultSet().getString("name"));
 
         return hotelModality;
     }

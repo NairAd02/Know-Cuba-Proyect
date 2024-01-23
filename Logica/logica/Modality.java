@@ -34,6 +34,11 @@ public abstract class Modality implements DUILogic {
 		this.typeOfModality = typeOfModality;
 	}
 
+	protected void actualizarCampos (Contract contract, String typeOfModality) { // Metodo para actualizar los atributos de la clase
+		this.contract = contract;
+		this.typeOfModality = typeOfModality;
+	}
+
 	public Modality(Contract contract) { // Contructor a nivel de logica // Constructor a nivel de logica (proceso de creacion del objeto)
 		this.contract = contract;
 	}

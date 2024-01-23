@@ -51,9 +51,9 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 	private JLabel lblTituloFrame;
 	private JLabel lblShowTransportationModalities;
 	private JLabel lblX;
-	private PanelCreacionContratoTransporteTransportModality panelCreacionContratoTransporteTransportModality;
 	private int mouseX, mouseY;
 	private JTextPane textPaneDescription;
+	private JLabel lblNewLabel;
 
 
 
@@ -173,7 +173,7 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 		lblShowTransportationModalities.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				cambioDePanel(panelCreacionContratoTransporteTransportModality); // se cambia para la seccion de añadir modalidades de transporte
+				cambioDePanel(new PanelCreacionContratoTransporteTransportModality(FrameGerenteCreacionContratoTransporte.this)); // se cambia para la seccion de añadir modalidades de transporte
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -196,12 +196,13 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 		lblConfirm.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblConfirm.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (verificarCampos()) {
 					if (carrierContract.getId() == -1) { // add
 						try {
 							addCarrierContract();
 							ConnectionDataBase.getConnectionDataBase().commit(); // se confirman las operaciones realizadas en la base de datos
+							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {	
 							try {
@@ -217,6 +218,8 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 						try {
 							updateCarrierContract();
 							ConnectionDataBase.getConnectionDataBase().commit(); // se confirman las operaciones realizadas en la base de datos
+							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
+							FramePrincipal.mostarFrameNotificacion("Ha sido actualizada con éxito la información del contrato de transporte: " + carrierContract.getId()); // se notifica de la accion realizada al usuario
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {
 							try {
@@ -250,11 +253,10 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 		lblX = new JLabel("X");
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if (carrierContract.getId() != -1) {
 					try {
-						ConnectionDataBase.roolback();
-						carrierContract.actualizarDatos(); // se actualizan los datos del contrato en la base de datos
+						restoreModalities();
 					} catch (SQLException e1) {
 
 						e1.printStackTrace();
@@ -292,22 +294,25 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 		lblDescription.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblDescription.setBounds(27, 230, 124, 30);
 		panelTransportationContract.add(lblDescription);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(FrameGerenteCreacionContratoTransporte.class.getResource("/images/Logo 38x38.png")));
+		lblNewLabel.setBounds(10, 16, 38, 38);
+		panelTransportationContract.add(lblNewLabel);
 
 		this.definirComponentes();
 		this.definirTexto();
-		this.crearSecciones();
+	
 	}
 
-	private void crearSecciones () {
-		this.panelCreacionContratoTransporteTransportModality = new PanelCreacionContratoTransporteTransportModality(FrameGerenteCreacionContratoTransporte.this);
-	}
-
+	
 	private void addRestore () {
 		lblRestore = new JLabel("RESTORE");
 		lblRestore.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				definirTexto();
+				restoreInformation();
+				FramePrincipal.mostarFrameNotificacion("Los datos del contrato de transporte: " + carrierContract.getId() + " han sido restaurados con éxito"); // se notifica de la accion realizada al usuario
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -356,6 +361,21 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 		comboBoxProvider.setBounds(461, 122, 150, 22);
 		panelTransportationContract.add(comboBoxProvider);
 	}
+	
+	private void restoreInformation () { // Metodo definido para restaurar la informacion del contrato
+		try {
+			this.restoreModalities();
+			this.definirTexto();	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+	}
+	
+	private void restoreModalities () throws SQLException { // Metodo para restuarar la modalidades del paquete por las que tenia antes de su modificacion
+		ConnectionDataBase.roolback(); // se cancelan las operaciones realizadas en la base de datos
+		this.carrierContract.actualizarDatos(); // se actualizan los datos del contrato en la base de datos
+	}
 
 	private void llenarComboBoxProviders () {
 		ArrayList<Provider> providers = Controller.getInstancie().getTouristAgency().getProviders(Provider.transportationProvider); // se obtienen todos los provedores de transporte del sistema
@@ -392,16 +412,18 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 	}
 
 	private void addCarrierContract () throws SQLException { // add
-		Controller.getInstancie().getTouristAgency().addContract(new CarrierContract(dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
+		CarrierContract carrierContract = new CarrierContract(dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
 				dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), textPaneDescription.getText(), this.carrierContract.getProvider(), 
-				this.carrierContract.getModalitys(), (Double) spinnerRecargo.getValue())); // se inserta el contrato de alojamiento a nivel de base de datos
-		panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
+				this.carrierContract.getModalitys(), (Double) spinnerRecargo.getValue());
+		
+		Controller.getInstancie().getTouristAgency().addContract(carrierContract); // se inserta el contrato de alojamiento a nivel de base de datos
+		FramePrincipal.mostarFrameNotificacion("Ha sido insertado correctamente el contrato de transporte: " + carrierContract.getId()); // se notifica de la accion realizada al usuario
+		
 	}
 
 	private void updateCarrierContract () throws SQLException { // update
 		Controller.getInstancie().getTouristAgency().updateContract(this.carrierContract, dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
 				dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), textPaneDescription.getText(), (Double) spinnerRecargo.getValue());
-		panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
 	}
 
 	private void cerrarFrame () {

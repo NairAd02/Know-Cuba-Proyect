@@ -15,17 +15,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import JFrames.FrameDecisor;
 import JFrames.FrameGerenteCreacionContratoAlojamiento;
 import JFrames.FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality;
+import JFrames.FramePrincipal;
 import logica.AccommodationContract;
 import logica.AccommodationModality;
+import logica.Controller;
 import logica.HotelModality;
 import logica.MealPlan;
 import logica.Modality;
 import logica.TypeOfRoom;
 import modelosTablas.ModeloTablaAccommodationModality;
 import utils.AusentFilter;
-
+import utils.Semaphore;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import java.awt.FlowLayout;
@@ -55,9 +58,33 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 	private JSpinner spinnerPriceMax;
 	private boolean isRestore;
 	private int mouseX, mouseY;
+	private JLabel lblUpdate;
 
 
+	private class Eliminar extends Thread { // Hilo para la eliminacion
 
+		public void run () {
+			synchronized (Semaphore.samaphore) { 
+				try {
+					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
+					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación				
+						deleteSelectedElements(); // se eliminan las modalidades seleccionadas 
+						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto			
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+
+	private void crearFrameDecisor () {
+		FrameDecisor frameDecisor = new FrameDecisor(frameGerenteCreacionContratoAlojamiento, "Seguro que desea eliminar");
+		frameDecisor.setVisible(true);
+		frameGerenteCreacionContratoAlojamiento.setEnabled(false); // se inhabilita el frame principal
+	}
 
 	public FrameGerenteCreacionContratoAlojamiento getFrameGerenteCreacionContratoAlojamiento() {
 		return frameGerenteCreacionContratoAlojamiento;
@@ -203,7 +230,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		add(lblCantDaysAccommodation);
 
 		spinnerCantDaysAccommodationMax = new JSpinner();
-		spinnerCantDaysAccommodationMax.setModel(new SpinnerNumberModel(Integer.valueOf(-1), null, null, Integer.valueOf(1)));
+		spinnerCantDaysAccommodationMax.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 		spinnerCantDaysAccommodationMax.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestore)
@@ -215,7 +242,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		add(spinnerCantDaysAccommodationMax);
 
 		spinnerCantDaysAccommodationMin = new JSpinner();
-		spinnerCantDaysAccommodationMin.setModel(new SpinnerNumberModel(Integer.valueOf(-1), null, null, Integer.valueOf(1)));
+		spinnerCantDaysAccommodationMin.setModel(new SpinnerNumberModel(Integer.valueOf(0), null, null, Integer.valueOf(1)));
 		spinnerCantDaysAccommodationMin.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestore)
@@ -252,7 +279,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		add(lblMin_1);
 
 		spinnerPriceMin = new JSpinner();
-		spinnerPriceMin.setModel(new SpinnerNumberModel(Double.valueOf(-1), null, null, Double.valueOf(1)));
+		spinnerPriceMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMin.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestore)
@@ -270,7 +297,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		add(lblMax_1);
 
 		spinnerPriceMax = new JSpinner();
-		spinnerPriceMax.setModel(new SpinnerNumberModel(Double.valueOf(-1), null, null, Double.valueOf(1)));
+		spinnerPriceMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMax.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestore)
@@ -372,10 +399,10 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		this.comboBoxTypeOfRoom.setSelectedIndex(0);
 		this.comboBoxMealPlan.setSelectedIndex(0);
 		this.comboBoxHotelModality.setSelectedIndex(0);
-		this.spinnerCantDaysAccommodationMin.setValue(-1);
-		this.spinnerCantDaysAccommodationMax.setValue(-1);
-		this.spinnerPriceMin.setValue(-1.0);
-		this.spinnerPriceMax.setValue(-1.0);
+		this.spinnerCantDaysAccommodationMin.setValue(0);
+		this.spinnerCantDaysAccommodationMax.setValue(0);
+		this.spinnerPriceMin.setValue(0);
+		this.spinnerPriceMax.setValue(0);
 		this.isRestore = false; // se indica que terminó la restauracion de los filtros
 		this.actualizarTablaModalitys(); // se actualiza la información de la tabla de las modalidades
 	}
@@ -413,7 +440,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality frameAddAccommodationModality = new FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality(PanelCreacionContratoAlojamientoAccommodationModality.this);
+				FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality frameAddAccommodationModality = new FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality(PanelCreacionContratoAlojamientoAccommodationModality.this, null);
 				frameAddAccommodationModality.setVisible(true);
 				frameGerenteCreacionContratoAlojamiento.setEnabled(false); // se inhabilita el frame
 			}
@@ -439,12 +466,9 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (lblEliminar.isEnabled()) {
-					try {
-						deleteElementsTable();
-					} catch (SQLException e1) {
-
-						e1.printStackTrace();
-					}
+					Eliminar eliminar = new Eliminar(); // se crea el nuevo hilo
+					eliminar.start(); // se ejecuta el nuevo hilo
+					crearFrameDecisor(); // se crea el frame decisor, donde el usuario dará su confirmación
 				}
 
 			}
@@ -457,6 +481,33 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 
 			}
 		});
+
+		lblUpdate = new JLabel("");
+		lblUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (lblUpdate.isEnabled()) {
+					FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality frameAddAccommodationModality = new FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality(PanelCreacionContratoAlojamientoAccommodationModality.this, 
+							((ModeloTablaAccommodationModality)	tableAccommodationModalitys.getModel()).getElement(tableAccommodationModalitys.getSelectedRow()));
+					frameAddAccommodationModality.setVisible(true);
+					frameGerenteCreacionContratoAlojamiento.setEnabled(false); // se inhabilita el frame
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+		});
+		lblUpdate.setIcon(new ImageIcon(PanelCreacionContratoAlojamientoAccommodationModality.class.getResource("/images/Edit.png")));
+		lblUpdate.setOpaque(true);
+		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUpdate.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblUpdate.setBackground(new Color(18, 95, 115));
+		panelBotones.add(lblUpdate);
 		lblEliminar.setOpaque(true);
 		lblEliminar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEliminar.setFont(new Font("Arial Black", Font.PLAIN, 11));
@@ -472,6 +523,15 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 
 		for (Modality mod : modalitys) {
 			((ModeloTablaAccommodationModality) tableAccommodationModalitys.getModel()).addElement((AccommodationModality) mod);
+		}
+	}
+
+	private void deleteSelectedElements () {
+		try {
+			this.deleteElementsTable();
+			FramePrincipal.mostarFrameNotificacion("Han sido eliminados correctamente las modalidades seleccionadas");
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -498,9 +558,13 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 	}
 
 	private void actualizarEstadoButtons() {
-		if (this.tableAccommodationModalitys.getSelectedRowCount() != 0)
+		if (this.tableAccommodationModalitys.getSelectedRowCount() != 0) {
 			this.lblEliminar.setEnabled(true);
-		else
+			this.lblUpdate.setEnabled(true);
+		}
+		else {
 			this.lblEliminar.setEnabled(false);
+			this.lblUpdate.setEnabled(false);
+		}
 	}
 }

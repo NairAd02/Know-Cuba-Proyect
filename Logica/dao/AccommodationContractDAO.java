@@ -48,6 +48,7 @@ public class AccommodationContractDAO implements AccommodationContractDAOInterfa
 	@Override
 	public void delete(int idAccommodationContract) throws SQLException {
 		ContractDAO.getInstancie().delete(idAccommodationContract);
+		this.cache.remove(idAccommodationContract); // Se elimina el contrato de cache
 	}
 
 	@Override

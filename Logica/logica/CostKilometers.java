@@ -40,6 +40,14 @@ public class CostKilometers extends TransportModality {
         this.typeTransportModality = "Cost Kilometers";
     }
 
+    public  void actualizarCampos (Contract contract, String typeOfModality, ArrayList<Vehicle> vehicles,
+                                      String typeTransportModality, double costKilometersGoing, double costKilometersLap, double costHoursWait ) { // Metodo para actualizar los atributos de la clase
+        super.actualizarCampos(contract, typeOfModality, vehicles, typeTransportModality);
+        this.costKilometersGoing = costKilometersGoing;
+        this.costKilometersLap = costKilometersLap;
+        this.costHoursWait = costHoursWait;
+    }
+
     public double getCostKilometersGoing() {
         return costKilometersGoing;
     }

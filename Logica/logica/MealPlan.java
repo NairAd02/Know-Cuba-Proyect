@@ -3,13 +3,17 @@ package logica;
 import java.sql.SQLException;
 import dao.MealPlanDAO;
 
-public class MealPlan implements DUILogic{
+public class MealPlan implements DUILogic {
 	private int id;
 	private String name;
 	
 	public MealPlan(int id, String name) { // Constructor a nivel de base de datos
 		super();
 		this.id = id;
+		this.name = name;
+	}
+
+	public void actualizarCampos (String name) { // Metodo para actualizar los atributos de la clase
 		this.name = name;
 	}
 	

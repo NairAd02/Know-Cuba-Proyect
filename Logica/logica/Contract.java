@@ -195,6 +195,5 @@ public abstract class Contract implements DUILogic {
 		return this.provider.equals(provider);
 	}
 	// Fin de Operaciones
-	
-	
+
 }

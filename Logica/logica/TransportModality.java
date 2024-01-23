@@ -2,6 +2,7 @@ package logica;
 
 
 import dao.VehicleDAO;
+import utils.FiltersVehicle;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,6 +37,13 @@ public abstract class TransportModality extends Modality {
         this.typeOfModality = "Transport Modality";
     }
 
+    protected void actualizarCampos(Contract contract, String typeOfModality, ArrayList<Vehicle> vehicles,
+                                    String typeTransportModality) { // Metodo para actualizar los atributos de la clase
+        super.actualizarCampos(contract, typeOfModality);
+        this.vehicles = vehicles;
+        this.typeTransportModality = typeTransportModality;
+    }
+
 
     public ArrayList<Vehicle> getVehicles() {
         return vehicles;
@@ -55,11 +63,11 @@ public abstract class TransportModality extends Modality {
 
     // Metodos de carga de informacion
 
-    public void actualizarDatos () throws SQLException {
+    public void actualizarDatos() throws SQLException {
         this.actualizarVehicles();
     }
 
-    private void actualizarVehicles () throws SQLException {
+    private void actualizarVehicles() throws SQLException {
         this.vehicles = (ArrayList<Vehicle>) VehicleDAO.getInstancie().selectIntoTransportModality(this.id); // se obtienen desde la base de datos todos los vehiculos de la modalidad de transporte
     }
 
@@ -73,6 +81,7 @@ public abstract class TransportModality extends Modality {
     }
 
     public void addVehicleLogic(Vehicle vehicle) {
+
         this.vehicles.add(vehicle);
     }
 
@@ -92,7 +101,37 @@ public abstract class TransportModality extends Modality {
         }
     }
 
+    // Metodos para la obtencion de lo vehiculos
+    // metodo de obtencion con filtros
+    public ArrayList<Vehicle> getVehicles(String lock) {
+        ArrayList<Vehicle> vehicles = this.vehicles;
+        // Se aplican los filtros
+
+        // Filtro Chapa
+        if (lock != null)
+            vehicles = FiltersVehicle.filterLock(vehicles, lock); // filtran los vehiculos por la chapa
+
+        return vehicles;
+    }
+
+    // Metodos para la obtencion de lo vehiculos
+
     // Fin Metodos para la gestion de los vehiculos
+
+    // Operaciones
+
+    public boolean verificarExistenciaDeVehicle(Vehicle vehicle) {
+        boolean isExist = false;
+
+        for (int i = 0; i < this.vehicles.size() && !isExist; i++) {
+            if (this.vehicles.get(i).equals(vehicle)) // si se encuentra al vehiculo en la lista de vehiculos de la modalidad de transporte
+                isExist = true;
+        }
+
+        return isExist;
+    }
+
+    // Fin de Operaciones
 
 
 }

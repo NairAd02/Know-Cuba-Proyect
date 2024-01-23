@@ -52,7 +52,7 @@ public class FilterUser {
         for (Integer i : User.getKeys()) { // se recorren las llaves del mapa
             for (User user : users.get(i)) { // se recorre la lista de la clave del mapa
                 if (user.isStatePassword() &&
-                        user.getStartDateConnection().isAfter(startDateConnectionMin) && user.getStartDateConnection().isBefore(startDateConnectionMax)) // si la fecha inicial del usuario pertenece al rango del filtro
+                        ( user.getStartDateConnection().isAfter(startDateConnectionMin) || user.getStartDateConnection().isEqual(startDateConnectionMin ) ) && ( user.getStartDateConnection().isBefore(startDateConnectionMax) || user.getStartDateConnection().isEqual(startDateConnectionMax) )) // si la fecha inicial del usuario pertenece al rango del filtro
                     usersFilter.get(i).add(user);
             }
         }
@@ -68,7 +68,7 @@ public class FilterUser {
         for (Integer i : User.getKeys()) { // se recorren las llaves del mapa
             for (User user : users.get(i)) { // se recorre la lista de la clave del mapa
                 if (user.isStatePassword() &&
-                        user.getLastDateConnection().isAfter(lastDateConnectionMin) && user.getLastDateConnection().isBefore(lastDateConnectionMax)) // si la fecha inicial del usuario pertenece al rango del filtro
+                        (user.getLastDateConnection().isAfter(lastDateConnectionMin) || user.getLastDateConnection().isEqual(lastDateConnectionMin) ) && ( user.getLastDateConnection().isBefore(lastDateConnectionMax) || user.getLastDateConnection().isEqual(lastDateConnectionMax))) // si la fecha inicial del usuario pertenece al rango del filtro
                     usersFilter.get(i).add(user);
             }
         }

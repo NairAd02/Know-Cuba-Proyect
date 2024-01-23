@@ -48,6 +48,7 @@ public class ServiceModalityDAO implements ServiceModalityDAOInterface {
 	@Override
 	public void delete(int idServiceModality) throws SQLException {
 		ModalityDAO.getInstancie().delete(idServiceModality);
+		this.cache.remove(idServiceModality); // se elimina de cache la modalidad
 	}
 
 	@Override
@@ -133,6 +134,9 @@ public class ServiceModalityDAO implements ServiceModalityDAOInterface {
 
 			this.cache.put(serviceModality.getId(), serviceModality); // se alamacena en cache la referencia de la modalidad de servicio
 		}
+		else
+			serviceModality.actualizarCampos(this.serviceContract, cs.getResultSet().getString("type_of_modality"),
+					ActivityDAO.getInstancie().select(cs.getResultSet().getInt("activity_id")), cs.getResultSet().getDate("release_date").toLocalDate(), cs.getResultSet().getDouble("price") );
 
 		return serviceModality;
 	}

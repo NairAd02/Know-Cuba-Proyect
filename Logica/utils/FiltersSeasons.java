@@ -33,7 +33,7 @@ public class FiltersSeasons {
         ArrayList<Season> seasonsFilter = new ArrayList<Season>();
 
         for (Season season : seasons) {
-            if (season.getStartDate().isAfter(startDateMin) && season.getStartDate().isBefore(startDateMax)) // si la fecha de inicio de la temporada se encuentra dentro del rango de fecha del filto
+            if ( (season.getStartDate().isAfter(startDateMin) || season.getStartDate().isEqual(startDateMin) ) && (season.getStartDate().isBefore(startDateMax) || season.getStartDate().isEqual(startDateMax)) ) // si la fecha de inicio de la temporada se encuentra dentro del rango de fecha del filto
                 seasonsFilter.add(season);
         }
 
@@ -44,7 +44,7 @@ public class FiltersSeasons {
         ArrayList<Season> seasonsFilter = new ArrayList<Season>();
 
         for (Season season : seasons) {
-            if (season.getTerminationDate().isAfter(terminationDateMin) && season.getTerminationDate().isBefore(terminationDateMax)) // si la fecha de inicio de la temporada se encuentra dentro del rango de fecha del filto
+            if ( (season.getTerminationDate().isAfter(terminationDateMin) || season.getTerminationDate().isEqual(terminationDateMin) ) && (season.getTerminationDate().isBefore(terminationDateMax) || season.getTerminationDate().isEqual(terminationDateMax)) ) // si la fecha de inicio de la temporada se encuentra dentro del rango de fecha del filto
                 seasonsFilter.add(season);
         }
 

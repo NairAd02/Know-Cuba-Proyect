@@ -1,6 +1,7 @@
 package JFrames;
 
 import java.awt.Color;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import JPanels.PanelCreacionContratoAlojamientoAccommodationModality;
@@ -9,6 +10,8 @@ import logica.AccommodationModality;
 import logica.HotelModality;
 import logica.MealPlan;
 import logica.TypeOfRoom;
+import utils.ConnectionDataBase;
+
 import javax.swing.JLabel;
 import java.awt.SystemColor;
 import java.awt.Font;
@@ -20,8 +23,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import javax.swing.border.LineBorder;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.MatteBorder;
 
@@ -40,12 +41,17 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 	private int mouseX, mouseY;
 	private JLabel lblX;
 	private JComboBox<HotelModality> comboBoxHotelModality;
+	private AccommodationModality accommodationModality;
+	private JLabel lblRestore;
 
 
-	public FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality(PanelCreacionContratoAlojamientoAccommodationModality am) {
+
+	public FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality(PanelCreacionContratoAlojamientoAccommodationModality am, AccommodationModality a) {
 		this.panelCreacionContratoAlojamientoAccommodationModality = am;
 		this.accommodationContract = this.panelCreacionContratoAlojamientoAccommodationModality.getAccommodationContract();
 		this.frameGerenteCreacionContratoAlojamiento = this.panelCreacionContratoAlojamientoAccommodationModality.getFrameGerenteCreacionContratoAlojamiento();
+		this.accommodationModality = a;
+		
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 350);
@@ -118,17 +124,32 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 		lblPrice.setBounds(72, 234, 119, 23);
 		contentPane.add(lblPrice);
 
-		lblAdd = new JLabel("ADD");
+		lblAdd = new JLabel();
 		lblAdd.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				try {
-					addAccommodationModality();
-					cerrarFrame();
-				} catch (SQLException e1) {
+				if (accommodationModality == null) { // Add
+					try {
+						addAccommodationModality();
+						panelCreacionContratoAlojamientoAccommodationModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
+						FramePrincipal.mostarFrameNotificacion("Ha sido insertada con éxito la modalidad de alojamiento"); // se notifica de la accion realiza al usuario
+						cerrarFrame();
+					} catch (SQLException e1) {
 
-					e1.printStackTrace();
+						e1.printStackTrace();
+					}
+				}
+				else { // Update
+					try {
+						updateAccommodationModality();
+						panelCreacionContratoAlojamientoAccommodationModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
+						FramePrincipal.mostarFrameNotificacion("Ha sido modificada con éxito la información de la modalidad de alojamiento"); // se notifica de la accion realiza al usuario
+						cerrarFrame();
+					} catch (SQLException e1) {
+
+						e1.printStackTrace();
+					}
 				}
 			}
 			@Override
@@ -148,7 +169,7 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 		JLabel lblTransportationMode = new JLabel("Plan Hotelero");
 		lblTransportationMode.setForeground(SystemColor.textHighlightText);
 		lblTransportationMode.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblTransportationMode.setBounds(136, 8, 178, 30);
+		lblTransportationMode.setBounds(10, 8, 178, 30);
 		contentPane.add(lblTransportationMode);
 
 		comboBoxTypeOfRoom = new JComboBox <TypeOfRoom>();
@@ -172,21 +193,69 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 		spinnerPrice.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerPrice.setBounds(152, 238, 100, 20);
 		contentPane.add(spinnerPrice);
-		
+
 		comboBoxHotelModality = new JComboBox<HotelModality>();
 		comboBoxHotelModality.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboBoxHotelModality.setBounds(247, 109, 161, 22);
 		contentPane.add(comboBoxHotelModality);
-		
+
 		JLabel lblHotelModality = new JLabel("HOTEL MODALITY :");
 		lblHotelModality.setForeground(SystemColor.textHighlightText);
 		lblHotelModality.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblHotelModality.setBounds(72, 108, 178, 23);
 		contentPane.add(lblHotelModality);
 
+
 		this.llenarComboBoxTypeOfRoom();
 		this.llenarComboBoxMealPlan();
 		this.llenarComboBoxHotelModality();
+		this.addComponenetes();
+		this.definirTextos();
+	}
+
+	private void addComponenetes () {
+		if (this.accommodationModality != null) // Update
+			this.addLblRestore();
+	}
+
+	private void addLblRestore () {
+
+		lblRestore = new JLabel("Restore");
+		lblRestore.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				restoreInformation();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+		});
+		lblRestore.setForeground(SystemColor.textHighlightText);
+		lblRestore.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblRestore.setBounds(206, 8, 76, 30);
+		contentPane.add(lblRestore);
+	}
+
+	private void restoreInformation () {
+		this.definirTextos();
+	}
+
+	private void definirTextos () {
+		if (this.accommodationModality != null) { // Update
+			this.comboBoxHotelModality.setSelectedItem(this.accommodationModality.getHotelModality());
+			this.comboBoxMealPlan.setSelectedItem(this.accommodationModality.getMealPlanSelect());
+			this.comboBoxTypeOfRoom.setSelectedItem(this.accommodationModality.getTypeOfModality());
+			this.spinnerCantDays.setValue(this.accommodationModality.getCantDaysAccommodation());
+			this.spinnerPrice.setValue(this.accommodationModality.getPrice());
+			this.lblAdd.setText("UPDATE");
+		}
+		else // Add
+			this.lblAdd.setText("ADD");
 	}
 
 	private void llenarComboBoxTypeOfRoom () {
@@ -204,10 +273,10 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 			this.comboBoxMealPlan.addItem(mealPlan);
 		}
 	}
-	
+
 	private void llenarComboBoxHotelModality () {
 		ArrayList<HotelModality> hotelsModalitys = this.accommodationContract.getHotelsModalitiesHotel(); // se obtienen las modalidades hoteleras del hotel seleccionado en el contrato de alojamiento
-		
+
 		for (HotelModality hotelModality : hotelsModalitys) {
 			this.comboBoxHotelModality.addItem(hotelModality);
 		}
@@ -224,11 +293,25 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 					(HotelModality) this.comboBoxHotelModality.getSelectedItem(), (Integer) spinnerCantDays.getValue(), (Double) spinnerPrice.getValue()));
 		}
 
-		panelCreacionContratoAlojamientoAccommodationModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
+	}
+
+	private void updateAccommodationModality () throws SQLException {
+		if (this.accommodationContract.getId() != -1) { // si es distinto de -1 se trata de un objeto real, entonces se adiciona a la logica del negocio a la base de datos
+			this.accommodationContract.updateAccommodationModality(this.accommodationModality, (TypeOfRoom) comboBoxTypeOfRoom.getSelectedItem(), (HotelModality) this.comboBoxHotelModality.getSelectedItem(), 
+					(MealPlan) comboBoxMealPlan.getSelectedItem(), 
+					(Double) spinnerPrice.getValue(), (Integer) spinnerCantDays.getValue());
+		}
+		else { // se forma contraria se almacena solo en la logica del negocio
+			this.accommodationContract.updateAccommodationModalityLogic(this.accommodationModality, (TypeOfRoom) comboBoxTypeOfRoom.getSelectedItem(), (HotelModality) this.comboBoxHotelModality.getSelectedItem(), 
+					(MealPlan) comboBoxMealPlan.getSelectedItem(), 
+					(Double) spinnerPrice.getValue(), (Integer) spinnerCantDays.getValue());
+		}
+
 	}
 
 	private void cerrarFrame () {
 		frameGerenteCreacionContratoAlojamiento.setEnabled(true); // se vuelve a habilitar el frame
 		dispose(); // se cierra el frame actual
 	}
+
 }

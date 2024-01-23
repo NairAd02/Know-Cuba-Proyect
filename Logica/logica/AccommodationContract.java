@@ -10,6 +10,7 @@ import dao.AccommodationModalityDAO;
 import dao.SeasonDAO;
 import utils.AusentFilter;
 import utils.FiltersAccommodationModality;
+import utils.FiltersModality;
 import utils.FiltersSeasons;
 
 
@@ -53,16 +54,18 @@ public class AccommodationContract extends Contract {
 	// Metodos para el control de las modalidades
 
 
-	public void updateAccommodationModality(AccommodationModality accommodationModality, TypeOfRoom typeOfRoom, MealPlan mealPlan, double price, int cantDaysAccommodation) throws SQLException {
+	public void updateAccommodationModality(AccommodationModality accommodationModality, TypeOfRoom typeOfRoom, HotelModality hotelModality,
+											MealPlan mealPlan, double price, int cantDaysAccommodation) throws SQLException {
 		// se actualiza la informacion a nivel de logica
-		this.updateAccommodationModalityLogic(accommodationModality, typeOfRoom, mealPlan, price, cantDaysAccommodation);
+		this.updateAccommodationModalityLogic(accommodationModality, typeOfRoom, hotelModality, mealPlan, price, cantDaysAccommodation);
 		accommodationModality.update(); // se actualiza la informacion de la modalidad en la base de datos
 	}
 
-	public void updateAccommodationModalityLogic(AccommodationModality accommodationModality, TypeOfRoom typeOfRoom, MealPlan mealPlan, double price, int cantDaysAccommodation) throws SQLException {
+	public void updateAccommodationModalityLogic(AccommodationModality accommodationModality, TypeOfRoom typeOfRoom, HotelModality hotelModality, MealPlan mealPlan, double price, int cantDaysAccommodation) throws SQLException {
 		// se actualiza la informacion a nivel de logica
 		accommodationModality.setTypeOfRoomSelect(typeOfRoom);
 		accommodationModality.setMealPlanSelect(mealPlan);
+		accommodationModality.setHotelModality(hotelModality);
 		accommodationModality.setPrice(price);
 		accommodationModality.setCantDaysAccommodation(cantDaysAccommodation);
 	}
@@ -177,20 +180,14 @@ public class AccommodationContract extends Contract {
 
 		// Se filtra por precio
 		if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
-			modalitys = FiltersAccommodationModality.filterPrice(modalitys, priceMin, priceMax); // se filtra por el rango de precios
-		else if (priceMin != AusentFilter.spinnerField)
-			modalitys = FiltersAccommodationModality.filterPrice(modalitys, priceMin, Double.MAX_VALUE); // solo se filtra por el precio minimo
-		else if (priceMax != AusentFilter.spinnerField)
-			modalitys = FiltersAccommodationModality.filterPrice(modalitys, Double.MIN_VALUE, priceMax); // solo se filtra por el precio maximo
+			modalitys = FiltersModality.filterPrice(modalitys, priceMin, priceMax); // se filtra por el rango de precios
+
 
 		// Se filtra por cantidad de dias de alojamiento
 
 		if (cantDaysAccommodationMin != AusentFilter.spinnerField && cantDaysAccommodationMax != AusentFilter.spinnerField)
 			modalitys = FiltersAccommodationModality.filterCantDaysAccommodations(modalitys, cantDaysAccommodationMin, cantDaysAccommodationMax); // se filtra por el rango de dias
-		else if (cantDaysAccommodationMin != AusentFilter.spinnerField)
-			modalitys = FiltersAccommodationModality.filterCantDaysAccommodations(modalitys, cantDaysAccommodationMin, Integer.MAX_VALUE); // se filtra por la cantidad de dias de alojamiento minima
-		else if (cantDaysAccommodationMax != AusentFilter.spinnerField)
-			modalitys = FiltersAccommodationModality.filterCantDaysAccommodations(modalitys, Integer.MIN_VALUE, cantDaysAccommodationMax); // se filtra por la cantidad de dias de alojamiento maxima
+
 
 		return modalitys;
 	}

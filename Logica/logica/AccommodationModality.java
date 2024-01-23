@@ -45,6 +45,16 @@ public class AccommodationModality extends Modality {
         this.typeOfModality = "Accommodation Modality";
     }
 
+    public void actualizarCampos (Contract contract, String typeOfModality, TypeOfRoom typeOfRoomSelect,
+                                  MealPlan mealPlanSelect, HotelModality hotelModality, int cantDaysAccommodation, double price ) { // Metodo para actualizar los atributos de la clase
+        super.actualizarCampos(contract, typeOfModality);
+        this.typeOfRoomSelect = typeOfRoomSelect;
+        this.mealPlanSelect = mealPlanSelect;
+        this.hotelModality = hotelModality;
+        this.cantDaysAccommodation = cantDaysAccommodation;
+        this.price = price;
+    }
+
 
     public TypeOfRoom getTypeOfRoomSelect() {
         return typeOfRoomSelect;

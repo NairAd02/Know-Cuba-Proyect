@@ -33,6 +33,7 @@ public class FrameChangeStatePassword extends JFrame {
 	private JLabel lblConfirm;
 	private FrameLogin frameLogin;
 	private int mouseX, mouseY;
+	private JTextPane txtpnEsUnPlacer;
 
 
 
@@ -42,7 +43,7 @@ public class FrameChangeStatePassword extends JFrame {
 		setResizable(false);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 440, 418);
+		setBounds(100, 100, 440, 391);
 		contentPane = new JPanel();
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -64,14 +65,15 @@ public class FrameChangeStatePassword extends JFrame {
 			}
 		});
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(18, 95, 115));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 		JLabel lblIntroductaNombreDe = new JLabel("Introduzca su nueva Contraseña:");
 		lblIntroductaNombreDe.setForeground(SystemColor.textText);
-		lblIntroductaNombreDe.setFont(new Font("Arial Black", Font.PLAIN, 14));
-		lblIntroductaNombreDe.setBounds(95, 228, 255, 21);
+		lblIntroductaNombreDe.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblIntroductaNombreDe.setBounds(83, 240, 274, 21);
 		contentPane.add(lblIntroductaNombreDe);
 
 		textFieldPassword = new JTextField();
@@ -80,7 +82,7 @@ public class FrameChangeStatePassword extends JFrame {
 		textFieldPassword.setFont(new Font("Tahoma", Font.BOLD, 12));
 		textFieldPassword.setColumns(10);
 		textFieldPassword.setBorder(new LineBorder(new Color(0, 0, 0)));
-		textFieldPassword.setBounds(10, 260, 420, 20);
+		textFieldPassword.setBounds(83, 281, 260, 20);
 		contentPane.add(textFieldPassword);
 
 		lblConfirm = new JLabel("CONFIRM");
@@ -111,7 +113,7 @@ public class FrameChangeStatePassword extends JFrame {
 		lblConfirm.setHorizontalAlignment(SwingConstants.CENTER);
 		lblConfirm.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblConfirm.setBackground(SystemColor.info);
-		lblConfirm.setBounds(10, 372, 142, 35);
+		lblConfirm.setBounds(52, 324, 142, 35);
 		contentPane.add(lblConfirm);
 
 		lblCancelar = new JLabel("CANCEL");
@@ -133,20 +135,24 @@ public class FrameChangeStatePassword extends JFrame {
 		lblCancelar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCancelar.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblCancelar.setBackground(SystemColor.info);
-		lblCancelar.setBounds(288, 372, 142, 35);
+		lblCancelar.setBounds(246, 324, 142, 35);
 		contentPane.add(lblCancelar);
 
 		JTextPane txtpnLeDamosLa = new JTextPane();
-		txtpnLeDamosLa.setText("Le damos la bienvenida al sistema.\r\nEs un placer para nosotros gestionar sus datos\r\n");
-		txtpnLeDamosLa.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		txtpnLeDamosLa.setBounds(10, 31, 420, 97);
+		txtpnLeDamosLa.setText("\u00A1 Bienvenido al Sistema !\r\n\r\n");
+		txtpnLeDamosLa.setForeground(SystemColor.textHighlightText);
+		txtpnLeDamosLa.setFont(new Font("Dialog", Font.PLAIN, 30));
+		txtpnLeDamosLa.setBackground(new Color(18, 95, 115));
+		txtpnLeDamosLa.setBounds(49, 26, 342, 41);
 		contentPane.add(txtpnLeDamosLa);
-
-		JTextPane txtpnPorFavorPara = new JTextPane();
-		txtpnPorFavorPara.setText("Por favor para logearse al sistema ha de introducir una contraseña\r\n");
-		txtpnPorFavorPara.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		txtpnPorFavorPara.setBounds(10, 139, 420, 69);
-		contentPane.add(txtpnPorFavorPara);
+		
+		txtpnEsUnPlacer = new JTextPane();
+		txtpnEsUnPlacer.setText("Es un placer para nosotros\r\n     gestionar sus datos.\r\nPor favor para logearse al \r\n      sistema introduzca\r\n       una contrase\u00C3\u00B1a\r\n");
+		txtpnEsUnPlacer.setForeground(SystemColor.textHighlightText);
+		txtpnEsUnPlacer.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		txtpnEsUnPlacer.setBackground(new Color(18, 95, 115));
+		txtpnEsUnPlacer.setBounds(98, 77, 260, 152);
+		contentPane.add(txtpnEsUnPlacer);
 	}
 
 	private boolean verificarCampos () {

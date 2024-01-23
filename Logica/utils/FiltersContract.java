@@ -54,7 +54,7 @@ public class FiltersContract {
 
         for (Integer i : keys) { // se itera la lista de llaves
             for (Contract contract : contracts.get(i)) { // se itera la lista de contratos asociada a cada clave
-                if (contract.getStartDate().isAfter(startDateMin) && contract.getStartDate().isBefore(startDateMax)) // si la fecha del contrato esta en rango
+                if ( (contract.getStartDate().isAfter(startDateMin) || contract.getStartDate().isEqual(startDateMin)) && (contract.getStartDate().isBefore(startDateMax) || contract.getStartDate().isEqual(startDateMax) ) ) // si la fecha del contrato esta en rango
                     contractsFilter.get(i).add(contract); // se añade el el contrato al mapa de filtro
             }
         }
@@ -70,7 +70,7 @@ public class FiltersContract {
 
         for (Integer i : keys) { // se itera la lista de llaves
             for (Contract contract : contracts.get(i)) { // se itera la lista de contratos asociada a cada clave
-                if (contract.getTerminationDate().isAfter(terminationDateMin) && contract.getTerminationDate().isBefore(terminationDateMax)) // si la fecha del contrato esta en rango
+                if ( (contract.getTerminationDate().isAfter(terminationDateMin) || contract.getTerminationDate().isEqual(terminationDateMin) ) && ( contract.getTerminationDate().isBefore(terminationDateMax) || contract.getTerminationDate().isEqual(terminationDateMax) )) // si la fecha del contrato esta en rango
                     contractsFilter.get(i).add(contract); // se añade el el contrato al mapa de filtro
             }
         }

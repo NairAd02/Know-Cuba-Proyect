@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import dao.TransportationProviderDAO;
 import dao.VehicleDAO;
-
+import utils.FiltersVehicle;
 
 
 public class TransportationProvider extends Provider {
@@ -78,6 +78,21 @@ public class TransportationProvider extends Provider {
 		// se actualizan los datos del vehiculo en la logica del negocio
 		vehicle.setLock(lock);
 	}
+
+	// Metodos para la obtencion de lo vehiculos
+    // metodo de obtencion con filtros
+	public ArrayList<Vehicle> getVehicles(String lock) {
+		ArrayList<Vehicle> vehicles = this.vehicles;
+		// Se aplican los filtros
+
+		// Filtro Chapa
+		if (lock != null)
+			vehicles = FiltersVehicle.filterLock(vehicles, lock); // filtran los vehiculos por la chapa
+
+		return vehicles;
+	}
+
+	// Metodos para la obtencion de lo vehiculos
 
 	// Fin Metodos para el control de los vehiculos
 

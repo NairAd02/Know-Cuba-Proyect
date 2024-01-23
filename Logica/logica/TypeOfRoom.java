@@ -14,6 +14,10 @@ public class TypeOfRoom implements DUILogic {
 		this.name = name;
 	}
 
+	public void actualizarCampos (String name) { // Metodo para actualizar los atributos de la clase
+		this.name = name;
+	}
+
 	public TypeOfRoom(String name) { // Constructor a nivel de logica
 		this.name = name;
 	}

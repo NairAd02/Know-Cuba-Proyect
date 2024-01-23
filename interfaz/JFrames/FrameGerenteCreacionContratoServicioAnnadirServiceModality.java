@@ -1,8 +1,6 @@
 package JFrames;
 
 import java.awt.Color;
-
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -22,10 +20,10 @@ import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends JFrame {
@@ -41,12 +39,15 @@ public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends 
 	private ServiceContract serviceContract;
 	private int mouseX, mouseY;
 	private JLabel lblX;
+	private ServiceModality serviceModality;
+	private JLabel lblRestore;
 
 
-	public FrameGerenteCreacionContratoServicioAnnadirServiceModality(PanelCreacionContratoServicioServiceModality pm) {
+	public FrameGerenteCreacionContratoServicioAnnadirServiceModality(PanelCreacionContratoServicioServiceModality pm, ServiceModality s) {
 		this.panelCreacionContratoAlojamientoServiceModality = pm;
 		this.frameGerenteCreacionContratoServivio = this.panelCreacionContratoAlojamientoServiceModality.getFrameGerenteCreacionContratoServivio();
 		this.serviceContract = this.panelCreacionContratoAlojamientoServiceModality.getServiceContract();
+		this.serviceModality = s;
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 305);
@@ -113,17 +114,32 @@ public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends 
 		lblStartDate.setBounds(82, 174, 77, 23);
 		contentPane.add(lblStartDate);
 
-		lblAdd = new JLabel("ADD");
+		lblAdd = new JLabel();
 		lblAdd.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (verificarCampos()) {
-					try {
-						addServiceModality();
-						cerrarFrame();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
+					if (serviceModality == null) { // Add
+						try {
+							addServiceModality();
+							panelCreacionContratoAlojamientoServiceModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
+							FramePrincipal.mostarFrameNotificacion("Ha sido insertada con éxito la modalidad"); // se notifica de la accion realiza al usuario
+							cerrarFrame();
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+					}
+					else { // Update
+						try {
+							updateServiceModality();
+							panelCreacionContratoAlojamientoServiceModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
+							FramePrincipal.mostarFrameNotificacion("Ha sido insertada con éxito la modalidad"); // se notifica de la accion realiza al usuario
+							cerrarFrame();
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+
 					}
 				}
 			}
@@ -162,14 +178,59 @@ public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends 
 		spinnerPrice.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerPrice.setBounds(267, 178, 100, 20);
 		contentPane.add(spinnerPrice);
-		
+
 		JLabel lblTransportationMode = new JLabel("Actividad Planificada");
 		lblTransportationMode.setForeground(SystemColor.textHighlightText);
 		lblTransportationMode.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblTransportationMode.setBounds(92, 8, 265, 30);
+		lblTransportationMode.setBounds(10, 8, 265, 30);
 		contentPane.add(lblTransportationMode);
 
+
+		this.definirComponentes();
 		this.llenarComboboxActivities();
+		this.definirTextos();
+	}
+
+	private void definirComponentes () {
+		if (this.serviceModality != null) // Update
+			this.addLblRestore();
+	}
+
+	private void addLblRestore () {
+		lblRestore = new JLabel("Restore");
+		lblRestore.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				restoreInformation();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+		});
+		lblRestore.setForeground(SystemColor.textHighlightText);
+		lblRestore.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblRestore.setBounds(309, 11, 77, 30);
+		contentPane.add(lblRestore);
+	}
+
+	private void restoreInformation () {
+		this.definirTextos();
+	}
+
+	private void definirTextos () {
+		if (this.serviceModality != null) { // Update
+			this.comboBoxActivities.setSelectedItem(this.serviceModality.getActivity());
+			this.dateChooserReleaseDate.setDate(Date.from(this.serviceModality.getReleasedDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			this.spinnerPrice.setValue(this.serviceModality.price());
+			this.lblAdd.setText("UPDATE");
+		}
+		else // Add
+			this.lblAdd.setText("ADD");
 	}
 
 	private void llenarComboboxActivities () {
@@ -194,7 +255,18 @@ public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends 
 					dateChooserReleaseDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), (Double) spinnerPrice.getValue()));
 		}
 
-		panelCreacionContratoAlojamientoServiceModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
+	}
+
+	private void updateServiceModality () throws SQLException {
+		if (this.serviceContract.getId() != -1) { // si es distinto de -1 se trata de un objeto real, entonces se adiciona a la logica del negocio a la base de datos
+			this.serviceContract.updateServiceModality(this.serviceModality, (Activity) comboBoxActivities.getSelectedItem(), 
+					dateChooserReleaseDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), (Double) spinnerPrice.getValue());
+		}
+		else { // se forma contraria se almacena solo en la logica del negocio
+			this.serviceContract.updateServiceModalityLogic(this.serviceModality, (Activity) comboBoxActivities.getSelectedItem(), 
+					dateChooserReleaseDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), (Double) spinnerPrice.getValue());
+		}
+
 	}
 
 	private void cerrarFrame () {

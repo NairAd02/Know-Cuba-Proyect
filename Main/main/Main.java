@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-
 import JFrames.FrameLogin;
 import utils.ConnectionDataBase;
 

@@ -4,6 +4,7 @@ import java.awt.Color;
 
 
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -35,10 +36,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
 import java.awt.Cursor;
 import javax.swing.border.MatteBorder;
+import javax.swing.ImageIcon;
 
 public class FrameGerenteCreacionContratoServivio extends JFrame {
 
@@ -59,6 +59,7 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 	private JLabel lblProviderContratado;
 	private JLabel lblRestore;
 	private JLabel lblX;
+	private JLabel lblNewLabel;
 
 	public ServiceContract getServiceContract() {
 		return serviceContract;
@@ -197,6 +198,7 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 						try {
 							addServiceContract();
 							ConnectionDataBase.commit(); // se confirman las operaciones realizadas sobre la base de datos
+							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
 							cerrarFrame();
 						} catch (SQLException e1) {
 							try {
@@ -213,6 +215,8 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 						try {
 							updateServiceContract();
 							ConnectionDataBase.commit(); // se confirman las operaciones realizadas sobre la base de datos
+							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
+							FramePrincipal.mostarFrameNotificacion("Ha sido modificada correctamente la información del contrato de servicio: " + serviceContract.getId()); // se notifica de la accion realizada al usuario
 							cerrarFrame();
 						} catch (SQLException e1) {
 							try {
@@ -309,6 +313,11 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 		lblShowServicesModalities.setBackground(SystemColor.info);
 		panelServiceContract.add(lblShowServicesModalities);
 
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(FrameGerenteCreacionContratoServivio.class.getResource("/images/Logo 38x38.png")));
+		lblNewLabel.setBounds(10, 16, 38, 38);
+		panelServiceContract.add(lblNewLabel);
+
 
 
 
@@ -322,6 +331,7 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				restoreInformation(); // se restaura la informacion del contrato
+				FramePrincipal.mostarFrameNotificacion("Los datos del contrato de servicio: " + serviceContract.getId() + " han sido restaurados con éxito"); // se notifica de la accion realizada al usuario
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -402,17 +412,17 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 
 
 	private void addServiceContract () throws SQLException  { // Modo add
-		Controller.getInstancie().getTouristAgency().addContract(new ServiceContract(dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
+		ServiceContract serviceContract = new ServiceContract(dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
 				dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), textPaneDescription.getText(), this.serviceContract.getProvider(), 
-				this.serviceContract.getModalitys(), (Double) spinnerRecargo.getValue())); // se inserta el contrato de servicio a nivel de base de datos
-		panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
+				this.serviceContract.getModalitys(), (Double) spinnerRecargo.getValue());
 
+		Controller.getInstancie().getTouristAgency().addContract(serviceContract); // se inserta el contrato de servicio a nivel de base de datos
+		FramePrincipal.mostarFrameNotificacion("Ha sido insertado correctamente el contrato de servicio: " + serviceContract.getId()); // se notifica de la accion realizada al usuario
 	}
 
 	public void updateServiceContract () throws SQLException { // Modo update
 		Controller.getInstancie().getTouristAgency().updateContract(serviceContract, dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
 				dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), textPaneDescription.getText(), (Double) spinnerRecargo.getValue());
-		panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
 	}
 
 	private void definirTexto () {

@@ -90,6 +90,11 @@ public class FramePrincipal extends JFrame {
 	public static void destruirInstancia () {
 		frameGerente = null;
 	}
+	
+	public static void mostarFrameNotificacion (String mensaje) {
+		FrameAdvertencia frameAdvertencia = new FrameAdvertencia(mensaje);
+		frameAdvertencia.setVisible(true);
+	}
 
 
 	private void crearFrameDecisor () {

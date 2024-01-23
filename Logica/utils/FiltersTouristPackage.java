@@ -23,7 +23,7 @@ public class FiltersTouristPackage {
         ArrayList<TouristPackage> touristPackagesFilter = new ArrayList<>();
 
         for (TouristPackage touristPackage : touristPackages) {
-            if (touristPackage.getStartDate().isAfter(startDateMin) && touristPackage.getStartDate().isBefore(startDateMax)) // si se encuentra un paquete turistico con la fecha de inicio en el rango de fechas
+            if ( (touristPackage.getStartDate().isAfter(startDateMin) || touristPackage.getStartDate().isEqual(startDateMin)  ) && (touristPackage.getStartDate().isBefore(startDateMax) || touristPackage.getStartDate().isEqual(startDateMax) )) // si se encuentra un paquete turistico con la fecha de inicio en el rango de fechas
                 touristPackagesFilter.add(touristPackage);
         }
 
@@ -34,7 +34,7 @@ public class FiltersTouristPackage {
         ArrayList<TouristPackage> touristPackagesFilter = new ArrayList<>();
 
         for (TouristPackage touristPackage : touristPackages) {
-            if (touristPackage.getTerminationDate().isAfter(terminationDateMin) && touristPackage.getTerminationDate().isBefore(terminationDateMax)) // si se encuentra un paquete turistico con la fecha de inicio en el rango de fechas
+            if ( (touristPackage.getTerminationDate().isAfter(terminationDateMin) || touristPackage.getTerminationDate().isEqual(terminationDateMin) ) && touristPackage.getTerminationDate().isBefore(terminationDateMax) || touristPackage.getTerminationDate().isEqual(terminationDateMax) ) // si se encuentra un paquete turistico con la fecha de inicio en el rango de fechas
                 touristPackagesFilter.add(touristPackage);
         }
 

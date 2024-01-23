@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import dao.ServiceContractDAO;
 import dao.ServiceModalityDAO;
 import utils.AusentFilter;
+import utils.FiltersModality;
 import utils.FiltersServiceModality;
 
 
@@ -104,11 +105,8 @@ public class ServiceContract extends Contract {
 
         // Filtro Precio
         if (precioMin != AusentFilter.spinnerField && precioMax != AusentFilter.spinnerField)
-            modalitys = FiltersServiceModality.filterPrice(modalitys, precioMin, precioMax); // se filtra por el rango de precios
-        else if (precioMin != AusentFilter.spinnerField)
-            modalitys = FiltersServiceModality.filterPrice(modalitys, precioMin, Double.MAX_VALUE);
-        else if (precioMax != AusentFilter.spinnerField)
-            modalitys = FiltersServiceModality.filterPrice(modalitys, Double.MIN_VALUE, precioMax);
+            modalitys = FiltersModality.filterPrice(modalitys, precioMin, precioMax); // se filtra por el rango de precios
+
 
         return modalitys;
     }

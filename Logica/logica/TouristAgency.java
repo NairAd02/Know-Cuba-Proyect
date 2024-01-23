@@ -290,12 +290,13 @@ public class TouristAgency {
 
     // Metodo de obtencion de modalidades de transporte de tipo costo por kilometraje con filtros
     public ArrayList<Modality> getTransportModalityCostKilometers(double costKilometersGoingMin, double costKilometersGoingMax, double costKilometersLapMin,
-                                                                  double costKilometersLapMax, double costHoursWaitMin, double costHoursWaitMax) { // Metodo para obtener todas las modalidades de transporte tipo costo por kilometraje de la agencia
+                                                                  double costKilometersLapMax, double costHoursWaitMin, double costHoursWaitMax,
+                                                                  double priceMin, double priceMax) { // Metodo para obtener todas las modalidades de transporte tipo costo por kilometraje de la agencia
         ArrayList<Modality> transportModalitysCostKilometers = new ArrayList<Modality>();
 
         for (Contract carrierContract : this.contracts.get(Contract.carrierContract)) {
             transportModalitysCostKilometers.addAll(((CarrierContract) carrierContract).getCostKilometers(costKilometersGoingMin, costKilometersGoingMax,
-                    costKilometersLapMin, costKilometersLapMax, costHoursWaitMin, costHoursWaitMax));
+                    costKilometersLapMin, costKilometersLapMax, costHoursWaitMin, costHoursWaitMax, priceMin, priceMax));
         }
 
         return transportModalitysCostKilometers;
@@ -303,23 +304,24 @@ public class TouristAgency {
 
     // Metodo de obtencion de modalidades de transporte de tipo horas por kilometraje con filtros
     public ArrayList<Modality> getTransportModalityHoursKilometers(double costKilometersRoutMin, double costKilometersRoutMax, double costHoursMin, double costHoursMax,
-                                                                   double costKilometersRoutAdditionalsMin, double costKilometersRoutAdditionalsMax, double costHoursAdditionalsMin, double costHoursAdditionalsMax) { // Metodo para obtener todas las modalidades de transporte tipo horas por kilometraje de la agencia
+                                                                   double costKilometersRoutAdditionalsMin, double costKilometersRoutAdditionalsMax, double costHoursAdditionalsMin, double costHoursAdditionalsMax,
+                                                                   double priceMin, double priceMax) { // Metodo para obtener todas las modalidades de transporte tipo horas por kilometraje de la agencia
         ArrayList<Modality> transportModalitysHoursKilometers = new ArrayList<Modality>();
 
         for (Contract carrierContract : this.contracts.get(Contract.carrierContract)) {
             transportModalitysHoursKilometers.addAll(((CarrierContract) carrierContract).getHoursKilometers(costKilometersRoutMin, costKilometersRoutMax, costHoursMin, costHoursMax,
-                    costKilometersRoutAdditionalsMin, costKilometersRoutAdditionalsMax, costHoursAdditionalsMin, costHoursAdditionalsMax));
+                    costKilometersRoutAdditionalsMin, costKilometersRoutAdditionalsMax, costHoursAdditionalsMin, costHoursAdditionalsMax, priceMin, priceMax));
         }
 
         return transportModalitysHoursKilometers;
     }
 
     // Metodo de obtencion de modalidades de transporte de tipo horas por kilometraje con filtros
-    public ArrayList<Modality> getTransportModalityEstablishedRoute(double costGoingMin, double costGoingMax, double costLapMin, double costLapMax) { // Metodo para obtener todas las modalidades de transporte tipo recorridos establecidos de la agencia
+    public ArrayList<Modality> getTransportModalityEstablishedRoute(double costGoingMin, double costGoingMax, double costLapMin, double costLapMax, double priceMin, double priceMax) { // Metodo para obtener todas las modalidades de transporte tipo recorridos establecidos de la agencia
         ArrayList<Modality> transportModalitysEstablishedRoute = new ArrayList<Modality>();
 
         for (Contract carrierContract : this.contracts.get(Contract.carrierContract)) {
-            transportModalitysEstablishedRoute.addAll(((CarrierContract) carrierContract).getEstablishedRoute(costGoingMin, costGoingMax, costLapMin, costLapMax));
+            transportModalitysEstablishedRoute.addAll(((CarrierContract) carrierContract).getEstablishedRoute(costGoingMin, costGoingMax, costLapMin, costLapMax, priceMin, priceMax));
         }
 
         return transportModalitysEstablishedRoute;
@@ -364,18 +366,12 @@ public class TouristAgency {
         // Filtro Price
         if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
             touristPackages = FiltersTouristPackage.filterPrice(touristPackages, priceMin, priceMax); // se filtra por el rango de precios
-        else if (priceMin != AusentFilter.spinnerField)
-            touristPackages = FiltersTouristPackage.filterPrice(touristPackages, priceMin, Double.MAX_VALUE); // se filtra por el precio minimo
-        else if (priceMax != AusentFilter.spinnerField)
-            touristPackages = FiltersTouristPackage.filterPrice(touristPackages, Double.MIN_VALUE, priceMax); // se filtra por el precio maximo
+
 
         // Filtro CantAviablePax
         if (cantAviablePaxMin != AusentFilter.spinnerField && cantAviablePaxMax != AusentFilter.spinnerField)
             touristPackages = FiltersTouristPackage.filterCantAviablePax(touristPackages, cantAviablePaxMin, cantAviablePaxMax); // se filtra por el rango de cantAviablePax
-        else if (cantAviablePaxMin != AusentFilter.spinnerField)
-            touristPackages = FiltersTouristPackage.filterCantAviablePax(touristPackages, cantAviablePaxMin, Integer.MAX_VALUE); // se filtra por el cantAviablePax minimo
-        else if (cantAviablePaxMax != AusentFilter.spinnerField)
-            touristPackages = FiltersTouristPackage.filterCantAviablePax(touristPackages, Integer.MIN_VALUE, cantAviablePaxMax); // se filtra por el cantAviablePax maximo
+
 
         return touristPackages;
 
@@ -384,15 +380,15 @@ public class TouristAgency {
     // Fin Metodos para la obtencion de los datos
 
     // Operaciones
-    public int cantServicesProviders () { // Metodo para obtener la cantidad de proveedores de servicio de la agencia
+    public int cantServicesProviders() { // Metodo para obtener la cantidad de proveedores de servicio de la agencia
         return this.providers.get(Provider.serviceProvider).size();
     }
 
-    public int cantAccommodationProviders () { // Metodo para obtener la cantidad de proveedores de alojamiento de la agencia
+    public int cantAccommodationProviders() { // Metodo para obtener la cantidad de proveedores de alojamiento de la agencia
         return this.providers.get(Provider.accommodationProvider).size();
     }
 
-    public int cantTransportProviders () { // Metodo para obtener la cantidad de proveedores de transporte de la agencia
+    public int cantTransportProviders() { // Metodo para obtener la cantidad de proveedores de transporte de la agencia
         return this.providers.get(Provider.transportationProvider).size();
     }
 
