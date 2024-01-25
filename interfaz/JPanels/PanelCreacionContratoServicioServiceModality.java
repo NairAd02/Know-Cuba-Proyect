@@ -326,7 +326,7 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 	}
 
 
-	private void llenarComboBoxActivities() {
+	private void llenarComboBoxActivities() { // Metodo para establecer la información que será mostrada en el comboBox activities
 		ArrayList<Activity> activities = this.serviceContract.getActivitiesServiceProvider();
 
 		comboBoxActivities.addItem(new Activity("All"));
@@ -444,7 +444,7 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 		this.actualizarEstadoButtons(); // se actualiza el estado de los botones
 	}
 
-	private Activity definirActivitySeleccionada() {
+	private Activity definirActivitySeleccionada() { // Metodo para definir la actividad seleccionada en el filtro de las actividades
 		Activity activity = (Activity) this.comboBoxActivities.getSelectedItem();
 
 		if (activity.getName().equalsIgnoreCase(AusentFilter.entintyField)) // si es igual a All

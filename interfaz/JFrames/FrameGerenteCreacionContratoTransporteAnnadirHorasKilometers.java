@@ -23,6 +23,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.MatteBorder;
 import javax.swing.ImageIcon;
+import java.awt.Cursor;
 
 public class FrameGerenteCreacionContratoTransporteAnnadirHorasKilometers extends JFrame implements AddTransportModalityOperations {
 
@@ -158,6 +159,8 @@ public class FrameGerenteCreacionContratoTransporteAnnadirHorasKilometers extend
 		panelHoursKilometersMode.add(spinnerCostKilometersRoutAdd);
 
 		lblAdd = new JLabel();
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAdd.setText("ADD");
 		lblAdd.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
@@ -226,6 +229,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirHorasKilometers extend
 		panelHoursKilometersMode.add(lblNewLabel);
 
 		lblSeccionVehicles = new JLabel("SECCION VEHICLES");
+		lblSeccionVehicles.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblSeccionVehicles.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {

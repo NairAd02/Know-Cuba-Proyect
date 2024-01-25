@@ -16,6 +16,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextField;
+import java.awt.Cursor;
 
 public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad extends JFrame {
 
@@ -89,10 +90,11 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 		JLabel lblDescription = new JLabel("DESCRIPTION :");
 		lblDescription.setForeground(SystemColor.textHighlightText);
 		lblDescription.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblDescription.setBounds(106, 127, 132, 23);
+		lblDescription.setBounds(80, 125, 262, 23);
 		contentPane.add(lblDescription);
 
 		JLabel lblAdd = new JLabel("ADD");
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -124,17 +126,17 @@ public class FrameGerenteAsociacionEmpresaProveedorServicioAnnadirActividad exte
 		contentPane.add(lblAdd);
 
 		textPaneActivityDescription = new JTextPane();
-		textPaneActivityDescription.setBounds(106, 161, 210, 78);
+		textPaneActivityDescription.setBounds(80, 159, 262, 78);
 		contentPane.add(textPaneActivityDescription);
 		
 		JLabel lblName = new JLabel("NAME :");
 		lblName.setForeground(SystemColor.textHighlightText);
 		lblName.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblName.setBounds(10, 88, 74, 23);
+		lblName.setBounds(80, 83, 74, 23);
 		contentPane.add(lblName);
 		
 		textFieldNameActivity = new JTextField();
-		textFieldNameActivity.setBounds(94, 92, 178, 20);
+		textFieldNameActivity.setBounds(164, 87, 178, 20);
 		contentPane.add(textFieldNameActivity);
 		textFieldNameActivity.setColumns(10);
 	}

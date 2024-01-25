@@ -24,6 +24,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.border.LineBorder;
+import java.awt.Cursor;
 
 public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 
@@ -151,6 +152,7 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 		scrollPane.setViewportView(tableVehicles);
 
 		lblAnnadir = new JLabel("ADD");
+		lblAnnadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -175,6 +177,7 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 		contentPane.add(lblAnnadir);
 
 		lblEliminar = new JLabel("DELETE");
+		lblEliminar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblEliminar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -283,7 +286,8 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporte extends JFrame {
 			nameButton = "ADD";
 		else
 			nameButton = "CONFIRM";
-		lblAdd = new JLabel(nameButton);
+		lblAdd = new JLabel("ADD");
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

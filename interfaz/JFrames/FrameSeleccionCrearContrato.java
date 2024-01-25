@@ -89,7 +89,7 @@ public class FrameSeleccionCrearContrato extends JFrame {
 
 		lblX = new JLabel("X");
 		lblX.setForeground(SystemColor.textHighlightText);
-		lblX.setFont(new Font("Tahoma", Font.PLAIN, 21));
+		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		lblX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

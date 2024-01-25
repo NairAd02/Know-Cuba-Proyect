@@ -15,6 +15,10 @@ public class PanelLienzoPaquetesTuristicos extends JPanel {
 		setBackground(SystemColor.inactiveCaptionBorder);
 		setLayout(null);
 	}
+	
+	public void clearElements () { // Metodo para eliminar todos los componenetes del panel
+		this.removeAll();
+	}
 
 	public void addPanelPaqueteTuristico(PanelPaqueteTuristico panelPaqueteTuristico){
 		Component[] componentes = getComponents();
@@ -28,15 +32,15 @@ public class PanelLienzoPaquetesTuristicos extends JPanel {
 
 
 		if(getComponentCount() == 0){
-			panelPaqueteTuristico.setLocation(56, 55);
+			panelPaqueteTuristico.setLocation(30, 55);
 
 		}
 		else{
-			if(getComponentCount() % 3 == 0){
-				panelPaqueteTuristico.setLocation(56, posicionExactaY + 50);
+			if(getComponentCount() % 2 == 0){
+				panelPaqueteTuristico.setLocation(30, posicionExactaY + 50);
 			}
 			else{
-				panelPaqueteTuristico.setLocation(ultimoElemento.getX() + 532, ultimoElemento.getY());
+				panelPaqueteTuristico.setLocation(ultimoElemento.getX() + ultimoElemento.getWidth() + 45, ultimoElemento.getY());
 			}
 		}
 

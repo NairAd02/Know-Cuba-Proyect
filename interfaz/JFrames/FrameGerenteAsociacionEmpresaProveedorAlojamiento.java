@@ -37,6 +37,7 @@ import javax.swing.border.LineBorder;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.SpinnerNumberModel;
+import java.awt.Cursor;
 
 public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
@@ -145,7 +146,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
-		JLabel lblAccommodationProvider = new JLabel("PROVEEDOR DE ALOJAMIENTO");
+		JLabel lblAccommodationProvider = new JLabel("ACCOMMODATION PROVIDER");
 		lblAccommodationProvider.setForeground(SystemColor.textHighlightText);
 		lblAccommodationProvider.setFont(new Font("Arial Black", Font.PLAIN, 19));
 		lblAccommodationProvider.setBounds(27, 11, 341, 30);
@@ -199,12 +200,12 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		JLabel lblRoomTypes = new JLabel("ROOM TYPES");
 		lblRoomTypes.setForeground(SystemColor.textHighlightText);
 		lblRoomTypes.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblRoomTypes.setBounds(27, 352, 118, 23);
+		lblRoomTypes.setBounds(65, 352, 118, 23);
 		contentPane.add(lblRoomTypes);
 
 
 		JPanel panelRoomTypes = new JPanel();
-		panelRoomTypes.setBounds(10, 386, 243, 113);
+		panelRoomTypes.setBounds(52, 386, 243, 113);
 		contentPane.add(panelRoomTypes);
 		panelRoomTypes.setLayout(new BorderLayout(0, 0));
 
@@ -222,6 +223,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		scrollPane.setViewportView(tableRoomTypes);
 
 		lblAnnadirTypeOfRoom = new JLabel("ADD");
+		lblAnnadirTypeOfRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAnnadirTypeOfRoom.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -244,10 +246,11 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblAnnadirTypeOfRoom.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAnnadirTypeOfRoom.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAnnadirTypeOfRoom.setBackground(SystemColor.info);
-		lblAnnadirTypeOfRoom.setBounds(155, 355, 38, 20);
+		lblAnnadirTypeOfRoom.setBounds(193, 355, 38, 20);
 		contentPane.add(lblAnnadirTypeOfRoom);
 
 		lblDeleteTypeOfRoom = new JLabel("DELETE");
+		lblDeleteTypeOfRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblDeleteTypeOfRoom.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -275,12 +278,12 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblDeleteTypeOfRoom.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDeleteTypeOfRoom.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblDeleteTypeOfRoom.setBackground(SystemColor.info);
-		lblDeleteTypeOfRoom.setBounds(200, 355, 57, 20);
+		lblDeleteTypeOfRoom.setBounds(238, 355, 57, 20);
 		contentPane.add(lblDeleteTypeOfRoom);
 
 
 		JPanel panelMealPlan = new JPanel();
-		panelMealPlan.setBounds(381, 386, 243, 113);
+		panelMealPlan.setBounds(347, 386, 243, 113);
 		contentPane.add(panelMealPlan);
 		panelMealPlan.setLayout(new BorderLayout(0, 0));
 
@@ -300,10 +303,11 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		JLabel lblMealPlan = new JLabel("MEAL PLAN");
 		lblMealPlan.setForeground(SystemColor.textHighlightText);
 		lblMealPlan.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblMealPlan.setBounds(404, 352, 118, 23);
+		lblMealPlan.setBounds(351, 352, 118, 23);
 		contentPane.add(lblMealPlan);
 
 		lblAddMealPlan = new JLabel("ADD");
+		lblAddMealPlan.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAddMealPlan.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -326,10 +330,11 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblAddMealPlan.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAddMealPlan.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAddMealPlan.setBackground(SystemColor.info);
-		lblAddMealPlan.setBounds(532, 355, 38, 20);
+		lblAddMealPlan.setBounds(485, 355, 38, 20);
 		contentPane.add(lblAddMealPlan);
 
 		lblDeleteMealPlan = new JLabel("DELETE");
+		lblDeleteMealPlan.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblDeleteMealPlan.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -357,7 +362,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblDeleteMealPlan.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDeleteMealPlan.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblDeleteMealPlan.setBackground(SystemColor.info);
-		lblDeleteMealPlan.setBounds(577, 355, 57, 20);
+		lblDeleteMealPlan.setBounds(533, 355, 57, 20);
 		contentPane.add(lblDeleteMealPlan);
 
 		this.addButtonADD();
@@ -393,7 +398,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 	}
 
 	private void addSeccionName() {
-		JLabel lblName = new JLabel("Nombre :");
+		JLabel lblName = new JLabel("Name :");
 		lblName.setForeground(SystemColor.textHighlightText);
 		lblName.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblName.setBounds(27, 66, 80, 23);
@@ -408,7 +413,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 	}
 
 	private void addSeccionProvince() {
-		JLabel lblProvince = new JLabel("Provincia :");
+		JLabel lblProvince = new JLabel("Province :");
 		lblProvince.setForeground(SystemColor.textHighlightText);
 		lblProvince.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblProvince.setBounds(27, 105, 109, 23);
@@ -416,39 +421,39 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		textFieldProvince = new JTextField();
 		textFieldProvince.setColumns(10);
-		textFieldProvince.setBounds(144, 106, 158, 20);
+		textFieldProvince.setBounds(148, 101, 158, 20);
 		contentPane.add(textFieldProvince);
 	}
 
 	private void addSeccionAddres() {
-		JLabel lblDireccion = new JLabel("Direccion :");
+		JLabel lblDireccion = new JLabel("Direction :");
 		lblDireccion.setForeground(SystemColor.textHighlightText);
 		lblDireccion.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblDireccion.setBounds(27, 222, 109, 23);
 		contentPane.add(lblDireccion);
 
 		textFieldDireccion = new JTextField();
-		textFieldDireccion.setBounds(129, 226, 146, 20);
+		textFieldDireccion.setBounds(160, 226, 146, 20);
 		contentPane.add(textFieldDireccion);
 		textFieldDireccion.setColumns(10);
 
 	}
 
 	private void addSeccionHotelChain() {
-		JLabel lblHotelChail = new JLabel("Cadena Hotelera :");
+		JLabel lblHotelChail = new JLabel("Hotel Chain :");
 		lblHotelChail.setForeground(SystemColor.textHighlightText);
 		lblHotelChail.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblHotelChail.setBounds(27, 144, 158, 23);
 		contentPane.add(lblHotelChail);
 
 		textFieldHotelChain = new JTextField();
-		textFieldHotelChain.setBounds(190, 148, 132, 20);
+		textFieldHotelChain.setBounds(174, 148, 132, 20);
 		contentPane.add(textFieldHotelChain);
 		textFieldHotelChain.setColumns(10);
 	}
 
 	private void addSeccionCategory() {
-		JLabel lblHotelCategory = new JLabel("Categoria Hotel :");
+		JLabel lblHotelCategory = new JLabel("Hotel Category :");
 		lblHotelCategory.setForeground(SystemColor.textHighlightText);
 		lblHotelCategory.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblHotelCategory.setBounds(27, 183, 158, 23);
@@ -456,7 +461,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		spinnerCategory = new JSpinner();
 		spinnerCategory.setModel(new SpinnerNumberModel(1, 1, 5, 1));
-		spinnerCategory.setBounds(185, 187, 57, 20);
+		spinnerCategory.setBounds(249, 187, 57, 20);
 		contentPane.add(spinnerCategory);
 
 	}
@@ -473,7 +478,8 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 			nameButton = "ADD";
 		else
 			nameButton = "UPDATE";
-		JLabel lblAdd = new JLabel(nameButton);
+		JLabel lblAdd = new JLabel("ADD");
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -531,10 +537,10 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAdd.setBackground(SystemColor.info);
-		lblAdd.setBounds(204, 702, 235, 35);
+		lblAdd.setBounds(223, 702, 197, 35);
 		contentPane.add(lblAdd);
 
-		JLabel lblTelefono = new JLabel("Telefono :");
+		JLabel lblTelefono = new JLabel("Phone :");
 		lblTelefono.setForeground(SystemColor.textHighlightText);
 		lblTelefono.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblTelefono.setBounds(332, 65, 97, 23);
@@ -542,7 +548,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		textFieldPhone = new JTextField();
 		textFieldPhone.setColumns(10);
-		textFieldPhone.setBounds(427, 69, 197, 20);
+		textFieldPhone.setBounds(417, 70, 197, 20);
 		contentPane.add(textFieldPhone);
 
 		JLabel lblFax = new JLabel("Fax :");
@@ -553,7 +559,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		textFieldFax = new JTextField();
 		textFieldFax.setColumns(10);
-		textFieldFax.setBounds(383, 108, 197, 20);
+		textFieldFax.setBounds(417, 109, 197, 20);
 		contentPane.add(textFieldFax);
 
 		JLabel lblEmail = new JLabel("Email :");
@@ -564,10 +570,10 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		textFieldEmail = new JTextField();
 		textFieldEmail.setColumns(10);
-		textFieldEmail.setBounds(396, 147, 197, 20);
+		textFieldEmail.setBounds(417, 148, 197, 20);
 		contentPane.add(textFieldEmail);
 
-		JLabel lblCantidadDeHabitaciones = new JLabel("Cant Habitaciones :");
+		JLabel lblCantidadDeHabitaciones = new JLabel("Number of Rooms :");
 		lblCantidadDeHabitaciones.setForeground(SystemColor.textHighlightText);
 		lblCantidadDeHabitaciones.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblCantidadDeHabitaciones.setBounds(332, 181, 181, 23);
@@ -575,20 +581,20 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		spinnerCantRooms = new JSpinner();
 		spinnerCantRooms.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-		spinnerCantRooms.setBounds(513, 187, 57, 20);
+		spinnerCantRooms.setBounds(557, 187, 57, 20);
 		contentPane.add(spinnerCantRooms);
 
-		JLabel lblCantPisos = new JLabel("Cant Pisos :");
+		JLabel lblCantPisos = new JLabel("Number of Floors :");
 		lblCantPisos.setForeground(SystemColor.textHighlightText);
 		lblCantPisos.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblCantPisos.setBounds(332, 219, 118, 23);
+		lblCantPisos.setBounds(332, 219, 168, 23);
 		contentPane.add(lblCantPisos);
 
 		spinnerCantFloors = new JSpinner();
-		spinnerCantFloors.setBounds(447, 226, 57, 20);
+		spinnerCantFloors.setBounds(557, 226, 57, 20);
 		contentPane.add(spinnerCantFloors);
 
-		JLabel lblLocalizacion = new JLabel("Localizacion :");
+		JLabel lblLocalizacion = new JLabel("Location :");
 		lblLocalizacion.setForeground(SystemColor.textHighlightText);
 		lblLocalizacion.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblLocalizacion.setBounds(27, 256, 132, 23);
@@ -596,10 +602,10 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		textFieldLocationHotel = new JTextField();
 		textFieldLocationHotel.setColumns(10);
-		textFieldLocationHotel.setBounds(156, 257, 146, 20);
+		textFieldLocationHotel.setBounds(160, 260, 146, 20);
 		contentPane.add(textFieldLocationHotel);
 
-		JLabel lblDistCiudadCercana = new JLabel("Dist Ciudad Cercana:");
+		JLabel lblDistCiudadCercana = new JLabel("Nearby City Dist :");
 		lblDistCiudadCercana.setForeground(SystemColor.textHighlightText);
 		lblDistCiudadCercana.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblDistCiudadCercana.setBounds(332, 256, 190, 23);
@@ -607,10 +613,10 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		spinnerDistanceNearestCity = new JSpinner();
 		spinnerDistanceNearestCity.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
-		spinnerDistanceNearestCity.setBounds(523, 260, 57, 20);
+		spinnerDistanceNearestCity.setBounds(557, 260, 57, 20);
 		contentPane.add(spinnerDistanceNearestCity);
 
-		JLabel lblDistAeropuerto = new JLabel("Dist Aeropuerto:");
+		JLabel lblDistAeropuerto = new JLabel("Airport Dist :");
 		lblDistAeropuerto.setForeground(SystemColor.textHighlightText);
 		lblDistAeropuerto.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblDistAeropuerto.setBounds(332, 302, 151, 23);
@@ -618,11 +624,11 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 
 		spinnerDistanceAirport = new JSpinner();
 		spinnerDistanceAirport.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
-		spinnerDistanceAirport.setBounds(479, 306, 57, 20);
+		spinnerDistanceAirport.setBounds(557, 306, 57, 20);
 		contentPane.add(spinnerDistanceAirport);
 
 		panelTableHotelModality = new JPanel();
-		panelTableHotelModality.setBounds(196, 550, 243, 113);
+		panelTableHotelModality.setBounds(174, 550, 295, 113);
 		contentPane.add(panelTableHotelModality);
 		panelTableHotelModality.setLayout(new BorderLayout(0, 0));
 
@@ -639,13 +645,14 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		tableHotelModality.setModel(new ModeloTablaHotelModality());
 		scrollPane.setViewportView(tableHotelModality);
 
-		JLabel lblModalidadesHotel = new JLabel("Modalidades Hotel");
+		JLabel lblModalidadesHotel = new JLabel("HOTEL MODALITIES");
 		lblModalidadesHotel.setForeground(SystemColor.textHighlightText);
 		lblModalidadesHotel.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblModalidadesHotel.setBounds(144, 516, 168, 23);
+		lblModalidadesHotel.setBounds(174, 516, 178, 23);
 		contentPane.add(lblModalidadesHotel);
 
 		lblAddHotelModality = new JLabel("ADD");
+		lblAddHotelModality.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAddHotelModality.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -666,10 +673,11 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblAddHotelModality.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAddHotelModality.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAddHotelModality.setBackground(SystemColor.info);
-		lblAddHotelModality.setBounds(348, 519, 38, 20);
+		lblAddHotelModality.setBounds(367, 516, 38, 20);
 		contentPane.add(lblAddHotelModality);
 
 		lblDeleteHotelModality = new JLabel("DELETE");
+		lblDeleteHotelModality.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblDeleteHotelModality.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -695,17 +703,17 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamiento extends JFrame {
 		lblDeleteHotelModality.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDeleteHotelModality.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblDeleteHotelModality.setBackground(SystemColor.info);
-		lblDeleteHotelModality.setBounds(393, 519, 57, 20);
+		lblDeleteHotelModality.setBounds(412, 516, 57, 20);
 		contentPane.add(lblDeleteHotelModality);
 
-		lblFechaDeConstruccion = new JLabel("Fecha Construccion:");
+		lblFechaDeConstruccion = new JLabel("Construction Date :");
 		lblFechaDeConstruccion.setForeground(SystemColor.textHighlightText);
 		lblFechaDeConstruccion.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblFechaDeConstruccion.setBounds(27, 302, 190, 23);
 		contentPane.add(lblFechaDeConstruccion);
 
 		dateChooserDateBuild = new JDateChooser();
-		dateChooserDateBuild.setBounds(220, 305, 102, 20);
+		dateChooserDateBuild.setBounds(204, 302, 102, 20);
 		contentPane.add(dateChooserDateBuild);
 
 

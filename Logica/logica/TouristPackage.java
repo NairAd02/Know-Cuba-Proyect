@@ -33,11 +33,11 @@ public class TouristPackage implements DUILogic, LikeName {
         this.modalitys = modalitys;
     }
 
-    public TouristPackage(String name, int cantMaxPax, int cantReserves, LocalDate startDate, LocalDate terminationDate, ArrayList<Modality> accommodationModalitys, ArrayList<Modality> serviceModalitys, ArrayList<Modality> transportModalitysCostKilometers,
+    public TouristPackage(String name, int cantMaxPax, LocalDate startDate, LocalDate terminationDate, ArrayList<Modality> accommodationModalitys, ArrayList<Modality> serviceModalitys, ArrayList<Modality> transportModalitysCostKilometers,
                           ArrayList<Modality> transportModalitysHoursKilometers, ArrayList<Modality> transportModalitysEstablishedRoute) { // Constructor a nivel de logica
         this.name = name;
         this.cantMaxPax = cantMaxPax;
-        this.cantReserves = cantReserves;
+        this.cantReserves = 0; // la cantidad de reservas de un paquete turistico en el momento de su construccion es 0
         this.startDate = startDate;
         this.terminationDate = terminationDate;
         this.construirHashMapModalitys(accommodationModalitys, serviceModalitys, transportModalitysCostKilometers, transportModalitysHoursKilometers, transportModalitysEstablishedRoute); // se construye el hashmap
@@ -239,7 +239,7 @@ public class TouristPackage implements DUILogic, LikeName {
     // Fin de Metodos para la obtencion de las modalidades de Servicio
 
     // Metodos para la obtencion de las modalidades de Alojamiento
-    public ArrayList<Modality> getAccommodationModalitys(TypeOfRoom typeOfRoom, MealPlan mealPlan, double priceMin, double priceMax, int cantDaysAccommodationMin, int cantDaysAccommodationMax) {
+    public ArrayList<Modality> getAccommodationModalitys(TypeOfRoom typeOfRoom, MealPlan mealPlan, HotelModality hotelModality, double priceMin, double priceMax, int cantDaysAccommodationMin, int cantDaysAccommodationMax) {
         ArrayList<Modality> modalitys = this.getModalitys(Modality.accommodationModality);
         // Se aplican los filtros
         // Filtro Tipo de Habitacion
@@ -248,6 +248,9 @@ public class TouristPackage implements DUILogic, LikeName {
         // Filtro plan Alimenticio
         if (mealPlan != null)
             modalitys = FiltersAccommodationModality.filterMealPlan(modalitys, mealPlan); // se filtra por plan alimenticio
+        //Filtro Modalidad Hotel
+        if (hotelModality != null)
+            modalitys = FiltersAccommodationModality.filterHotelModality(modalitys, hotelModality); // se filtra por modalidad de hotel
 
         // Se filtra por precio
         if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
@@ -335,7 +338,7 @@ public class TouristPackage implements DUILogic, LikeName {
     // Fin de Metodos para la obtencion de las modalidades de Transporte de Tipo Recorridos Establecidos
 
     // Metodo de obtencion con Filtros aplicados
-    public ArrayList<Modality> getEstablishedRoute(double costGoingMin, double costGoingMax, double costLapMin, double costLapMax, double priceMin, double priceMax) {
+    public ArrayList<Modality> getTransportModalitysEstablishedRoute(double costGoingMin, double costGoingMax, double costLapMin, double costLapMax, double priceMin, double priceMax) {
         ArrayList<Modality> establishedRouteList = this.getModalitys(Modality.establishedRoute);
 
         // Se aplican los filtros
@@ -463,6 +466,12 @@ public class TouristPackage implements DUILogic, LikeName {
         }
         return precio;
     }
+
+    public boolean verificarIntervaloFecha () { // Metodo para verificar si las fechas introducidas son correctas
+        return ( (this.startDate != null && this.terminationDate != null) && this.terminationDate.isAfter(this.startDate));
+    }
+
+  
 
     // Fin de Operaciones
 

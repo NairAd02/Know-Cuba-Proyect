@@ -361,16 +361,16 @@ public class PanelCreacionContratoContenedorTablaHoursKilometers extends JPanel 
 
 	@Override
 	public void restoreFilters() {
-		this.spinnerPriceMax.setValue(0);
-		this.spinnerPriceMin.setValue(0);
-		this.spinnerCostHoursAdditionalsMax.setValue(0);
-		this.spinnerCostHoursAdditionalsMin.setValue(0);
-		this.spinnerCostHoursMax.setValue(0);
-		this.spinnerCostHoursMin.setValue(0);
-		this.spinnerCostKilometersRoutMax.setValue(0);
-		this.spinnerCostKilometersRoutMin.setValue(0);
-		this.spinnerCostKilometersRoutAdditionalsMax.setValue(0);
-		this.spinnerCostKilometersRoutAdditionalsMin.setValue(0);
+		this.spinnerPriceMax.setValue(0.0);
+		this.spinnerPriceMin.setValue(0.0);
+		this.spinnerCostHoursAdditionalsMax.setValue(0.0);
+		this.spinnerCostHoursAdditionalsMin.setValue(0.0);
+		this.spinnerCostHoursMax.setValue(0.0);
+		this.spinnerCostHoursMin.setValue(0.0);
+		this.spinnerCostKilometersRoutMax.setValue(0.0);
+		this.spinnerCostKilometersRoutMin.setValue(0.0);
+		this.spinnerCostKilometersRoutAdditionalsMax.setValue(0.0);
+		this.spinnerCostKilometersRoutAdditionalsMin.setValue(0.0);
 	}
 	// Fin de Metodos para la actualizacion de la informacion de la tabla
 }

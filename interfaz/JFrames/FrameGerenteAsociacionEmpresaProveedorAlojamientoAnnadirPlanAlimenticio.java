@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.border.LineBorder;
+import java.awt.Cursor;
 
 public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirPlanAlimenticio extends JFrame {
 
@@ -105,6 +106,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirPlanAliment
 		contentPane.add(comboBoxMealPlans);
 
 		JLabel lblAdd = new JLabel("ADD");
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

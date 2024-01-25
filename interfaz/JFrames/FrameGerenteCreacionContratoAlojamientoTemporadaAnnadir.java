@@ -25,6 +25,7 @@ import java.util.Date;
 
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import java.awt.Cursor;
 
 public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFrame {
 
@@ -135,6 +136,8 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 		contentPane_1.add(lblTypeSeason);
 
 		lblAdd = new JLabel();
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAdd.setText("ADD");
 		lblAdd.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override

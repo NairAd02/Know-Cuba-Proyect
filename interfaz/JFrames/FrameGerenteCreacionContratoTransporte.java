@@ -33,6 +33,7 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.Insets;
 import javax.swing.border.MatteBorder;
 import javax.swing.ImageIcon;
+import java.awt.Cursor;
 
 public class FrameGerenteCreacionContratoTransporte extends JFrame {
 
@@ -169,6 +170,7 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 		panelTransportationContract.add(spinnerRecargo);
 
 		lblShowTransportationModalities = new JLabel("SHOW TRANSPORTATION MODALITIES");
+		lblShowTransportationModalities.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblShowTransportationModalities.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblShowTransportationModalities.addMouseListener(new MouseAdapter() {
 			@Override
@@ -189,10 +191,11 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 		lblShowTransportationModalities.setForeground(SystemColor.textText);
 		lblShowTransportationModalities.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblShowTransportationModalities.setBackground(SystemColor.info);
-		lblShowTransportationModalities.setBounds(10, 189, 348, 30);
+		lblShowTransportationModalities.setBounds(252, 189, 348, 30);
 		panelTransportationContract.add(lblShowTransportationModalities);
 
 		lblConfirm = new JLabel("CONFIRM");
+		lblConfirm.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblConfirm.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblConfirm.addMouseListener(new MouseAdapter() {
 			@Override

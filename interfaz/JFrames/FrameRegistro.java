@@ -28,6 +28,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.border.MatteBorder;
+import java.awt.Cursor;
 
 
 public class FrameRegistro extends JFrame {
@@ -117,6 +118,7 @@ public class FrameRegistro extends JFrame {
 		panel.add(labelBarraUserName);
 
 		labelAceptar = new JLabel("ACCEPT");
+		labelAceptar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		labelAceptar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -175,6 +177,7 @@ public class FrameRegistro extends JFrame {
 		panel.add(labelAceptar);
 
 		lblCancelar = new JLabel("CANCEL");
+		lblCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -199,7 +202,7 @@ public class FrameRegistro extends JFrame {
 		if (true) // add
 			this.addComboBoxRoles();
 
-		lblErrorCampos = new JLabel("Campo Obligatorio");
+		lblErrorCampos = new JLabel("Obligatory Field");
 		lblErrorCampos.setVisible(false);
 		lblErrorCampos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblErrorCampos.setForeground(SystemColor.red);

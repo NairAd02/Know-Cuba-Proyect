@@ -18,6 +18,7 @@ import dao.HotelModalityDAO;
 import logica.Hotel;
 import logica.HotelModality;
 import modelosTablas.ModeloTablaHotelModality;
+import java.awt.Cursor;
 
 
 public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirHotelModality extends JFrame {
@@ -60,7 +61,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirHotelModali
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblSelectMealPlan = new JLabel("SELECCION MODALIDAD HOTEL");
+		JLabel lblSelectMealPlan = new JLabel("HOTEL MODALITY SELECTION");
 		lblSelectMealPlan.setFont(new Font("Arial Black", Font.PLAIN, 19));
 		lblSelectMealPlan.setBounds(10, 8, 346, 30);
 		contentPane.add(lblSelectMealPlan);
@@ -87,7 +88,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirHotelModali
 		lblX.setBounds(384, 0, 38, 38);
 		contentPane.add(lblX);
 
-		JLabel lblTypesOfMeal = new JLabel("Modalidad Hotel :");
+		JLabel lblTypesOfMeal = new JLabel("Hotel Modality :");
 		lblTypesOfMeal.setForeground(SystemColor.info);
 		lblTypesOfMeal.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblTypesOfMeal.setBounds(27, 73, 162, 23);
@@ -103,6 +104,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirHotelModali
 		contentPane.add(comboBoxHotelModality);
 
 		JLabel lblAdd = new JLabel("ADD");
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

@@ -23,6 +23,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+import java.awt.Cursor;
 
 public class FrameChangeStatePassword extends JFrame {
 
@@ -34,6 +36,7 @@ public class FrameChangeStatePassword extends JFrame {
 	private FrameLogin frameLogin;
 	private int mouseX, mouseY;
 	private JTextPane txtpnEsUnPlacer;
+	private JPanel panel;
 
 
 
@@ -86,6 +89,7 @@ public class FrameChangeStatePassword extends JFrame {
 		contentPane.add(textFieldPassword);
 
 		lblConfirm = new JLabel("CONFIRM");
+		lblConfirm.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblConfirm.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -117,6 +121,7 @@ public class FrameChangeStatePassword extends JFrame {
 		contentPane.add(lblConfirm);
 
 		lblCancelar = new JLabel("CANCEL");
+		lblCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -153,6 +158,22 @@ public class FrameChangeStatePassword extends JFrame {
 		txtpnEsUnPlacer.setBackground(new Color(18, 95, 115));
 		txtpnEsUnPlacer.setBounds(98, 77, 260, 152);
 		contentPane.add(txtpnEsUnPlacer);
+		
+		JLabel lblX = new JLabel("X");
+		lblX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		lblX.setHorizontalAlignment(SwingConstants.CENTER);
+		lblX.setForeground(SystemColor.textHighlightText);
+		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		lblX.setBackground(SystemColor.menu);
+		lblX.setBounds(402, 0, 38, 38);
+		contentPane.add(lblX);
+		
+		panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
+		panel.setBackground(new Color(18, 95, 115));
+		panel.setBounds(0, 0, 440, 391);
+		contentPane.add(panel);
 	}
 
 	private boolean verificarCampos () {

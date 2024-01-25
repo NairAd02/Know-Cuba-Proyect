@@ -401,8 +401,8 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		this.comboBoxHotelModality.setSelectedIndex(0);
 		this.spinnerCantDaysAccommodationMin.setValue(0);
 		this.spinnerCantDaysAccommodationMax.setValue(0);
-		this.spinnerPriceMin.setValue(0);
-		this.spinnerPriceMax.setValue(0);
+		this.spinnerPriceMin.setValue(0.0);
+		this.spinnerPriceMax.setValue(0.0);
 		this.isRestore = false; // se indica que terminó la restauracion de los filtros
 		this.actualizarTablaModalitys(); // se actualiza la información de la tabla de las modalidades
 	}

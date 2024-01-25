@@ -8,6 +8,7 @@ import JPanels.PanelGerenteAsociacionEmpresaProveedorTransporte;
 import JPanels.PanelGerenteCreacionContrato;
 import JPanels.PanelGestionPaquetesTuristicos;
 import JPanels.PanelGestionUsuarios;
+import JPanels.PanelReporteGeneral;
 import logica.Administrator;
 import logica.Controller;
 import logica.Manager;
@@ -57,7 +58,8 @@ public class FramePrincipal extends JFrame {
 	private JLabel lblUsers;
 	private JLabel lblTouristPackage;
 	private JLabel lblSeccionTouristPackageDesing;
-	
+	private JLabel lblReport;
+
 
 	private class CerrarPrograma extends Thread { // Hilo para cerrar el programa
 		public void run () {
@@ -86,11 +88,11 @@ public class FramePrincipal extends JFrame {
 
 		return frameGerente;
 	}
-	
+
 	public static void destruirInstancia () {
 		frameGerente = null;
 	}
-	
+
 	public static void mostarFrameNotificacion (String mensaje) {
 		FrameAdvertencia frameAdvertencia = new FrameAdvertencia(mensaje);
 		frameAdvertencia.setVisible(true);
@@ -238,22 +240,24 @@ public class FramePrincipal extends JFrame {
 
 		this.addSecciones();
 
-		
+
 		this.definirColorLabelsSecciones(); // se actualizan los colores de los labels se de seleccion de las secciones
 
 	}
 
 	private void addSecciones () {
-		if (Controller.getInstancie().getUser() instanceof Administrator) { // si el usuario es administrador se añaden todas las secciones
+		if (true) { // si el usuario es administrador se añaden todas las secciones
 			this.addSeccionCreateContract(); // se añade la seccion de creacion de contratos
 			this.addSeccionAssociationCompany(); // se añade la seccion de asociasion con proveedores
 			this.addSeccionTouristPackageDesign(); // se añade la seccion de diseño de paquetes turisticos
 			this.addSeccionUsers(); // se añade la seccion de administracion de usarios
+			this.addLblReport(); // se añade el lbl para mostrar los reportes
 			this.contentPane.add(new PanelGerenteAsociacionEmpresaProveedorServicio(), BorderLayout.CENTER);
 		}
 		else if (Controller.getInstancie().getUser() instanceof Manager) { // si el usuario es manager se añaden las secciones de creacion de contrato y de asociacion con proveedores
 			this.addSeccionCreateContract(); // se añade la seccion de creacion de contratos
 			this.addSeccionAssociationCompany(); // se añade la seccion de asociasion con proveedores
+			this.addLblReport(); // se añade el lbl para mostrar los reportes
 			this.contentPane.add(new PanelGerenteAsociacionEmpresaProveedorServicio(), BorderLayout.CENTER);
 		}
 		else if (Controller.getInstancie().getUser() instanceof PackageDesigner) { // si el usuario es packageDisigner se añaden las secciones de gestión de paquetes turisticos
@@ -473,7 +477,36 @@ public class FramePrincipal extends JFrame {
 		lblUsers.setBounds(0, 525, 244, 38);
 		panelSecciones.add(lblUsers);
 
+	}
 
+	public void addLblReport () {
+
+		lblReport = new JLabel("REPORTS");
+		lblReport.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblReport.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				FrameSeleccionReporte frameSeleccionReporte = new FrameSeleccionReporte();
+				frameSeleccionReporte.setVisible(true);
+				setEnabled(false); // se inhabilita el frame principal
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+		});
+		lblReport.setOpaque(true);
+		lblReport.setHorizontalAlignment(SwingConstants.CENTER);
+		lblReport.setForeground(SystemColor.textText);
+		lblReport.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblReport.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
+		lblReport.setBackground(SystemColor.info);
+		lblReport.setBounds(14, 630, 250, 38);
+		panelSecciones.add(lblReport);
 	}
 
 	private void cerrarPrograma () {
@@ -490,13 +523,13 @@ public class FramePrincipal extends JFrame {
 			} 
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	private void cerrarSesionUser () throws SQLException {
-			Controller.getInstancie().getUser().cerrarConexion(); // se cierra sesión
+		Controller.getInstancie().getUser().cerrarConexion(); // se cierra sesión
 	}
-	
+
 	private void cerrarSesionPrograma () {
 		try {
 			this.cerrarSesionUser();
@@ -504,7 +537,7 @@ public class FramePrincipal extends JFrame {
 			destruirInstancia(); // se destruye la instancia de este frame
 			Controller.destruirInstancie(); // se destruye la instancia de la clase controladora
 			this.abrirFrameLogin(); // se abre el frame login
-			
+
 		} catch (SQLException e) {
 			try {
 				ConnectionDataBase.getConnectionDataBase().rollback(); // se cancelan todas las operaciones realizadas a la base de datos
@@ -515,12 +548,12 @@ public class FramePrincipal extends JFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void abrirFrameLogin () {
 		FrameLogin frameLogin = new FrameLogin();
 		frameLogin.setVisible(true);
 		dispose(); // se cierra el frame actual
-		
+
 	}
 
 	public void cambiarSeccion (JPanel seccion) {
@@ -562,7 +595,7 @@ public class FramePrincipal extends JFrame {
 		else if (Controller.getInstancie().getUser() instanceof PackageDesigner) {
 			this.definirColorLabelTouristPackage();
 		}
-		
+
 
 	}
 
@@ -643,5 +676,5 @@ public class FramePrincipal extends JFrame {
 			lblUsers.setForeground(SystemColor.textHighlightText);
 	}
 
-	
+
 }

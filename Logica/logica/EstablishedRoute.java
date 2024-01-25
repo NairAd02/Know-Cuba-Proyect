@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import dao.EstablishedRouteDAO;
 
-public class EstablishedRoute extends TransportModality {
+public class EstablishedRoute extends TransportModality  {
     private String descriptionRout;
     private double costGoing;
     private double costLap;

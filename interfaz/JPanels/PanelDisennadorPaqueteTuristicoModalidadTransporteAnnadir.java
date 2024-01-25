@@ -1,181 +1,91 @@
 package JPanels;
 
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
+import javax.swing.JPanel;
 import JFrames.FrameInformacionPaquete;
-import logica.Controller;
-import logica.CostKilometers;
-import logica.EstablishedRoute;
-import logica.HoursKilometers;
-import logica.Modality;
 import logica.TouristPackage;
-import modelosTablas.ModeloTablaTransportModalityCostKilometers;
-import modelosTablas.ModeloTablaTransportModalityEstablishedRoute;
-import modelosTablas.ModeloTablaTransportModalityHoursKilometers;
 import java.awt.Color;
+import java.awt.Component;
 import javax.swing.JLabel;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.ImageIcon;
-import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+
 
 public class PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTable tableAvailableTransportation;
-	private JTable tableAssignedTransports;
 	private int mouseX, mouseY;
 	private FrameInformacionPaquete frameInformacionPaquete;
 	private TouristPackage touristPackage;
-	private JLabel lblAnnadir;
-	private JLabel lblDenegar;
-	private JLabel lblConfirm;
-	private JLabel labelFlechaAterior;
-	private JLabel labelFlechaSiguiente;
-	private JLabel lblX;
-	private Deque<DefaultTableModel> previusModelsAssignedTransports;
-	private Deque<DefaultTableModel> nextsModelsAssignedTransports;
-	private Deque<DefaultTableModel> previusModelsAviableTransports;
-	private Deque<DefaultTableModel> nextsModelsAviableTransports;
+	private Deque<PanelTransportModalityTouristDesignerOperations> previusModels;
+	private Deque<PanelTransportModalityTouristDesignerOperations> nextsModels;
+	private PanelTransportModalityTouristDesignerOperations panelContenedorTablas;
 	private JLabel lblTitleTable;
+	private JLabel labelFlechaAnterior;
+	private JLabel labelFlechaSiguiente;
+	private JLabel lblAtras;
+
+
+
+	public TouristPackage getTouristPackage() {
+		return touristPackage;
+	}
+
+	public void setTouristPackage(TouristPackage touristPackage) {
+		this.touristPackage = touristPackage;
+	}
 
 
 	public PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir(FrameInformacionPaquete f) {
+		setBorder(new MatteBorder(3, 3, 3, 3, (Color) new Color(0, 0, 0)));
 		this.frameInformacionPaquete = f;
 		this.touristPackage = this.frameInformacionPaquete.getTouristPackage();
-	
-		setBounds(100, 100, 600, 360);
+		
+		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				int x= e.getXOnScreen();
+				int y= e.getYOnScreen();
+
+			frameInformacionPaquete.setLocation(x - mouseX , y - mouseY );
+			}
+		});
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
+				panelContenedorTablas.clearSelectionTable();
+				panelContenedorTablas.actualizarEstadosBotones();
+			}
+		});
+		setBounds(0, 0, 971, 591);
 		setLayout(null);
 		setBackground(new Color(18, 95, 115));
-		lblX = new JLabel("X");
-		lblX.addMouseListener(new MouseAdapter() {
+
+		JLabel lblTransportationSeccion = new JLabel("TRANSPORT SECCION");
+		lblTransportationSeccion.setForeground(SystemColor.textHighlightText);
+		lblTransportationSeccion.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblTransportationSeccion.setBounds(348, 5, 275, 20);
+		add(lblTransportationSeccion);
+
+		labelFlechaAnterior = new JLabel("");
+		labelFlechaAnterior.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				cerrarFrame(); // se cierra el frame actual
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				lblX.setForeground(SystemColor.red);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				lblX.setForeground(SystemColor.black);
-			}
-		});
-		lblX.setHorizontalAlignment(SwingConstants.CENTER);
-		lblX.setForeground(Color.BLACK);
-		lblX.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		lblX.setBackground(SystemColor.menu);
-		lblX.setBounds(562, 0, 38, 38);
-		add(lblX);
-
-		JLabel lblAvailableTransportation = new JLabel("AVAILABLE TRANSPORTATION");
-		lblAvailableTransportation.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblAvailableTransportation.setBounds(25, 11, 275, 19);
-		add(lblAvailableTransportation);
-
-		lblAnnadir = new JLabel("ASIGN");
-		lblAnnadir.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					asing();
-					actualizarEstadosBotones();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-		});
-		lblAnnadir.setOpaque(true);
-		lblAnnadir.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAnnadir.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblAnnadir.setBackground(SystemColor.info);
-		lblAnnadir.setBounds(435, 40, 155, 20);
-		add(lblAnnadir);
-
-		JLabel lblAssignedTransports = new JLabel("ASSIGNED TRANSPORTS");
-		lblAssignedTransports.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblAssignedTransports.setBounds(25, 173, 275, 19);
-		add(lblAssignedTransports);
-
-		lblDenegar = new JLabel("DENY");
-		lblDenegar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					deny();
-					actualizarEstadosBotones();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-		});
-		lblDenegar.setOpaque(true);
-		lblDenegar.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDenegar.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblDenegar.setBackground(SystemColor.info);
-		lblDenegar.setBounds(435, 183, 155, 20);
-		add(lblDenegar);
-
-		lblConfirm = new JLabel("CERRAR");
-		lblConfirm.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				cerrarFrame(); // se cierra el frame actual
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-		});
-		lblConfirm.setOpaque(true);
-		lblConfirm.setHorizontalAlignment(SwingConstants.CENTER);
-		lblConfirm.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblConfirm.setBackground(SystemColor.info);
-		lblConfirm.setBounds(182, 311, 235, 35);
-		add(lblConfirm);
-
-		labelFlechaAterior = new JLabel("");
-		labelFlechaAterior.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				if (labelFlechaAterior.isEnabled()) {
-					previusModel();
-					actualizarEstadosFlechas();
-					actualizarTablas();
+				if (labelFlechaAnterior.isEnabled()) {
+					previusPanel(); // realiza la operacion de asignar el modelo anterior
+					actualizarPanelTablaModality(); // se actualiza la informacion de la tabla anterior
+					actualizarEstadosFlechas(); // se actualiza el estado de las flechas para evitar inconsistencias
 					actualizarTextotTitleTable(); // se establece un nuevo texto para el titulo de la tabla de actuado al modelo actual
 				}
 			}
@@ -188,19 +98,26 @@ public class PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 
 			}
 		});
-		labelFlechaAterior.setIcon(new ImageIcon(FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir.class.getResource("/images/flecha_izquierda.png")));
-		labelFlechaAterior.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		labelFlechaAterior.setBounds(123, 44, 99, 12);
-		add(labelFlechaAterior);
+		labelFlechaAnterior.setIcon(new ImageIcon(PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir.class.getResource("/images/Left Arrow.png")));
+		labelFlechaAnterior.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		labelFlechaAnterior.setBounds(348, 31, 50, 20);
+		add(labelFlechaAnterior);
+
+		lblTitleTable = new JLabel("");
+		lblTitleTable.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitleTable.setForeground(SystemColor.textHighlightText);
+		lblTitleTable.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblTitleTable.setBounds(428, 26, 111, 30);
+		add(lblTitleTable);
 
 		labelFlechaSiguiente = new JLabel("");
 		labelFlechaSiguiente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (labelFlechaSiguiente.isEnabled()) {
-					nextModel();
-					actualizarEstadosFlechas();
-					actualizarTablas();
+					nextPanel(); // se realiza la operacion de asignar el modelo siguiente
+					actualizarPanelTablaModality(); // se actualiza la informacion de la tabla siguiente
+					actualizarEstadosFlechas(); // se actualiza el estado de las flechas para evitar inconsistencias
 					actualizarTextotTitleTable(); // se establece un nuevo texto para el titulo de la tabla de actuado al modelo actual
 				}
 			}
@@ -213,486 +130,121 @@ public class PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir extends J
 
 			}
 		});
-		labelFlechaSiguiente.setIcon(new ImageIcon(FrameDisennadorPaqueteTuristicoModalidadTransporteAnnadir.class.getResource("/images/flecha_derecha.png")));
+		labelFlechaSiguiente.setIcon(new ImageIcon(PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir.class.getResource("/images/Right Arrow.png")));
 		labelFlechaSiguiente.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		labelFlechaSiguiente.setBounds(257, 44, 99, 12);
+		labelFlechaSiguiente.setBounds(556, 31, 50, 20);
 		add(labelFlechaSiguiente);
-
-		JPanel panelAvailableTransportation = new JPanel();
-		panelAvailableTransportation.setBounds(10, 71, 580, 86);
-		add(panelAvailableTransportation);
-		panelAvailableTransportation.setLayout(new BorderLayout(0, 0));
-
-		JScrollPane scrollPane = new JScrollPane();
-		panelAvailableTransportation.add(scrollPane, BorderLayout.CENTER);
-
-		tableAvailableTransportation = new JTable();
-		tableAvailableTransportation.addMouseListener(new MouseAdapter() {
+		
+		lblAtras = new JLabel("");
+		lblAtras.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				actualizarEstadosBotones();
+				frameInformacionPaquete.cambioDePanel(frameInformacionPaquete.getPanelInformacionPaquetes()); // se ejecuta el cambio de panel
 			}
-		});
-		tableAvailableTransportation.setModel(new ModeloTablaTransportModalityCostKilometers());
-		scrollPane.setViewportView(tableAvailableTransportation);
-
-		JPanel panelAssignedTransports = new JPanel();
-		panelAssignedTransports.setOpaque(false);
-		panelAssignedTransports.setBounds(10, 214, 580, 86);
-		add(panelAssignedTransports);
-		panelAssignedTransports.setLayout(new BorderLayout(0, 0));
-
-		JScrollPane scrollPane_1 = new JScrollPane();
-		panelAssignedTransports.add(scrollPane_1, BorderLayout.CENTER);
-
-		tableAssignedTransports = new JTable();
-		tableAssignedTransports.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				actualizarEstadosBotones();
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
 			}
 		});
-		tableAssignedTransports.setModel(new ModeloTablaTransportModalityCostKilometers());
-		scrollPane_1.setViewportView(tableAssignedTransports);
+		lblAtras.setIcon(new ImageIcon(PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir.class.getResource("/images/Circled Right.png")));
+		lblAtras.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAtras.setForeground(Color.BLACK);
+		lblAtras.setFont(new Font("Arial Black", Font.PLAIN, 20));
+		lblAtras.setBackground(SystemColor.menu);
+		lblAtras.setBounds(10, 13, 53, 43);
+		add(lblAtras);
+		
+		this.inicializarSistemaDePaneles();
+	}
 
-		lblTitleTable = new JLabel("( Hours Kilometers ) ");
-		lblTitleTable.setFont(new Font("Arial Black", Font.PLAIN, 12));
-		lblTitleTable.setBounds(308, 5, 173, 30);
-		add(lblTitleTable);
-
-		this.actualizarTablas(); // se actualiza la informacion de las tablas
-		this.actualizarEstadosBotones();
+	private void inicializarSistemaDePaneles () {
+		this.panelContenedorTablas = new PanelPackageDisignerContenedorCostKilometers(PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir.this);
+		add ((Component) this.panelContenedorTablas);
 		this.inicializarPilas();
+		this.actualizarPanelTablaModality();
 		this.actualizarEstadosFlechas();
 		this.actualizarTextotTitleTable();
 	}
-
-	private void actualizarTablas () {
-		this.actualizarTablaAssignedTransportModality ();
-		this.actualizarTablaAviableTransporModality ();
-	}
-
-	private void actualizarTablaAssignedTransportModality () {
-		if (this.tableAssignedTransports.getModel() instanceof ModeloTablaTransportModalityCostKilometers)
-			this.actualizarTablaAssignedCostKilometers();
-
-		else if (this.tableAssignedTransports.getModel() instanceof ModeloTablaTransportModalityHoursKilometers)
-			this.actualizarTablaAssignedHoursKilometers();
-
-		else if (this.tableAssignedTransports.getModel() instanceof ModeloTablaTransportModalityEstablishedRoute)
-			this.actualizarTablaAssignedEstablishedRoute();
-	}
-
-	private void actualizarTablaAviableTransporModality () {
-		if (this.tableAvailableTransportation.getModel() instanceof ModeloTablaTransportModalityCostKilometers)
-			this.actualizarTablaAviableCostKilometers();
-
-		else if (this.tableAvailableTransportation.getModel() instanceof ModeloTablaTransportModalityHoursKilometers)
-			this.actualizarTablaAviableHoursKilometers();
-
-		else if (this.tableAvailableTransportation.getModel() instanceof ModeloTablaTransportModalityEstablishedRoute)
-			this.actualizarTablaAviableEstablishedRoute();
-
-	}
-
-	// Metodos de acutalizacion del modeloCostKilometers
-
-	// Metodos de actualizacion del modelo  tableAviavleTransporModality
-	private void actualizarTablaAviableCostKilometers () {	
-		this.actualizarTablaAviableCostKilometers(Controller.getInstancie().getTouristAgency().getTransportModalityCostKilometers());  // se obtienen todas las modalidades del alojamiento de la agencia turistica
-	}
-
-
-	private void actualizarTablaAviableCostKilometers(ArrayList<Modality> modalitys){
-		reiniciarTable(this.tableAvailableTransportation);
-
-
-		for (Modality mod : modalitys) {
-			if (!touristPackage.isContainsModality(Modality.costKilometers, mod))
-				((ModeloTablaTransportModalityCostKilometers) tableAvailableTransportation.getModel()).addElement((CostKilometers) mod); 
-		}
-	}
-
-	// Fin de Metodos de actualizacion de la tabla  tableAviavleTransporModality
-
-
-	private void actualizarTablaAssignedCostKilometers () {	
-		this.actualizarTablaAssignedCostKilometers(touristPackage.getModalitys(Modality.costKilometers)); // se obtienen todas las modalidades de transporte de tipo costKilometers pertenecientes al paquete turistico
-	}
-
-	// Metodos de actualizacion de la tabla  tableAssignedTransporModality
-	private void actualizarTablaAssignedCostKilometers(ArrayList<Modality> modalitys){
-		reiniciarTable(this.tableAssignedTransports);
-
-
-		for (Modality mod : modalitys) {
-			((ModeloTablaTransportModalityCostKilometers) tableAssignedTransports.getModel()).addElement((CostKilometers) mod);
-		}
-	}
-
-	// Fin de Metodos de actualizacion de la tabla  tableAssignedTransporModality
-
-	// Fin de Metodos de acutalizacion del modeloCostKilometers
-
-	// Metodos de acutalizacion del modeloHoursKilometers
-
-	// Metodos de actualizacion del modelo  tableAviavleTransporModality
-	private void actualizarTablaAviableHoursKilometers () {	
-		this.actualizarTablaAviableHoursKilometers(Controller.getInstancie().getTouristAgency().getTransportModalityHoursKilometers());  // se obtienen todas las modalidades de transporte de tipo hours de la agencia turistica
-	}
-
-
-	private void actualizarTablaAviableHoursKilometers(ArrayList<Modality> modalitys){
-		reiniciarTable(this.tableAvailableTransportation);
-
-
-		for (Modality mod : modalitys) {
-			if (!touristPackage.isContainsModality(Modality.hoursKilometers, mod))
-				((ModeloTablaTransportModalityHoursKilometers) tableAvailableTransportation.getModel()).addElement((HoursKilometers) mod); 
-		}
-	}
-
-	// Fin de Metodos de actualizacion de la tabla  tableAviavleTransporModality
-
-
-	private void actualizarTablaAssignedHoursKilometers () {	
-		this.actualizarTablaAssignedHoursKilometers(touristPackage.getModalitys(Modality.hoursKilometers)); // se obtienen todas las modalidades de transporte tipo hours pertenecientes al paquete turistico
-	}
-
-	// Metodos de actualizacion de la tabla  tableAssignedTransporModality
-	private void actualizarTablaAssignedHoursKilometers(ArrayList<Modality> modalitys){
-		reiniciarTable(this.tableAssignedTransports);
-
-
-		for (Modality mod : modalitys) {
-			((ModeloTablaTransportModalityHoursKilometers) tableAssignedTransports.getModel()).addElement((HoursKilometers) mod);
-		}
-	}
-
-	// Fin de Metodos de actualizacion de la tabla  tableAssignedTransporModality
-
-	// Fin de Metodos de acutalizacion del modeloHoursKilometers
-
-
-	// Metodos de acutalizacion del modeloEstablishedRoute
-
-	// Metodos de actualizacion del modelo  tableAviavleTransporModality
-	private void actualizarTablaAviableEstablishedRoute () {	
-		this.actualizarTablaAviableEstablishedRoute(Controller.getInstancie().getTouristAgency().getTransportModalityEstablishedRoute());  // se obtienen todas las modalidades de transporte de tipo hours de la agencia turistica
-	}
-
-
-	private void actualizarTablaAviableEstablishedRoute(ArrayList<Modality> modalitys){
-		reiniciarTable(this.tableAvailableTransportation);
-
-
-		for (Modality mod : modalitys) {
-			if (!touristPackage.isContainsModality(Modality.establishedRoute, mod))
-				((ModeloTablaTransportModalityEstablishedRoute) tableAvailableTransportation.getModel()).addElement((EstablishedRoute) mod); 
-		}
-	}
-
-	// Fin de Metodos de actualizacion de la tabla  tableAviavleTransporModality
-
-
-	private void actualizarTablaAssignedEstablishedRoute () {	
-		this.actualizarTablaAssignedEstablishedRoute(touristPackage.getModalitys(Modality.establishedRoute)); // se obtienen todas las modalidades de transporte tipo recorridos establecidos pertenecientes al paquete turistico
-	}
-
-	// Metodos de actualizacion de la tabla  tableAssignedTransporModality
-	private void actualizarTablaAssignedEstablishedRoute(ArrayList<Modality> modalitys){
-		reiniciarTable(this.tableAssignedTransports);
-
-
-		for (Modality mod : modalitys) {
-			((ModeloTablaTransportModalityEstablishedRoute) tableAssignedTransports.getModel()).addElement((EstablishedRoute) mod);
-		}
-	}
-
-	// Fin de Metodos de actualizacion de la tabla  tableAssignedTransporModality
-
-	// Fin de Metodos de acutalizacion del modeloEstablishedRoute
-
-
-	
-	private void reiniciarTable(JTable table){
-
-		if (table.getModel() instanceof ModeloTablaTransportModalityCostKilometers)
-			this.reiniciarTableCostKilometers(table);
-		
-		else if (table.getModel() instanceof ModeloTablaTransportModalityHoursKilometers)
-			this.reiniciarTableHoursKilometers(table);
-		
-		else if (table.getModel() instanceof ModeloTablaTransportModalityEstablishedRoute)
-			this.reiniciarTableEstablishedRoute(table);
-	}
-
-	private void reiniciarTableHoursKilometers (JTable table) {
-		for(int i=0;table.getRowCount()!=0;i++){
-			i=0;
-			((ModeloTablaTransportModalityHoursKilometers) table.getModel()).deleteElement(i);
-		}
-	}
-
-	private void reiniciarTableCostKilometers (JTable table) {
-		for(int i=0;table.getRowCount()!=0;i++){
-			i=0;
-			((ModeloTablaTransportModalityCostKilometers) table.getModel()).deleteElement(i);
-		}
-	}
-	
-	private void reiniciarTableEstablishedRoute (JTable table) {
-		for(int i=0;table.getRowCount()!=0;i++){
-			i=0;
-			((ModeloTablaTransportModalityEstablishedRoute) table.getModel()).deleteElement(i);
-		}
-	}
-
-
-	// Operaciones
-
-	private void asing () throws SQLException {
-		if (this.tableAvailableTransportation.getModel() instanceof ModeloTablaTransportModalityCostKilometers)
-			this.asignCostKilometers();
-
-		else if (this.tableAvailableTransportation.getModel() instanceof ModeloTablaTransportModalityHoursKilometers)
-			this.asignHoursKilometers();
-
-		else if (this.tableAvailableTransportation.getModel() instanceof ModeloTablaTransportModalityEstablishedRoute)
-			this.asignEstablishedRoute();
-	}
-
-	private void deny () throws SQLException {
-		if (this.tableAssignedTransports.getModel() instanceof ModeloTablaTransportModalityCostKilometers)
-			this.denyCostKilometers();
-
-		else if (this.tableAssignedTransports.getModel() instanceof ModeloTablaTransportModalityHoursKilometers)
-			this.denyHoursKilometers();
-
-		else if (this.tableAssignedTransports.getModel() instanceof ModeloTablaTransportModalityEstablishedRoute)
-			this.denyEstablishedRoute();
-	}
-
-	// Operaciones Modelo CostKilometers
-
-	private void asignCostKilometers () throws SQLException  { // Metodo para asignar las modalidades tipo costKilometers seleccionadas al paquete
-		int [] rows = this.tableAvailableTransportation.getSelectedRows();
-
-		for (int i = 0; i < rows.length; i++) {
-			if (this.touristPackage.getId() != -1) 
-				this.touristPackage.addModality(((ModeloTablaTransportModalityCostKilometers) this.tableAvailableTransportation.getModel()).getElement(rows[i])); // se asigna a las base de datos y a la logica del negocio
-			else
-				this.touristPackage.addModalityLogic(((ModeloTablaTransportModalityCostKilometers) this.tableAvailableTransportation.getModel()).getElement(rows[i])); // se asigna solo en la logica del negocio
-		}
-
-		this.actualizarTablas(); // se actualiza la informacion de las dos tablas
-	}
-
-
-
-	private void denyCostKilometers () throws SQLException { // Metodo para desasignar las modalidades tipo costKilometers seleccionadas del paquete
-		int [] rows = this.tableAssignedTransports.getSelectedRows();
-
-		for (int i = 0; i < rows.length; i++) {
-			if (this.touristPackage.getId() != -1) 
-				this.touristPackage.deleteModality(((ModeloTablaTransportModalityCostKilometers) this.tableAssignedTransports.getModel()).getElement(rows[i])); // se elimina a las base de datos y a la logica del negocio
-			else
-				this.touristPackage.deleteModalityLogic(((ModeloTablaTransportModalityCostKilometers) this.tableAssignedTransports.getModel()).getElement(rows[i])); // se elimina solo en la logica del negocio
-		}
-
-		this.actualizarTablas(); // se actualiza la informacion de las dos tablas
-	}
-
-	// Fin de Operaciones Modelo CostKilometers
-
-	// Operaciones Modelo HoursKilometers
-
-	private void asignHoursKilometers () throws SQLException  { // Metodo para asignar las modalidades tipo costKilometers seleccionadas al paquete
-		int [] rows = this.tableAvailableTransportation.getSelectedRows();
-
-		for (int i = 0; i < rows.length; i++) {
-			if (this.touristPackage.getId() != -1) 
-				this.touristPackage.addModality(((ModeloTablaTransportModalityHoursKilometers) this.tableAvailableTransportation.getModel()).getElement(rows[i])); // se asigna a las base de datos y a la logica del negocio
-			else
-				this.touristPackage.addModalityLogic(((ModeloTablaTransportModalityHoursKilometers) this.tableAvailableTransportation.getModel()).getElement(rows[i])); // se asigna solo en la logica del negocio
-		}
-
-		this.actualizarTablas(); // se actualiza la informacion de las dos tablas
-	}
-
-
-	private void denyHoursKilometers () throws SQLException { // Metodo para desasignar las modalidades tipo costKilometers seleccionadas del paquete
-		int [] rows = this.tableAssignedTransports.getSelectedRows();
-
-		for (int i = 0; i < rows.length; i++) {
-			if (this.touristPackage.getId() != -1) 
-				this.touristPackage.deleteModality(((ModeloTablaTransportModalityHoursKilometers) this.tableAssignedTransports.getModel()).getElement(rows[i])); // se elimina a las base de datos y a la logica del negocio
-			else
-				this.touristPackage.deleteModalityLogic(((ModeloTablaTransportModalityHoursKilometers) this.tableAssignedTransports.getModel()).getElement(rows[i])); // se elimina solo en la logica del negocio
-		}
-
-		this.actualizarTablas(); // se actualiza la informacion de las dos tablas
-	}
-
-	// Fin de Operaciones Modelo HoursKilometers
-
-	// Operaciones Modelo EstablishedRoute
-
-	private void asignEstablishedRoute () throws SQLException  { // Metodo para asignar las modalidades tipo costKilometers seleccionadas al paquete
-		int [] rows = this.tableAvailableTransportation.getSelectedRows();
-
-		for (int i = 0; i < rows.length; i++) {
-			if (this.touristPackage.getId() != -1) 
-				this.touristPackage.addModality(((ModeloTablaTransportModalityEstablishedRoute) this.tableAvailableTransportation.getModel()).getElement(rows[i])); // se asigna a las base de datos y a la logica del negocio
-			else
-				this.touristPackage.addModalityLogic(((ModeloTablaTransportModalityEstablishedRoute) this.tableAvailableTransportation.getModel()).getElement(rows[i])); // se asigna solo en la logica del negocio
-		}
-
-		this.actualizarTablas(); // se actualiza la informacion de las dos tablas
-	}
-
-
-	private void denyEstablishedRoute () throws SQLException { // Metodo para desasignar las modalidades tipo costKilometers seleccionadas del paquete
-		int [] rows = this.tableAssignedTransports.getSelectedRows();
-
-		for (int i = 0; i < rows.length; i++) {
-			if (this.touristPackage.getId() != -1) 
-				this.touristPackage.deleteModality(((ModeloTablaTransportModalityEstablishedRoute) this.tableAssignedTransports.getModel()).getElement(rows[i])); // se elimina a las base de datos y a la logica del negocio
-			else
-				this.touristPackage.deleteModalityLogic(((ModeloTablaTransportModalityEstablishedRoute) this.tableAssignedTransports.getModel()).getElement(rows[i])); // se elimina solo en la logica del negocio
-		}
-
-		this.actualizarTablas(); // se actualiza la informacion de las dos tablas
-	}
-
-	// Fin de Operaciones Modelo EstablishedRoute
-
-	// Fin de Operaciones
-
-	// Operaciones Flechas
 
 	private void actualizarTextotTitleTable () {
 		String texto = "";
 
 
-		if (this.tableAssignedTransports.getModel() instanceof ModeloTablaTransportModalityCostKilometers)
-			texto = "( Cost of Kilometers )";
+		if (this.panelContenedorTablas instanceof PanelPackageDisignerContenedorCostKilometers)
+			texto = "Cost-KM";
 
-		else if (this.tableAssignedTransports.getModel() instanceof ModeloTablaTransportModalityHoursKilometers)
-			texto = "( Hours Kilometers )";
+		else if (this.panelContenedorTablas instanceof PanelPackageDisignerContenedorHoursKilometers)
+			texto = "Hours-KM";
 
-		else if (this.tableAssignedTransports.getModel() instanceof ModeloTablaTransportModalityEstablishedRoute)
-			texto = "( Established Route )";
+		else if (this.panelContenedorTablas instanceof PanelPackageDisignerContenedorEstablishedRoute)
+			texto = "Route";
 
-		lblTitleTable.setText(texto); // se establece el nuevo texto
+		lblTitleTable.setText(texto);
 
 
 	}
 
 	private void inicializarPilas () {
-		this.inicializarPilasAssignedTransports();
-		this.inicializarPilasAviableTransports();
+		this.previusModels = new LinkedList<PanelTransportModalityTouristDesignerOperations>();
+		this.nextsModels = new LinkedList<PanelTransportModalityTouristDesignerOperations>();
+		this.nextsModels.push(new PanelPackageDisignerContenedorEstablishedRoute(PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir.this)); // se añade a la pila de siguientes el panel tipo EstablishedRoute
+		this.nextsModels.push(new PanelPackageDisignerContenedorHoursKilometers(PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir.this)); // se añade a la pila de siguientes el panel tipo HoursKilometers
 	}
 
-	private void inicializarPilasAssignedTransports () {
-		this.previusModelsAssignedTransports = new LinkedList<DefaultTableModel>();
-		this.nextsModelsAssignedTransports = new LinkedList<DefaultTableModel>();
-		this.nextsModelsAssignedTransports.push(new ModeloTablaTransportModalityEstablishedRoute()); // se añade a la pila de siguientes un modelo tipo EstablishedRoute para la tabla assing
-		this.nextsModelsAssignedTransports.push(new ModeloTablaTransportModalityHoursKilometers()); // se añade a la pila de siguientes un modelo tipo HoursKilometers para la tabla aviable
-
-	}
-
-	private void inicializarPilasAviableTransports () {
-		this.previusModelsAviableTransports = new LinkedList<DefaultTableModel>();
-		this.nextsModelsAviableTransports = new LinkedList<DefaultTableModel>();
-		this.nextsModelsAviableTransports.push(new ModeloTablaTransportModalityEstablishedRoute()); // se añade a la pila de siguientes un modelo tipo EstablishedRoute para la tabla assing
-		this.nextsModelsAviableTransports.push(new ModeloTablaTransportModalityHoursKilometers()); // se añade a la pila de siguientes un modelo tipo HoursKilometers para la tabla aviable
-	}
-
-
+	// Metodos para el cambio de tablas
 	private void actualizarEstadosFlechas () {
-		if (this.previusModelsAssignedTransports.isEmpty()) 
-			this.labelFlechaAterior.setEnabled(false);
+		if (this.previusModels.isEmpty()) 
+			this.labelFlechaAnterior.setEnabled(false);
 		else
-			this.labelFlechaAterior.setEnabled(true);
+			this.labelFlechaAnterior.setEnabled(true);
 
-		if (this.nextsModelsAssignedTransports.isEmpty())
+		if (this.nextsModels.isEmpty())
 			this.labelFlechaSiguiente.setEnabled(false);
 		else
 			this.labelFlechaSiguiente.setEnabled(true);
 
-	}
-
-	private void nextModel () { // Para la flecha Next
-		this.nextModelAssignedTransports();
-		this.nextModelAviableTransports();
-	}
-
-	private void previusModel () { // Para la flecha previus
-		this.previusModelAssignedTransports();
-		this.previusModelAviableTransports();
-	}
-
-	// Metodos Pila para la Tabla Assigned
-
-	private void nextModelAssignedTransports () {
-		DefaultTableModel model = this.nextsModelsAssignedTransports.pop(); // se obtiene el modelo siguiente
-		this.previusModelsAssignedTransports.push((DefaultTableModel) tableAssignedTransports.getModel()); // el modelo antes asignado se convierte en el modelo anterior
-		this.tableAssignedTransports.setModel(model); // se asigna el nuevo modelo a la tabla	
-	}
-
-	private void previusModelAssignedTransports () {
-		DefaultTableModel model = this.previusModelsAssignedTransports.pop(); // se obtiene el modelo anterior
-		this.nextsModelsAssignedTransports.push((DefaultTableModel) tableAssignedTransports.getModel()); // el modelo antes asignado se convierte en el modelo siguiente
-		this.tableAssignedTransports.setModel(model); // se asigna el nuevo modelo a la tabla
 
 	}
 
-	// Fin de Metodos Pila para la Tabla Assigned
-
-	// Metodos Pila para la Tabla Aviable
-	private void nextModelAviableTransports () {
-		DefaultTableModel model = this.nextsModelsAviableTransports.pop(); // se obtiene el modelo siguiente
-		this.previusModelsAviableTransports.push((DefaultTableModel) tableAvailableTransportation.getModel()); // el modelo antes asignado se convierte en el modelo anterior
-		this.tableAvailableTransportation.setModel(model); // se asigna el nuevo modelo a la tabla	
+	private void nextPanel () {
+		PanelTransportModalityTouristDesignerOperations panel = this.nextsModels.pop(); // se obtiene el panel siguiente
+		this.previusModels.push(panelContenedorTablas); // el panel antes asignado se convierte en el modelo anterior
+		this.panelContenedorTablas = panel; // se asigna el nuevo panel
+		this.panelContenedorTablas.actualizarTablas(); // se actualiza la informacion de las tablas del panel
+		this.cambiaranel((JPanel) this.panelContenedorTablas);
 	}
 
-	private void previusModelAviableTransports () {
-		DefaultTableModel model = this.previusModelsAviableTransports.pop(); // se obtiene el modelo anterior
-		this.nextsModelsAviableTransports.push((DefaultTableModel) tableAvailableTransportation.getModel()); // el modelo antes asignado se convierte en el modelo siguiente
-		this.tableAvailableTransportation.setModel(model); // se asigna el nuevo modelo a la tabla
-
+	private void previusPanel () {
+		PanelTransportModalityTouristDesignerOperations panel = this.previusModels.pop(); // se obtiene el panel anterior
+		this.nextsModels.push(panelContenedorTablas); // el panel antes asignado se convierte en el panel siguiente
+		this.panelContenedorTablas = panel; // se asigna el nuevo panel
+		this.panelContenedorTablas.actualizarTablas(); // se actualiza la informacion de las tablas del panel
+		this.cambiaranel((JPanel) this.panelContenedorTablas);
 	}
 
-	// Fin de Metodos Pila para la Tabla Aviable
-
-
-	// Fin de Operaciones Flechas
-
-
-
-	private void cerrarFrame () {
-		frameInformacionPaquete.setEnabled(true);
-		dispose();
+	private void cambiaranel (JPanel panel) {
+		remove(getComponentCount() - 1); // se remueve el ulitmo componenete
+		add(panel); // se añade el nuevo panel
+		this.repintarPanel(); // se repinta la informacion del panel
 	}
 
-	private void actualizarEstadosBotones () {
-		this.estadoLblAsign();
-		this.estadoLblDeny();
+	private void repintarPanel () {
+		repaint();
+		revalidate();
 	}
 
-	private void estadoLblAsign () {
-		if (tableAvailableTransportation.getSelectedRowCount() != 0)
-			lblAnnadir.setEnabled(true);
-		else
-			lblAnnadir.setEnabled(false);
+	// Fin de Metodos para el cambio de tablas
+
+	public void actualizarPanelTablaModality () {
+		this.panelContenedorTablas.actualizarTablas(); // se actualiza la informacion del panel que contiene a la tabla de las modadlidades seleccionadas
 	}
 
-	private void estadoLblDeny () {
-		if (tableAssignedTransports.getSelectedRowCount() != 0)
-			lblDenegar.setEnabled(true);
-		else
-			lblDenegar.setEnabled(false);
-	}
+	// Metodos para la actualizacion de el panel de la tabla 
+
+
 
 }

@@ -84,13 +84,13 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 		JLabel lblMealPlan = new JLabel("Cost Going:");
 		lblMealPlan.setForeground(SystemColor.textHighlightText);
 		lblMealPlan.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblMealPlan.setBounds(268, 0, 112, 27);
+		lblMealPlan.setBounds(115, 17, 112, 27);
 		add(lblMealPlan);
 
 		JLabel lblMin_2 = new JLabel("Min:");
 		lblMin_2.setForeground(SystemColor.textHighlightText);
 		lblMin_2.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblMin_2.setBounds(278, 30, 30, 14);
+		lblMin_2.setBounds(73, 50, 30, 14);
 		add(lblMin_2);
 
 		spinnerCostGoingMin = new JSpinner();
@@ -103,13 +103,13 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 		
 		spinnerCostGoingMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostGoingMin.setFont(new Font("Dialog", Font.PLAIN, 15));
-		spinnerCostGoingMin.setBounds(313, 27, 53, 20);
+		spinnerCostGoingMin.setBounds(108, 47, 53, 20);
 		add(spinnerCostGoingMin);
 
 		JLabel lblMax_2 = new JLabel("Max:");
 		lblMax_2.setForeground(SystemColor.textHighlightText);
 		lblMax_2.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblMax_2.setBounds(278, 51, 40, 14);
+		lblMax_2.setBounds(187, 50, 40, 14);
 		add(lblMax_2);
 
 		spinnerCostGoingMax = new JSpinner();
@@ -122,19 +122,19 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 	
 		spinnerCostGoingMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostGoingMax.setFont(new Font("Dialog", Font.PLAIN, 15));
-		spinnerCostGoingMax.setBounds(313, 48, 53, 20);
+		spinnerCostGoingMax.setBounds(222, 47, 53, 20);
 		add(spinnerCostGoingMax);
 
 		JLabel lblMin = new JLabel("Min:");
 		lblMin.setForeground(SystemColor.textHighlightText);
 		lblMin.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblMin.setBounds(463, 30, 30, 14);
+		lblMin.setBounds(343, 50, 30, 14);
 		add(lblMin);
 
 		JLabel lblCantDaysAccommodation = new JLabel("Cost Lap:");
 		lblCantDaysAccommodation.setForeground(SystemColor.textHighlightText);
 		lblCantDaysAccommodation.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblCantDaysAccommodation.setBounds(463, 0, 95, 27);
+		lblCantDaysAccommodation.setBounds(383, 17, 95, 27);
 		add(lblCantDaysAccommodation);
 
 		spinnerCostLapMin = new JSpinner();
@@ -147,13 +147,13 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 		
 		spinnerCostLapMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostLapMin.setFont(new Font("Dialog", Font.PLAIN, 15));
-		spinnerCostLapMin.setBounds(498, 27, 53, 20);
+		spinnerCostLapMin.setBounds(378, 47, 53, 20);
 		add(spinnerCostLapMin);
 
 		JLabel lblMax = new JLabel("Max:");
 		lblMax.setForeground(SystemColor.textHighlightText);
 		lblMax.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblMax.setBounds(463, 51, 40, 14);
+		lblMax.setBounds(441, 50, 40, 14);
 		add(lblMax);
 
 		spinnerCostLapMax = new JSpinner();
@@ -166,20 +166,20 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 	
 		spinnerCostLapMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostLapMax.setFont(new Font("Dialog", Font.PLAIN, 15));
-		spinnerCostLapMax.setBounds(498, 48, 53, 20);
+		spinnerCostLapMax.setBounds(476, 47, 53, 20);
 		add(spinnerCostLapMax);
 
 		JLabel lblMin_1 = new JLabel("Max:");
 		lblMin_1.setForeground(SystemColor.textHighlightText);
 		lblMin_1.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblMin_1.setBounds(740, 51, 40, 14);
+		lblMin_1.setBounds(709, 50, 40, 14);
 		add(lblMin_1);
 
 		JLabel lblPrice = new JLabel("Plan Price:");
 		lblPrice.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPrice.setForeground(SystemColor.textHighlightText);
 		lblPrice.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblPrice.setBounds(740, 3, 103, 20);
+		lblPrice.setBounds(656, 20, 103, 20);
 		add(lblPrice);
 
 		spinnerPriceMax = new JSpinner();
@@ -192,13 +192,13 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 		
 		spinnerPriceMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMax.setFont(new Font("Dialog", Font.PLAIN, 15));
-		spinnerPriceMax.setBounds(780, 48, 53, 20);
+		spinnerPriceMax.setBounds(749, 47, 53, 20);
 		add(spinnerPriceMax);
 
 		JLabel lblMax_1 = new JLabel("Min:");
 		lblMax_1.setForeground(SystemColor.textHighlightText);
 		lblMax_1.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblMax_1.setBounds(740, 30, 40, 14);
+		lblMax_1.setBounds(607, 50, 40, 14);
 		add(lblMax_1);
 
 		spinnerPriceMin = new JSpinner();
@@ -211,7 +211,7 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 	
 		spinnerPriceMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMin.setFont(new Font("Dialog", Font.PLAIN, 15));
-		spinnerPriceMin.setBounds(779, 27, 53, 20);
+		spinnerPriceMin.setBounds(646, 47, 53, 20);
 		add(spinnerPriceMin);
 
 	}
@@ -265,12 +265,12 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 
 	@Override
 	public void restoreFilters() {
-		this.spinnerCostGoingMax.setValue(0);
-		this.spinnerCostGoingMin.setValue(0);
-		this.spinnerPriceMax.setValue(0);
-		this.spinnerPriceMin.setValue(0);
-		this.spinnerCostLapMax.setValue(0);
-		this.spinnerCostLapMin.setValue(0);
+		this.spinnerCostGoingMax.setValue(0.0);
+		this.spinnerCostGoingMin.setValue(0.0);
+		this.spinnerPriceMax.setValue(0.0);
+		this.spinnerPriceMin.setValue(0.0);
+		this.spinnerCostLapMax.setValue(0.0);
+		this.spinnerCostLapMin.setValue(0.0);
 	}
 	// Fin de Metodos para la actualizacion de la informacion de la tabla
 }

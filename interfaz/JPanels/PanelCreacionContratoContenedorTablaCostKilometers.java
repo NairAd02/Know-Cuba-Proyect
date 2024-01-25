@@ -55,14 +55,14 @@ public class PanelCreacionContratoContenedorTablaCostKilometers extends JPanel i
 
 	@Override
 	public void restoreFilters() {
-		this.spinnerCostHoursWaitMax.setValue(0);
-		this.spinnerCostHoursWaitMin.setValue(0);
-		this.spinnerPriceMax.setValue(0);
-		this.spinnerPriceMin.setValue(0);
-		this.spinnerCostKilometersGoingMax.setValue(0);
-		this.spinnerCostKilometersGoingMin.setValue(0);
-		this.spinnerCostKilometersLapMax.setValue(0);
-		this.spinnerCostKilometersLapMin.setValue(0);
+		this.spinnerCostHoursWaitMax.setValue(0.0);
+		this.spinnerCostHoursWaitMin.setValue(0.0);
+		this.spinnerPriceMax.setValue(0.0);
+		this.spinnerPriceMin.setValue(0.0);
+		this.spinnerCostKilometersGoingMax.setValue(0.0);
+		this.spinnerCostKilometersGoingMin.setValue(0.0);
+		this.spinnerCostKilometersLapMax.setValue(0.0);
+		this.spinnerCostKilometersLapMin.setValue(0.0);
 	}
 
 	public PanelCreacionContratoContenedorTablaCostKilometers(PanelCreacionContratoTransporteTransportModality p) {

@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.MatteBorder;
+import java.awt.Cursor;
 
 public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality extends JFrame {
 
@@ -125,6 +126,8 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 		contentPane.add(lblPrice);
 
 		lblAdd = new JLabel();
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAdd.setText("ADD");
 		lblAdd.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
@@ -166,32 +169,32 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 		lblAdd.setBounds(107, 291, 235, 35);
 		contentPane.add(lblAdd);
 
-		JLabel lblTransportationMode = new JLabel("Plan Hotelero");
+		JLabel lblTransportationMode = new JLabel("HOTEL PLAN");
 		lblTransportationMode.setForeground(SystemColor.textHighlightText);
 		lblTransportationMode.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblTransportationMode.setBounds(10, 8, 178, 30);
+		lblTransportationMode.setBounds(31, 8, 178, 30);
 		contentPane.add(lblTransportationMode);
 
 		comboBoxTypeOfRoom = new JComboBox <TypeOfRoom>();
 		comboBoxTypeOfRoom.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		comboBoxTypeOfRoom.setBounds(195, 64, 161, 22);
+		comboBoxTypeOfRoom.setBounds(247, 64, 161, 22);
 		contentPane.add(comboBoxTypeOfRoom);
 
 		comboBoxMealPlan = new JComboBox <MealPlan>();
 		comboBoxMealPlan.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		comboBoxMealPlan.setBounds(195, 151, 161, 22);
+		comboBoxMealPlan.setBounds(247, 151, 161, 22);
 		contentPane.add(comboBoxMealPlan);
 
 		spinnerCantDays = new JSpinner();
 		spinnerCantDays.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		spinnerCantDays.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-		spinnerCantDays.setBounds(325, 196, 100, 20);
+		spinnerCantDays.setBounds(325, 196, 83, 20);
 		contentPane.add(spinnerCantDays);
 
 		spinnerPrice = new JSpinner();
 		spinnerPrice.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		spinnerPrice.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
-		spinnerPrice.setBounds(152, 238, 100, 20);
+		spinnerPrice.setBounds(308, 236, 100, 20);
 		contentPane.add(spinnerPrice);
 
 		comboBoxHotelModality = new JComboBox<HotelModality>();

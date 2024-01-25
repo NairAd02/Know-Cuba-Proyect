@@ -1,15 +1,16 @@
 package JPanels;
 
 import java.awt.Color;
-
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import java.awt.SystemColor;
-import javax.swing.border.EmptyBorder;
-
 import logica.TouristPackage;
+import javax.swing.border.MatteBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Cursor;
 
 public class PanelPaqueteTuristico extends JPanel {
 
@@ -22,55 +23,121 @@ public class PanelPaqueteTuristico extends JPanel {
 	private JLabel lblCampoDiasDuracion;
 	private JLabel lblName;
 	private JLabel lblCampoName;
+	private JLabel lblCampoTerminationDate;
+	private JLabel lblCampoStartDate;
+	private JLabel lblCampoCantPax;
+	private JLabel lblCampoCosto;
+	private JLabel lblCantPax_1;
+	private JLabel lblCampoCantDisponibles;
+	private JLabel lblCarrito;
 
 	public PanelPaqueteTuristico(TouristPackage t) {
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblCarrito.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/Diapositiva2.JPG")));
+				setBackground(new Color(5, 150, 177));
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblCarrito.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/PaqueteTuristico.jpg")));
+				setBackground(new Color(18, 95, 115));
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+		});
+		setBorder(new MatteBorder(4, 4, 4, 4, (Color) new Color(0, 0, 0)));
 		this.touristPackage = t;
 		setLayout(null);
-		setBackground(new Color(4, 179, 208));
+		setBackground(new Color(18, 95, 115));
 
 		lblName = new JLabel("Name :");
-		lblName.setForeground(SystemColor.info);
+		lblName.setForeground(SystemColor.textHighlightText);
 		lblName.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblName.setBounds(461, 56, 72, 23);
+		lblName.setBounds(315, 11, 72, 23);
 		add(lblName);
-
-		JLabel lblPaquete = new JLabel("PAQUETE : ");
-		lblPaquete.setForeground(SystemColor.info);
-		lblPaquete.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblPaquete.setBounds(461, 22, 101, 23);
-		add(lblPaquete);
-
-		JLabel lblCampoPaquete = new JLabel(String.valueOf(this.touristPackage.getId()));
-		lblCampoPaquete.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblCampoPaquete.setBounds(572, 22, 34, 23);
-		add(lblCampoPaquete);
 
 		lblCampoDiasDuracion = new JLabel("");
 		lblCampoDiasDuracion.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblCampoDiasDuracion.setBounds(623, 178, 77, 23);
+		lblCampoDiasDuracion.setBounds(572, 178, 77, 23);
 		add(lblCampoDiasDuracion);
 
 		JLabel lblCosto = new JLabel("COSTO :");
-		lblCosto.setForeground(SystemColor.info);
+		lblCosto.setForeground(SystemColor.textHighlightText);
 		lblCosto.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblCosto.setBounds(461, 178, 72, 23);
+		lblCosto.setBounds(528, 178, 72, 23);
 		add(lblCosto);
 
-		JLabel lblCampoCosto = new JLabel(String.valueOf(this.touristPackage.costo()));
+		lblCampoCosto = new JLabel(String.valueOf(this.touristPackage.price()));
+		lblCampoCosto.setForeground(SystemColor.textHighlightText);
 		lblCampoCosto.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblCampoCosto.setBounds(543, 178, 72, 23);
+		lblCampoCosto.setBounds(610, 178, 72, 23);
 		add(lblCampoCosto);
 		lblCampoName = new JLabel(this.touristPackage.getName());
-		lblCampoName.setForeground(Color.BLACK);
+		lblCampoName.setForeground(SystemColor.textHighlightText);
 		lblCampoName.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblCampoName.setBounds(532, 56, 280, 23);
+		lblCampoName.setBounds(386, 11, 280, 23);
 		add(lblCampoName);
-		JLabel lblImagen = new JLabel("");
-		lblImagen.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
-		lblImagen.setBounds(0, 0, 915, 243);
-		add(lblImagen);
 
-		setSize(425, 231);
+		setSize(756, 231);
+		
+		JLabel lblDesde = new JLabel("Desde :");
+		lblDesde.setForeground(SystemColor.textHighlightText);
+		lblDesde.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblDesde.setBounds(315, 56, 72, 23);
+		add(lblDesde);
+		
+		JLabel lblHasta = new JLabel("Hasta :");
+		lblHasta.setForeground(SystemColor.textHighlightText);
+		lblHasta.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblHasta.setBounds(528, 56, 72, 23);
+		add(lblHasta);
+		
+		JLabel lblCantPax = new JLabel("Cant PAX :");
+		lblCantPax.setForeground(SystemColor.textHighlightText);
+		lblCantPax.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblCantPax.setBounds(315, 126, 101, 23);
+		add(lblCantPax);
+		
+		lblCampoTerminationDate = new JLabel(this.touristPackage.getTerminationDate().toString());
+		lblCampoTerminationDate.setForeground(SystemColor.textHighlightText);
+		lblCampoTerminationDate.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		lblCampoTerminationDate.setBounds(603, 56, 143, 23);
+		add(lblCampoTerminationDate);
+		
+		lblCampoStartDate = new JLabel(this.touristPackage.getStartDate().toString());
+		lblCampoStartDate.setForeground(SystemColor.textHighlightText);
+		lblCampoStartDate.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		lblCampoStartDate.setBounds(386, 56, 143, 23);
+		add(lblCampoStartDate);
+		
+		lblCampoCantPax = new JLabel(String.valueOf(this.touristPackage.getCantMaxPax()));
+		lblCampoCantPax.setForeground(SystemColor.textHighlightText);
+		lblCampoCantPax.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		lblCampoCantPax.setBounds(413, 126, 143, 23);
+		add(lblCampoCantPax);
+		
+		lblCantPax_1 = new JLabel("Avaible :");
+		lblCantPax_1.setForeground(SystemColor.textHighlightText);
+		lblCantPax_1.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		lblCantPax_1.setBounds(315, 178, 101, 23);
+		add(lblCantPax_1);
+		
+		lblCampoCantDisponibles = new JLabel(String.valueOf(this.touristPackage.cantAviablePax()));
+		lblCampoCantDisponibles.setForeground(SystemColor.textHighlightText);
+		lblCampoCantDisponibles.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		lblCampoCantDisponibles.setBounds(413, 178, 143, 23);
+		add(lblCampoCantDisponibles);
+		
+		lblCarrito = new JLabel("");
+		lblCarrito.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(0, 0, 0)));
+		lblCarrito.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/PaqueteTuristico.jpg")));
+		lblCarrito.setBounds(6, 0, 287, 231);
+		add(lblCarrito);
 
 
 	}

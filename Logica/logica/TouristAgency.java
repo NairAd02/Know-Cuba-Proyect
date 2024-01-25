@@ -165,11 +165,10 @@ public class TouristAgency {
         transportationProviver.update(); // se actualiza la informacion del provedor a nivel de base de datos
     }
 
-    public void updateTouristPackage(TouristPackage touristPackage, String name, int cantMaxPax, int cantRerserves) throws SQLException {
+    public void updateTouristPackage(TouristPackage touristPackage, String name, int cantMaxPax) throws SQLException {
         // se actualiza la informacion del paquete turistico a nivel de logica
         touristPackage.setName(name);
         touristPackage.setCantMaxPax(cantMaxPax);
-        touristPackage.setCantReserves(cantRerserves);
         touristPackage.update(); // se actualiza el paquete turistico en la base de datos
     }
 

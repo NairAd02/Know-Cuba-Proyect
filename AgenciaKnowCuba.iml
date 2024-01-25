@@ -48,5 +48,27 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/Jasper/commons-beanutils-1.8.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/Jasper/commons-collections-3.2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/Jasper/commons-collections4-4.4.jar!/" />
+          <root url="jar://$MODULE_DIR$/Jasper/commons-digester-2.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/Jasper/commons-logging-1.1.1-1.0.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/Jasper/itext-pdfa-5.4.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/Jasper/itextpdf-5.1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/Jasper/jasperreports-6.20.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/Jasper/postgresql-42.6.0.jar!/" />
+          <root url="file://$MODULE_DIR$" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/Logica" />
+          <root url="file://$MODULE_DIR$/Main" />
+          <root url="file://$MODULE_DIR$/interfaz" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

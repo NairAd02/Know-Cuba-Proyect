@@ -309,7 +309,7 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 		});
 		lblShowServicesModalities.setForeground(SystemColor.textText);
 		lblShowServicesModalities.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblShowServicesModalities.setBounds(10, 189, 348, 30);
+		lblShowServicesModalities.setBounds(252, 189, 348, 30);
 		lblShowServicesModalities.setBackground(SystemColor.info);
 		panelServiceContract.add(lblShowServicesModalities);
 

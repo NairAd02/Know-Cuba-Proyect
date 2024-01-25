@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JTextPane;
 import javax.swing.border.MatteBorder;
+import java.awt.Cursor;
 
 public class FrameDecisor extends JFrame {
 
@@ -66,6 +67,7 @@ public class FrameDecisor extends JFrame {
 		contentPane.add(panel);
 
 		lblYes = new JLabel("YES");
+		lblYes.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblYes.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -89,6 +91,7 @@ public class FrameDecisor extends JFrame {
 		panel.add(lblYes);
 
 		lblNo = new JLabel("NO");
+		lblNo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblNo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

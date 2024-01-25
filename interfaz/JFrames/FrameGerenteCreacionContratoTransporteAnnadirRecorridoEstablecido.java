@@ -24,6 +24,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextPane;
 import javax.swing.border.MatteBorder;
 import javax.swing.ImageIcon;
+import java.awt.Cursor;
 
 public class FrameGerenteCreacionContratoTransporteAnnadirRecorridoEstablecido extends JFrame implements AddTransportModalityOperations {
 
@@ -162,6 +163,8 @@ public class FrameGerenteCreacionContratoTransporteAnnadirRecorridoEstablecido e
 		panelTransportationMode.add(spinnerCostLap);
 
 		lblAdd = new JLabel();
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAdd.setText("ADD");
 		lblAdd.setBorder(new MatteBorder(3, 3, 3, 3, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
@@ -214,6 +217,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirRecorridoEstablecido e
 		panelTransportationMode.add(textPaneDescription);
 		
 		JLabel lblSeccionVehicles = new JLabel("SECCION VEHICLES");
+		lblSeccionVehicles.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblSeccionVehicles.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {

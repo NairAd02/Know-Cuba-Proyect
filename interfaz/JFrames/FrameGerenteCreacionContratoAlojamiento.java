@@ -36,6 +36,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.MatteBorder;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
+import java.awt.Cursor;
 
 public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 
@@ -157,6 +158,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		panelAccommodationContract.add(lblDescription);
 
 		lblConfirm = new JLabel("CONFIRM");
+		lblConfirm.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblConfirm.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblConfirm.addMouseListener(new MouseAdapter() {
 			@Override
@@ -211,7 +213,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		lblConfirm.setHorizontalAlignment(SwingConstants.CENTER);
 		lblConfirm.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblConfirm.setBackground(SystemColor.info);
-		lblConfirm.setBounds(311, 531, 235, 35);
+		lblConfirm.setBounds(309, 531, 235, 35);
 		panelAccommodationContract.add(lblConfirm);
 
 		lblX = new JLabel("X");
@@ -268,6 +270,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		panelAccommodationContract.add(textPaneDescription);
 
 		lblShowAccommodationModalities = new JLabel("SHOW ACCOMMODATION MODALITIES");
+		lblShowAccommodationModalities.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblShowAccommodationModalities.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblShowAccommodationModalities.addMouseListener(new MouseAdapter() {
 			@Override
@@ -285,11 +288,12 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		lblShowAccommodationModalities.setOpaque(true);
 		lblShowAccommodationModalities.setForeground(SystemColor.textText);
 		lblShowAccommodationModalities.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblShowAccommodationModalities.setBounds(10, 189, 348, 30);
+		lblShowAccommodationModalities.setBounds(117, 189, 348, 30);
 		lblShowAccommodationModalities.setBackground(SystemColor.info);
 		panelAccommodationContract.add(lblShowAccommodationModalities);
 
 		lblShowSeasons = new JLabel("SHOW SEASONS");
+		lblShowSeasons.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblShowSeasons.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblShowSeasons.addMouseListener(new MouseAdapter() {
 			@Override
@@ -309,7 +313,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		lblShowSeasons.setOpaque(true);
 		lblShowSeasons.setForeground(SystemColor.textText);
 		lblShowSeasons.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblShowSeasons.setBounds(690, 189, 153, 30);
+		lblShowSeasons.setBounds(582, 189, 153, 30);
 		lblShowSeasons.setBackground(SystemColor.info);
 		panelAccommodationContract.add(lblShowSeasons);
 		

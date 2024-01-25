@@ -20,6 +20,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.JSpinner;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.SpinnerNumberModel;
+import java.awt.Cursor;
 
 public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo extends JFrame {
 
@@ -100,13 +101,14 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 		lblX.setBounds(459, 0, 38, 38);
 		contentPane.add(lblX);
 
-		JLabel lblLock = new JLabel("Chapa :");
+		JLabel lblLock = new JLabel("Lock :");
 		lblLock.setForeground(SystemColor.textHighlightText);
 		lblLock.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblLock.setBounds(22, 52, 70, 23);
+		lblLock.setBounds(213, 72, 59, 23);
 		contentPane.add(lblLock);
 
 		lblAdd = new JLabel("ADD");
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -134,54 +136,54 @@ public class FrameGerenteAsociacionEmpresaProveedorTransporteAnnadirVehiculo ext
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAdd.setFont(new Font("Arial Black", Font.PLAIN, 11));
 		lblAdd.setBackground(SystemColor.info);
-		lblAdd.setBounds(133, 281, 235, 35);
+		lblAdd.setBounds(131, 266, 235, 35);
 		contentPane.add(lblAdd);
 
 		textFieldLock = new JTextField();
-		textFieldLock.setBounds(95, 56, 100, 20);
+		textFieldLock.setBounds(326, 76, 100, 20);
 		contentPane.add(textFieldLock);
 		textFieldLock.setColumns(10);
 
 		textFieldBrand = new JTextField();
 		textFieldBrand.setColumns(10);
-		textFieldBrand.setBounds(384, 56, 100, 20);
+		textFieldBrand.setBounds(326, 107, 100, 20);
 		contentPane.add(textFieldBrand);
 
-		lblMarca = new JLabel("Marca :");
+		lblMarca = new JLabel("Brand :");
 		lblMarca.setForeground(SystemColor.textHighlightText);
 		lblMarca.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblMarca.setBounds(311, 52, 70, 23);
+		lblMarca.setBounds(202, 102, 70, 24);
 		contentPane.add(lblMarca);
 
-		lblCapacidadSinEquipaje = new JLabel("Capacidad sin Equipaje :");
+		lblCapacidadSinEquipaje = new JLabel("Capacity without luggage :");
 		lblCapacidadSinEquipaje.setForeground(SystemColor.textHighlightText);
 		lblCapacidadSinEquipaje.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblCapacidadSinEquipaje.setBounds(22, 103, 226, 23);
+		lblCapacidadSinEquipaje.setBounds(31, 133, 241, 23);
 		contentPane.add(lblCapacidadSinEquipaje);
 
 		spinnercapacityWithoutLuggage = new JSpinner();
 		spinnercapacityWithoutLuggage.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-		spinnercapacityWithoutLuggage.setBounds(95, 137, 70, 20);
+		spinnercapacityWithoutLuggage.setBounds(356, 137, 70, 20);
 		contentPane.add(spinnercapacityWithoutLuggage);
 
-		lblCapacidadConEquipaje = new JLabel("Capacidad con Equipaje :");
+		lblCapacidadConEquipaje = new JLabel("Capacity with luggage :");
 		lblCapacidadConEquipaje.setForeground(SystemColor.textHighlightText);
 		lblCapacidadConEquipaje.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblCapacidadConEquipaje.setBounds(258, 103, 226, 23);
+		lblCapacidadConEquipaje.setBounds(61, 163, 211, 23);
 		contentPane.add(lblCapacidadConEquipaje);
 
 		spinnerCapacityWithLuggage = new JSpinner();
-		spinnerCapacityWithLuggage.setBounds(352, 137, 70, 20);
+		spinnerCapacityWithLuggage.setBounds(356, 167, 70, 20);
 		contentPane.add(spinnerCapacityWithLuggage);
 
-		lblFechaDeProduccin = new JLabel("Fecha de Producción :");
+		lblFechaDeProduccin = new JLabel("Date of Production :");
 		lblFechaDeProduccin.setForeground(SystemColor.textHighlightText);
 		lblFechaDeProduccin.setFont(new Font("Arial Black", Font.PLAIN, 16));
-		lblFechaDeProduccin.setBounds(143, 178, 211, 23);
+		lblFechaDeProduccin.setBounds(89, 193, 183, 23);
 		contentPane.add(lblFechaDeProduccin);
 
 		dateChooserDateProduction = new JDateChooser();
-		dateChooserDateProduction.setBounds(198, 212, 102, 20);
+		dateChooserDateProduction.setBounds(324, 196, 102, 20);
 		contentPane.add(dateChooserDateProduction);
 	}
 

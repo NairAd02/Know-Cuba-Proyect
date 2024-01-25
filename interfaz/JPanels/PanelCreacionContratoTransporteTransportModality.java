@@ -238,9 +238,8 @@ public class PanelCreacionContratoTransporteTransportModality extends JPanel {
 	private void inicializarSistemaDePaneles () {
 		this.panelContenedorTablas = new PanelCreacionContratoContenedorTablaCostKilometers(PanelCreacionContratoTransporteTransportModality.this);
 		add ((Component) this.panelContenedorTablas);
-		this.panelContenedorTablas.actualizarTablaModalitys(); // se actualiza la informacion de las tablas del panel
 		this.inicializarPilas();
-		this.actualizarPanelTablaModality();
+		this.actualizarPanelTablaModality(); // se actualiza la informacion de las tablas del panel
 		this.actualizarEstadosFlechas();
 		this.actualizarTextotTitleTable();
 	}
@@ -415,7 +414,6 @@ public class PanelCreacionContratoTransporteTransportModality extends JPanel {
 		this.nextsModels = new LinkedList<PanelTransportModalityOperations>();
 		this.nextsModels.push(new PanelCreacionContratoContenedorTablaEstablishedRoute(PanelCreacionContratoTransporteTransportModality.this)); // se añade a la pila de siguientes el panel tipo EstablishedRoute
 		this.nextsModels.push(new PanelCreacionContratoContenedorTablaHoursKilometers(PanelCreacionContratoTransporteTransportModality.this)); // se añade a la pila de siguientes el panel tipo HoursKilometers
-
 	}
 
 

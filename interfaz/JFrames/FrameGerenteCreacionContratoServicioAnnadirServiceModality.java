@@ -25,6 +25,7 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
+import java.awt.Cursor;
 
 public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends JFrame {
 
@@ -115,6 +116,8 @@ public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends 
 		contentPane.add(lblStartDate);
 
 		lblAdd = new JLabel();
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAdd.setText("ADD");
 		lblAdd.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
@@ -179,7 +182,7 @@ public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends 
 		spinnerPrice.setBounds(267, 178, 100, 20);
 		contentPane.add(spinnerPrice);
 
-		JLabel lblTransportationMode = new JLabel("Actividad Planificada");
+		JLabel lblTransportationMode = new JLabel("PLANNED ACTIVITY");
 		lblTransportationMode.setForeground(SystemColor.textHighlightText);
 		lblTransportationMode.setFont(new Font("Dialog", Font.BOLD, 26));
 		lblTransportationMode.setBounds(10, 8, 265, 30);

@@ -7,5 +7,14 @@
 	<classpathentry kind="lib" path="DriverJDBC/postgresql-42.6.0.jar"/>
 	<classpathentry kind="lib" path="Tree Library/tree-package-v3.0.jar"/>
 	<classpathentry kind="lib" path="Calendar Library/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="Jasper/commons-beanutils-1.8.3.jar"/>
+	<classpathentry kind="lib" path="Jasper/commons-collections-3.2.2.jar"/>
+	<classpathentry kind="lib" path="Jasper/commons-collections4-4.4.jar"/>
+	<classpathentry kind="lib" path="Jasper/commons-digester-2.1.jar"/>
+	<classpathentry kind="lib" path="Jasper/commons-logging-1.1.1-1.0.0.jar"/>
+	<classpathentry kind="lib" path="Jasper/itextpdf-5.1.0.jar"/>
+	<classpathentry kind="lib" path="Jasper/itext-pdfa-5.4.0.jar"/>
+	<classpathentry kind="lib" path="Jasper/jasperreports-6.20.3.jar"/>
+	<classpathentry kind="lib" path="Jasper/postgresql-42.6.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

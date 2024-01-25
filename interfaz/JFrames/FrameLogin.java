@@ -159,7 +159,7 @@ public class FrameLogin extends JFrame {
 		lblLogin.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblLogin.setOpaque(true);
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLogin.setBounds(37, 358, 325, 35);
+		lblLogin.setBounds(35, 358, 325, 35);
 		lblLogin.setBackground(SystemColor.info);
 		panel_2.add(lblLogin);
 
@@ -189,9 +189,9 @@ public class FrameLogin extends JFrame {
 		lblNotificacionRegistro = new JLabel("You have not been registered in the system");
 		lblNotificacionRegistro.setVisible(false);
 		lblNotificacionRegistro.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNotificacionRegistro.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblNotificacionRegistro.setBounds(58, 324, 284, 21);
-		lblNotificacionRegistro.setForeground(new Color(255, 51, 0));
+		lblNotificacionRegistro.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		lblNotificacionRegistro.setBounds(50, 324, 295, 21);
+		lblNotificacionRegistro.setForeground(Color.RED);
 		panel_2.add(lblNotificacionRegistro);
 
 		lblX = new JLabel("X");

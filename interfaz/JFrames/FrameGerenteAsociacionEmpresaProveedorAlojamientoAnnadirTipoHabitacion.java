@@ -20,6 +20,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.border.LineBorder;
+import java.awt.Cursor;
 
 public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirTipoHabitacion extends JFrame {
 
@@ -90,6 +91,7 @@ public class FrameGerenteAsociacionEmpresaProveedorAlojamientoAnnadirTipoHabitac
 		contentPane.add(lblSelectRoomType);
 
 		lblAdd = new JLabel("ADD");
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

@@ -9,7 +9,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import javax.swing.border.EmptyBorder;
 
-public class PanelPaqueteTuristico extends JPanel {
+public class PanelPaqueteTuristicoTemporal extends JPanel {
 
 	/**
 	 * 
@@ -19,7 +19,7 @@ public class PanelPaqueteTuristico extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PanelPaqueteTuristico() {
+	public PanelPaqueteTuristicoTemporal() {
 		setLayout(null);
 		setBackground(new Color(4, 179, 208));
 		
@@ -72,7 +72,7 @@ public class PanelPaqueteTuristico extends JPanel {
 		add(lblCampoCosto);
 		
 		JLabel lblImagen = new JLabel("");
-		lblImagen.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
+		lblImagen.setIcon(new ImageIcon(PanelPaqueteTuristicoTemporal.class.getResource("/images/Nuevo Presentaci\u00F3n de Microsoft PowerPoint (2) - copia (3).jpg")));
 		lblImagen.setBounds(0, 0, 990, 216);
 		add(lblImagen);
 
