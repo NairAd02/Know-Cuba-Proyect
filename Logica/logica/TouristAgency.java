@@ -343,24 +343,16 @@ public class TouristAgency {
         // Se aplican los filtros
 
         // Filtro Name
-        if (name != null)
             touristPackages = FiltersTouristPackage.filterName(touristPackages, name); // Se filtra por name
 
         // Filtro StartDate
         if (startDateMin != null && startDateMax != null)
             touristPackages = FiltersTouristPackage.filterStartDate(touristPackages, startDateMin, startDateMax); // se filtra por el rango de fechas
-        else if (startDateMin != null)
-            touristPackages = FiltersTouristPackage.filterStartDate(touristPackages, startDateMin, LocalDate.MAX); // se filtra por la fecha minima
-        else if (startDateMax != null)
-            touristPackages = FiltersTouristPackage.filterStartDate(touristPackages, LocalDate.MIN, startDateMax); // se filtra por la fecha maxima
+
 
         // Filtro TerminationDate
         if (terminationDateMin != null && terminationDateMax != null)
             touristPackages = FiltersTouristPackage.filterTerminationDate(touristPackages, terminationDateMin, terminationDateMax); // se filtra por el rango de fechas
-        else if (terminationDateMin != null)
-            touristPackages = FiltersTouristPackage.filterTerminationDate(touristPackages, terminationDateMin, LocalDate.MAX); // se filtra por la fecha minima
-        else if (terminationDateMax != null)
-            touristPackages = FiltersTouristPackage.filterTerminationDate(touristPackages, LocalDate.MIN, terminationDateMax); // se filtra por la fecha maxima
 
         // Filtro Price
         if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)

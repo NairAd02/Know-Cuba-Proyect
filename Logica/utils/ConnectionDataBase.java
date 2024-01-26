@@ -18,7 +18,7 @@ public class ConnectionDataBase {
     }
 
     public static void establecerConeccion() throws SQLException {
-        connectionDataBase = DriverManager.getConnection("jdbc:postgresql://localhost:5432/know_cuba_db_2", "postgres", "12134588ad");
+        connectionDataBase = DriverManager.getConnection("jdbc:postgresql://localhost:5432/know_cuba_db_3", "postgres", "12134588ad");
         connectionDataBase.setAutoCommit(false); // se deshabilitan los auto-commit
     }
 

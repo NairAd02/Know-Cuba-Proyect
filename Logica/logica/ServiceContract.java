@@ -98,10 +98,7 @@ public class ServiceContract extends Contract {
         // Filtro Fecha de Realizacion
         if (releasedDateMin != null && releasedDateMax != null)
             modalitys = FiltersServiceModality.filterReleasedDate(modalitys, releasedDateMin, releasedDateMax); // se filtra por el rango de fechas
-        else if (releasedDateMin != null)
-            modalitys = FiltersServiceModality.filterReleasedDate(modalitys, releasedDateMin, LocalDate.MAX); // se filtra por fecha minima
-        else if (releasedDateMax != null)
-            modalitys = FiltersServiceModality.filterReleasedDate(modalitys, LocalDate.MIN, releasedDateMax); // se filtra por fecha maxima
+
 
         // Filtro Precio
         if (precioMin != AusentFilter.spinnerField && precioMax != AusentFilter.spinnerField)

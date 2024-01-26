@@ -67,6 +67,14 @@ public class TouristPackage implements DUILogic, LikeName {
         this.construirHashMapModalitys();
     }
 
+    public BusquedaResultado getBusquedaResultado() {
+        return busquedaResultado;
+    }
+
+    public void setBusquedaResultado(BusquedaResultado busquedaResultado) {
+        this.busquedaResultado = busquedaResultado;
+    }
+
     public LocalDate getStartDate() {
         return startDate;
     }
