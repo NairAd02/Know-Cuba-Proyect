@@ -59,7 +59,6 @@ public class FramePrincipal extends JFrame {
 	private JLabel lblTouristPackage;
 	private JLabel lblSeccionTouristPackageDesing;
 	private JLabel lblReport;
-	private JLabel lblNewLabel_3;
 
 
 	private class CerrarPrograma extends Thread { // Hilo para cerrar el programa
@@ -99,9 +98,15 @@ public class FramePrincipal extends JFrame {
 		frameAdvertencia.setVisible(true);
 	}
 
+	public static void mostrarFrameInformacion (JFrame jframe, String mensaje) {
+		FrameInformacion frameInformacion = new FrameInformacion(jframe, mensaje);
+		frameInformacion.setVisible(true);
+		jframe.setEnabled(false); // se inhabilita el frame
+	}
+
 
 	private void crearFrameDecisor () {
-		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.this, "Seguro que desea salir del programa");
+		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.this, "Are you sure you want to go out?");
 		frameDecisor.setVisible(true);
 		setEnabled(false); // se inhabilita el frame
 	}
@@ -123,22 +128,7 @@ public class FramePrincipal extends JFrame {
 		setLocationRelativeTo(null);
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(0, 0, 0)));
-		panelSuperior.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				int x= e.getXOnScreen();
-				int y= e.getYOnScreen();
 
-				setLocation(x - mouseX , y - mouseY );
-			}
-		});
-		panelSuperior.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-			}
-		});
 		contentPane.setLayout(new BorderLayout(0, 0));
 		panelSuperior.setBackground(new Color(18, 95, 115));
 		contentPane.add(panelSuperior, BorderLayout.NORTH);
@@ -218,7 +208,7 @@ public class FramePrincipal extends JFrame {
 		lblNewLabel_2 = new JLabel("\r\n");
 		panelNameAplication.add(lblNewLabel_2, BorderLayout.NORTH);
 
-		lblCerrarSesion = new JLabel("Cerrar Sesion");
+		lblCerrarSesion = new JLabel("Log Out");
 		lblCerrarSesion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblCerrarSesion.setIcon(new ImageIcon(FramePrincipal.class.getResource("/images/Home.png")));
 		lblCerrarSesion.addMouseListener(new MouseAdapter() {
@@ -247,7 +237,7 @@ public class FramePrincipal extends JFrame {
 	}
 
 	private void addSecciones () {
-		if (true) { // si el usuario es administrador se añaden todas las secciones
+		if (Controller.getInstancie().getUser() instanceof Administrator) { // si el usuario es administrador se añaden todas las secciones
 			this.addSeccionCreateContract(); // se añade la seccion de creacion de contratos
 			this.addSeccionAssociationCompany(); // se añade la seccion de asociasion con proveedores
 			this.addSeccionTouristPackageDesign(); // se añade la seccion de diseño de paquetes turisticos
@@ -508,16 +498,6 @@ public class FramePrincipal extends JFrame {
 		lblReport.setBackground(SystemColor.info);
 		lblReport.setBounds(14, 630, 250, 38);
 		panelSecciones.add(lblReport);
-		
-		lblNewLabel_3 = new JLabel("New label");
-		lblNewLabel_3.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-			}
-		});
-		lblNewLabel_3.setBounds(168, 11, 46, 14);
-		panelSecciones.add(lblNewLabel_3);
 	}
 
 	private void cerrarPrograma () {

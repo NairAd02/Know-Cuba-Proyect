@@ -13,6 +13,8 @@ import logica.CostKilometers;
 import logica.Modality;
 import logica.TouristPackage;
 import modelosTablas.ModeloTablaTransportModalityCostKilometers;
+import utils.Operations;
+
 import java.awt.BorderLayout;
 import javax.swing.JSpinner;
 import javax.swing.JScrollPane;
@@ -181,7 +183,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAviableCostKilometers(); // se actualiza la informacion de la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostKilometersGoingMinAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersGoingMinAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostKilometersGoingMinAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostKilometersGoingMinAvaible.setBounds(55, 54, 53, 20);
 		add(spinnerCostKilometersGoingMinAvaible);
@@ -199,7 +201,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAviableCostKilometers(); // se actualiza la informacion de la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostKilometersGoingMaxAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersGoingMaxAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostKilometersGoingMaxAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostKilometersGoingMaxAvaible.setBounds(153, 54, 53, 20);
 		add(spinnerCostKilometersGoingMaxAvaible);
@@ -223,7 +225,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAviableCostKilometers(); // se actualiza la informacion de la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostKilometersLapMinAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersLapMinAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostKilometersLapMinAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostKilometersLapMinAvaible.setBounds(289, 54, 53, 20);
 		add(spinnerCostKilometersLapMinAvaible);
@@ -241,7 +243,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAviableCostKilometers(); // se actualiza la informacion de la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostKilometersLapMaxAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersLapMaxAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostKilometersLapMaxAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostKilometersLapMaxAvaible.setBounds(387, 54, 53, 20);
 		add(spinnerCostKilometersLapMaxAvaible);
@@ -259,7 +261,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAviableCostKilometers(); // se actualiza la informacion de la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostHoursWaitMinAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostHoursWaitMinAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostHoursWaitMinAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostHoursWaitMinAvaible.setBounds(487, 54, 53, 20);
 		add(spinnerCostHoursWaitMinAvaible);
@@ -283,7 +285,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAviableCostKilometers(); // se actualiza la informacion de la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostHoursWaitMaxAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostHoursWaitMaxAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostHoursWaitMaxAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostHoursWaitMaxAvaible.setBounds(585, 54, 53, 20);
 		add(spinnerCostHoursWaitMaxAvaible);
@@ -301,7 +303,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAviableCostKilometers(); // se actualiza la informacion de la tabla de las modalidades disponibles
 			}
 		});
-		spinnerPriceMinAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMinAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMinAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMinAvaible.setBounds(688, 54, 53, 20);
 		add(spinnerPriceMinAvaible);
@@ -326,7 +328,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAviableCostKilometers(); // se actualiza la informacion de la tabla de las modalidades disponibles
 			}
 		});
-		spinnerPriceMaxAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMaxAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMaxAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMaxAvaible.setBounds(790, 54, 53, 20);
 		add(spinnerPriceMaxAvaible);
@@ -356,7 +358,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAssignedCostKilometers(); // se actualiza la informacion de la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostKilometersGoingMinAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersGoingMinAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostKilometersGoingMinAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostKilometersGoingMinAssigned.setBounds(55, 317, 53, 20);
 		add(spinnerCostKilometersGoingMinAssigned);
@@ -374,7 +376,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAssignedCostKilometers(); // se actualiza la informacion de la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostKilometersGoingMaxAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersGoingMaxAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostKilometersGoingMaxAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostKilometersGoingMaxAssigned.setBounds(153, 317, 53, 20);
 		add(spinnerCostKilometersGoingMaxAssigned);
@@ -398,7 +400,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAssignedCostKilometers(); // se actualiza la informacion de la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostKilometersLapMinAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersLapMinAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostKilometersLapMinAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostKilometersLapMinAssigned.setBounds(289, 317, 53, 20);
 		add(spinnerCostKilometersLapMinAssigned);
@@ -416,7 +418,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAssignedCostKilometers(); // se actualiza la informacion de la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostKilometersLapMaxAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersLapMaxAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostKilometersLapMaxAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostKilometersLapMaxAssigned.setBounds(387, 317, 53, 20);
 		add(spinnerCostKilometersLapMaxAssigned);
@@ -434,7 +436,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAssignedCostKilometers(); // se actualiza la informacion de la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostHoursWaitMinAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostHoursWaitMinAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostHoursWaitMinAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostHoursWaitMinAssigned.setBounds(487, 317, 53, 20);
 		add(spinnerCostHoursWaitMinAssigned);
@@ -471,7 +473,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAssignedCostKilometers(); // se actualiza la informacion de la tabla de las modalidades asignados
 			}
 		});
-		spinnerPriceMinAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMinAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMinAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMinAssigned.setBounds(688, 317, 53, 20);
 		add(spinnerPriceMinAssigned);
@@ -489,7 +491,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAssignedCostKilometers(); // se actualiza la informacion de la tabla de las modalidades asignados
 			}
 		});
-		spinnerPriceMaxAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMaxAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMaxAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMaxAssigned.setBounds(790, 317, 53, 20);
 		add(spinnerPriceMaxAssigned);
@@ -531,7 +533,7 @@ public class PanelPackageDisignerContenedorCostKilometers extends JPanel impleme
 					actualizarTablaAssignedCostKilometers(); // se actualiza la informacion de la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostHoursWaitMaxAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostHoursWaitMaxAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostHoursWaitMaxAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostHoursWaitMaxAssigned.setBounds(585, 317, 53, 20);
 		add(spinnerCostHoursWaitMaxAssigned);

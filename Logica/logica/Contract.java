@@ -194,6 +194,10 @@ public abstract class Contract implements DUILogic {
 	public boolean verificarProvedor (Provider provider) {
 		return this.provider.equals(provider);
 	}
+
+	public boolean verificarIntervaloFechas () {
+		return ( (this.startDate != null && this.terminationDate != null) && this.terminationDate.isAfter(this.startDate));
+	}
 	// Fin de Operaciones
 
 }

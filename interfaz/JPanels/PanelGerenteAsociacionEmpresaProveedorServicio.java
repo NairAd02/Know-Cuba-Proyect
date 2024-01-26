@@ -114,8 +114,12 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 		panelTable.add(scrollPaneTable, BorderLayout.CENTER);
 
 		tableServiceProviders = new JTable();
+		tableServiceProviders.setModel(new ModeloTablaServiceProvider());
 		tableServiceProviders.setRowHeight(30);
-		tableServiceProviders.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		tableServiceProviders.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableServiceProviders.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
+		tableServiceProviders.getTableHeader().setForeground(Color.black);
+		tableServiceProviders.getTableHeader().setBackground(SystemColor.black);
 		tableServiceProviders.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -123,10 +127,7 @@ public class PanelGerenteAsociacionEmpresaProveedorServicio extends JPanel {
 				actualizarEstadoButtonShow();
 			}
 		});
-		tableServiceProviders.setModel(new ModeloTablaServiceProvider());
-		tableServiceProviders.getTableHeader().setFont(new Font("Arial", Font.BOLD, 24));
-		tableServiceProviders.getTableHeader().setForeground(Color.black);
-		tableServiceProviders.getTableHeader().setBackground(SystemColor.black);
+		
 		scrollPaneTable.setViewportView(tableServiceProviders);
 		scrollPaneTable.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
 		panelOpciones = new JPanel();

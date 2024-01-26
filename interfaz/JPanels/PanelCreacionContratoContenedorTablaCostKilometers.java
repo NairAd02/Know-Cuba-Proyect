@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 import logica.*;
 import modelosTablas.ModeloTablaTransportModalityCostKilometers;
+import utils.Operations;
+
 import java.awt.Color;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
@@ -116,7 +118,7 @@ public class PanelCreacionContratoContenedorTablaCostKilometers extends JPanel i
 		add(lblMin_3);
 		
 		spinnerCostKilometersGoingMin = new JSpinner();
-		spinnerCostKilometersGoingMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersGoingMin, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerCostKilometersGoingMin.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!panelCreacionContratoTransporteTransportModality.isRestoreFilters())
@@ -134,7 +136,7 @@ public class PanelCreacionContratoContenedorTablaCostKilometers extends JPanel i
 		add(lblMax_3);
 		
 		spinnerCostKilometersGoingMax = new JSpinner();
-		spinnerCostKilometersGoingMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersGoingMax, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerCostKilometersGoingMax.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!panelCreacionContratoTransporteTransportModality.isRestoreFilters())
@@ -158,7 +160,7 @@ public class PanelCreacionContratoContenedorTablaCostKilometers extends JPanel i
 		add(lblMin_2);
 		
 		spinnerCostKilometersLapMin = new JSpinner();
-		spinnerCostKilometersLapMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersLapMin, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerCostKilometersLapMin.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!panelCreacionContratoTransporteTransportModality.isRestoreFilters())
@@ -176,7 +178,7 @@ public class PanelCreacionContratoContenedorTablaCostKilometers extends JPanel i
 		add(lblMax_2);
 		
 		spinnerCostKilometersLapMax = new JSpinner();
-		spinnerCostKilometersLapMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersLapMax, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerCostKilometersLapMax.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!panelCreacionContratoTransporteTransportModality.isRestoreFilters())
@@ -200,7 +202,7 @@ public class PanelCreacionContratoContenedorTablaCostKilometers extends JPanel i
 		add(lblCantDaysAccommodation);
 		
 		spinnerCostHoursWaitMin = new JSpinner();
-		spinnerCostHoursWaitMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostHoursWaitMin, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerCostHoursWaitMin.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!panelCreacionContratoTransporteTransportModality.isRestoreFilters())
@@ -218,7 +220,7 @@ public class PanelCreacionContratoContenedorTablaCostKilometers extends JPanel i
 		add(lblMax);
 		
 		spinnerCostHoursWaitMax = new JSpinner();
-		spinnerCostHoursWaitMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostHoursWaitMax, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerCostHoursWaitMax.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!panelCreacionContratoTransporteTransportModality.isRestoreFilters())
@@ -243,7 +245,7 @@ public class PanelCreacionContratoContenedorTablaCostKilometers extends JPanel i
 		add(lblPrice);
 		
 		spinnerPriceMin = new JSpinner();
-		spinnerPriceMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMin, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerPriceMin.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!panelCreacionContratoTransporteTransportModality.isRestoreFilters())
@@ -261,7 +263,7 @@ public class PanelCreacionContratoContenedorTablaCostKilometers extends JPanel i
 		add(lblMax_1);
 		
 		spinnerPriceMax = new JSpinner();
-		spinnerPriceMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMax, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerPriceMax.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!panelCreacionContratoTransporteTransportModality.isRestoreFilters())

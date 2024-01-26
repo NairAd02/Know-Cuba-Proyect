@@ -32,6 +32,7 @@ import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import com.toedter.calendar.JDateChooser;
 import utils.AusentFilter;
+import utils.Operations;
 import utils.Semaphore;
 
 import javax.swing.border.MatteBorder;
@@ -245,7 +246,7 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 					actualizarTablaModalitys();
 			}
 		});
-		spinnerPriceMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMin, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMin.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMin.setBounds(659, 121, 53, 20);
 		add(spinnerPriceMin);
@@ -266,7 +267,7 @@ public class PanelCreacionContratoServicioServiceModality extends JPanel {
 
 			}
 		});
-		spinnerPriceMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMax, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMax.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMax.setBounds(761, 121, 53, 20);
 		add(spinnerPriceMax);

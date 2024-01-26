@@ -238,7 +238,7 @@ public class TouristPackage implements DUILogic, LikeName {
             modalitys = FiltersServiceModality.filterReleasedDate(modalitys, LocalDate.MIN, releasedDateMax); // se filtra por fecha maxima
 
         // Filtro Precio
-        if (precioMin != AusentFilter.spinnerField && precioMax != AusentFilter.spinnerField)
+        if (precioMin != AusentFilter.spinnerField || precioMax != AusentFilter.spinnerField)
             modalitys = FiltersModality.filterPrice(modalitys, precioMin, precioMin); // se filtra por el rango de precios
 
 
@@ -261,12 +261,12 @@ public class TouristPackage implements DUILogic, LikeName {
             modalitys = FiltersAccommodationModality.filterHotelModality(modalitys, hotelModality); // se filtra por modalidad de hotel
 
         // Se filtra por precio
-        if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
+        if (priceMin != AusentFilter.spinnerField || priceMax != AusentFilter.spinnerField)
             modalitys = FiltersModality.filterPrice(modalitys, priceMin, priceMax); // se filtra por el rango de precios
 
         // Se filtra por cantidad de dias de alojamiento
 
-        if (cantDaysAccommodationMin != AusentFilter.spinnerField && cantDaysAccommodationMax != AusentFilter.spinnerField)
+        if (cantDaysAccommodationMin != AusentFilter.spinnerField || cantDaysAccommodationMax != AusentFilter.spinnerField)
             modalitys = FiltersAccommodationModality.filterCantDaysAccommodations(modalitys, cantDaysAccommodationMin, cantDaysAccommodationMax); // se filtra por el rango de dias
 
         return modalitys;
@@ -285,19 +285,19 @@ public class TouristPackage implements DUILogic, LikeName {
         // Se aplican los filtros
 
         // Filtro CostKilometersGoing
-        if (costKilometersGoingMin != AusentFilter.spinnerField && costKilometersGoingMax != AusentFilter.spinnerField)
+        if (costKilometersGoingMin != AusentFilter.spinnerField || costKilometersGoingMax != AusentFilter.spinnerField)
             costsKilometers = FiltersTransportModality.filterCostKilometersGoing(costsKilometers, costKilometersGoingMin, costKilometersGoingMax); // se filtra por el rango de costos
 
         // Filtro CostKilometersLap
-        if (costKilometersLapMin != AusentFilter.spinnerField && costKilometersLapMax != AusentFilter.spinnerField)
+        if (costKilometersLapMin != AusentFilter.spinnerField || costKilometersLapMax != AusentFilter.spinnerField)
             costsKilometers = FiltersTransportModality.filterCostKilometersLap(costsKilometers, costKilometersLapMin, costKilometersLapMax); // se filtra por el rango de costos
 
         // Filtro CostHoursWait
-        if (costHoursWaitMin != AusentFilter.spinnerField && costHoursWaitMax != AusentFilter.spinnerField)
+        if (costHoursWaitMin != AusentFilter.spinnerField || costHoursWaitMax != AusentFilter.spinnerField)
             costsKilometers = FiltersTransportModality.filterCostHoursWait(costsKilometers, costHoursWaitMin, costHoursWaitMax);  // se filtra por el rango de costos
 
         // Filtro Price
-        if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
+        if (priceMin != AusentFilter.spinnerField || priceMax != AusentFilter.spinnerField)
             FiltersModality.filterPrice(costsKilometers, priceMin, priceMax); // se aplica el filtro para el rango de precios
 
         return costsKilometers;
@@ -315,23 +315,23 @@ public class TouristPackage implements DUILogic, LikeName {
         // Se aplican los filtros
 
         // Filtro CostKilometersRout
-        if (costKilometersRoutMin != AusentFilter.spinnerField && costKilometersRoutMax != AusentFilter.spinnerField)
+        if (costKilometersRoutMin != AusentFilter.spinnerField || costKilometersRoutMax != AusentFilter.spinnerField)
             hoursKilometersList = FiltersTransportModality.filterCostKilometersRout(hoursKilometersList, costKilometersRoutMin, costKilometersRoutMax); // se aplica el filtro para el rango de costos
 
         // Filtro CostHours
-        if (costHoursMin != AusentFilter.spinnerField && costHoursMax != AusentFilter.spinnerField)
+        if (costHoursMin != AusentFilter.spinnerField || costHoursMax != AusentFilter.spinnerField)
             hoursKilometersList = FiltersTransportModality.filterCostHours(hoursKilometersList, costHoursMin, costHoursMax); // se aplica el filtro para el rango de costos
 
         // Filtro CostKilometersRoutAdditionals
-        if (costKilometersRoutAdditionalsMin != AusentFilter.spinnerField && costKilometersRoutAdditionalsMax != AusentFilter.spinnerField)
+        if (costKilometersRoutAdditionalsMin != AusentFilter.spinnerField || costKilometersRoutAdditionalsMax != AusentFilter.spinnerField)
             hoursKilometersList = FiltersTransportModality.filterCostKilometersRoutAdditionals(hoursKilometersList, costKilometersRoutAdditionalsMin, costKilometersRoutAdditionalsMax); // se aplica el filtro para el rango de costos
 
         // Filtro CostHoursAdditionals
-        if (costHoursAdditionalsMin != AusentFilter.spinnerField && costHoursAdditionalsMax != AusentFilter.spinnerField)
+        if (costHoursAdditionalsMin != AusentFilter.spinnerField || costHoursAdditionalsMax != AusentFilter.spinnerField)
             hoursKilometersList = FiltersTransportModality.filterCostHoursAdditionals(hoursKilometersList, costHoursAdditionalsMin, costHoursAdditionalsMax); // se aplica el filtro para el rango de costos
 
         // Filtro Price
-        if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
+        if (priceMin != AusentFilter.spinnerField || priceMax != AusentFilter.spinnerField)
             FiltersModality.filterPrice(hoursKilometersList, priceMin, priceMax); // se aplica el filtro para el rango de precios
 
         return hoursKilometersList;
@@ -352,16 +352,16 @@ public class TouristPackage implements DUILogic, LikeName {
         // Se aplican los filtros
 
         // Filtro CostGoing
-        if (costGoingMin != AusentFilter.spinnerField && costGoingMax != AusentFilter.spinnerField)
+        if (costGoingMin != AusentFilter.spinnerField || costGoingMax != AusentFilter.spinnerField)
             establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costGoingMin, costGoingMax); // se aplica el filtro para el rango de costos
 
 
         // Filtro CostLap
-        if (costLapMin != AusentFilter.spinnerField && costLapMax != AusentFilter.spinnerField)
+        if (costLapMin != AusentFilter.spinnerField || costLapMax != AusentFilter.spinnerField)
             establishedRouteList = FiltersTransportModality.filterCostGoing(establishedRouteList, costLapMin, costLapMax); // se aplica el filtro para el rango de costos
 
         // Filtro Price
-        if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
+        if (priceMin != AusentFilter.spinnerField || priceMax != AusentFilter.spinnerField)
             FiltersModality.filterPrice(establishedRouteList, priceMin, priceMax); // se aplica el filtro para el rango de precios
 
 

@@ -42,6 +42,8 @@ import javax.swing.JFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Cursor;
+import java.awt.Dimension;
+
 import javax.swing.border.LineBorder;
 import java.awt.FlowLayout;
 import javax.swing.border.MatteBorder;
@@ -57,7 +59,7 @@ import java.beans.PropertyChangeEvent;
 public class PanelGerenteCreacionContrato extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel panelTable;
+	private JPanel panelTable, panelFiltrosStartDate, panelMinMaxStartDate, panelFiltrosTerminationDate, panelMinMaxTerminationDate;
 	private JScrollPane scrollPaneTable;
 	private JTable tableContracts;
 	private JComboBox<String> comboBoxTypeOfContrac;
@@ -71,14 +73,14 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	private JPanel panelFiltros;
 	private JPanel panelBotones;
 	private JLabel lblAnnadir;
-	private JLabel lblDelete;
-	private JLabel lblUpdate, lblUsersStartDateConnectionMin, lblUsersStartDateConnectionMax, lblLastDateMin, lblLastDateMax;
+	private JLabel lblDelete, lblMin, lblMax_1;
+	private JLabel lblUpdate, lblTerminationDate, lblMin_1;
 	private JDateChooser dateChooserStratDateMin, dateChooserStratDateMax, dateChooserTerminationDateMin, dateChooserTerminationDateMax;
 	private JPanel panelTypeOfContractFilter;
 	private JPanel panelContractStateFilter;
 	private JPanel panelProviderFilter;
-	private JLabel lblRestore;
 	private boolean isRestoreFilters;
+	private JLabel lblRestore;
 
 	private class Eliminar extends Thread { // Hilo para la eliminacion
 
@@ -101,13 +103,13 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	}
 
 	private void crearFrameDecisor () {
-		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Seguro que desea eliminar");
+		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Are you sure you want to delete?");
 		frameDecisor.setVisible(true);
 		FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
 	}
 
 	private void crearFrameNotificacion () {
-		FrameAdvertencia frameAdvertencia = new FrameAdvertencia("Han sido elimanado correctamente los contratos");
+		FrameAdvertencia frameAdvertencia = new FrameAdvertencia("\"It has been successfully removed the contracts");
 		frameAdvertencia.setVisible(true);
 	}
 
@@ -332,112 +334,131 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	}
 
 	private void addFiltres () {
+		
+		this.addTypeOfContractFilter();
+		this.addContractStateFilter();
+		this.addProviderFilter();
 
-		panelTypeOfContractFilter = new JPanel();
-		panelTypeOfContractFilter.setBackground(new Color(18, 95, 115));
-		panelFiltros.add(panelTypeOfContractFilter);
-		panelTypeOfContractFilter.setLayout(new BoxLayout(panelTypeOfContractFilter, BoxLayout.Y_AXIS));
+		panelFiltrosStartDate = new JPanel();
+		panelFiltrosStartDate.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelFiltrosStartDate);
+		panelFiltrosStartDate.setLayout(new BorderLayout(0, 0));
 
-		panelContractStateFilter = new JPanel();
-		panelContractStateFilter.setBackground(new Color(18, 95, 115));
-		panelFiltros.add(panelContractStateFilter);
+		lblNewLabel = new JLabel("Start Date");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setForeground(SystemColor.textHighlightText);
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 18));
+		panelFiltrosStartDate.add(lblNewLabel, BorderLayout.NORTH);
 
-		panelProviderFilter = new JPanel();
-		panelProviderFilter.setBackground(new Color(18, 95, 115));
-		panelFiltros.add(panelProviderFilter);
+		panelMinMaxStartDate = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panelMinMaxStartDate.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		panelMinMaxStartDate.setBackground(new Color(18, 95, 115));
+		panelFiltrosStartDate.add(panelMinMaxStartDate, BorderLayout.SOUTH);
 
-		panelStartDateConnection = new JPanel();
-		panelStartDateConnection.setBackground(new Color(18, 95, 115));
-		panelFiltros.add(panelStartDateConnection);
-		panelStartDateConnection.setLayout(new BoxLayout(panelStartDateConnection, BoxLayout.Y_AXIS));
-
-		lblUsersStartDateConnectionMin = new JLabel("Start Date Min:");
-		lblUsersStartDateConnectionMin.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUsersStartDateConnectionMin.setForeground(SystemColor.textHighlightText);
-		lblUsersStartDateConnectionMin.setFont(new Font("Dialog", Font.BOLD, 21));
-		panelStartDateConnection.add(lblUsersStartDateConnectionMin);
+		lblMin = new JLabel("Min:");
+		lblMin.setForeground(SystemColor.textHighlightText);
+		lblMin.setFont(new Font("Dialog", Font.BOLD, 16));
+		panelMinMaxStartDate.add(lblMin);
 
 		dateChooserStratDateMin = new JDateChooser();
 		dateChooserStratDateMin.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
-				if (e.getPropertyName().equals("date"))
-					actualizarTablaContracts(); // se actualiza la informacion de los contratos
+				if (e.getPropertyName().equals("date") && !isRestoreFilters) {
+					actualizarTablaContracts(); // se actualiza la tabla de los contratos
+				}
 			}
 		});
+		dateChooserStratDateMin.setPreferredSize(new Dimension(120, 22));
+		dateChooserStratDateMin.setFont(new Font("Dialog", Font.PLAIN, 16));
+		panelMinMaxStartDate.add(dateChooserStratDateMin);
 
-		panelStartDateConnection.add(dateChooserStratDateMin);
-
-		lblUsersStartDateConnectionMax = new JLabel("Start Date Max:");
-		lblUsersStartDateConnectionMax.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUsersStartDateConnectionMax.setForeground(SystemColor.textHighlightText);
-		lblUsersStartDateConnectionMax.setFont(new Font("Dialog", Font.BOLD, 21));
-		panelStartDateConnection.add(lblUsersStartDateConnectionMax);
+		JLabel lblMax = new JLabel("Max:");
+		lblMax.setForeground(SystemColor.textHighlightText);
+		lblMax.setFont(new Font("Dialog", Font.BOLD, 16));
+		panelMinMaxStartDate.add(lblMax);
 
 		dateChooserStratDateMax = new JDateChooser();
 		dateChooserStratDateMax.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
-				if (e.getPropertyName().equals("date"))
-					actualizarTablaContracts(); // se actualiza la informacion de los contratos
+				if (e.getPropertyName().equals("date") && !isRestoreFilters) {
+					actualizarTablaContracts(); // se actualiza la tabla de los contratos
+				}
 			}
 		});
+		dateChooserStratDateMax.setPreferredSize(new Dimension(120, 22));
+		dateChooserStratDateMax.setFont(new Font("Dialog", Font.PLAIN, 16));
+		panelMinMaxStartDate.add(dateChooserStratDateMax);
 
-		panelStartDateConnection.add(dateChooserStratDateMax);
+		panelFiltrosTerminationDate = new JPanel();
+		panelFiltrosTerminationDate.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelFiltrosTerminationDate);
+		panelFiltrosTerminationDate.setLayout(new BorderLayout(0, 0));
 
-		panelLastDateConnection = new JPanel();
-		panelLastDateConnection.setBackground(new Color(18, 95, 115));
-		panelFiltros.add(panelLastDateConnection);
-		panelLastDateConnection.setLayout(new BoxLayout(panelLastDateConnection, BoxLayout.Y_AXIS));
+		lblTerminationDate = new JLabel("Termination Date");
+		lblTerminationDate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTerminationDate.setForeground(SystemColor.textHighlightText);
+		lblTerminationDate.setFont(new Font("Dialog", Font.BOLD, 18));
+		panelFiltrosTerminationDate.add(lblTerminationDate, BorderLayout.NORTH);
 
-		lblLastDateMin = new JLabel("Termination Date Min:");
-		lblLastDateMin.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLastDateMin.setForeground(SystemColor.textHighlightText);
-		lblLastDateMin.setFont(new Font("Dialog", Font.BOLD, 21));
-		panelLastDateConnection.add(lblLastDateMin);
+		panelMinMaxTerminationDate = new JPanel();
+		panelMinMaxTerminationDate.setBackground(new Color(18, 95, 115));
+		panelFiltrosTerminationDate.add(panelMinMaxTerminationDate, BorderLayout.CENTER);
+
+		lblMin_1 = new JLabel("Min:");
+		lblMin_1.setForeground(SystemColor.textHighlightText);
+		lblMin_1.setFont(new Font("Dialog", Font.BOLD, 16));
+		panelMinMaxTerminationDate.add(lblMin_1);
 
 		dateChooserTerminationDateMin = new JDateChooser();
 		dateChooserTerminationDateMin.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
-				if (e.getPropertyName().equals("date"))
-					actualizarTablaContracts(); // se actualiza la informacion de los contratos
+				if (e.getPropertyName().equals("date") && !isRestoreFilters) {
+					actualizarTablaContracts(); // se actualiza la tabla de los contratos
+				}
 			}
 		});
+		dateChooserTerminationDateMin.setPreferredSize(new Dimension(120, 22));
+		dateChooserTerminationDateMin.setFont(new Font("Dialog", Font.PLAIN, 16));
+		panelMinMaxTerminationDate.add(dateChooserTerminationDateMin);
 
-		panelLastDateConnection.add(dateChooserTerminationDateMin);
-
-		lblLastDateMax = new JLabel("Termination Date Max:");
-		lblLastDateMax.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLastDateMax.setForeground(SystemColor.textHighlightText);
-		lblLastDateMax.setFont(new Font("Dialog", Font.BOLD, 21));
-		panelLastDateConnection.add(lblLastDateMax);
+		lblMax_1 = new JLabel("Max:");
+		lblMax_1.setForeground(SystemColor.textHighlightText);
+		lblMax_1.setFont(new Font("Dialog", Font.BOLD, 16));
+		panelMinMaxTerminationDate.add(lblMax_1);
 
 		dateChooserTerminationDateMax = new JDateChooser();
 		dateChooserTerminationDateMax.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
-				if (e.getPropertyName().equals("date"))
-					actualizarTablaContracts(); // se actualiza la informacion de los contratos
+				if (e.getPropertyName().equals("date") && !isRestoreFilters) {
+					actualizarTablaContracts(); // se actualiza la tabla de los contratos
+				}
 			}
 		});
-
-		panelLastDateConnection.add(dateChooserTerminationDateMax);
-
-		lblRestore = new JLabel("  Restore");
+		dateChooserTerminationDateMax.setPreferredSize(new Dimension(120, 22));
+		dateChooserTerminationDateMax.setFont(new Font("Dialog", Font.PLAIN, 16));
+		panelMinMaxTerminationDate.add(dateChooserTerminationDateMax);
+		
+		lblRestore = new JLabel();
+		lblRestore.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblRestore.setBackground(new Color(18, 95, 115));
+		lblRestore.setOpaque(true);
 		lblRestore.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				restoreFilters();
 			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblRestore.setBackground(SystemColor.activeCaptionBorder);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblRestore.setBackground(new Color(18, 95, 115));
+			}
 		});
-		lblRestore.setHorizontalAlignment(SwingConstants.LEFT);
-		lblRestore.setForeground(SystemColor.textHighlightText);
-		lblRestore.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblRestore.setIcon(new ImageIcon(PanelGerenteCreacionContrato.class.getResource("/images/Restart.png")));
 		panelFiltros.add(lblRestore);
-
-
-
-		this.addTypeOfContractFilter();
-		this.addContractStateFilter();
-		this.addProviderFilter();
-
 
 	}
 
@@ -472,8 +493,11 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	}
 
 	private void addTypeOfContractFilter () {
+		panelTypeOfContractFilter = new JPanel();
+		panelTypeOfContractFilter.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelTypeOfContractFilter);
 		comboBoxTypeOfContrac = new JComboBox<String>();
-		comboBoxTypeOfContrac.setFont(new Font("Dialog", Font.PLAIN, 21));
+		comboBoxTypeOfContrac.setFont(new Font("Dialog", Font.PLAIN, 16));
 		comboBoxTypeOfContrac.setBorder(new LineBorder(new Color(0, 0, 0)));
 		this.llenarComboBoxTypeOfContract();
 		comboBoxTypeOfContrac.addActionListener(new ActionListener() {
@@ -481,28 +505,32 @@ public class PanelGerenteCreacionContrato extends JPanel {
 				actualizarTablaContracts(); // se actualiza la información de la tabla de contratos
 			}
 		});
+		panelTypeOfContractFilter.setLayout(new BorderLayout(0, 0));
 
 		JLabel lblTypeOfContract = new JLabel("Type Of Contract");
 		lblTypeOfContract.setForeground(SystemColor.textHighlightText);
-		lblTypeOfContract.setHorizontalAlignment(SwingConstants.LEFT);
+		lblTypeOfContract.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTypeOfContract.setFont(new Font("Dialog", Font.BOLD, 21));
 		lblTypeOfContract.setBounds(61, 24, 138, 14);
-		panelTypeOfContractFilter.add(lblTypeOfContract);
+		panelTypeOfContractFilter.add(lblTypeOfContract, BorderLayout.NORTH);
 		comboBoxTypeOfContrac.setBounds(61, 49, 138, 22);
 		panelTypeOfContractFilter.add(comboBoxTypeOfContrac);
 	}
 
 	private void addContractStateFilter () {
-		panelContractStateFilter.setLayout(new BoxLayout(panelContractStateFilter, BoxLayout.Y_AXIS));
+		panelContractStateFilter = new JPanel();
+		panelContractStateFilter.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelContractStateFilter);
+		panelContractStateFilter.setLayout(new BorderLayout(0, 0));
 		JLabel lblNewLabel_1 = new JLabel("Contract State");
 		lblNewLabel_1.setForeground(SystemColor.textHighlightText);
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 21));
 		lblNewLabel_1.setBounds(522, 24, 119, 14);
-		panelContractStateFilter.add(lblNewLabel_1);
+		panelContractStateFilter.add(lblNewLabel_1, BorderLayout.NORTH);
 
 		comboBoxState = new JComboBox<String>();
-		comboBoxState.setFont(new Font("Dialog", Font.PLAIN, 21));
+		comboBoxState.setFont(new Font("Dialog", Font.PLAIN, 16));
 		comboBoxState.setBorder(new LineBorder(new Color(0, 0, 0)));
 		this.llenarComboboxStateContract();
 		comboBoxState.addActionListener(new ActionListener() {
@@ -515,8 +543,12 @@ public class PanelGerenteCreacionContrato extends JPanel {
 	}
 
 	private void addProviderFilter () {
+		panelProviderFilter = new JPanel();
+		panelProviderFilter.setBackground(new Color(18, 95, 115));
+		panelFiltros.add(panelProviderFilter);
 		comboBoxProvider = new JComboBox<Provider>();
-		comboBoxProvider.setFont(new Font("Dialog", Font.PLAIN, 21));
+	//	comboBoxProvider.setPreferredSize(new Dimension(200, 30));
+		comboBoxProvider.setFont(new Font("Dialog", Font.PLAIN, 16));
 		comboBoxProvider.setBorder(new LineBorder(new Color(0, 0, 0)));
 		this.llenarComboBoxProviders();
 		comboBoxProvider.addActionListener(new ActionListener() {
@@ -524,14 +556,14 @@ public class PanelGerenteCreacionContrato extends JPanel {
 				actualizarTablaContracts(); // se actualiza la información de la tabla de contratos
 			}
 		});
-		panelProviderFilter.setLayout(new BoxLayout(panelProviderFilter, BoxLayout.Y_AXIS));
+		panelProviderFilter.setLayout(new BorderLayout(0, 0));
 
 		lblNewLabel = new JLabel("Provider");
 		lblNewLabel.setForeground(SystemColor.textHighlightText);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 21));
 		lblNewLabel.setBounds(301, 24, 119, 14);
-		panelProviderFilter.add(lblNewLabel);
+		panelProviderFilter.add(lblNewLabel, BorderLayout.NORTH);
 		comboBoxProvider.setBounds(301, 49, 119, 22);
 		panelProviderFilter.add(comboBoxProvider);
 	}

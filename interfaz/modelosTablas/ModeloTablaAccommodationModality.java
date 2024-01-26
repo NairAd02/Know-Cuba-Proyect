@@ -17,7 +17,7 @@ public class ModeloTablaAccommodationModality extends DefaultTableModel implemen
 		this.elements = new ArrayList<AccommodationModality>();
 
 	}
-
+	
 	@Override
 	public void addElement(AccommodationModality accommodationModality) {
 		Object[] newRow =  null;

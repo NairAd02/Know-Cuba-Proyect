@@ -152,7 +152,7 @@ public class FrameChangeStatePassword extends JFrame {
 		contentPane.add(txtpnLeDamosLa);
 		
 		txtpnEsUnPlacer = new JTextPane();
-		txtpnEsUnPlacer.setText("Es un placer para nosotros\r\n     gestionar sus datos.\r\nPor favor para logearse al \r\n      sistema introduzca\r\n       una contrase\u00C3\u00B1a\r\n");
+		txtpnEsUnPlacer.setText("Es un placer para nosotros gestionar sus datos. Por favor para logearse al sistema introduzca una contraseña");
 		txtpnEsUnPlacer.setForeground(SystemColor.textHighlightText);
 		txtpnEsUnPlacer.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		txtpnEsUnPlacer.setBackground(new Color(18, 95, 115));

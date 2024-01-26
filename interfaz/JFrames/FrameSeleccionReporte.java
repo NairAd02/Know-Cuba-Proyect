@@ -9,6 +9,7 @@ import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import JPanels.PanelGerenteCreacionContrato;
+import JPanels.PanelReporteGeneral;
 import logica.AccommodationContract;
 import logica.CarrierContract;
 import logica.Controller;
@@ -44,9 +46,12 @@ public class FrameSeleccionReporte extends JFrame {
 	private JLabel lblReporte5;
 	private JLabel lblProgramaDelPaquete;
 	private JLabel lblPlanDeIngresos;
+	private HashMap mapa;
 
-
+	private static final String reportsPath = "Reportes/";
+	
 	public FrameSeleccionReporte() {
+		
 		
 		setResizable(false);
 		setUndecorated(true);
@@ -54,6 +59,7 @@ public class FrameSeleccionReporte extends JFrame {
 		setBounds(100, 100, 1035, 678);
 		contentPane = new JPanel();
 		contentPane.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
+		mapa = new HashMap<>();
 
 
 		setContentPane(contentPane);
@@ -129,13 +135,14 @@ public class FrameSeleccionReporte extends JFrame {
 		scrollPane.setViewportView(panelContratos);
 		panelContratos.setLayout(null);
 
-		lblReporte2 = new JLabel("Listado de Temporadas de los Contratos de Hoteles ");
+		lblReporte2 = new JLabel("List of seasons for hotel contracts ");
 		lblReporte2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblReporte2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblReporte2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				PanelReporteGeneral pr = new PanelReporteGeneral(reportsPath + "Programa del paquete turistico.jasper",reportsPath + "SubreportSeason.jasper",reportsPath + "SubreportePlanHotelero.jasper", mapa, mapa);
+				pr.setVisible(true);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -154,13 +161,14 @@ public class FrameSeleccionReporte extends JFrame {
 		lblReporte2.setFont(new Font("Dialog", Font.BOLD, 26));
 		panelContratos.add(lblReporte2);
 
-		lblReporteListadoContratosConciliadoHoteles = new JLabel("Listado de Contratos Conciliados con Hoteles");
+		lblReporteListadoContratosConciliadoHoteles = new JLabel("List of contracts reconciled with hotels");
 		lblReporteListadoContratosConciliadoHoteles.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblReporteListadoContratosConciliadoHoteles.setHorizontalAlignment(SwingConstants.CENTER);
 		lblReporteListadoContratosConciliadoHoteles.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				PanelReporteGeneral pr = new PanelReporteGeneral(reportsPath + "Listado de contratos conciliados con hoteless.jasper",reportsPath + "SubreportePlanHotelero.jasper", mapa);
+				pr.setVisible(true);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -179,13 +187,14 @@ public class FrameSeleccionReporte extends JFrame {
 		lblReporteListadoContratosConciliadoHoteles.setFont(new Font("Dialog", Font.BOLD, 26));
 		panelContratos.add(lblReporteListadoContratosConciliadoHoteles);
 
-		lblReporte3 = new JLabel("Listado de Contratos de Transporte");
+		lblReporte3 = new JLabel("List of carrier contracts");
 		lblReporte3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblReporte3.setHorizontalAlignment(SwingConstants.CENTER);
 		lblReporte3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-			
+				PanelReporteGeneral pr = new PanelReporteGeneral(reportsPath + "Listado de contratos de transporte.jasper",reportsPath + "SubreporteVehiculos.jasper", mapa);
+				pr.setVisible(true);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -204,11 +213,13 @@ public class FrameSeleccionReporte extends JFrame {
 		lblReporte3.setFont(new Font("Dialog", Font.BOLD, 26));
 		panelContratos.add(lblReporte3);
 		
-		lblReporte4 = new JLabel("Listado de Contratos de Servicios Complementarios");
+		lblReporte4 = new JLabel("List of complementary service contracts");
 		lblReporte4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblReporte4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				PanelReporteGeneral pr = new PanelReporteGeneral(reportsPath + "Listado de contratos de servicios complementarios.jasper");
+				pr.setVisible(true);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -228,7 +239,7 @@ public class FrameSeleccionReporte extends JFrame {
 		lblReporte4.setBounds(164, 291, 679, 41);
 		panelContratos.add(lblReporte4);
 		
-		lblReporte5 = new JLabel("Listado de Hoteles Activos");
+		lblReporte5 = new JLabel("List of active hotels");
 		lblReporte5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblReporte5.addMouseListener(new MouseAdapter() {
 			@Override
@@ -255,11 +266,13 @@ public class FrameSeleccionReporte extends JFrame {
 		lblReporte5.setBounds(164, 374, 679, 41);
 		panelContratos.add(lblReporte5);
 		
-		lblProgramaDelPaquete = new JLabel("Programa del Paquete Turistico");
+		lblProgramaDelPaquete = new JLabel("Tour package program");
 		lblProgramaDelPaquete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblProgramaDelPaquete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				PanelReporteGeneral pr = new PanelReporteGeneral(reportsPath + "Reporte del paquete turístico.jasper", reportsPath + "Subreporte Programacion de Actividades Diarias.jasper", mapa);
+				pr.setVisible(true);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -279,11 +292,13 @@ public class FrameSeleccionReporte extends JFrame {
 		lblProgramaDelPaquete.setBounds(164, 457, 679, 41);
 		panelContratos.add(lblProgramaDelPaquete);
 		
-		lblPlanDeIngresos = new JLabel("Plan de ingresos por concepto de venta de Paquetes");
+		lblPlanDeIngresos = new JLabel("Plan for revenue from the sale of tour packages");
 		lblPlanDeIngresos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblPlanDeIngresos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				PanelReporteGeneral pr = new PanelReporteGeneral(reportsPath + "Plan de ingresos por concepto de venta de paquetes turísticos.jasper");
+				pr.setVisible(true);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {

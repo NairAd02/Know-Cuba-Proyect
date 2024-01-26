@@ -101,7 +101,7 @@ public class ServiceContract extends Contract {
 
 
         // Filtro Precio
-        if (precioMin != AusentFilter.spinnerField && precioMax != AusentFilter.spinnerField)
+        if (precioMin != AusentFilter.spinnerField || precioMax != AusentFilter.spinnerField)
             modalitys = FiltersModality.filterPrice(modalitys, precioMin, precioMax); // se filtra por el rango de precios
 
 

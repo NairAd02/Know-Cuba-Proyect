@@ -2,6 +2,8 @@ package JFrames;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
 import dao.UserDAO;
 import logica.Administrator;
 import logica.Controller;
@@ -20,6 +22,9 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -37,7 +42,7 @@ public class FrameLogin extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textFieldUsername;
-	private JTextField textFieldPassword;
+	private JPasswordField textFieldPassword;
 	private JLabel lblLogin;
 	private JLabel lblNotificacionRegistro;
 	private JLabel lblX;
@@ -122,6 +127,16 @@ public class FrameLogin extends JFrame {
 		panel_2.add(labelIntroducirPassword);
 
 		JCheckBox chckbxShowPassword = new JCheckBox("Show password");
+		chckbxShowPassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(textFieldPassword.getEchoChar());
+				if(textFieldPassword.getEchoChar() == (char)0){
+					textFieldPassword.setEchoChar((char)'*');
+				}
+				else
+					textFieldPassword.setEchoChar((char)0);
+			}
+		});
 		chckbxShowPassword.setForeground(SystemColor.textHighlightText);
 		chckbxShowPassword.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		chckbxShowPassword.setOpaque(false);
@@ -172,7 +187,8 @@ public class FrameLogin extends JFrame {
 		panel_2.add(textFieldUsername);
 		textFieldUsername.setColumns(10);
 
-		textFieldPassword = new JTextField();
+		textFieldPassword = new JPasswordField();
+		textFieldPassword.setEchoChar((char)'*');
 		textFieldPassword.setForeground(Color.BLACK);
 		textFieldPassword.setFont(new Font("Tahoma", Font.BOLD, 12));
 		textFieldPassword.setOpaque(false);
@@ -180,6 +196,13 @@ public class FrameLogin extends JFrame {
 		textFieldPassword.setBounds(37, 255, 288, 20);
 		textFieldPassword.setBorder(null);
 		panel_2.add(textFieldPassword);
+	
+		
+		chckbxShowPassword.setForeground(Color.BLACK);
+		chckbxShowPassword.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		chckbxShowPassword.setOpaque(false);
+		chckbxShowPassword.setBounds(37, 294, 121, 23);
+		panel_2.add(chckbxShowPassword);
 
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(FrameLogin.class.getResource("/images/WhatsApp Image 2023-11-14 at 8.59.57 PM - copia - copia.jpeg")));

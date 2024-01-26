@@ -8,6 +8,7 @@ import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,7 +19,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import logica.Controller;
+
 import javax.swing.JTextField;
+
+import JPanels.PanelReporteGeneral;
 
 public class FrameReporteElegirParametros extends JFrame {
 
@@ -34,8 +38,12 @@ public class FrameReporteElegirParametros extends JFrame {
 	private JTextField textFieldHotelChain;
 	private JLabel lblProvince;
 	private JTextField textFieldProvince;
+	private HashMap mapa;
+	
+	private static final String reportsPath = "Reportes/";
 
 	public FrameReporteElegirParametros(JFrame f) {
+		mapa = new HashMap<>();
 		this.frame = f;
 		setUndecorated(true);
 
@@ -78,6 +86,27 @@ public class FrameReporteElegirParametros extends JFrame {
 		lblConfirm.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				String provincia = textFieldProvince.getText();
+				String cadena = textFieldHotelChain.getText();
+				
+				if(provincia.isEmpty())
+				{
+					mapa.put("Provincia", null);
+				}
+				else
+				{
+					mapa.put("Provincia", provincia);
+				}
+				
+				if(cadena.isEmpty())
+				{
+					mapa.put("Cadena", null);
+				}
+				else{
+					mapa.put("Cadena", cadena);
+					}
+						
+				PanelReporteGeneral pr = new PanelReporteGeneral(reportsPath + "Listado de hoteles activos.jasper", mapa);
 				cerrarFrame(); // se cierra el frame actual
 			}
 			@Override

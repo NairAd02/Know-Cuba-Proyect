@@ -36,8 +36,46 @@ public class PanelPaqueteTuristico extends JPanel {
 	private SimpleAttributeSet modificadorDeTexto;
 	private JLabel lblCarrito;
 	private JTextPaneModificado textPaneNameTouristPackage;
+	private boolean isSelected;
+	private PanelGestionPaquetesTuristicos panelGestionPaquetesTuristicos;
 
-	public PanelPaqueteTuristico(TouristPackage t) {
+	public void select () {
+		this.isSelected = true;
+		lblCarrito.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/Diapositiva2.JPG")));
+		setBackground(new Color(5, 150, 177));
+		this.panelGestionPaquetesTuristicos.deselectedAllTouristPackage(PanelPaqueteTuristico.this);
+		this.panelGestionPaquetesTuristicos.actualizarEstadoButtons();
+	}
+
+	public void deselect () {
+		this.isSelected = false;
+		lblCarrito.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/PaqueteTuristico.jpg")));
+		setBackground(new Color(18, 95, 115));
+	}
+
+
+
+
+
+	public TouristPackage getTouristPackage() {
+		return touristPackage;
+	}
+
+	public void setTouristPackage(TouristPackage touristPackage) {
+		this.touristPackage = touristPackage;
+	}
+
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+	}
+
+	public PanelPaqueteTuristico(PanelGestionPaquetesTuristicos p ,TouristPackage t) {
+		this.isSelected = false;
+
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -48,16 +86,19 @@ public class PanelPaqueteTuristico extends JPanel {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lblCarrito.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/PaqueteTuristico.jpg")));
-				setBackground(new Color(18, 95, 115));
+				if (!isSelected) {
+					lblCarrito.setIcon(new ImageIcon(PanelPaqueteTuristico.class.getResource("/images/PaqueteTuristico.jpg")));
+					setBackground(new Color(18, 95, 115));
+				}
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-
+				select();
 			}
 		});
 		setBorder(new MatteBorder(4, 4, 4, 4, (Color) new Color(0, 0, 0)));
 		this.touristPackage = t;
+		this.panelGestionPaquetesTuristicos = p;
 		setLayout(null);
 		setBackground(new Color(18, 95, 115));
 
@@ -93,13 +134,13 @@ public class PanelPaqueteTuristico extends JPanel {
 
 		setSize(756, 231);
 
-		JLabel lblDesde = new JLabel("Desde :");
+		JLabel lblDesde = new JLabel("Begin :");
 		lblDesde.setForeground(SystemColor.textHighlightText);
 		lblDesde.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblDesde.setBounds(315, 56, 72, 23);
 		add(lblDesde);
 
-		JLabel lblHasta = new JLabel("Hasta :");
+		JLabel lblHasta = new JLabel("Final :");
 		lblHasta.setForeground(SystemColor.textHighlightText);
 		lblHasta.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblHasta.setBounds(528, 56, 72, 23);

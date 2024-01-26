@@ -19,6 +19,8 @@ import logica.Modality;
 import logica.TouristPackage;
 import modelosTablas.ModeloTablaTransportModalityCostKilometers;
 import modelosTablas.ModeloTablaTransportModalityEstablishedRoute;
+import utils.Operations;
+
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -197,7 +199,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAviableEstablishedRoute(); // se actualiza la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostGoingMinAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostGoingMinAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostGoingMinAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostGoingMinAvaible.setBounds(130, 58, 53, 20);
 		add(spinnerCostGoingMinAvaible);
@@ -215,7 +217,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAviableEstablishedRoute(); // se actualiza la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostGoingMaxAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostGoingMaxAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostGoingMaxAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostGoingMaxAvaible.setBounds(244, 58, 53, 20);
 		add(spinnerCostGoingMaxAvaible);
@@ -239,7 +241,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAviableEstablishedRoute(); // se actualiza la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostLapMinAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostLapMinAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostLapMinAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostLapMinAvaible.setBounds(400, 58, 53, 20);
 		add(spinnerCostLapMinAvaible);
@@ -257,7 +259,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAviableEstablishedRoute(); // se actualiza la tabla de las modalidades disponibles
 			}
 		});
-		spinnerCostLapMaxAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostLapMaxAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostLapMaxAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostLapMaxAvaible.setBounds(498, 58, 53, 20);
 		add(spinnerCostLapMaxAvaible);
@@ -282,7 +284,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAviableEstablishedRoute(); // se actualiza la tabla de las modalidades disponibles
 			}
 		});
-		spinnerPriceMinAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMinAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMinAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMinAvaible.setBounds(668, 58, 53, 20);
 		add(spinnerPriceMinAvaible);
@@ -300,7 +302,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAviableEstablishedRoute(); // se actualiza la tabla de las modalidades disponibles
 			}
 		});
-		spinnerPriceMaxAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMaxAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMaxAvaible.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMaxAvaible.setBounds(771, 58, 53, 20);
 		add(spinnerPriceMaxAvaible);
@@ -324,7 +326,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAssignedEstablishedRoute(); // se actualiza la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostGoingMinAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostGoingMinAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostGoingMinAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostGoingMinAssigned.setBounds(130, 321, 53, 20);
 		add(spinnerCostGoingMinAssigned);
@@ -342,7 +344,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAssignedEstablishedRoute(); // se actualiza la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostGoingMaxAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostGoingMaxAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostGoingMaxAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostGoingMaxAssigned.setBounds(244, 321, 53, 20);
 		add(spinnerCostGoingMaxAssigned);
@@ -366,7 +368,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAssignedEstablishedRoute(); // se actualiza la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostLapMinAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostLapMinAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostLapMinAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostLapMinAssigned.setBounds(400, 321, 53, 20);
 		add(spinnerCostLapMinAssigned);
@@ -384,7 +386,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAssignedEstablishedRoute(); // se actualiza la tabla de las modalidades asignados
 			}
 		});
-		spinnerCostLapMaxAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostLapMaxAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostLapMaxAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostLapMaxAssigned.setBounds(498, 321, 53, 20);
 		add(spinnerCostLapMaxAssigned);
@@ -409,7 +411,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAssignedEstablishedRoute(); // se actualiza la tabla de las modalidades asignados
 			}
 		});
-		spinnerPriceMinAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMinAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMinAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMinAssigned.setBounds(668, 321, 53, 20);
 		add(spinnerPriceMinAssigned);
@@ -427,7 +429,7 @@ public class PanelPackageDisignerContenedorEstablishedRoute extends JPanel imple
 					actualizarTablaAssignedEstablishedRoute(); // se actualiza la tabla de las modalidades asignados
 			}
 		});
-		spinnerPriceMaxAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMaxAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMaxAssigned.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMaxAssigned.setBounds(771, 321, 53, 20);
 		add(spinnerPriceMaxAssigned);

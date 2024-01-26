@@ -18,6 +18,8 @@ import logica.Provider;
 import logica.ServiceContract;
 import logica.ServiceProvider;
 import utils.ConnectionDataBase;
+import utils.Operations;
+
 import javax.swing.JComboBox;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
@@ -216,7 +218,7 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 							updateServiceContract();
 							ConnectionDataBase.commit(); // se confirman las operaciones realizadas sobre la base de datos
 							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
-							FramePrincipal.mostarFrameNotificacion("Ha sido modificada correctamente la información del contrato de servicio: " + serviceContract.getId()); // se notifica de la accion realizada al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been successfully modified the contract"); // se notifica de la accion realizada al usuario
 							cerrarFrame();
 						} catch (SQLException e1) {
 							try {
@@ -286,7 +288,7 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 		spinnerRecargo = new JSpinner();
 		spinnerRecargo.setFont(new Font("Dialog", Font.PLAIN, 14));
 		spinnerRecargo.setBorder(new LineBorder(new Color(0, 0, 0)));
-		spinnerRecargo.setModel(new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerRecargo, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerRecargo.setBounds(663, 122, 124, 22);
 		panelServiceContract.add(spinnerRecargo);
 
@@ -417,7 +419,7 @@ public class FrameGerenteCreacionContratoServivio extends JFrame {
 				this.serviceContract.getModalitys(), (Double) spinnerRecargo.getValue());
 
 		Controller.getInstancie().getTouristAgency().addContract(serviceContract); // se inserta el contrato de servicio a nivel de base de datos
-		FramePrincipal.mostarFrameNotificacion("Ha sido insertado correctamente el contrato de servicio: " + serviceContract.getId()); // se notifica de la accion realizada al usuario
+		FramePrincipal.mostarFrameNotificacion("It has been added successfully the contract"); // se notifica de la accion realizada al usuario
 	}
 
 	public void updateServiceContract () throws SQLException { // Modo update

@@ -28,6 +28,7 @@ import logica.Modality;
 import logica.TypeOfRoom;
 import modelosTablas.ModeloTablaAccommodationModality;
 import utils.AusentFilter;
+import utils.Operations;
 import utils.Semaphore;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
@@ -230,7 +231,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		add(lblCantDaysAccommodation);
 
 		spinnerCantDaysAccommodationMax = new JSpinner();
-		spinnerCantDaysAccommodationMax.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		Operations.crearJSpinnerNumericoInteger(spinnerCantDaysAccommodationMax, new SpinnerNumberModel(Integer.valueOf(0), null, null, Integer.valueOf(1)));
 		spinnerCantDaysAccommodationMax.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestore)
@@ -242,7 +243,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		add(spinnerCantDaysAccommodationMax);
 
 		spinnerCantDaysAccommodationMin = new JSpinner();
-		spinnerCantDaysAccommodationMin.setModel(new SpinnerNumberModel(Integer.valueOf(0), null, null, Integer.valueOf(1)));
+		Operations.crearJSpinnerNumericoInteger(spinnerCantDaysAccommodationMin, new SpinnerNumberModel(Integer.valueOf(0), null, null, Integer.valueOf(1)));
 		spinnerCantDaysAccommodationMin.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestore)
@@ -279,7 +280,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		add(lblMin_1);
 
 		spinnerPriceMin = new JSpinner();
-		spinnerPriceMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMin, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerPriceMin.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestore)
@@ -297,7 +298,7 @@ public class PanelCreacionContratoAlojamientoAccommodationModality extends JPane
 		add(lblMax_1);
 
 		spinnerPriceMax = new JSpinner();
-		spinnerPriceMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMax, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerPriceMax.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestore)

@@ -26,6 +26,8 @@ import java.util.Date;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.Cursor;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFrame {
 
@@ -44,6 +46,7 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 	private int mouseX, mouseY;
 	private Season season;
 	private JLabel lblRestore;
+	private JLabel lblErrorName;
 
 
 	public FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir(PanelGerenteCreacionContratoAlojamientoTemporada at, Season s) {
@@ -143,11 +146,11 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (verificarCampos()) {
-					if (season == null) { // Add
+					if (season.getId() == -1) { // Add
 						try {
 							addSeason();
 							panelGerenteCreacionContratoAlojamientoTemporada.actualizarTablaSeasons(); // se actualiza la información de la tabla de las tempordadas
-							FramePrincipal.mostarFrameNotificacion("Ha sido insertada con éxito la temporada"); // se notifica de la accion realiza al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been added successfully the season"); // se notifica de la accion realiza al usuario
 							cerrarFrame();
 						} catch (SQLException e1) {
 							e1.printStackTrace();
@@ -157,7 +160,7 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 						try {
 							updateSeason();
 							panelGerenteCreacionContratoAlojamientoTemporada.actualizarTablaSeasons(); // se actualiza la información de la tabla de las tempordadas
-							FramePrincipal.mostarFrameNotificacion("Ha sido modificado con éxito la información de la temporada: " + season.getId()); // se notifica de la accion realiza al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been successfully modified the season"); // se notifica de la accion realiza al usuario
 							cerrarFrame();
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
@@ -165,12 +168,16 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 						}
 					}
 				}
+				else
+					mostrarErrores();
+
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				ocultarErrores();
 			}
 		});
 		lblAdd.setOpaque(true);
@@ -186,11 +193,32 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 		textFieldName.setColumns(10);
 
 		dateChooserStratDate = new JDateChooser();
+		dateChooserStratDate.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date")) {
+					season.setStartDate(dateChooserStratDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+					dateChooserEndDate.setMinSelectableDate(Date.from(season.getStartDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+				}
+			}
+		});
 		dateChooserStratDate.setBounds(315, 89, 125, 20);
+		dateChooserStratDate.setMinSelectableDate(Date.from(this.accommodationContract.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		
 		contentPane_1.add(dateChooserStratDate);
 
 		dateChooserEndDate = new JDateChooser();
+		dateChooserEndDate.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date")) {
+					season.setTerminationDate(dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+					dateChooserStratDate.setMaxSelectableDate(Date.from(season.getTerminationDate().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+				}
+			}
+		});
 		dateChooserEndDate.setBounds(315, 120, 125, 20);
+		if (this.season.getId() == -1) // add
+		dateChooserEndDate.setMinSelectableDate(Date.from(this.accommodationContract.getStartDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		dateChooserEndDate.setMaxSelectableDate(Date.from(this.accommodationContract.getTerminationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		contentPane_1.add(dateChooserEndDate);
 
 		comboBoxTypeOfSeason = new JComboBox <String>();
@@ -201,6 +229,13 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 		textPaneDescription.setBounds(220, 157, 220, 109);
 		contentPane_1.add(textPaneDescription);
 
+		lblErrorName = new JLabel("Incorrect name");
+		lblErrorName.setVisible(false);
+		lblErrorName.setForeground(Color.RED);
+		lblErrorName.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblErrorName.setBounds(329, 31, 111, 14);
+		contentPane_1.add(lblErrorName);
+
 
 
 		this.llenarComboBoxTypeOfSeason();
@@ -209,9 +244,22 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 	}
 
 	private void definirComponentes () {
-		if (this.season != null) // Update
+		if (this.season.getId() != -1) // Update
 			this.addLblRestore();
 	}
+
+	private void mostrarErrores () {
+		if (!this.season.verificarIntervaloFechas() || !this.season.verificarFechasInContract(this.accommodationContract.getStartDate(), this.accommodationContract.getTerminationDate()))
+			FramePrincipal.mostrarFrameInformacion(FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir.this, "Selected dates are incorrect");
+		if (this.textFieldName.getText().equalsIgnoreCase(""))
+			lblErrorName.setVisible(true);
+	}
+
+	private void ocultarErrores () {
+		lblErrorName.setVisible(false);	
+	}
+
+
 
 	private void addLblRestore () {
 		lblRestore = new JLabel("Restore");
@@ -232,7 +280,7 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 	}
 
 	private void definirTexto () {
-		if (this.season != null) { // Update 
+		if (this.season.getId() != -1) { // Update 
 			this.dateChooserStratDate.setDate(Date.from(this.season.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			this.dateChooserEndDate.setDate(Date.from(this.season.getTerminationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			this.textFieldName.setText(this.season.getName());
@@ -241,8 +289,10 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 			this.lblAdd.setText("UPDATE");
 		}
 		else {
-			this.dateChooserStratDate.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-			this.dateChooserEndDate.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			this.dateChooserStratDate.setDate(Date.from(this.accommodationContract.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			this.dateChooserEndDate.setDate(Date.from(this.accommodationContract.getTerminationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			this.season.setStartDate(this.accommodationContract.getStartDate());
+			this.season.setTerminationDate(this.accommodationContract.getTerminationDate());
 			this.lblAdd.setText("ADD");
 		}
 	}
@@ -255,7 +305,8 @@ public class FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir extends JFr
 	}
 
 	private boolean verificarCampos () {
-		return (!this.textFieldName.getText().equalsIgnoreCase("") && this.dateChooserStratDate.getDate() != null && this.dateChooserEndDate.getDate() != null);
+		return (!this.textFieldName.getText().equalsIgnoreCase("") && this.season.verificarIntervaloFechas() && 
+				this.season.verificarFechasInContract(this.accommodationContract.getStartDate(), this.accommodationContract.getTerminationDate()));
 	}
 
 	private void addSeason () throws SQLException {

@@ -3,7 +3,13 @@ package JPanels;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.SystemColor;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.swing.JPanel;
+
+import logica.TouristPackage;
+import net.sf.jasperreports.engine.type.PenEnum;
 
 
 public class PanelLienzoPaquetesTuristicos extends JPanel {
@@ -15,7 +21,7 @@ public class PanelLienzoPaquetesTuristicos extends JPanel {
 		setBackground(SystemColor.inactiveCaptionBorder);
 		setLayout(null);
 	}
-	
+
 	public void clearElements () { // Metodo para eliminar todos los componenetes del panel
 		this.removeAll();
 	}
@@ -57,6 +63,45 @@ public class PanelLienzoPaquetesTuristicos extends JPanel {
 
 				setPreferredSize(new Dimension((int)getPreferredSize().getWidth(), (int)getPreferredSize().getHeight() + (posicionExactaY - (int)getPreferredSize().getHeight())+ 50));
 			}
+		}
+	}
+
+	public TouristPackage getFirstSelectElement () {
+		TouristPackage touristPackage = null;
+
+		for (int i = 0; i < getComponentCount() && touristPackage == null; i++) {
+			PanelPaqueteTuristico panelPaq = (PanelPaqueteTuristico) getComponent(i);
+			if (panelPaq.isSelected())
+				touristPackage = panelPaq.getTouristPackage();
+		}
+
+		return touristPackage;
+	}
+
+	public ArrayList<TouristPackage> getSelectElements () {
+		ArrayList<TouristPackage> touristPackage = new ArrayList<TouristPackage>();
+
+		for (int i = 0; i < getComponentCount(); i++) {
+			PanelPaqueteTuristico panelPaq = (PanelPaqueteTuristico) getComponent(i);
+			if (panelPaq.isSelected())
+				touristPackage.add(panelPaq.getTouristPackage());
+		}
+
+		return touristPackage;
+	}
+
+	public void deselectedAllPanelTouristPackage (PanelPaqueteTuristico panel) {
+		for (int i = 0; i < getComponentCount(); i++) {
+			PanelPaqueteTuristico panelPaq = (PanelPaqueteTuristico) getComponent(i);
+			if (!panelPaq.equals(panel))
+			panelPaq.deselect();			
+		}
+	}
+	
+	public void deselectedAllPanelTouristPackage () {
+		for (int i = 0; i < getComponentCount(); i++) {
+			PanelPaqueteTuristico panelPaq = (PanelPaqueteTuristico) getComponent(i);
+			panelPaq.deselect();			
 		}
 	}
 }

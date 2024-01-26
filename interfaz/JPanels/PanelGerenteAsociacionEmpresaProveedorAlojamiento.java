@@ -217,8 +217,12 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 		panelTable.add(scrollPaneTable, BorderLayout.CENTER);
 
 		tableAccommodationProvider = new JTable();
+		tableAccommodationProvider.setModel(new ModeloTablaAccommodationProvider());
 		tableAccommodationProvider.setRowHeight(30);
-		tableAccommodationProvider.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		tableAccommodationProvider.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableAccommodationProvider.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
+		tableAccommodationProvider.getTableHeader().setForeground(Color.black);
+		tableAccommodationProvider.getTableHeader().setBackground(SystemColor.black);
 		tableAccommodationProvider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -226,10 +230,7 @@ public class PanelGerenteAsociacionEmpresaProveedorAlojamiento extends JPanel {
 				actualizarEstadoButtonShow();
 			}
 		});
-		tableAccommodationProvider.setModel(new ModeloTablaAccommodationProvider());
-		tableAccommodationProvider.getTableHeader().setFont(new Font("Arial", Font.BOLD, 24));
-		tableAccommodationProvider.getTableHeader().setForeground(Color.black);
-		tableAccommodationProvider.getTableHeader().setBackground(SystemColor.black);
+		
 		scrollPaneTable.setViewportView(tableAccommodationProvider);
 		scrollPaneTable.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
 	}

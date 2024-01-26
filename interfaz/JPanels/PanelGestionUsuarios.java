@@ -101,13 +101,13 @@ public class PanelGestionUsuarios extends JPanel {
 	}
 
 	private void crearFrameDecisor () {
-		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Seguro que desea eliminar los usuarios seleccionados");
+		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Are you sure you want to delete?");
 		frameDecisor.setVisible(true);
 		FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
 	}
 
 	private void crearFrameNotificacion () {
-		FrameAdvertencia frameAdvertencia = new FrameAdvertencia("Han sido elimanados correctamente los usuarios seleccionados");
+		FrameAdvertencia frameAdvertencia = new FrameAdvertencia("It has been successfully removed the Users");
 		frameAdvertencia.setVisible(true);
 	}
 

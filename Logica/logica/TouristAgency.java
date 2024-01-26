@@ -355,12 +355,12 @@ public class TouristAgency {
             touristPackages = FiltersTouristPackage.filterTerminationDate(touristPackages, terminationDateMin, terminationDateMax); // se filtra por el rango de fechas
 
         // Filtro Price
-        if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
+        if (priceMin != AusentFilter.spinnerField || priceMax != AusentFilter.spinnerField)
             touristPackages = FiltersTouristPackage.filterPrice(touristPackages, priceMin, priceMax); // se filtra por el rango de precios
 
 
         // Filtro CantAviablePax
-        if (cantAviablePaxMin != AusentFilter.spinnerField && cantAviablePaxMax != AusentFilter.spinnerField)
+        if (cantAviablePaxMin != AusentFilter.spinnerField || cantAviablePaxMax != AusentFilter.spinnerField)
             touristPackages = FiltersTouristPackage.filterCantAviablePax(touristPackages, cantAviablePaxMin, cantAviablePaxMax); // se filtra por el rango de cantAviablePax
 
 

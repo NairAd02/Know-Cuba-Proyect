@@ -9,6 +9,8 @@ import logica.Controller;
 import logica.Modality;
 import logica.TouristPackage;
 import utils.ConnectionDataBase;
+import utils.Operations;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -19,7 +21,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
+
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.JSpinner;
@@ -57,6 +62,7 @@ public class FrameInformacionPaquete extends JFrame {
 	private JDateChooser dateChooserStratDate;
 	private JSpinner spinnerCantPax;
 	private PanelGestionPaquetesTuristicos panelGestionPaquetesTuristicos;
+	private JLabel lblNewLabel;
 
 
 	public TouristPackage getTouristPackage() {
@@ -158,14 +164,15 @@ public class FrameInformacionPaquete extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				cambioDePanel(new PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir(FrameInformacionPaquete.this));
+				lblAccommodationModalitys.setBackground(new Color(18, 95, 115));
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-
+				lblAccommodationModalitys.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-
+				lblAccommodationModalitys.setBackground(new Color(18, 95, 115));
 			}
 		});
 		lblAccommodationModalitys.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -181,14 +188,15 @@ public class FrameInformacionPaquete extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				cambioDePanel(new PanelDisennadorPaqueteTuristicoModalidadTransporteAnnadir(FrameInformacionPaquete.this));
+				lblTransportModalitys.setBackground(new Color(18, 95, 115));
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-
+				lblTransportModalitys.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-
+				lblTransportModalitys.setBackground(new Color(18, 95, 115));
 			}
 		});
 		lblTransportModalitys.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -205,14 +213,17 @@ public class FrameInformacionPaquete extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				if (touristPackage.verificarIntervaloFecha()) // se verifica que las fechas seleccionadas sean correctas
 					cambioDePanel(new PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir(FrameInformacionPaquete.this));
+				else
+					FramePrincipal.mostrarFrameInformacion(FrameInformacionPaquete.this, "Selected dates are incorrect");
+				lblServiceModalitys.setBackground(new Color(18, 95, 115));
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-
+				lblServiceModalitys.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-
+				lblServiceModalitys.setBackground(new Color(18, 95, 115));
 			}
 		});
 		lblServiceModalitys.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -224,6 +235,7 @@ public class FrameInformacionPaquete extends JFrame {
 		panelInformacionPaquetes.add(lblServiceModalitys);
 
 		lblOperation = new JLabel();
+		lblOperation.setBorder(new MatteBorder(3, 3, 3, 3, (Color) new Color(0, 0, 0)));
 		lblOperation.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -234,7 +246,7 @@ public class FrameInformacionPaquete extends JFrame {
 						try {
 							addTouristPackage();
 							ConnectionDataBase.getConnectionDataBase().commit(); // se confirman las operaciones realizadas en la base de datos
-							FramePrincipal.mostarFrameNotificacion("Se ha añadido correctamente el paquete");
+							FramePrincipal.mostarFrameNotificacion("It has been added successfully the Touris Package");
 							panelGestionPaquetesTuristicos.actualizarPanelPaquetes(); // se actualiza la informacion de los paquetes turisticos
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {
@@ -251,7 +263,7 @@ public class FrameInformacionPaquete extends JFrame {
 						try {
 							updateTouristPackage();
 							ConnectionDataBase.getConnectionDataBase().commit(); // se confirman las operaciones realizadas en la base de datos
-							FramePrincipal.mostarFrameNotificacion("Se ha modficado correctamente la información del paquete turistico");
+							FramePrincipal.mostarFrameNotificacion("It has been successfully modified the Touris Package");
 							panelGestionPaquetesTuristicos.actualizarPanelPaquetes(); // se actualiza la informacion de los paquetes turisticos
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {
@@ -264,6 +276,8 @@ public class FrameInformacionPaquete extends JFrame {
 						}
 					}
 				}
+				else // Temporal
+					FramePrincipal.mostrarFrameInformacion(FrameInformacionPaquete.this, "Tourist Package Fields are incorrect");
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -276,26 +290,28 @@ public class FrameInformacionPaquete extends JFrame {
 		});
 		lblOperation.setOpaque(true);
 		lblOperation.setHorizontalAlignment(SwingConstants.CENTER);
-		lblOperation.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblOperation.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblOperation.setBackground(SystemColor.info);
 		lblOperation.setBounds(368, 525, 235, 35);
 		panelInformacionPaquetes.add(lblOperation);
 
 		lblTitleFrame = new JLabel();
+		lblTitleFrame.setHorizontalAlignment(SwingConstants.LEFT);
 		lblTitleFrame.setForeground(SystemColor.textHighlightText);
 		lblTitleFrame.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblTitleFrame.setBounds(27, 11, 477, 30);
+		lblTitleFrame.setBounds(247, 8, 477, 30);
 		panelInformacionPaquetes.add(lblTitleFrame);
 
 		lblName = new JLabel("Name");
 		lblName.setHorizontalAlignment(SwingConstants.LEFT);
 		lblName.setForeground(SystemColor.textHighlightText);
 		lblName.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblName.setBounds(10, 53, 71, 30);
+		lblName.setBounds(108, 53, 71, 30);
 		panelInformacionPaquetes.add(lblName);
 
 		textFieldName = new JTextField();
-		textFieldName.setBounds(10, 83, 170, 20);
+		textFieldName.setFont(new Font("Dialog", Font.PLAIN, 13));
+		textFieldName.setBounds(108, 83, 170, 20);
 		panelInformacionPaquetes.add(textFieldName);
 		textFieldName.setColumns(10);
 
@@ -303,65 +319,63 @@ public class FrameInformacionPaquete extends JFrame {
 		lblCantpax.setHorizontalAlignment(SwingConstants.LEFT);
 		lblCantpax.setForeground(SystemColor.textHighlightText);
 		lblCantpax.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblCantpax.setBounds(237, 52, 109, 30);
+		lblCantpax.setBounds(335, 52, 109, 30);
 		panelInformacionPaquetes.add(lblCantpax);
 
 		spinnerCantPax = new JSpinner();
-		spinnerCantPax.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-		spinnerCantPax.setBounds(237, 83, 109, 20);
+		spinnerCantPax.setFont(new Font("Dialog", Font.PLAIN, 13));
+		Operations.crearJSpinnerNumericoInteger(spinnerCantPax, new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+		spinnerCantPax.setBounds(335, 83, 109, 20);
 		panelInformacionPaquetes.add(spinnerCantPax);
 
 		JLabel lblStartDate = new JLabel("Start Date");
 		lblStartDate.setHorizontalAlignment(SwingConstants.LEFT);
 		lblStartDate.setForeground(SystemColor.textHighlightText);
 		lblStartDate.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblStartDate.setBounds(418, 53, 109, 30);
+		lblStartDate.setBounds(516, 53, 109, 30);
 		panelInformacionPaquetes.add(lblStartDate);
 
 		dateChooserStratDate = new JDateChooser();
 		dateChooserStratDate.setFont(new Font("Dialog", Font.PLAIN, 13));
 		dateChooserStratDate.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
-				if (e.getPropertyName().equals("date"))
+				if (e.getPropertyName().equals("date")) {
 					touristPackage.setStartDate(dateChooserStratDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+					if (dateChooserTerminationDate != null)
+						dateChooserTerminationDate.setMinSelectableDate(Date.from(touristPackage.getStartDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+				}
 
 			}
 		});
-		dateChooserStratDate.setBounds(417, 83, 134, 20);
+		dateChooserStratDate.setBounds(515, 83, 134, 20);
+		if (this.touristPackage.getId() == -1) { // Add
+			this.touristPackage.setStartDate(LocalDate.now());
+			dateChooserStratDate.setDate(Date.from(this.touristPackage.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			dateChooserStratDate.setMinSelectableDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		}
 		panelInformacionPaquetes.add(dateChooserStratDate);
 
 		JLabel lblTermintationDate = new JLabel("Termintation Date");
 		lblTermintationDate.setHorizontalAlignment(SwingConstants.LEFT);
 		lblTermintationDate.setForeground(SystemColor.textHighlightText);
 		lblTermintationDate.setFont(new Font("Arial Black", Font.PLAIN, 19));
-		lblTermintationDate.setBounds(612, 53, 203, 30);
+		lblTermintationDate.setBounds(710, 53, 203, 30);
 		panelInformacionPaquetes.add(lblTermintationDate);
 
 		dateChooserTerminationDate = new JDateChooser();
 		dateChooserTerminationDate.setFont(new Font("Dialog", Font.PLAIN, 13));
 		dateChooserTerminationDate.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e) {
-				if (e.getPropertyName().equals("date"))
+				if (e.getPropertyName().equals("date")) {
 					touristPackage.setTerminationDate(dateChooserTerminationDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+					dateChooserStratDate.setMaxSelectableDate(Date.from(touristPackage.getTerminationDate().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+				}
 			}
 		});
-		dateChooserTerminationDate.setBounds(646, 83, 134, 20);
+		dateChooserTerminationDate.setBounds(744, 83, 134, 20);
+		if (this.touristPackage.getId() == -1) // add
+			dateChooserTerminationDate.setMinSelectableDate(Date.from(touristPackage.getStartDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		panelInformacionPaquetes.add(dateChooserTerminationDate);
-
-		JTextPane textPaneDescription = new JTextPane();
-		textPaneDescription.setMargin(new Insets(8, 8, 8, 8));
-		textPaneDescription.setForeground(SystemColor.textText);
-		textPaneDescription.setFont(new Font("Dialog", Font.PLAIN, 18));
-		textPaneDescription.setBorder(new LineBorder(new Color(0, 0, 0)));
-		textPaneDescription.setBackground(SystemColor.inactiveCaptionBorder);
-		textPaneDescription.setBounds(10, 331, 951, 168);
-		panelInformacionPaquetes.add(textPaneDescription);
-
-		JLabel lblDescription = new JLabel("DESCRIPTION");
-		lblDescription.setForeground(SystemColor.textHighlightText);
-		lblDescription.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblDescription.setBounds(27, 290, 124, 30);
-		panelInformacionPaquetes.add(lblDescription);
 
 		JSeparator separator = new JSeparator();
 		separator.setForeground(SystemColor.textText);
@@ -375,6 +389,11 @@ public class FrameInformacionPaquete extends JFrame {
 		separator_1.setBounds(0, 173, 971, 2);
 		panelInformacionPaquetes.add(separator_1);
 
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(FrameInformacionPaquete.class.getResource("/images/Logo 38x38.png")));
+		lblNewLabel.setBounds(10, 16, 38, 38);
+		panelInformacionPaquetes.add(lblNewLabel);
+
 
 
 		this.definirTexto();
@@ -386,7 +405,18 @@ public class FrameInformacionPaquete extends JFrame {
 	private void definirTexto () {
 		this.definirTextoLblTitle();
 		this.definirTextoLblOperation();
+		if (this.touristPackage.getId() != -1) // Update
+			this.definirCampos();
 	}
+
+	private void definirCampos () {
+		this.dateChooserStratDate.setDate(Date.from(this.touristPackage.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		this.dateChooserTerminationDate.setDate(Date.from(this.touristPackage.getTerminationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		this.textFieldName.setText(this.touristPackage.getName());
+		this.spinnerCantPax.setValue(this.touristPackage.getCantMaxPax());
+	}
+
+
 
 	private void definirTextoLblTitle () {
 		String text = "";

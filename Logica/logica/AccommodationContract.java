@@ -179,13 +179,13 @@ public class AccommodationContract extends Contract {
 			modalitys = FiltersAccommodationModality.filterHotelModality(modalitys, hotelModality); // se filtra por modalidad de hotel
 
 		// Se filtra por precio
-		if (priceMin != AusentFilter.spinnerField && priceMax != AusentFilter.spinnerField)
+		if (priceMin != AusentFilter.spinnerField || priceMax != AusentFilter.spinnerField)
 			modalitys = FiltersModality.filterPrice(modalitys, priceMin, priceMax); // se filtra por el rango de precios
 
 
 		// Se filtra por cantidad de dias de alojamiento
 
-		if (cantDaysAccommodationMin != AusentFilter.spinnerField && cantDaysAccommodationMax != AusentFilter.spinnerField)
+		if (cantDaysAccommodationMin != AusentFilter.spinnerField || cantDaysAccommodationMax != AusentFilter.spinnerField)
 			modalitys = FiltersAccommodationModality.filterCantDaysAccommodations(modalitys, cantDaysAccommodationMin, cantDaysAccommodationMax); // se filtra por el rango de dias
 
 

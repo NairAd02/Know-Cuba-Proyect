@@ -191,13 +191,13 @@ public class PanelSeccionVehicles extends JPanel {
 		lblVehicles.setBounds(216, 11, 116, 30);
 		add(lblVehicles);
 
-		JLabel lblDisponible = new JLabel("Disponibles");
+		JLabel lblDisponible = new JLabel("Available");
 		lblDisponible.setForeground(SystemColor.textHighlightText);
 		lblDisponible.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblDisponible.setBounds(10, 53, 107, 23);
 		add(lblDisponible);
 
-		JLabel lblSeleccionados = new JLabel("Seleccionados");
+		JLabel lblSeleccionados = new JLabel("Assigned");
 		lblSeleccionados.setForeground(SystemColor.textHighlightText);
 		lblSeleccionados.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		lblSeleccionados.setBounds(10, 225, 136, 20);

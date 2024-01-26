@@ -7,7 +7,10 @@ import logica.Controller;
 import logica.Modality;
 import logica.TouristPackage;
 import modelosTablas.ModeloTablaAccommodationModality;
+import modelosTablas.ModeloTablaAccommodationModalityWithHotel;
 import utils.AusentFilter;
+import utils.Operations;
+
 import javax.swing.JLabel;
 import java.awt.SystemColor;
 import java.awt.Font;
@@ -190,7 +193,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 				actualizarEstadosBotones();
 			}
 		});
-		tableAvailableAccommodation.setModel(new ModeloTablaAccommodationModality());
+		tableAvailableAccommodation.setModel(new ModeloTablaAccommodationModalityWithHotel());
 		scrollPane.setViewportView(tableAvailableAccommodation);
 
 		JPanel panelAssignedAccommodations = new JPanel();
@@ -214,7 +217,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 				actualizarEstadosBotones();
 			}
 		});
-		tableAssignedAccommodations.setModel(new ModeloTablaAccommodationModality());
+		tableAssignedAccommodations.setModel(new ModeloTablaAccommodationModalityWithHotel());
 		scrollPane_1.setViewportView(tableAssignedAccommodations);
 
 		JLabel lblNewLabel_1 = new JLabel("Type Of Room:");
@@ -335,7 +338,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		add(lblCantDaysAccommodation_1);
 
 		spinnerCantDaysAccommodationMinAvaible = new JSpinner();
-		spinnerCantDaysAccommodationMinAvaible.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCantDaysAccommodationMinAvaible, new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 		spinnerCantDaysAccommodationMinAvaible.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAvaivle)
@@ -359,7 +362,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		add(lblMax_2);
 
 		spinnerCantDaysAccommodationMaxAvaible = new JSpinner();
-		spinnerCantDaysAccommodationMaxAvaible.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCantDaysAccommodationMaxAvaible, new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 		spinnerCantDaysAccommodationMaxAvaible.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAvaivle)
@@ -377,7 +380,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		add(lblMin_1_1);
 
 		spinnerPriceMinAvaible = new JSpinner();
-		spinnerPriceMinAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMinAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMinAvaible.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAvaivle)
@@ -389,7 +392,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		add(spinnerPriceMinAvaible);
 
 		spinnerPriceMaxAvaible = new JSpinner();
-		spinnerPriceMaxAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMaxAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMaxAvaible.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAvaivle)
@@ -448,7 +451,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		add(lblMin_2_1);
 
 		spinnerCantDaysAccommodationMinAssigned = new JSpinner();
-		spinnerCantDaysAccommodationMinAssigned.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCantDaysAccommodationMinAssigned, new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 		spinnerCantDaysAccommodationMinAssigned.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAssigned)
@@ -466,7 +469,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		add(lblMax_2_1);
 
 		spinnerCantDaysAccommodationMaxAssigned = new JSpinner();
-		spinnerCantDaysAccommodationMaxAssigned.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCantDaysAccommodationMaxAssigned, new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 		spinnerCantDaysAccommodationMaxAssigned.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAssigned)
@@ -491,7 +494,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		add(lblPrice_1_1);
 
 		spinnerPriceMinAssigned = new JSpinner();
-		spinnerPriceMinAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMinAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMinAssigned.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAssigned)
@@ -509,7 +512,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 		add(lblMax_1_1_1);
 
 		spinnerPriceMaxAssigned = new JSpinner();
-		spinnerPriceMaxAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMaxAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMaxAssigned.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAssigned)
@@ -699,7 +702,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 
 		for (Modality mod : modalitys) {
 			if (!touristPackage.isContainsModality(Modality.accommodationModality, mod))
-				((ModeloTablaAccommodationModality) tableAvailableAccommodation.getModel()).addElement((AccommodationModality) mod); // se obtienen todas las modalidades del alojamiento de la agencia turistica
+				((ModeloTablaAccommodationModalityWithHotel) tableAvailableAccommodation.getModel()).addElement((AccommodationModality) mod); // se obtienen todas las modalidades del alojamiento de la agencia turistica
 		}
 	}
 
@@ -718,7 +721,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 
 
 		for (Modality mod : modalitys) {
-			((ModeloTablaAccommodationModality) tableAssignedAccommodations.getModel()).addElement((AccommodationModality) mod);
+			((ModeloTablaAccommodationModalityWithHotel) tableAssignedAccommodations.getModel()).addElement((AccommodationModality) mod);
 		}
 	}
 
@@ -730,7 +733,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 
 		for(int i=0;table.getRowCount()!=0;i++){
 			i=0;
-			((ModeloTablaAccommodationModality) table.getModel()).deleteElement(i);
+			((ModeloTablaAccommodationModalityWithHotel) table.getModel()).deleteElement(i);
 		}
 	}
 
@@ -742,9 +745,9 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 
 		for (int i = 0; i < rows.length; i++) {
 			if (this.touristPackage.getId() != -1) 
-				this.touristPackage.addModality(((ModeloTablaAccommodationModality) this.tableAvailableAccommodation.getModel()).getElement(rows[i])); // se asigna a las base de datos y a la logica del negocio
+				this.touristPackage.addModality(((ModeloTablaAccommodationModalityWithHotel) this.tableAvailableAccommodation.getModel()).getElement(rows[i])); // se asigna a las base de datos y a la logica del negocio
 			else
-				this.touristPackage.addModalityLogic(((ModeloTablaAccommodationModality) this.tableAvailableAccommodation.getModel()).getElement(rows[i])); // se asigna solo en la logica del negocio
+				this.touristPackage.addModalityLogic(((ModeloTablaAccommodationModalityWithHotel) this.tableAvailableAccommodation.getModel()).getElement(rows[i])); // se asigna solo en la logica del negocio
 		}
 
 		this.actualizarTablas(); // se actualiza la informacion de las dos tablas
@@ -760,9 +763,9 @@ public class PanelDisennadorPaqueteTuristicoModalidadAlojamientoAnnadir extends 
 
 		for (int i = 0; i < rows.length; i++) {
 			if (this.touristPackage.getId() != -1) 
-				this.touristPackage.deleteModality(((ModeloTablaAccommodationModality) this.tableAssignedAccommodations.getModel()).getElement(rows[i])); // se elimina a las base de datos y a la logica del negocio
+				this.touristPackage.deleteModality(((ModeloTablaAccommodationModalityWithHotel) this.tableAssignedAccommodations.getModel()).getElement(rows[i])); // se elimina a las base de datos y a la logica del negocio
 			else
-				this.touristPackage.deleteModalityLogic(((ModeloTablaAccommodationModality) this.tableAssignedAccommodations.getModel()).getElement(rows[i])); // se elimina solo en la logica del negocio
+				this.touristPackage.deleteModalityLogic(((ModeloTablaAccommodationModalityWithHotel) this.tableAssignedAccommodations.getModel()).getElement(rows[i])); // se elimina solo en la logica del negocio
 		}
 
 		this.actualizarTablas(); // se actualiza la informacion de las dos tablas

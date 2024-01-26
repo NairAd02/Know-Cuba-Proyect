@@ -52,6 +52,10 @@ public class Season implements DUILogic, LikeName {
         this.typeOfSeason = typeOfSeason;
     }
 
+    public Season() { // Constructor temporal
+        this.id = -1;
+    }
+
     public void actualizarCampos(String name, LocalDate startDate,
                                  LocalDate terminationDate, String description,
                                  String typeOfSeason, int accommodationContractId) { // Metodo para actualizar los campos de la clase
@@ -170,6 +174,16 @@ public class Season implements DUILogic, LikeName {
     }
 
     // Fin Metodo para comprobar semejanza de nombre
+
+    public boolean verificarIntervaloFechas() {
+        return ((this.startDate != null && this.terminationDate != null) && this.terminationDate.isAfter(this.startDate));
+    }
+
+    public boolean verificarFechasInContract(LocalDate startDateContract, LocalDate terminationDateContract) {
+        return (this.startDate.isAfter(startDateContract) || this.startDate.isEqual(startDateContract)) && (this.terminationDate.isBefore(terminationDateContract) ||
+                this.terminationDate.isEqual(terminationDateContract));
+    }
+
     // Fin de Operaciones
 
 

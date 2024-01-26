@@ -11,6 +11,7 @@ import logica.TouristPackage;
 import modelosTablas.ModeloTablaAccommodationModality;
 import modelosTablas.ModeloTablaServiceModality;
 import utils.AusentFilter;
+import utils.Operations;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -302,11 +303,13 @@ public class PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JPa
 			public void propertyChange(PropertyChangeEvent e) {
 				if (e.getPropertyName().equals("date") && !isRestoreFiltersAvaible)
 					actualizarTablaAviableServicies(); // se actualiza la informacion de la tabla de las modalidades de disponibles
+				dateChooserReleaseDateMaxAvaible.setMinSelectableDate(Date.from(touristPackage.getStartDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			}
 		});
 		dateChooserReleaseDateMinAvaible.setFont(new Font("Dialog", Font.PLAIN, 13));
 		dateChooserReleaseDateMinAvaible.setBorder(new LineBorder(new Color(0, 0, 0)));
 		dateChooserReleaseDateMinAvaible.setBounds(345, 111, 111, 22);
+		dateChooserReleaseDateMinAvaible.setMinSelectableDate(Date.from(this.touristPackage.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		add(dateChooserReleaseDateMinAvaible);
 
 		JLabel lblMax = new JLabel("Max:");
@@ -320,11 +323,13 @@ public class PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JPa
 			public void propertyChange(PropertyChangeEvent e) {
 				if (e.getPropertyName().equals("date") && !isRestoreFiltersAvaible)
 					actualizarTablaAviableServicies(); // se actualiza la informacion de la tabla de las modalidades de disponibles
+				dateChooserReleaseDateMinAvaible.setMaxSelectableDate(Date.from(touristPackage.getTerminationDate().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			}
 		});
 		dateChooserReleaseDateMaxAvaible.setFont(new Font("Dialog", Font.PLAIN, 13));
 		dateChooserReleaseDateMaxAvaible.setBorder(new LineBorder(new Color(0, 0, 0)));
 		dateChooserReleaseDateMaxAvaible.setBounds(506, 111, 111, 22);
+		dateChooserReleaseDateMaxAvaible.setMaxSelectableDate(Date.from(this.touristPackage.getTerminationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		add(dateChooserReleaseDateMaxAvaible);
 
 		JLabel lblMin_1 = new JLabel("Min:");
@@ -334,7 +339,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JPa
 		add(lblMin_1);
 
 		spinnerPriceMinAvaible = new JSpinner();
-		spinnerPriceMinAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMinAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMinAvaible.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAvaible)
@@ -359,7 +364,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JPa
 		add(lblMax_1);
 
 		spinnerPriceMaxAvaible = new JSpinner();
-		spinnerPriceMaxAvaible.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMaxAvaible, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMaxAvaible.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAvaible)
@@ -400,11 +405,13 @@ public class PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JPa
 			public void propertyChange(PropertyChangeEvent e) {
 				if (e.getPropertyName().equals("date") && !isRestoreFiltersAssigned)
 					actualizarTablaAssignedServicies(); // se actualiza la informacion de la tabla de las modalidades de asignadas
+				dateChooserReleaseDateMaxAssigned.setMinSelectableDate(Date.from(touristPackage.getStartDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			}
 		});
 		dateChooserReleaseDateMinAssigned.setFont(new Font("Dialog", Font.PLAIN, 13));
 		dateChooserReleaseDateMinAssigned.setBorder(new LineBorder(new Color(0, 0, 0)));
 		dateChooserReleaseDateMinAssigned.setBounds(345, 374, 111, 22);
+		dateChooserReleaseDateMinAssigned.setMinSelectableDate(Date.from(this.touristPackage.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		add(dateChooserReleaseDateMinAssigned);
 
 		JLabel lblMax_2 = new JLabel("Max:");
@@ -418,11 +425,13 @@ public class PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JPa
 			public void propertyChange(PropertyChangeEvent e) {
 				if (e.getPropertyName().equals("date") && !isRestoreFiltersAssigned)
 					actualizarTablaAssignedServicies(); // se actualiza la informacion de la tabla de las modalidades de asignadas
+				dateChooserReleaseDateMinAssigned.setMaxSelectableDate(Date.from(touristPackage.getTerminationDate().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			}
 		});
 		dateChooserReleaseDateMaxAssigned.setFont(new Font("Dialog", Font.PLAIN, 13));
 		dateChooserReleaseDateMaxAssigned.setBorder(new LineBorder(new Color(0, 0, 0)));
 		dateChooserReleaseDateMaxAssigned.setBounds(506, 374, 111, 22);
+		dateChooserReleaseDateMaxAssigned.setMaxSelectableDate(Date.from(this.touristPackage.getTerminationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		add(dateChooserReleaseDateMaxAssigned);
 
 		JLabel lblMin_1_1 = new JLabel("Min:");
@@ -432,7 +441,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JPa
 		add(lblMin_1_1);
 
 		spinnerPriceMinAssigned = new JSpinner();
-		spinnerPriceMinAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMinAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMinAssigned.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAssigned)
@@ -457,7 +466,7 @@ public class PanelDisennadorPaqueteTuristicoModalidadServicioAnnadir extends JPa
 		add(lblMax_1_1);
 
 		spinnerPriceMaxAssigned = new JSpinner();
-		spinnerPriceMaxAssigned.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMaxAssigned, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMaxAssigned.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!isRestoreFiltersAssigned)

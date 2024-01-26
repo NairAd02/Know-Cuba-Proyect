@@ -28,6 +28,8 @@ public class Operations {
 	            formatter.setValueClass(Integer.class);
 	            formatter.setAllowsInvalid(false);
 	            formatter.setCommitsOnValidEdit(true);
+	           
+	            
 	            return formatter;
 	        }
 	    });
@@ -46,6 +48,7 @@ public static void crearJSpinnerNumericoDouble(JSpinner spinner, SpinnerNumberMo
 	            formatter.setValueClass(Double.class);
 	            formatter.setAllowsInvalid(false);
 	            formatter.setCommitsOnValidEdit(true);
+	           
 	            return formatter;
 	        }
 	    });

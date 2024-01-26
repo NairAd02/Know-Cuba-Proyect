@@ -324,7 +324,7 @@ public class PanelGerenteCreacionContratoAlojamientoTemporada extends JPanel {
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir frameAddSeason = new FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir(PanelGerenteCreacionContratoAlojamientoTemporada.this, null);
+				FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir frameAddSeason = new FrameGerenteCreacionContratoAlojamientoTemporadaAnnadir(PanelGerenteCreacionContratoAlojamientoTemporada.this, new Season());
 				frameAddSeason.setVisible(true);
 				frameGerenteCreacionContratoAlojamiento.setEnabled(false); // se inhabilita el frame
 			}

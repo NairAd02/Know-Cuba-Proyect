@@ -13,6 +13,8 @@ import JPanels.PanelCreacionContratoServicioServiceModality;
 import logica.Activity;
 import logica.ServiceContract;
 import logica.ServiceModality;
+import utils.Operations;
+
 import javax.swing.JSpinner;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -127,7 +129,7 @@ public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends 
 						try {
 							addServiceModality();
 							panelCreacionContratoAlojamientoServiceModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
-							FramePrincipal.mostarFrameNotificacion("Ha sido insertada con éxito la modalidad"); // se notifica de la accion realiza al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been added successfully the modality"); // se notifica de la accion realiza al usuario
 							cerrarFrame();
 						} catch (SQLException e1) {
 							e1.printStackTrace();
@@ -137,7 +139,7 @@ public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends 
 						try {
 							updateServiceModality();
 							panelCreacionContratoAlojamientoServiceModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
-							FramePrincipal.mostarFrameNotificacion("Ha sido insertada con éxito la modalidad"); // se notifica de la accion realiza al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been successfully modified the modality"); // se notifica de la accion realiza al usuario
 							cerrarFrame();
 						} catch (SQLException e1) {
 							e1.printStackTrace();
@@ -178,7 +180,7 @@ public class FrameGerenteCreacionContratoServicioAnnadirServiceModality extends 
 
 		spinnerPrice = new JSpinner();
 		spinnerPrice.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		spinnerPrice.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPrice, new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerPrice.setBounds(267, 178, 100, 20);
 		contentPane.add(spinnerPrice);
 

@@ -57,7 +57,7 @@ public class PanelGestionPaquetesTuristicos extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JLabel lblAnnadir;
 	private JLabel lblDelete;
-	private JLabel lblShowPlans;
+	private JLabel lblUpdate;
 	private String searchName;
 	private JPanel panelContenedorTable;
 	private JPanel panelOpciones;
@@ -109,7 +109,9 @@ public class PanelGestionPaquetesTuristicos extends JPanel{
 				try {
 					Semaphore.samaphore.wait(); // se duerme al hilo hasta esperar la confirmacion del usuario
 					if (Controller.getInstancie().isConfirmacion()) { // si el usuario dió el consentimiento de realizar la operación
+						deleteTouristPackage();
 						Controller.getInstancie().setConfirmacion(false); // se establece el estado de la confirmación por defecto
+
 					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -122,21 +124,19 @@ public class PanelGestionPaquetesTuristicos extends JPanel{
 
 
 	private void crearFrameDecisor () {
-		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Seguro que desea eliminar los paquetes turisticos seleccionados seleccionados");
+		FrameDecisor frameDecisor = new FrameDecisor(FramePrincipal.getIntancie(), "Are you sure you want to delete?");
 		frameDecisor.setVisible(true);
 		FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
 	}
 
-	private void crearFrameNotificacion () {
-		FrameAdvertencia frameAdvertencia = new FrameAdvertencia("Han sido elimanado correctamente los paquetes turisticos");
-		frameAdvertencia.setVisible(true);
-	}
+
 
 	public PanelGestionPaquetesTuristicos() {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-
+				panelLienzoPaquetesTuristicos.deselectedAllPanelTouristPackage();
+				actualizarEstadoButtons();
 			}
 		});
 		this.isRestoreFilters = false;
@@ -204,7 +204,7 @@ public class PanelGestionPaquetesTuristicos extends JPanel{
 		lblAnnadir.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/Plus.png")));
 		lblAnnadir.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				FrameInformacionPaquete frameInformacionPaqueteTuristico = new FrameInformacionPaquete(PanelGestionPaquetesTuristicos.this, new TouristPackage());
 				frameInformacionPaqueteTuristico.setVisible(true);
 				FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
@@ -230,7 +230,7 @@ public class PanelGestionPaquetesTuristicos extends JPanel{
 		lblDelete.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/Trash.png")));
 		lblDelete.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				if (lblDelete.isEnabled()) {
 					Eliminar eliminar = new Eliminar(); // se crea el nuevo hilo
 					eliminar.start(); // se ejecuta el nuevo hilo
@@ -253,33 +253,35 @@ public class PanelGestionPaquetesTuristicos extends JPanel{
 		lblDelete.setBackground(new Color(18, 95, 115));
 		lblDelete.setBounds(405, 19, 67, 52);
 		panelBotones.add(lblDelete);
-		lblShowPlans = new JLabel("");
-		lblShowPlans.setOpaque(true);
-		lblShowPlans.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblShowPlans.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/Edit.png")));
-		lblShowPlans.addMouseListener(new MouseAdapter() {
+		lblUpdate = new JLabel("");
+		lblUpdate.setOpaque(true);
+		lblUpdate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblUpdate.setIcon(new ImageIcon(PanelGerenteAsociacionEmpresaProveedorAlojamiento.class.getResource("/images/Edit.png")));
+		lblUpdate.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (lblShowPlans.isEnabled()) {
-
+			public void mousePressed(MouseEvent e) {
+				if (lblUpdate.isEnabled()) {
+					FrameInformacionPaquete frameInformacionPaqueteTuristico = new FrameInformacionPaquete(PanelGestionPaquetesTuristicos.this, panelLienzoPaquetesTuristicos.getFirstSelectElement());
+					frameInformacionPaqueteTuristico.setVisible(true);
+					FramePrincipal.getIntancie().setEnabled(false); // se inhabilita el frame principal
 				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if (lblShowPlans.isEnabled())
-					lblShowPlans.setBackground(SystemColor.activeCaptionBorder);
+				if (lblUpdate.isEnabled())
+					lblUpdate.setBackground(SystemColor.activeCaptionBorder);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (lblShowPlans.isEnabled())
-					lblShowPlans.setBackground(new Color(18, 95, 115));
+				if (lblUpdate.isEnabled())
+					lblUpdate.setBackground(new Color(18, 95, 115));
 			}
 		});
-		lblShowPlans.setHorizontalAlignment(SwingConstants.CENTER);
-		lblShowPlans.setFont(new Font("Arial Black", Font.PLAIN, 11));
-		lblShowPlans.setBackground(new Color(18, 95, 115));
-		lblShowPlans.setBounds(564, 19, 67, 52);
-		panelBotones.add(lblShowPlans);
+		lblUpdate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUpdate.setFont(new Font("Arial Black", Font.PLAIN, 11));
+		lblUpdate.setBackground(new Color(18, 95, 115));
+		lblUpdate.setBounds(564, 19, 67, 52);
+		panelBotones.add(lblUpdate);
 
 		panelFilterName = new JPanel();
 		panelFilterName.setBackground(new Color(18, 95, 115));
@@ -585,6 +587,7 @@ public class PanelGestionPaquetesTuristicos extends JPanel{
 											(this.dateChooserTerminationDateMax.getDate() != null) ? this.dateChooserTerminationDateMax.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null, 
 													(Double) this.spinnerPriceMin.getValue(), (Double) this.spinnerPriceMax.getValue(), (Integer) this.spinnerCantAvaibleMin.getValue(), (Integer) this.spinnerCantAvaibleMax.getValue()));
 			ConnectionDataBase.commit(); // se confirman las operaciones realizadas en la base de datos
+			this.actualizarEstadoButtons();
 		} catch (SQLException e) {
 			try {
 				ConnectionDataBase.roolback(); // se cancelan las operaciones realizadas en la base de datos
@@ -603,7 +606,7 @@ public class PanelGestionPaquetesTuristicos extends JPanel{
 		this.panelLienzoPaquetesTuristicos.clearElements();
 		for (int i = 0; i < touristPackages.size(); i++) {
 			if (touristPackages.get(i).verificarPaquete()) // Se comprueba si el paquete es valido (Se contiene al menos una modalidad)
-				this.panelLienzoPaquetesTuristicos.addPanelPaqueteTuristico(new PanelPaqueteTuristico(touristPackages.get(i)));
+				this.panelLienzoPaquetesTuristicos.addPanelPaqueteTuristico(new PanelPaqueteTuristico( PanelGestionPaquetesTuristicos.this, touristPackages.get(i)));
 			else {
 				Controller.getInstancie().getTouristAgency().deleteTouristPackage(touristPackages.get(i)); // se elimina el paquete de la logica del negocio y de la base de datos*/
 				i--; // se decrementa por la eliminacion
@@ -613,24 +616,40 @@ public class PanelGestionPaquetesTuristicos extends JPanel{
 		this.repintarPanel(); // se repinta la infromacion del panel
 	}
 
-	/*private void actualizarEstadoButtons () {
-		this.actualizarEstadoButtonDelete();
-		this.actualizarEstadoButtonUpdate();
+	public void deselectedAllTouristPackage (PanelPaqueteTuristico panel) { // Metodo para deseleccionar todos los paquetes turisticos seleccionados
+		this.panelLienzoPaquetesTuristicos.deselectedAllPanelTouristPackage(panel);
 	}
 
-	private void actualizarEstadoButtonDelete () {
-		if (tableContracts.getSelectedRowCount() != 0)
+	public void deleteTouristPackage () {
+		try {
+			Controller.getInstancie().getTouristAgency().deleteTouristPackage(this.panelLienzoPaquetesTuristicos.getFirstSelectElement());
+			ConnectionDataBase.commit(); // se confirman las operaciones realizadas en la base de datos
+			this.actualizarPanelPaquetes();
+			FramePrincipal.mostarFrameNotificacion("It has been successfully removed the Tourist Package");
+		} catch (SQLException e) {
+			try {
+				ConnectionDataBase.roolback(); // se cancelan las operaciones realizadas en la base de datos
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			} 
+			e.printStackTrace();
+		}
+	}
+
+
+
+	public void actualizarEstadoButtons () {
+		if (panelLienzoPaquetesTuristicos.getFirstSelectElement() != null) {
 			lblDelete.setEnabled(true);
-		else
+			lblUpdate.setEnabled(true);
+		}
+		else {
 			lblDelete.setEnabled(false);
+			lblUpdate.setEnabled(false);
+		}
 	}
 
-	private void actualizarEstadoButtonUpdate () {
-		if (tableContracts.getSelectedRowCount() != 0)
-			lblUpdate.setEnabled(true);
-		else
-			lblUpdate.setEnabled(false);
-	}*/
+
 
 	private void repintarPanel () {
 		repaint();

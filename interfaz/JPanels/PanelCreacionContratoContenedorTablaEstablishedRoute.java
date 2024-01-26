@@ -15,6 +15,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 import logica.*;
 import modelosTablas.ModeloTablaTransportModalityEstablishedRoute;
+import utils.Operations;
+
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -101,7 +103,7 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 			}
 		});
 		
-		spinnerCostGoingMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostGoingMin, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostGoingMin.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostGoingMin.setBounds(108, 47, 53, 20);
 		add(spinnerCostGoingMin);
@@ -120,7 +122,7 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 			}
 		});
 	
-		spinnerCostGoingMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostGoingMax, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostGoingMax.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostGoingMax.setBounds(222, 47, 53, 20);
 		add(spinnerCostGoingMax);
@@ -145,7 +147,7 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 			}
 		});
 		
-		spinnerCostLapMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostLapMin, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostLapMin.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostLapMin.setBounds(378, 47, 53, 20);
 		add(spinnerCostLapMin);
@@ -164,7 +166,7 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 			}
 		});
 	
-		spinnerCostLapMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostLapMax, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerCostLapMax.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerCostLapMax.setBounds(476, 47, 53, 20);
 		add(spinnerCostLapMax);
@@ -190,7 +192,7 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 			}
 		});
 		
-		spinnerPriceMax.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMax, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMax.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMax.setBounds(749, 47, 53, 20);
 		add(spinnerPriceMax);
@@ -209,7 +211,7 @@ public class PanelCreacionContratoContenedorTablaEstablishedRoute extends JPanel
 			}
 		});
 	
-		spinnerPriceMin.setModel(new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPriceMin, new SpinnerNumberModel(Double.valueOf(0), Double.valueOf(0), null, Double.valueOf(1)));
 		spinnerPriceMin.setFont(new Font("Dialog", Font.PLAIN, 15));
 		spinnerPriceMin.setBounds(646, 47, 53, 20);
 		add(spinnerPriceMin);

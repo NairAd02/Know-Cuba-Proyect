@@ -17,6 +17,8 @@ import logica.Controller;
 import logica.Hotel;
 import logica.Provider;
 import utils.ConnectionDataBase;
+import utils.Operations;
+
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.JSpinner;
@@ -37,6 +39,8 @@ import javax.swing.border.MatteBorder;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 
@@ -58,6 +62,9 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 	private JPanel panelAccommodationContract;
 	private JLabel lblX;
 	private JLabel lblNewLabel;
+	private JLabel lblErrorFechas;
+	private JLabel lblErrorModalitys;
+	private JLabel lblErrorNumeroSeasons;
 
 
 
@@ -117,7 +124,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		lblTituloFrame.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTituloFrame.setForeground(SystemColor.textHighlightText);
 		lblTituloFrame.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblTituloFrame.setBounds(139, 36, 574, 30);
+		lblTituloFrame.setBounds(137, 16, 574, 30);
 		panelAccommodationContract.add(lblTituloFrame);
 
 		JLabel lblStartDate = new JLabel("START DATE ");
@@ -139,22 +146,46 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		panelAccommodationContract.add(lblProvider);
 
 		dateChooserStartDate = new JDateChooser();
+		dateChooserStartDate.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date")) {
+					accommodationContract.setStartDate(dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+				if (dateChooserEndDate != null)
+				dateChooserEndDate.setMinSelectableDate(Date.from(accommodationContract.getStartDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+				}
+			}
+		});
 		dateChooserStartDate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		dateChooserStartDate.setFont(new Font("Dialog", Font.PLAIN, 14));
 		dateChooserStartDate.setBounds(54, 122, 150, 22);
+		if (this.accommodationContract.getId() == -1) { // Add
+		this.accommodationContract.setStartDate(LocalDate.now());
+		dateChooserStartDate.setDate(Date.from(this.accommodationContract.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		dateChooserStartDate.setMinSelectableDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		}
 		panelAccommodationContract.add(dateChooserStartDate);
 
 		dateChooserEndDate = new JDateChooser();
+		dateChooserEndDate.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date")) {
+					accommodationContract.setTerminationDate(dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+				dateChooserStartDate.setMaxSelectableDate(Date.from(accommodationContract.getTerminationDate().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+				}
+			}
+		});
 		dateChooserEndDate.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		dateChooserEndDate.setFont(new Font("Dialog", Font.PLAIN, 14));
 		dateChooserEndDate.setBounds(254, 122, 150, 22);
+		if (this.accommodationContract.getId() == -1)
+		dateChooserEndDate.setMinSelectableDate(Date.from(this.accommodationContract.getStartDate().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		panelAccommodationContract.add(dateChooserEndDate);
 
 
-		JLabel lblDescription = new JLabel("DESCRIPTION");
+		JLabel lblDescription = new JLabel("DESCRIPTION (OPTIONAL)");
 		lblDescription.setForeground(SystemColor.textHighlightText);
 		lblDescription.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblDescription.setBounds(27, 230, 124, 30);
+		lblDescription.setBounds(27, 230, 241, 30);
 		panelAccommodationContract.add(lblDescription);
 
 		lblConfirm = new JLabel("CONFIRM");
@@ -163,8 +194,8 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		lblConfirm.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (accommodationContract.getId() == -1) {
-					if (verificarCampos()) {
+				if (verificarCampos()) {
+					if (accommodationContract.getId() == -1) {
 						try {
 							addAccommodationContract();
 							ConnectionDataBase.commit(); // se confirman las operaciones realizadas sobre la base de datos
@@ -177,16 +208,14 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 								e2.printStackTrace();
 							} 
 							e1.printStackTrace();
-						}
+						}		
 					}
-				}
-				else {
-					if (verificarCampos()) {
+					else {
 						try {
 							updateAccommodationContract();
 							ConnectionDataBase.commit(); // se confirman las operaciones realizadas sobre la base de datos
 							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
-							FramePrincipal.mostarFrameNotificacion("Ha sido modaficada correctamente la información del contrato de alojamiento: " + + accommodationContract.getId()); // se notifica de la accion realizada al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been successfully modified the contract"); // se notifica de la accion realizada al usuario
 							cerrarFrame();
 						} catch (SQLException e1) {
 							try {
@@ -196,8 +225,11 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 								e2.printStackTrace();
 							}
 							e1.printStackTrace();
-						}
+						}	
 					}
+				}
+				else {
+					mostrarErrores();
 				}
 			}
 			@Override
@@ -206,7 +238,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-
+				ocultarErrores();
 			}
 		});
 		lblConfirm.setOpaque(true);
@@ -256,7 +288,7 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		spinnerRecargo = new JSpinner();
 		spinnerRecargo.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		spinnerRecargo.setFont(new Font("Dialog", Font.PLAIN, 14));
-		spinnerRecargo.setModel(new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerRecargo, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerRecargo.setBounds(663, 122, 124, 22);
 		panelAccommodationContract.add(spinnerRecargo);
 
@@ -298,7 +330,10 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		lblShowSeasons.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				cambioDePanel(new PanelGerenteCreacionContratoAlojamientoTemporada(FrameGerenteCreacionContratoAlojamiento.this));
+				if (accommodationContract.verificarIntervaloFechas()) // Si el intervalo de fechas es correcto
+					cambioDePanel(new PanelGerenteCreacionContratoAlojamientoTemporada(FrameGerenteCreacionContratoAlojamiento.this));
+				else
+					FramePrincipal.mostrarFrameInformacion(FrameGerenteCreacionContratoAlojamiento.this, "Selected dates are incorrect");
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -316,11 +351,32 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		lblShowSeasons.setBounds(582, 189, 153, 30);
 		lblShowSeasons.setBackground(SystemColor.info);
 		panelAccommodationContract.add(lblShowSeasons);
-		
+
 		lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(FrameGerenteCreacionContratoAlojamiento.class.getResource("/images/Logo 38x38.png")));
 		lblNewLabel.setBounds(10, 16, 38, 38);
 		panelAccommodationContract.add(lblNewLabel);
+
+		lblErrorFechas = new JLabel("Incorrect date range");
+		lblErrorFechas.setVisible(false);
+		lblErrorFechas.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblErrorFechas.setForeground(Color.RED);
+		lblErrorFechas.setBounds(149, 54, 164, 23);
+		panelAccommodationContract.add(lblErrorFechas);
+
+		lblErrorModalitys = new JLabel("Incorrect number of modalities");
+		lblErrorModalitys.setVisible(false);
+		lblErrorModalitys.setForeground(Color.RED);
+		lblErrorModalitys.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblErrorModalitys.setBounds(163, 155, 241, 23);
+		panelAccommodationContract.add(lblErrorModalitys);
+
+		lblErrorNumeroSeasons = new JLabel("Incorrect number of seasons");
+		lblErrorNumeroSeasons.setVisible(false);
+		lblErrorNumeroSeasons.setForeground(Color.RED);
+		lblErrorNumeroSeasons.setFont(new Font("Dialog", Font.PLAIN, 16));
+		lblErrorNumeroSeasons.setBounds(539, 155, 226, 23);
+		panelAccommodationContract.add(lblErrorNumeroSeasons);
 
 		this.definirComponentes();
 		this.definirTexto();
@@ -410,9 +466,24 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		}
 	}
 
+	private void mostrarErrores () {
+		if (!this.accommodationContract.verificarIntervaloFechas())
+			this.lblErrorFechas.setVisible(true);
+		if (this.accommodationContract.getModalitys().size() == 0)
+			this.lblErrorModalitys.setVisible(true);
+		if (this.accommodationContract.getSeasons().size() == 0)
+			this.lblErrorNumeroSeasons.setVisible(true);		
+	}
+
+	private void ocultarErrores () {
+		this.lblErrorFechas.setVisible(false);
+		this.lblErrorModalitys.setVisible(false);
+		this.lblErrorNumeroSeasons.setVisible(false);		
+	}
+
 
 	private boolean verificarCampos () {
-		return (dateChooserStartDate.getDate() != null && dateChooserEndDate.getDate() != null && accommodationContract.getModalitys().size() != 0 && accommodationContract.getSeasons().size() != 0);
+		return (accommodationContract.verificarIntervaloFechas() && accommodationContract.getModalitys().size() != 0 && accommodationContract.getSeasons().size() != 0);
 	}
 
 	private void definirTexto () {
@@ -420,8 +491,6 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 
 		if (accommodationContract.getId() == -1) { // add
 			textoLblTitulo = "ADD ACCOMMODATION CONTRACT";
-			dateChooserStartDate.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-			dateChooserEndDate.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		}	
 		else {
 			textoLblTitulo = "UPDATE ACCOMMODATION CONTRACT";
@@ -440,9 +509,9 @@ public class FrameGerenteCreacionContratoAlojamiento extends JFrame {
 		AccommodationContract accommodationContract = new AccommodationContract(dateChooserStartDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
 				dateChooserEndDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), textPaneDescription.getText(), this.accommodationContract.getProvider(), 
 				this.accommodationContract.getModalitys(), (Double) spinnerRecargo.getValue(), this.accommodationContract.getSeasons());
-		
+
 		Controller.getInstancie().getTouristAgency().addContract(accommodationContract); // se inserta el contrato de alojamiento a nivel de base de datos
-		FramePrincipal.mostarFrameNotificacion("Ha sido insertado correctamente el contrato de alojamiento: " + accommodationContract.getId()); // se notifica de la accion realizada al usuario
+		FramePrincipal.mostarFrameNotificacion("It has been added successfully the contract"); // se notifica de la accion realizada al usuario
 	}
 
 	public void updateAccommodationContract () throws SQLException { // update

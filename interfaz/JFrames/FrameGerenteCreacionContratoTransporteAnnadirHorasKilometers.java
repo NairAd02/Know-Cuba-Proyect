@@ -10,6 +10,7 @@ import logica.CarrierContract;
 import logica.HoursKilometers;
 import logica.TransportModality;
 import utils.ConnectionDataBase;
+import utils.Operations;
 
 import javax.swing.JLabel;
 import java.awt.SystemColor;
@@ -143,7 +144,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirHorasKilometers extend
 		panelHoursKilometersMode.add(lblCostHours);
 
 		spinnerCostHours = new JSpinner();
-		spinnerCostHours.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostHours, new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerCostHours.setBounds(386, 205, 100, 20);
 		panelHoursKilometersMode.add(spinnerCostHours);
 
@@ -154,7 +155,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirHorasKilometers extend
 		panelHoursKilometersMode.add(lblCostKilometersRoutAdd);
 
 		spinnerCostKilometersRoutAdd = new JSpinner();
-		spinnerCostKilometersRoutAdd.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersRoutAdd, new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerCostKilometersRoutAdd.setBounds(386, 239, 100, 20);
 		panelHoursKilometersMode.add(spinnerCostKilometersRoutAdd);
 
@@ -170,7 +171,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirHorasKilometers extend
 						try {
 							addHoursKilometers();
 							panelCreacionContratoTransporteTransportModality.actualizarPanelTablaModality(); // se actualiza la informacion de la tablas de las modalidades del contrato
-							FramePrincipal.mostarFrameNotificacion("Ha sido insertada con éxito la modalidad"); // se notifica de la accion realiza al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been added successfully the modality"); // se notifica de la accion realiza al usuario
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
@@ -181,7 +182,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirHorasKilometers extend
 						try {
 							updateHoursKilometers();
 							panelCreacionContratoTransporteTransportModality.actualizarPanelTablaModality(); // se actualiza la informacion de la tablas de las modalidades del contrato
-							FramePrincipal.mostarFrameNotificacion("Ha sido modificada con éxito la información de la modalidad"); // se notifica de la accion realiza al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been successfully modified the modality"); // se notifica de la accion realiza al usuario
 							deleteSavePoint(); // se elimina el punto de guarado
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {
@@ -207,7 +208,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirHorasKilometers extend
 		panelHoursKilometersMode.add(lblAdd);
 
 		spinnerCostKilometersRout = new JSpinner();
-		spinnerCostKilometersRout.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostKilometersRout, new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerCostKilometersRout.setBounds(386, 171, 100, 20);
 		panelHoursKilometersMode.add(spinnerCostKilometersRout);
 
@@ -218,7 +219,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirHorasKilometers extend
 		panelHoursKilometersMode.add(lblCostHoursAdd);
 
 		spinnerCostHoursAdd = new JSpinner();
-		spinnerCostHoursAdd.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostHoursAdd, new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerCostHoursAdd.setBounds(386, 273, 100, 20);
 		panelHoursKilometersMode.add(spinnerCostHoursAdd);
 

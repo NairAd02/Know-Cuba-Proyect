@@ -11,6 +11,7 @@ import logica.HotelModality;
 import logica.MealPlan;
 import logica.TypeOfRoom;
 import utils.ConnectionDataBase;
+import utils.Operations;
 
 import javax.swing.JLabel;
 import java.awt.SystemColor;
@@ -136,7 +137,7 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 					try {
 						addAccommodationModality();
 						panelCreacionContratoAlojamientoAccommodationModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
-						FramePrincipal.mostarFrameNotificacion("Ha sido insertada con éxito la modalidad de alojamiento"); // se notifica de la accion realiza al usuario
+						FramePrincipal.mostarFrameNotificacion("It has been added successfully the modality"); // se notifica de la accion realiza al usuario
 						cerrarFrame();
 					} catch (SQLException e1) {
 
@@ -147,7 +148,7 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 					try {
 						updateAccommodationModality();
 						panelCreacionContratoAlojamientoAccommodationModality.actualizarTablaModalitys(); // se actualiza la informacion de las modalidades en la tabla de modalidades
-						FramePrincipal.mostarFrameNotificacion("Ha sido modificada con éxito la información de la modalidad de alojamiento"); // se notifica de la accion realiza al usuario
+						FramePrincipal.mostarFrameNotificacion("It has been successfully modified the modality"); // se notifica de la accion realiza al usuario
 						cerrarFrame();
 					} catch (SQLException e1) {
 
@@ -187,13 +188,13 @@ public class FrameGerenteCreacionContratoAlojamientoAnnadirAccommodationModality
 
 		spinnerCantDays = new JSpinner();
 		spinnerCantDays.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		spinnerCantDays.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+		Operations.crearJSpinnerNumericoInteger(spinnerCantDays, new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 		spinnerCantDays.setBounds(325, 196, 83, 20);
 		contentPane.add(spinnerCantDays);
 
 		spinnerPrice = new JSpinner();
 		spinnerPrice.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		spinnerPrice.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerPrice, new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerPrice.setBounds(308, 236, 100, 20);
 		contentPane.add(spinnerPrice);
 

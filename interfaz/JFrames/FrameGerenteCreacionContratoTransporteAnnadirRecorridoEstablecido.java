@@ -11,6 +11,8 @@ import logica.CarrierContract;
 import logica.EstablishedRoute;
 import logica.TransportModality;
 import utils.ConnectionDataBase;
+import utils.Operations;
+
 import javax.swing.JLabel;
 import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
@@ -147,7 +149,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirRecorridoEstablecido e
 		panelTransportationMode.add(lblCostGoing);
 
 		spinnerCostGoing = new JSpinner();
-		spinnerCostGoing.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostGoing, new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerCostGoing.setBounds(362, 252, 100, 20);
 		panelTransportationMode.add(spinnerCostGoing);
 
@@ -158,7 +160,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirRecorridoEstablecido e
 		panelTransportationMode.add(lblCostLap);
 
 		spinnerCostLap = new JSpinner();
-		spinnerCostLap.setModel(new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerCostLap, new SpinnerNumberModel(Double.valueOf(1), Double.valueOf(1), null, Double.valueOf(1)));
 		spinnerCostLap.setBounds(362, 286, 100, 20);
 		panelTransportationMode.add(spinnerCostLap);
 
@@ -174,7 +176,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirRecorridoEstablecido e
 						try {
 							addEstablishedRoute();
 							panelCreacionContratoTransporteTransportModality.actualizarPanelTablaModality(); // se actualiza la informacion de la tablas de las modalidades del contrato
-							FramePrincipal.mostarFrameNotificacion("Ha sido insertada con éxito la modalidad"); // se notifica de la accion realiza al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been added successfully the modality"); // se notifica de la accion realiza al usuario
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
@@ -185,7 +187,7 @@ public class FrameGerenteCreacionContratoTransporteAnnadirRecorridoEstablecido e
 						try {
 							updateEstablishedRoute();
 							panelCreacionContratoTransporteTransportModality.actualizarPanelTablaModality(); // se actualiza la informacion de la tablas de las modalidades del contrato
-							FramePrincipal.mostarFrameNotificacion("Ha sido modificada con éxito la información de la modalidad"); // se notifica de la accion realiza al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been successfully modified the modality"); // se notifica de la accion realiza al usuario
 							deleteSavePoint(); // se elimina el punto de guarado
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {

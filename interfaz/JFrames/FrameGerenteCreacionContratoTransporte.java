@@ -14,6 +14,8 @@ import logica.Controller;
 import logica.Provider;
 import logica.TransportationProvider;
 import utils.ConnectionDataBase;
+import utils.Operations;
+
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
@@ -165,7 +167,7 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 		spinnerRecargo = new JSpinner();
 		spinnerRecargo.setFont(new Font("Dialog", Font.PLAIN, 14));
 		spinnerRecargo.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		spinnerRecargo.setModel(new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
+		Operations.crearJSpinnerNumericoDouble(spinnerRecargo, new SpinnerNumberModel(Double.valueOf(0), null, null, Double.valueOf(1)));
 		spinnerRecargo.setBounds(663, 122, 124, 22);
 		panelTransportationContract.add(spinnerRecargo);
 
@@ -222,7 +224,7 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 							updateCarrierContract();
 							ConnectionDataBase.getConnectionDataBase().commit(); // se confirman las operaciones realizadas en la base de datos
 							panelGerenteCreacionContrato.actualizarTablaContracts();// se actualiza la informacion de la tabla de contratos
-							FramePrincipal.mostarFrameNotificacion("Ha sido actualizada con éxito la información del contrato de transporte: " + carrierContract.getId()); // se notifica de la accion realizada al usuario
+							FramePrincipal.mostarFrameNotificacion("It has been successfully modified the contract"); // se notifica de la accion realizada al usuario
 							cerrarFrame(); // se cierra el frame actual
 						} catch (SQLException e1) {
 							try {
@@ -420,7 +422,7 @@ public class FrameGerenteCreacionContratoTransporte extends JFrame {
 				this.carrierContract.getModalitys(), (Double) spinnerRecargo.getValue());
 		
 		Controller.getInstancie().getTouristAgency().addContract(carrierContract); // se inserta el contrato de alojamiento a nivel de base de datos
-		FramePrincipal.mostarFrameNotificacion("Ha sido insertado correctamente el contrato de transporte: " + carrierContract.getId()); // se notifica de la accion realizada al usuario
+		FramePrincipal.mostarFrameNotificacion("It has been added successfully the contract"); // se notifica de la accion realizada al usuario
 		
 	}
 

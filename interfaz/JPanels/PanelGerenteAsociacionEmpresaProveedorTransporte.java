@@ -152,8 +152,12 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 		panelTable.add(scrollPaneTable, BorderLayout.CENTER);
 
 		tableTransportationProviders = new JTable();
+		tableTransportationProviders.setModel(new ModeloTablaTransportationProvider());
 		tableTransportationProviders.setRowHeight(30);
-		tableTransportationProviders.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		tableTransportationProviders.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableTransportationProviders.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
+		tableTransportationProviders.getTableHeader().setForeground(Color.black);
+		tableTransportationProviders.getTableHeader().setBackground(SystemColor.black);
 		tableTransportationProviders.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -161,10 +165,8 @@ public class PanelGerenteAsociacionEmpresaProveedorTransporte extends JPanel {
 				actualizarEstadoButtonShow();
 			}
 		});
-		tableTransportationProviders.setModel(new ModeloTablaTransportationProvider());
-		tableTransportationProviders.getTableHeader().setFont(new Font("Arial", Font.BOLD, 24));
-		tableTransportationProviders.getTableHeader().setForeground(Color.black);
-		tableTransportationProviders.getTableHeader().setBackground(SystemColor.black);
+	
+
 		scrollPaneTable.setViewportView(tableTransportationProviders);
 		scrollPaneTable.getViewport().setBackground(SystemColor.inactiveCaptionBorder);
 		
