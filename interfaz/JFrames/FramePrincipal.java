@@ -59,6 +59,7 @@ public class FramePrincipal extends JFrame {
 	private JLabel lblTouristPackage;
 	private JLabel lblSeccionTouristPackageDesing;
 	private JLabel lblReport;
+	private JLabel lblNewLabel_3;
 
 
 	private class CerrarPrograma extends Thread { // Hilo para cerrar el programa
@@ -507,6 +508,16 @@ public class FramePrincipal extends JFrame {
 		lblReport.setBackground(SystemColor.info);
 		lblReport.setBounds(14, 630, 250, 38);
 		panelSecciones.add(lblReport);
+		
+		lblNewLabel_3 = new JLabel("New label");
+		lblNewLabel_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+		});
+		lblNewLabel_3.setBounds(168, 11, 46, 14);
+		panelSecciones.add(lblNewLabel_3);
 	}
 
 	private void cerrarPrograma () {
